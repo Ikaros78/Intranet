@@ -1,0 +1,35 @@
+@charset "utf-8";
+#contents{height: 1000px;}
+#contents div{float: left;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container h4{font-size: 20px;}
+#contents #container hr{width: 1550px; margin-top: 7px;}
+
+#contents #container p{margin-top: 50px; line-height: 50px;}
+#contents #container p span{color: #e25f27;}
+
+#contents #container form{line-height: 50px; float: left;position: absolute;right: 0; top: 90px;}
+#contents #container form .date{margin-right: 30px;}
+#contents #container form input[type="date"]{width: 140px; line-height: 28px; font-size: 17px; border: 1px solid #999; border-radius: 5px;}
+#contents #container form input[type="search"]{width: 160px; height: 32px; font-size: 17px; padding: 3px; border-radius: 5px; border: 1px solid #999;padding-bottom:1px;}
+#contents #container form button{width: 50px; line-height: 34px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff;}
+#contents #container form button:hover{background-color: #e25f27; transition: all .5s;}
+
+#contents #container ul{width: 1550px; margin: 0 auto; padding-top: 35px;}
+#contents #container ul li{width: 290px; height: 320px; box-shadow: 1px 1px 4px #ccc; float: left; margin: 0 25px 40px 0;}
+#contents #container ul li a{width: 100%; height: 100%; display: block;}
+#contents #container ul li:hover {box-shadow: 1px 1px 4px #888; transition: all .4s;}
+#contents #container ul li .bcground{width: 290px;height: 270px;z-index: 999; position: absolute;}
+#contents #container ul li:hover .bcground{background-color:rgba(255, 150, 89, 0.3); transition: all .4s;}
+
+#contents #container ul li:nth-child(5), #contents #container ul li:nth-child(10){margin-right: 0;}
+#contents #container ul li .img{width: 290px;height: 270px; background-color: #ccc;}
+#contents #container ul li .img img{width: 100%; height: 100%; object-fit: cover;}
+#contents #container ul li .title{margin-left : 10px; width: 270px; line-height: 50px; text-align: center; font-size: 17px;  text-overflow: ellipsis;
+    white-space  : nowrap; overflow : hidden; display : block; }
+
+#contents #container .registBtn{width: 80px; height: 40px; font-size: 15px; border : none; border-radius: 5px; cursor:pointer;background-color: #FFA57E; color: #fff;
+    position: absolute; bottom: 0;right: 0;}
+#contents #container .registBtn:hover{background-color: #e25f27; transition: all .3s; color: #fff;}
+

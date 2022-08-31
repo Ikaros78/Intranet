@@ -1,0 +1,34 @@
+@charset "utf-8";
+#contents{height: 955px;}
+#contents div{float: left;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container h4{font-size: 20px;}
+#contents #container hr{width: 1550px; margin-top: 7px;}
+
+#contents #container p{line-height: 50px; position: absolute; left: 0;top: 178px;}
+
+#contents #container .search{float: left;width: 1550px; height: 100px; background: #eee; position: relative; top: 16px; margin-bottom: 100px;}
+#contents #container .search label{margin-left: 15px;}
+#contents #container .search input[type="search"]{width: 160px; height: 34px; font-size: 17px; padding: 3px;border: 1px solid #999; margin: 33px 0 0 20px;}
+#contents #container .search button{width: 50px; height: 34px;border: none; cursor: pointer; background-color: #000; color: #fff; position: absolute; top: 33px; left: 280px;}
+#contents #container .search button img{width: 28px;height: 28px;}
+
+#contents #container .namebox{width: 150px; line-height : 40px; background-color: #ddd; border: 1px solid #999; text-align: center; position: absolute; top: 77px; left: 350px;}
+
+#contents #container table{border-collapse: collapse; width: 1535px; font-size: 18px; margin-top: 100px;text-align: center;}
+#contents #container table tr th{background:#ffece6;}
+#contents #container table tr th:first-child{width: 530px;}
+th, td{border: 1px solid #ddd; border-left: none;}
+th:first-child, td:first-child{text-align-last: left;}
+th:last-child, td:last-child{border-right: none;}
+#contents #container table tr{height: 38px; text-indent: 30px;}
+#contents #container table tbody tr td{font-size: 15px; font-family: 'nanumGothic';}
+#contents #container table td{font-size: 17px;}
+#contents #container table .category{font-weight: bold;}
+#contents #container table .subCategory{text-indent: 50px;}
+
+#contents #container .save button{border-radius: 5px; width: 70px; height: 34px;border: none; cursor: pointer; background-color: #FFA57E; color: #fff; position: absolute; bottom: -70px; 
+    right: 10px; transition: all .3s;}
+#contents #container .save button:hover{background:#e25f27;}
+

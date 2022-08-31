@@ -1,0 +1,20 @@
+@charset "utf-8";
+#contents{height: 955px;}
+#contents div{float: left;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container h4{font-size: 20px;}
+#contents #container hr{width: 1550px; margin-top: 7px;}
+
+#contents #container p{margin-top: 30px;}
+
+#contents #container table{border-collapse: collapse; width: 1550px; font-size: 17px; border-top: 2px solid #ddd; border-bottom: 2px solid #ddd; margin-top: 15px;}
+#contents #container table th{width: 200px; background-color: rgba(238, 238, 238, 0.384);}
+#contents #container table tr{height: 45px; border-top: 1px solid #ddd;}
+#contents #container table td{font-size: 17px; padding-left : 20px; }
+#contents #container table tr select{width: 120px; height: 30px; font-size: 17px;}
+
+#contents #container form button{width: 80px; line-height: 36px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff; transition: all .5s;
+    position: absolute; bottom: -80px; right: 0;}
+#contents #container form button:hover{background-color: #e25f27;}
+

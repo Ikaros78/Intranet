@@ -1,23 +1,16 @@
-package com.ohgiraffers.intranet.msBoard.model.dao;
+package com.ohgiraffers.intranet.msBoard.model.service;
 
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 
-@Mapper
-public interface MsBoardMapper {
+public interface MsBoardService {
 
 	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
 
-	int MsFileInsert(MsBoardDTO msBoard);
-
 	int selectTotalCount(Map<String, String> searchMap);
 
-
-	
-	
+	int MsFileInsert(MsBoardDTO msBoard);
 }

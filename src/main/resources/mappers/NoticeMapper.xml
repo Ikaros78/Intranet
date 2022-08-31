@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.notice.model.dao.NoticeMapper">
+
+    <resultMap id="noticeResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        <id property="no" column="NT_NO"/>
+        <result property="title" column="NT_TITLE"/>
+        <result property="date" column="NT_DATE"/>
+        <result property="views" column="NT_VIEWS"/>
+        <result property="contents" column="NT_CONTENTS"/>
+        <result property="num" column="MEM_NUM"/>
+    </resultMap>
+
+    <resultMap id="addFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+        <id property="no" column="NTF_NO"/>
+        <result property="originName" column="NTF_ORIGIN_NAME"/>
+        <result property="saveName" column="NTF_SAVE_NAME"/>
+        <result property="savePath" column="NTF_SAVE_PATH"/>
+        <result property="deleteYn" column="DELETE_YN"/>
+        <result property="ntNo" column="NT_NO"/>
+    </resultMap>
+
+    <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        INSERT
+          INTO NT_NOTICE
+        (
+          NT_NO
+        , NT_TITLE
+        , NT_DATE
+        , NT_VIEWS
+        , NT_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+        (
+        SEQ_NOTICE_NO.NEXTVAL
+        , #{title}
+        , SYSDATE
+        , DEFAULT
+        , #{contents}
+        , 0001
+        )
+    </insert>
+
+    <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_NOTICE_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+          INTO NTF_NOTICE_FILE
+        (
+          NTF_NO
+        , NTF_ORIGIN_NAME
+        , NTF_SAVE_NAME
+        , NTF_SAVE_PATH
+        , NTF_DELETE_YN
+        , NT_NO
+        )
+        VALUES
+        (
+          SEQ_NOTICE_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{ntNo}
+        )
+    </insert>
+
+</mapper>

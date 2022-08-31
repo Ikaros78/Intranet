@@ -25,4 +25,36 @@
                  WHERE A.MEM_ID = #{ mem_id }
     </select>
 
+    <insert id="insertMember" parameterMap="MemberDTO">
+                INSERT
+                  INTO MEMBER A
+                (
+                  A.MEM_NUM
+                , A.MEM_ID
+                , A.MEM_PW
+                , A.MEM_NAME
+                , A.MEM_PHONE
+                , A.MEM_JOINDATE
+                , A.MEM_BIRTH
+                , A.MEM_EMAIL
+                , A.MEM_ADDRESS
+                , A.DEPT_RANK
+                , A.DEPT_CODE
+                )
+                VALUES
+                (
+                  #{ mem_num}
+                , #{ mem_id}
+                , #{ mem_pw}
+                , #{ mem_name}
+                , #{ mem_phone}
+                , #{ mem_joinDate}
+                , #{ mem_birth}
+                , #{ mem_email}
+                , #{ mem_address}
+                , #{ dept_rank}
+                , #{ dept_code}
+                )
+    </insert>
+
 </mapper>

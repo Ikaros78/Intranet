@@ -1,70 +1,82 @@
 package com.ohgiraffers.intranet.msBoard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ohgiraffers.intranet.common.paging.Pagenation;
+import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
-import com.ohgiraffers.intranet.msBoard.model.service.MsboardService;
+import com.ohgiraffers.intranet.msBoard.model.service.MsBoardService;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/ms")
 public class MsBoardController {
 
-	public final MsboardService msBoardService;
+	public final MsBoardService msBoardService;
 	
 	@Autowired
-	public MsBoardController(MsboardService msBoardService) {
+	public MsBoardController(MsBoardService msBoardService) {
 		
 		this.msBoardService = msBoardService;
 		
 	}
 	
-	@GetMapping("/all/msList")
-	public ModelAndView selectAllMsBoard(ModelAndView mv) {
+	@GetMapping("/recp")
+	public ModelAndView selectMsRecpBoard(ModelAndView mv, HttpServletRequest request) {
 		
-		List<MsBoardDTO> boardList = msBoardService.selectAllMsBoard();
+		   String currentPage = request.getParameter("currentPage");
+	        int pageNo = 1;
+
+	        if(currentPage != null && !"".equals(currentPage)) {
+	            pageNo = Integer.parseInt(currentPage);
+	        }
+
+	        String searchCondition = request.getParameter("searchCondition");
+	        String searchValue = request.getParameter("searchValue");
+
+	        Map<String, String> searchMap = new HashMap<>();
+	        searchMap.put("searchCondition", searchCondition);
+	        searchMap.put("searchValue", searchValue);
+
+	        int totalCount = msBoardService.selectTotalCount(searchMap);
+
+	        /* 한 페이지에 보여 줄 게시물 수 */
+	        int limit = 10;		//얘도 파라미터로 전달받아도 된다.
+
+	        /* 한 번에 보여질 페이징 버튼의 갯수 */
+	        int buttonAmount = 5;
+
+	        /* 페이징 처리를 위한 로직 호출 후 페이징 처리에 관한 정보를 담고 있는 인스턴스를 반환받는다. */
+	        SelectCriteria selectCriteria = null;
+
+	        if(searchCondition != null && !"".equals(searchCondition)) {
+	            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
+	        } else {
+	            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+	        }
+
+		
+		List<MsBoardDTO> boardList = msBoardService.selectMsRecpBoard(selectCriteria);
 	
 		mv.addObject("boardList", boardList);
+		mv.addObject("selectCriteria", selectCriteria);
 		mv.setViewName("");
 		
 		return mv;
 	}
 	
-	@GetMapping("/send/msList")
-	public ModelAndView selectSendMsBoard(ModelAndView mv) {
-		
-		List<MsBoardDTO> boardList = msBoardService.selectSendMsBoard();
 	
-		mv.addObject("boardList", boardList);
-		mv.setViewName("");
-		
-		return mv;
-	}
-	
-	@GetMapping("/recp/msList")
-	public ModelAndView selectRecpMsBoard(ModelAndView mv) {
-		
-		List<MsBoardDTO> boardList = msBoardService.selectRecpMsBoard();
-		
-		mv.addObject("boardList",boardList);
-		mv.setViewName("");
-		
-		return mv;
-	}
-	@GetMapping("/msInsert")
-	public void Msboardsend() {}
+	@GetMapping("/insert")
+	public void MsboardInsert() {}
 	
 
 	

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,19 +35,20 @@ public class MemberController {
 
         return "/member/login";
     }
-    @GetMapping
+    @GetMapping("/loginFail")
     public String loginFailed(){
 
         return "errors/loginFail";
     }
 
     /* 회원가입 요청을 받으면 회원가입 폼으로 이동 시킴*/
-    @GetMapping
+    @GetMapping("/regist")
     public String memberRegist(){
 
         return "/member/regist";
     }
 
+    @PostMapping("/regist")
     /* 회원가입 */
     public String memberRegistInsert(@ModelAttribute MemberDTO member, HttpServletRequest request,
                                      RedirectAttributes rttr) throws MemberRegistException {
@@ -57,7 +59,7 @@ public class MemberController {
 
         // 우편번호 API를 통해 받은 데이터를 spring으로 들고 오는 코드
         String address = request.getParameter("sample6_postcode")
-                + request.getParameter("memAddre") + request.getParameter("memAddre2");
+                + request.getParameter("mem_address") + request.getParameter("mem_address2");
 
         // spring으로 받은 주소를 DB에 저장하는 코드
         member.setMem_address(address);

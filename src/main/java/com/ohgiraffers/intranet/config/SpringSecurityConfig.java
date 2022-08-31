@@ -57,7 +57,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .successForwardUrl("/")
+                .defaultSuccessUrl("/")
+                .failureUrl("/member/loginFail")
 
            .and()
                 .logout() //로그아웃
@@ -78,9 +79,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
             .userDetailsService(userDetailsService()) // 사용자 정보를 받음. 자동 로그인 필수 설정.
 
-//           .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/common/denied")
+           .and()
+                .exceptionHandling()
+                .accessDeniedPage("/member/loginFail")
 ;    }
 
 

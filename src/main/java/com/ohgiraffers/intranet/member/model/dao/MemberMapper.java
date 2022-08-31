@@ -4,12 +4,12 @@ import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface MemberDAO {
+public interface MemberMapper {
 
-    int insertMember(MemberDTO member);
+    int memberRegistInsert(MemberDTO member);
 
     int updateMember(MemberDTO member);
 
-    MemberDTO findByMemberId(String memId);
+    MemberDTO findByMemberId(String mem_id);
 
 }

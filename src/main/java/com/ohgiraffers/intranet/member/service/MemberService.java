@@ -1,7 +1,7 @@
 package com.ohgiraffers.intranet.member.service;
 
 import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
-import com.ohgiraffers.intranet.member.model.dao.MemberDAO;
+import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,18 +16,18 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final MemberDAO memberDAO;
+    private final MemberMapper memberMapper;
 
-    public MemberService(PasswordEncoder passwordEncoder, MemberDAO memberDAO) {
+    public MemberService(PasswordEncoder passwordEncoder, MemberMapper memberMapper) {
         this.passwordEncoder = passwordEncoder;
-        this.memberDAO = memberDAO;
+        this.memberMapper = memberMapper;
     }
 
     @Transactional
     public void memberRegistInsert(MemberDTO member) throws MemberRegistException{
 
         log.info("[MemberService] Insert Member : " + member);
-        int result = memberDAO.insertMember(member);
+        int result = memberMapper.memberRegistInsert(member);
 
         log.info("[memberService] Insert result : " + ((result > 0) ? "회원가입 성공! " : "회원 가입 실패!"));
 

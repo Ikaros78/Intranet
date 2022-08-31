@@ -61,7 +61,7 @@ public class MemberDTO implements UserDetails {
         return true;
     }
 
-    // 계정 활성화 여부 -> true. 활성화
+    // 계정 활성화 여부
     @Override
     public boolean isEnabled() {
         return true;

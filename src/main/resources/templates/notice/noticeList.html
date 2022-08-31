@@ -43,7 +43,7 @@
             <div id="container">
                 <h4>공지사항</h4><hr>
                 <p>전체 <span>10</span></p>
-                <form action="">
+                <form action="${/notice/list}">
                     <div class="date">
                         <input type="date"> ~ <input type="date">
                     </div>
@@ -67,10 +67,10 @@
                     </thead>
                     <tbody>
                         <tr th:each="notice : ${ noticeList }">
-                            <td th:text="${ notice.view }"></td>
+                            <td th:text="${ notice.no }"></td>
                             <td><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
-                            <td ><a th:text="${ notice.title }" th:href="@{/notice/noticeDetail/{no}(no=${notice.no})}"></a></td>
-                            <td><span th:text="${ notice.member.mem_name}">주이슬</span>&nbsp;<span th:text="${ notice.writer.dept }">인사과</span></td>
+                            <td><a th:text="${ notice.title }" th:href="@{/notice/noticeDetail/{no}(no=${notice.no})}"></a></td>
+                            <td><span th:text="${ notice.member.mem_name}">주이슬</span>&nbsp;<span>인사과</span></td>
                             <td th:text="${ notice.date }"></td>
                             <td th:text="${ notice.views }"></td>
                         </tr>

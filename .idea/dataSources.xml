@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="인트라넷" uuid="0997b033-28ff-441e-9f24-6ceb76851a37">
+    <data-source source="LOCAL" name="인트라넷" uuid="bde5758e-40a1-4638-a301-630423fbbd96">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>

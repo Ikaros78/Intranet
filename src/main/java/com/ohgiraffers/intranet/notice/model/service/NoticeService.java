@@ -5,6 +5,8 @@ import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("noticeService")
 public class NoticeService {
 
@@ -24,5 +26,12 @@ public class NoticeService {
     public int noticeFileInsert(NoticeFileDTO noticeFile) {
 
         return noticeMapper.fileRegist(noticeFile);
+    }
+
+    public List<NoticeDTO> selectAllNoticeList() {
+
+        List<NoticeDTO> noticeList = noticeMapper.selectAllNoticeList();
+
+        return noticeList;
     }
 }

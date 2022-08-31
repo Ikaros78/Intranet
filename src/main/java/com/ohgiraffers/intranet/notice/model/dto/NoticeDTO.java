@@ -2,18 +2,18 @@ package com.ohgiraffers.intranet.notice.model.dto;
 
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
-import java.util.Date;
-import java.util.List;
+import java.sql.Date;
 
 public class NoticeDTO {
 
     private int no;
     private String title;
-    private java.util.Date date;
+    private Date date;
     private int views;
     private String contents;
+    private MemberDTO member;
+    private NoticeFileDTO file;
 
-    private List<MemberDTO> member;
 
     public NoticeDTO() {
     }
@@ -26,13 +26,14 @@ public class NoticeDTO {
         this.contents = contents;
     }
 
-    public NoticeDTO(int no, String title, Date date, int views, String contents, List<MemberDTO> member) {
+    public NoticeDTO(int no, String title, Date date, int views, String contents, MemberDTO member, NoticeFileDTO file) {
         this.no = no;
         this.title = title;
         this.date = date;
         this.views = views;
         this.contents = contents;
         this.member = member;
+        this.file = file;
     }
 
     public int getNo() {
@@ -75,12 +76,20 @@ public class NoticeDTO {
         this.contents = contents;
     }
 
-    public List<MemberDTO> getMember() {
+    public MemberDTO getMember() {
         return member;
     }
 
-    public void setMember(List<MemberDTO> member) {
+    public void setMember(MemberDTO member) {
         this.member = member;
+    }
+
+    public NoticeFileDTO getFile() {
+        return file;
+    }
+
+    public void setFile(NoticeFileDTO file) {
+        this.file = file;
     }
 
     @Override
@@ -92,6 +101,7 @@ public class NoticeDTO {
                 ", views=" + views +
                 ", contents='" + contents + '\'' +
                 ", member=" + member +
+                ", file=" + file +
                 '}';
     }
 }

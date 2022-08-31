@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -89,8 +90,15 @@ public class NoticeController {
     }
 
     @GetMapping("/list")
-    public String noticeListPage(){
+    public ModelAndView noticeList(ModelAndView mv){
 
-        return "notice/noticeList";
+        List<NoticeDTO> noticeList = noticeService.selectAllNoticeList();
+        log.info("noticeList값 확인 : " + noticeList);
+
+        mv.addObject("noticeList", noticeList);
+
+        mv.setViewName("notice/noticeList");
+
+        return mv;
     }
 }

@@ -22,6 +22,31 @@
         <result property="ntNo" column="NT_NO"/>
     </resultMap>
 
+    <resultMap id="NoticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        <id property="no" column="NT_NO"/>
+        <result property="title" column="NT_TITLE"/>
+        <result property="date" column="NT_DATE"/>
+        <result property="views" column="NT_VIEWS"/>
+        <result property="contents" column="NT_CONTENTS"/>
+        <result property="num" column="MEM_NUM"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="file" resultMap="addFileResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
         INSERT
           INTO NT_NOTICE
@@ -70,5 +95,16 @@
         , #{ntNo}
         )
     </insert>
+
+    <select id="selectAllNoticeList" resultMap="noticeResultMap">
+        SELECT
+               A.NT_NO
+             , A.NT_TITLE
+             , B.MEM_NAME
+             , A.NT_DATE
+          FROM NT_NOTICE A
+          JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+         ORDER BY A.NT_NO DESC
+    </select>
 
 </mapper>

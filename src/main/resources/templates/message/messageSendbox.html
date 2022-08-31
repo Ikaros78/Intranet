@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>basic</title>
+    <link rel="stylesheet" href="../resources/css/reset.css">
+    <link rel="stylesheet" href="../resources/css/basic.css">
+    <link rel="stylesheet" href="../resources/css/board.css">    
+</head>
+<script>
+    
+
+
+</script>
+
+<body>
+    <div id="wrap">
+        <div id="header">
+            <h1 class="logo"><a href="../main/main.html"><img src="../resources/images/logo.png" alt="로고 이미지"></a></h1>
+            <ul class="lnb">
+                <li><a href="../common/mypage.html">마이페이지</a></li>
+                <li><a href="../login.html">로그아웃</a></li>
+            </ul>
+            <ul class="gnb">
+                <li><a href="../board/notice/noticeList.html">공지사항</a></li>
+                <li><a href="../board/free/freeList.html">게시판</a></li>
+                <li><a href="../calendar/cd_main.html">일정관리</a></li>
+                <li><a href="../sign/testsignmain.html">전자결재</a></li>
+                <li><a href="../message/messageRecpBox.html">쪽지함</a></li>
+                <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
+            </ul>
+        </div>
+    <div id="messageheader">
+        <select class="form-select" aria-label="Default select example" style="width: 110px; position: absolute; top:140px; left:380px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px; ">
+            <option selected>전체쪽지</option>
+            <option value="1">받은쪽지</option>
+            <option value="2">보낸쪽지</option>
+            <option value="3">보관쪽지</option>
+          </select>
+        <div id="searchbox">
+            <table>
+                <div class="search" style="position: absolute; width: 300px; left: 500px; top: 140px;" >
+                    <input type="text" placeholder="검색어 입력" style=" width: 100%; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
+                    <img src="../resources/images/pngwing.com.png" style=" position : absolute; width: 17px; top: 12px; right: -15px; margin: 0;" >   
+                </div>
+            </table>
+        </div>
+        <button type="button" style="position: absolute; top: 210px; left: 340px; padding: 6px 8px;" >삭제</button>
+    </div>
+       
+        <div id="visual" >
+            <div class="table-area" style="position: absolute; top: 250px;left: 350px;width: 1350px;" >     
+                <table align="center" id="">
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>받는사람 </th>
+                        <th width="" style="border: 1px solid black">내용</th>
+                        <th width="100px" style="border: 1px solid black">보낸날짜</th>
+                        <th width="100px" style="border: 1px solid black">받은날짜</th>
+                        <th width="100px" style="border: 1px solid black">읽기여부</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">Y</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="1000px" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">Y</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="1000px" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">N</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="1000px" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">N</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="1000px" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">N</th>
+                    </tr>
+                    <tr>
+                        <th><input type="checkbox" style="margin: 10px;"></button></th>
+                        <th width="100px" style="border: 1px solid black";>user01</th>
+                        <th width="1000px" style="border: 1px solid black">contents01</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">22.08.05</th>
+                        <th width="100px" style="border: 1px solid black">N</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="page-wrap" style="position: absolute; top:800px; right: 730px;">
+            <ul class="page-nation">
+                <li><a href=""><<</a></li>
+                <li><a href=""><</a></li>
+                <li><a href="">1</a></li>
+                <li><a href="">2</a></li>
+                <li><a href="">3</a></li>
+                <li><a href="">4</a></li>
+                <li><a href="">5</a></li>
+                <li><a href="">></a></li>
+                <li><a href="">>></a></li>
+            </ul>
+        </div>
+    </li>
+
+        <div id="contents">
+            <div id="sideBar">
+                <h3>쪽지함</h3>
+                <ul>
+                    <li class="main"><a href="./messageSend.html">쪽지보내기</a></li>
+                    <li class="main"><a href="./messageRecpBox.html">받은쪽지함</a></li>
+                    <li class="main"><a href="./messageSendbox.html">보낸쪽지함</a></li>
+                    <li class="main"><a href="./messageAllBox.html">쪽지보관함</a></li>
+                </ul>
+            </div>
+        </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+@charset "utf-8";
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+/* reset */
+*{margin: 0;padding: 0; font-family: 'nanumsquare', 'Sans-serif';}
+li{list-style: none;}
+a{text-decoration: none !important;color: #000;}
+a:hover{color:#000;}
+img{border: 0;vertical-align: top;}
+
+
+#contents{height: 955px;}
+#contents #sideBar, #contents #container{float: left;}
+#contents #sideBar h3{margin-top: 0;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container h4{font-size: 20px;}
+#contents #container hr{width: 1550px; margin : 7px 0 30px 0; border:1px solid #ccc;}
+
+#contents #container table{width: 1550px; height: 70px; font-size: 17px; margin-bottom: 30px;}
+#contents #container table tr{border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;}
+#contents #container table tr th{background-color: #eee; width: 150px; padding-right: 20px; text-align: right;}
+#contents #container table tr td{padding-left: 20px;}
+#contents #container table tr td input{width: 1360px; border: 1px solid #ddd;}
+
+#contents #container form input[type="file"]{width: 1550px; line-height: 65px; background-color: #eee; margin-top: -15px; border: 1px solid #ccc; padding-left: 10px; font-size: 15px;}
+#contents #container form .registBtn{width: 80px; height: 40px; font-size: 15px; border : none; border-radius: 5px; cursor:pointer;background-color: #FFA57E; color: #fff;
+    margin: 30px 0 0 735px;}
+#contents #container form .registBtn:hover{background-color: #e25f27; transition: all .3s; color: #fff;}
+
+#contents #container #summernote{height: 500px; overflow: auto;}
+
+

@@ -1,0 +1,23 @@
+@charset "utf-8";
+#contents{height: 955px;}
+#contents div{float: left;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container h4{font-size: 20px;}
+#contents #container hr{width: 1550px; margin : 7px 0 30px 0;}
+#contents #container .title {height: 95px; background-color: #eee; padding : 45px 0 0 10px;}
+#contents #container .title .writer{font-size: 17px; line-height: 50px; font-weight: bold;}
+#contents #container .title .date{font-size: 17px; line-height: 50px; font-weight: normal;}
+#contents #container .title .fileDown{font-size: 15px; display: block;}
+#contents #container .title .fileDown>span{margin-left: 5px;}
+#contents #container .title .fileDown:hover span span{color: #e25f27; text-decoration: underline;}
+
+#contents #container .body{width: 1490px; margin-top: 30px; height: 540px; overflow: auto; border: 1px solid #ddd; padding: 30px; font-size: 17px; 
+    background-color: rgba(238, 238, 238, 0.384);}
+
+#contents #container .btnArea{position: absolute; right: 0; bottom: -55px;}
+#contents #container button{width: 80px; height: 40px; font-size: 15px; border : none; border-radius: 5px; cursor:pointer;
+    margin-top: 30px;}
+#contents #container button:nth-child(3){background-color: #FFA57E; color: #fff;}
+#contents #container button:hover{background-color: #e25f27; transition: all .3s; color: #fff;}
+

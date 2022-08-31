@@ -1,6 +1,9 @@
 package com.ohgiraffers.intranet.notice.model.dto;
 
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+
 import java.util.Date;
+import java.util.List;
 
 public class NoticeDTO {
 
@@ -9,6 +12,8 @@ public class NoticeDTO {
     private java.util.Date date;
     private int views;
     private String contents;
+
+    private List<MemberDTO> member;
 
     public NoticeDTO() {
     }
@@ -19,6 +24,15 @@ public class NoticeDTO {
         this.date = date;
         this.views = views;
         this.contents = contents;
+    }
+
+    public NoticeDTO(int no, String title, Date date, int views, String contents, List<MemberDTO> member) {
+        this.no = no;
+        this.title = title;
+        this.date = date;
+        this.views = views;
+        this.contents = contents;
+        this.member = member;
     }
 
     public int getNo() {
@@ -61,6 +75,14 @@ public class NoticeDTO {
         this.contents = contents;
     }
 
+    public List<MemberDTO> getMember() {
+        return member;
+    }
+
+    public void setMember(List<MemberDTO> member) {
+        this.member = member;
+    }
+
     @Override
     public String toString() {
         return "NoticeDTO{" +
@@ -69,6 +91,7 @@ public class NoticeDTO {
                 ", date=" + date +
                 ", views=" + views +
                 ", contents='" + contents + '\'' +
+                ", member=" + member +
                 '}';
     }
 }

@@ -87,4 +87,10 @@ public class NoticeController {
 
         return "redirect:/notice/list";
     }
+
+    @GetMapping("/list")
+    public String noticeListPage(){
+
+        return "notice/noticeList";
+    }
 }

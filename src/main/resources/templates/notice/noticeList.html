@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/common/paging.css}">
+    <link rel="stylesheet" th:href="@{/css/notice/noticeList.css}">
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+            <h1 class="logo"><a href=""><img th:src="@{/images/logo.png}" alt="로고 이미지"></a></h1>
+            <ul class="lnb">
+                <li><a href="">마이페이지</a></li>
+                <li><a href="">로그아웃</a></li>
+            </ul>
+            <ul class="gnb">
+                <li><a href="">공지사항</a></li>
+                <li><a href="">게시판</a></li>
+                <li><a href="">일정관리</a></li>
+                <li><a href="">전자결재</a></li>
+                <li><a href="">쪽지함</a></li>
+                <li><a href="">직원관리</a></li>
+            </ul>
+        </div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>공지사항</h3>
+                <ul>
+                    <li class="main">
+                        <a href="">공지사항</a>
+                    </li>
+                    <li class="main">
+                        <a href="">사내소식</a>
+                    </li>
+                    <li class="main">
+                        <a href="">갤러리</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="container">
+                <h4>공지사항</h4><hr>
+                <p>전체 <span>10</span></p>
+                <form action="">
+                    <div class="date">
+                        <input type="date"> ~ <input type="date">
+                    </div>
+                    <select name="" id="">
+                        <option value="제목">제목</option>
+                        <option value="작성자">작성자</option>
+                    </select>
+                    <input type="search" name="" id="">
+                    <button>검색</button>
+                </form>
+                <table>
+                    <thead>
+                        <tr>
+                        <th>번호</th>
+                        <th><img th:src="@{/images/clip.png}" alt="첨부파일"></th>
+                        <th>제목</th>
+                        <th>등록자</th>
+                        <th>등록일</th>
+                        <th>조회</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="notice : ${ noticeList }">
+                            <td th:text="${ notice.view }"></td>
+                            <td><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
+                            <td ><a th:text="${ notice.title }" th:href="@{/notice/noticeDetail/{no}(no=${notice.no})}"></a></td>
+                            <td><span th:text="${ notice.member.mem_name}">주이슬</span>&nbsp;<span th:text="${ notice.writer.dept }">인사과</span></td>
+                            <td th:text="${ notice.date }"></td>
+                            <td th:text="${ notice.views }"></td>
+                        </tr>
+                    </tbody>    
+                </table>
+                <button class="registBtn"><a href="noticeRegist.html">등록하기</a></button>
+                <div class="hs_table_foot">
+                    <input class="hs_board_lshift shiftbtn" type="button" value="<<">
+                    <input class="hs_board_left shiftbtn" type="button" value="<"><a class="hs_board_numbering">1</a>
+                    <input class="hs_board_right shiftbtn" type="button" value=">"><input class="hs_board_rshift shiftbtn" type="button" value=">>">
+                </div>
+            </div>
+        </div>
+</body>
+</html>

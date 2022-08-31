@@ -51,7 +51,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout() //로그아웃
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .deleteCookies("JSESSIONID") // 쿠키 제거 -> 로그아웃 시 자동로그인이 해제되도록 할 생각.
-                .invalidateHttpSession(true)
+                .invalidateHttpSession(true);
+
+        //중복 로그인 방지용 코드
+    http.sessionManagement()
+            .maximumSessions(1) //세션 최대 허용 수
+            .maxSessionsPreventsLogin(false) //중복 로그인을 인지하면 이전 로그인이 풀림
 
 //           .and()
 //                .exceptionHandling()

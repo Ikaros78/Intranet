@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
+
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../images/startup-g4e56988c0_1920.jpg) no-repeat;
+  width: 100vw;
+  height: 56.25vw;
+  /* margin: auto;
+  padding: 0; */
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  position: absolute;
+  margin-top: 15%;
+  margin-right: 0.9%;
+  font-size: 3rem;
+  color: #fff;
+}
+
+form {
+  margin-left: 25px;
+  width: 350px;
+}
+
+.select {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.login-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ccc;
+  height: 270px;
+  width: 400px;
+  border-radius: 35px;
+  box-shadow: 0 1px 1px 0px, 0 1px 1px 0px;
+}
+
+.input-box {
+  position: relative;
+  margin: 10px 0;
+}
+
+.input-box > input {
+  /* 입력칸 테두리 없애고 bottom만 남김.*/
+  background: none;
+  border: none;
+  border-bottom: solid 1px #000;
+  padding: 20px 0px 5px 0px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.input-box input::placeholder {
+  color: transparent;
+}
+
+.input-box input:placeholder-shown + label {
+  color: #000;
+  font-size: 14pt;
+  top: 15px;
+}
+
+.input-box input:focus + label,
+label {
+  color: #000;
+  font-size: 10pt;
+  font-family: "Noto Sans KR", sans-serif;
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+}
+
+.input-box input:focus,
+.input-box input:not(:placeholder-shown) {
+  border-bottom: solid 1px #000;
+  outline: none;
+}
+
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button {
+  margin: 0;
+  margin-left: 1%;
+  margin-top: 5%;
+
+  padding: 0.4rem 1.9rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: auto;
+
+  border: none;
+  border-radius: 6px;
+}
+
+button {
+  box-shadow: 0 4px 6px -5px, 0 2px 4px -5px;
+
+  cursor: pointer;
+
+  transition: 0.6s;
+}
+
+button:active,
+button:hover,
+button:focus {
+  background: var(--button-hover-bg-color);
+  outline: 0;
+}
+button:disabled {
+  opacity: 0.5;
+}
+
+:root {
+  --button-color: #fff;
+  --button-bg-color: #e25f27;
+  --button-hover-bg-color: #ffa57e;
+}
+
+button {
+  background: var(--button-bg-color);
+  color: var(--button-color);
+}
+
+label + input[id="chk"] {
+  float: right;
+}
+
+.select {
+  float: right;
+  height: 20px;
+}
+
+input[type="checkbox"] {
+  zoom: 1.1;
+  bottom: 5px;
+  transition: 0.2s;
+}
+
+input[type="checkbox"]:hover {
+  transform: scale(1.9);
+}
+
+/* 로그인 버튼 */
+.logIn {
+  margin-top: 50px;
+  width: 340px;
+  font-size: 1.3rem;
+  border: none;
+  text-shadow: 1px 1px 2px #e25f27;
+}
+
+#keyShow {
+  margin-top: 10px;
+  float: left;
+  width: 125px;
+  color: #e25f27;
+}

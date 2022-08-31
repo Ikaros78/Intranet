@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.config;
 
 import com.ohgiraffers.intranet.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,14 +20,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         this.memberService = memberService;
     }
 
-    /* 비밀번호 암호화 빈 설정*/
+    /* 암호화 설정*/
     @Bean
     public PasswordEncoder passwordEncoder(){
 
         return new BCryptPasswordEncoder();
     }
 
-    /* 시큐리티 설정 무시할 리소스 등록. 작업 화이팅 */
+    /* 시큐리티 설정 무시할 리소스 등록. 여러분 작업 화이팅 */
     public void configure(WebSecurity web){
 
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/lib/**");
@@ -49,11 +50,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
            .and()
                 .logout() //로그아웃
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .deleteCookies("JSESSIONID") // 쿠키 제거 -> 로그아웃 시 자동로그인이 해제되도록 할 생각.
                 .invalidateHttpSession(true)
 
-           .and()
-                .exceptionHandling()
-                .accessDeniedPage("/common/denied")
+//           .and()
+//                .exceptionHandling()
+//                .accessDeniedPage("/common/denied")
 ;    }
+
+    /* 권한 등록 시 인증할 비즈니스 로직 등록 코드 */
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+    }
+
 
 }

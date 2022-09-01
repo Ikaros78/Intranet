@@ -28,7 +28,6 @@
         <result property="date" column="NT_DATE"/>
         <result property="views" column="NT_VIEWS"/>
         <result property="contents" column="NT_CONTENTS"/>
-        <result property="num" column="MEM_NUM"/>
         <association property="member" resultMap="memberResultMap"/>
         <association property="file" resultMap="addFileResultMap"/>
         <association property="dept" resultMap="deptResultMap"/>
@@ -48,9 +47,9 @@
         <result property="dept_code" column="DEPT_CODE"/>
     </resultMap>
 
-    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.notice.model.dto.TestDeptDTO">
-        <id property="deptCode" column="DEPT_CODE"/>
-        <result property="deptName" column="DEPT_NAME"/>
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
@@ -102,18 +101,69 @@
         )
     </insert>
 
-    <select id="selectAllNoticeList" resultMap="noticeListResultMap">
-        SELECT
-               A.NT_NO
+    <select id="selectNoticeList" resultMap="noticeListResultMap">
+        SELECT A.RNUM
+             , A.NT_NO
              , A.NT_TITLE
-             , B.MEM_NAME
+             , D.MEM_NAME
              , A.NT_DATE
-             , C.DEPT_CODE
+             , E.DEPT_NAME
              , A.NT_VIEWS
-          FROM NT_NOTICE A
-          LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
-          LEFT JOIN DEPARTMENT C ON(B.DEPT_CODE = C.DEPT_CODE)
-         ORDER BY A.NT_NO DESC
+             , F.NTF_ORIGIN_NAME
+             , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+             , B.NT_NO
+             , B.NT_TITLE
+             , B.NT_DATE
+             , B.NT_VIEWS
+             , B.MEM_NUM
+        FROM (SELECT
+               C.NT_NO
+             , C.NT_TITLE
+             , C.NT_DATE
+             , C.NT_VIEWS
+             , C.MEM_NUM
+        FROM NT_NOTICE C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.NT_NO DESC
+             ) B
+            <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+             ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
     </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+
+          FROM NT_NOTICE A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
 
 </mapper>

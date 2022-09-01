@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.notice.model.dto;
 
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
 import java.sql.Date;
@@ -11,10 +12,10 @@ public class NoticeDTO {
     private Date date;
     private int views;
     private String contents;
+
     private MemberDTO member;
     private NoticeFileDTO file;
-
-    private TestDeptDTO dept;
+    private DepartmentDTO dept;
 
     public NoticeDTO() {
     }
@@ -28,7 +29,7 @@ public class NoticeDTO {
     }
 
 
-    public NoticeDTO(int no, String title, Date date, int views, String contents, MemberDTO member, NoticeFileDTO file, TestDeptDTO dept) {
+    public NoticeDTO(int no, String title, Date date, int views, String contents, MemberDTO member, NoticeFileDTO file, DepartmentDTO dept) {
         this.no = no;
         this.title = title;
         this.date = date;
@@ -95,11 +96,11 @@ public class NoticeDTO {
         this.file = file;
     }
 
-    public TestDeptDTO getDept() {
+    public DepartmentDTO getDept() {
         return dept;
     }
 
-    public void setDept(TestDeptDTO dept) {
+    public void setDept(DepartmentDTO dept) {
         this.dept = dept;
     }
 

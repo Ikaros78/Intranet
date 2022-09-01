@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>전자결재 : 기안 양식선택</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/sign/signbasic.css">
+    <link rel="stylesheet" href="/css/paging.css">
+    <link rel="stylesheet" href="/css/sign/selectForm.css">
+</head>
+<body>
+
+    <div th:replace="/common/header.html"></div>
+
+    <div th:replace="/sign/signSideBar.html"></div>
+
+            <div id="container">
+                <h4>공지사항</h4><hr>
+                <div class="noticeArea">
+                    <img class="firstImg" src="/images/circleMark.png" alt="">
+                    <p class="first">
+                        시스템 항목이 '문서결재'인 양식은 전자결재 내에서 결재문서가 작성되어 결재가 처리됩니다. '문서결재'외 양식은 해당 시스템에서 결재문서 관련 사항을 입력하여 결재요청하면
+                        전자결재와 연계하여 결재가 처리됩니다.
+                    </p>    
+                    <br>
+                    <img class="secondImg" src="/images/circleMark.png" alt="">
+                    <p class="second">
+                        자가결재(기안자가 결재문서 작성화면에서 결재선을 지정하지 않고 결재오청하면 바로 문서가 완료 처리되는 기능) 허용이 필요할 경우 회사관리자에게는 관리자메뉴 > 사용관리에서
+                        '자가결재'기능을 사용으로 변경하도록 요청하시기 바랍니다.<br>(직책이 있는 사용자만 자가결재 가능)
+                    </p>    
+                </div>
+                <div class="leftArea">
+                    <table class="leftTbl">
+                        <thead>
+                            <th colspan="2">최신 기안한 양식</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
+                                <td class="txtTd"><a href="#">출장 신청서</a></td>
+                            </tr>
+                            <tr>
+                                <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
+                                <td class="txtTd">출장 신청서</td>
+                            </tr>
+                            <tr>
+                                <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
+                                <td class="txtTd">출장 신청서</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="rightArea">
+                    <p>전체 <span>10</span></p>
+                    <form action="">
+                        <select name="" id="">
+                            <option value="">양식명</option>
+                            <option value="">양식명</option>
+                            <option value="">양식명</option>
+                            <option value="">양식명</option>
+                        </select>
+                        <input type="search">
+                        <button><img src="/images/searchIconOrg.png" alt=""></button>
+                    </form>
+                    <table class="rightTbl">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>시스템</th>
+                                <th>서식함</th>
+                                <th>즐겨찾기</th>
+                                <th>양식명</th>
+                                <th>담당부서</th>
+                                <th>담당자</th>
+                            </tr>
+                        </thead>
+                        <!-- List 10개 들어가면 옆 테이블이랑 height 딱 맞도록 해놨슴다 -->
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>인사</td>
+                                <td>공통</td>
+                                <!-- 즐겨찾기를 어떻게 구현하실지 모르겠어서 일단 버튼 안에 이미지로 넣어놨슴다... 일케 해도 되려나.. star.png >>> 색 없음 -->
+                                <td><button onclick="fav()"><img src="/images/star.png" alt="즐겨찾기" id="star"></button></td>
+                                <td><a href="#">출장 신청서</a></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>인사</td>
+                                <td>공통</td>
+                                <!-- starFill.png >>> 색 있음 -->
+                                <td><button onclick="fav()"><img src="/images/starFill.png" alt="즐겨찾기"></button></td>
+                                <td>출장 신청서</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>인사</td>
+                                <td>공통</td>
+                                <!-- starFill.png >>> 색 있음 -->
+                                <td><button onclick="fav()"><img src="/images/starFill.png" alt="즐겨찾기"></button></td>
+                                <td>출장 신청서</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>인사</td>
+                                <td>공통</td>
+                                <!-- starFill.png >>> 색 있음 -->
+                                <td><button onclick="fav()"><img src="/images/starFill.png" alt="즐겨찾기"></button></td>
+                                <td>출장 신청서</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="hs_table_foot">
+                                        <input class="hs_board_lshift shiftbtn" type="button" value="<<">
+                                        <input class="hs_board_left shiftbtn" type="button" value="<"><a class="hs_board_numbering">1</a>
+                                        <input class="hs_board_right shiftbtn" type="button" value=">"><input class="hs_board_rshift shiftbtn" type="button" value=">>">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

@@ -17,6 +17,12 @@
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
 
+        <collection property="authorit" resultMap="authoritResultMap"/>
+    </resultMap>
+
+    <resultMap id="authoritResultMap" type="com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO">
+        <id property="memNum" column="MEM_NUM"/>
+        <result property="auCode" column="AU_CODE"/>
     </resultMap>
 
     <select id="memberLogin" resultMap="loginMemberResultMap">
@@ -57,4 +63,7 @@
                 )
     </insert>
 
+    <select id="selectMemberListForCalendarManage" resultMap="loginMemberResultMap">
+
+    </select>
 </mapper>

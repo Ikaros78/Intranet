@@ -1,5 +1,5 @@
 package com.ohgiraffers.intranet.calendar.model.dao;
 
-public interface CalendarDAO {
+public interface CalendarMapper {
 
 }

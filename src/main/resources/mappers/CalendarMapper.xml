@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.member.model.dao.MemberMapper">
+
+    <resultMap id="cdResultMap" type="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
+        <id property="id" column="CD_NO"/>
+        <result property="memNum" column="MEM_NUM"/>
+        <result property="groupId" column="CD_GROUP"/>
+        <result property="title" column="CD_TITLE"/>
+        <result property="content" column="CD_CONTENT"/>
+        <result property="start" column="CD_START"/>
+        <result property="end" column="CD_END"/>
+        <result property="allDay" column="CD_ALLDAY"/>
+        <result property="color" column="CD_COLOR"/>
+        <result property="type" column="CD_TYPE"/>
+        <result property="wDate" column="CD_WDATE"/>
+    </resultMap>
+
+
+</mapper>

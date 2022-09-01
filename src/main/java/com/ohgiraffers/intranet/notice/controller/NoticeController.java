@@ -21,7 +21,6 @@ public class NoticeController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final NoticeService noticeService;
-
     public NoticeController(NoticeService noticeService){
 
         this.noticeService = noticeService;

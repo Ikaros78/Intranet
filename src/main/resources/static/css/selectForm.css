@@ -1,0 +1,42 @@
+@charset "utf-8";
+#contents{height: 905px;}
+#contents div{float: left;}
+#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+
+#contents #container .noticeArea{width: 1550px; background-color: #eee; font-size: 15px; height: 95px;position: relative; margin-top: 24px;}
+#contents #container .noticeArea img{position: absolute; left: 10px;}
+#contents #container .noticeArea .firstImg{margin-top: 10px;}
+#contents #container .noticeArea .secondImg{margin-top: 23px;}
+#contents #container .noticeArea p{position: absolute; left:35px; line-height: 25px;}
+#contents #container .noticeArea .first{top: 7px;}
+#contents #container .noticeArea .second{top: 37px;}
+
+#contents #container table{border-collapse: collapse;}
+
+#contents #container .leftArea{position: absolute; top: 200px; left: 0; height: 600px;border: 1px solid #ddd; overflow:auto;}
+#contents #container .leftTbl{width: 580px;}
+#contents #container .leftTbl thead{background: #ddd; height: 40px; position:sticky; top: 0;}
+#contents #container .leftTbl tbody tr{line-height: 40px; font-size: 15px; text-indent: 10px;}
+#contents #container .leftTbl tbody tr .imgTd{width: 23px; text-align: center;}
+#contents #container .leftTbl tbody tr .imgTd img{width: 17px; height:auto; margin-top: 10px;}
+
+#contents #container .rightArea{position: absolute; top: 200px; right: 0; width: 920px; }
+#contents #container .rightArea p{line-height: 32px; font-size: 17px;}
+#contents #container .rightArea p span{color: #e25f27;}
+
+#contents #container .rightArea form{position: absolute; top: 0; right: 31px;}
+#contents #container .rightArea form select{width: 130px; height: 33px; font-size: 17px; text-align: center; border-radius: 0; border-color: #bbb; }
+#contents #container .rightArea form input[type="search"]{width: 180px; height: 32px; }
+#contents #container .rightArea form button{border: 1px solid #999; background:#fff; width: 33px; height: 32px; position: absolute; right: -31px; top: 1px;}
+#contents #container .rightArea form button img{width: 28px; height: 28px;}
+
+.rightArea .rightTbl{margin-top: 20px; width: 920px;}
+.rightArea .rightTbl tr{height: 45px; border: 1px solid #ddd; border-left: none; border-right: none;}
+.rightArea .rightTbl tr:first-child{border-top:2px solid #aaa;}
+.rightArea .rightTbl tbody tr:nth-child(odd){background: rgba(201, 201, 201, 0.171);}
+.rightArea .rightTbl th{font-size: 17px; height: 50px;}
+.rightArea .rightTbl td{font-size: 15px; text-align: center;}
+.rightArea .rightTbl td button{border: none; cursor: pointer; background : none;}
+.rightArea .rightTbl td img{width: 17px; height: auto;}
+
+.rightArea .rightTbl th:nth-child(5){width: 250px;}

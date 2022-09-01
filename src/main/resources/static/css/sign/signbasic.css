@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+#contents{height: 1200px;}
+#contents #sideBar{width: 250px; background-color: #eee; height: 100%; box-shadow: 1px 0px 2px #ccc; float:left}
+#contents #sideBar h3{font-size: 35px; text-align: center; padding: 15px 0; background-color: #313131; color:#fff;
+margin-bottom: 15px;}
+#contents #sideBar .main{background-color: #999; text-indent: 10px;}
+#contents #sideBar .main>a{line-height: 50px; display: block; font-size: 25px; font-weight: bold;}
+#contents #sideBar .main .sub{background-color:#eee;border-bottom: 2px solid #fff; text-indent: 23px; }
+#contents #sideBar .main .sub a{font-size: 18px; display: block; width: 250px; line-height: 30px; }
+#contents #sideBar .main .sub a:hover{color: rgb(255, 120, 66);}

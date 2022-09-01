@@ -5,7 +5,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @RequiredArgsConstructor
 public class ReferencerDTO {
 

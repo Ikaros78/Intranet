@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 @ToString
 public class SignDTO {

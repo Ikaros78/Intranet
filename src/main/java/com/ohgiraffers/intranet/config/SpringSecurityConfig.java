@@ -49,6 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests() //요청에 대한 권한 체크
+//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**") 일단 주석 처리 22-09-01
+                .mvcMatchers("/**","/member/**").permitAll()
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
 
@@ -57,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/main/main") // 로그인 성공시 이동할 페이지
                 .failureUrl("/member/loginFail")
 
            .and()

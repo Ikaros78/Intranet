@@ -132,7 +132,7 @@ const autoHypen = (target) => {
 //회원가입 selectBox 값을 Input 박스에 넣는 코드
 let selectBoxChange = function (value) {
   console.log(value);
-  $("#memDepart").val(value);
+  $("#memDept").val(value);
 };
 
 // 회원가입 우편번호 API

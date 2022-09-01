@@ -49,6 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests() //요청에 대한 권한 체크
+//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**") 일단 주석 처리 22-09-01
+                .mvcMatchers("/**","/member/**").permitAll()
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
 
@@ -57,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/main/main") // 로그인 성공시 이동할 페이지
                 .failureUrl("/member/loginFail")
 
            .and()
@@ -67,21 +69,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/");
 
-        //중복 로그인 방지용 코드
-    http.sessionManagement()
-            .maximumSessions(1) //세션 최대 허용 수
-            .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
+                //중복 로그인 방지용 코드
+        http.sessionManagement()
+                    .maximumSessions(1) //세션 최대 허용 수
+                    .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
 
-        //자동 로그인 코드
-    http.rememberMe()
-            .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
-            .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
-            .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
-            .userDetailsService(userDetailsService()) // 사용자 정보를 받음. 자동 로그인 필수 설정.
+                //자동 로그인 코드
+        http.rememberMe()
+                    .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
+                    .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
+                    .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
+                    .userDetailsService(userDetailsService()) // 사용자 정보를 받음. 자동 로그인 필수 설정.
 
-           .and()
-                .exceptionHandling()
-                .accessDeniedPage("/member/loginFail")
+               .and()
+                    .exceptionHandling()
+                    .accessDeniedPage("/member/loginFail")
 ;    }
 
 

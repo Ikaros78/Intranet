@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부서수신함</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
+    <link rel="stylesheet" type="text/css" href="/css/sign/signmain.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
+    
+</head>
+<body>
+
+    <div th:replace="/common/header.html"></div>
+
+    <div th:replace="/sign/signSideBar.html"></div>
+
+        
+            <div id="main-container">
+                <div class="con-header col-offset-1">
+                    <h2>부서수신함</h2>
+                </div>
+            
+
+                <div class="search-wrap">
+                    <div class="form-group">
+                        <form id="searchForm" action="" method="get">
+                            <input type="hidden" name="currentPage" value="1">
+
+                            <table>
+                                <colgroup>
+                                    <col style="width:7%";>
+                                    <col style="width:33%";>
+                                    <col style="width:7%";>
+                                    <col style="width:33%";>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" width="7%">
+                                            <labeL>기안자</labeL>
+                                        </th>
+                                        <td width="33%">
+                                            <input type="text" title="기안자" name="searchWriter">
+                                        </td>
+                                        <th scope="row" width="7%">
+                                            <labeL>양식명</labeL>
+                                        </th>
+                                        <td width="33%">
+                                            <input type="text" title="양식명" name="searchType">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <labeL>제목</labeL>
+                                        </th>
+                                        <td>
+                                            <input type="text" title="제목" name="searchTitle">
+                                        </td>
+                                        <th scope="row">
+                                            <labe>배정일</labe>
+                                        </th>
+                                        <td>
+                                            <input type="text" title="시작일" name="searchStartDate" class="datePicker">
+                                            <span>~</span>
+                                            <input type="text" title="종료일" name="searchEndDate" class="datePicker">     
+                                            <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
+                                            <button type="button" class="btn btn-color7">검색</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label>문서번호</label>
+                                        </th>
+                                        <td>
+                                            <input type="text" title="문서번호" name="searchNum">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>              <!-- form-group -->
+                </div>  <!-- search-wrap -->
+
+                <div class="list-wrap">
+                    <table class="table table-borderd">
+                        <thead>
+                            <tr>
+                                <th width="20px"><input type="checkbox"></th>
+                                <th width="100px">NO</th>
+                                <th width="150px">서식함</th>
+                                <th width="80px">문서번호</th>
+                                <th width="800px">문서제목</th>
+                                <th width="80px">기안자</th>
+                                <th width="100px">기안부서</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td>공통</td>
+                                <td>ㅇ</td>
+                                <td>결재요청문</td>
+                                <td>홍길동</td>
+                                <td>영업팀</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>2</td>
+                                <td>공통</td>
+                                <td>ㄴ</td>
+                                <td>결재요청문</td>
+                                <td>홍길동</td>
+                                <td>영업팀</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- 페이지 처리 -->
+
+                </div> <!-- list-wrap -->
+
+                <div class="col-2-offset-8" align="right">
+                    <button>일괄합의</button>
+                    <button>일괄결재</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="text/javascript">
+        $('.datePicker').datepicker({
+            format : "yyyy-mm-dd",
+            language : "kr",
+            todayHighlight : true
+        });
+        
+    </script>
+</body>
+</html>

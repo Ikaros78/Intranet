@@ -22,7 +22,7 @@
         <result property="ntNo" column="NT_NO"/>
     </resultMap>
 
-    <resultMap id="NoticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <resultMap id="noticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
         <result property="date" column="NT_DATE"/>
@@ -31,6 +31,7 @@
         <result property="num" column="MEM_NUM"/>
         <association property="member" resultMap="memberResultMap"/>
         <association property="file" resultMap="addFileResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
     </resultMap>
 
     <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
@@ -45,6 +46,11 @@
         <result property="mem_address" column="MEM_ADDRESS"/>
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.notice.model.dto.TestDeptDTO">
+        <id property="deptCode" column="DEPT_CODE"/>
+        <result property="deptName" column="DEPT_NAME"/>
     </resultMap>
 
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
@@ -96,14 +102,17 @@
         )
     </insert>
 
-    <select id="selectAllNoticeList" resultMap="noticeResultMap">
+    <select id="selectAllNoticeList" resultMap="noticeListResultMap">
         SELECT
                A.NT_NO
              , A.NT_TITLE
              , B.MEM_NAME
              , A.NT_DATE
+             , C.DEPT_CODE
+             , A.NT_VIEWS
           FROM NT_NOTICE A
-          JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+          LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+          LEFT JOIN DEPARTMENT C ON(B.DEPT_CODE = C.DEPT_CODE)
          ORDER BY A.NT_NO DESC
     </select>
 

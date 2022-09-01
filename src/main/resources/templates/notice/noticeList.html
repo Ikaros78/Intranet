@@ -70,7 +70,7 @@
                             <td th:text="${ notice.no }"></td>
                             <td><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
                             <td><a th:text="${ notice.title }" th:href="@{/notice/noticeDetail/{no}(no=${notice.no})}"></a></td>
-                            <td><span th:text="${ notice.member.mem_name}">주이슬</span>&nbsp;<span>인사과</span></td>
+                            <td><span th:text="${ notice.member.mem_name}"></span>&nbsp;<span th:text="${ notice.dept.deptName }"/></td>
                             <td th:text="${ notice.date }"></td>
                             <td th:text="${ notice.views }"></td>
                         </tr>
@@ -84,5 +84,6 @@
                 </div>
             </div>
         </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.msBoard.model.dao.MsBoardMapper">
+	
+	<resultMap id="MsboardResultMap" type="com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO">
+		<id property="msNo" column="MS_NO" />
+		<result property="msTitle" column="MS_TITLE" />
+		<result property="sendName" column="MS_SEND_NAME" />
+		<result property="recpName" column="MS_RECP_NAME" />
+		<result property="sendDate" column="MS_SEND_DATE" />
+		<result property="recpDate" column="MS_RECP_DATE" />
+		<result property="readYn" column="MS_READ_YN" />
+		<result property="gubun" column="MS_GUBUN" />
+		<result property="memNum" column="MEM_NUM" />
+
+<!-- 		<association property="NAME" resultMap="memberResultMap" /> -->
+	</resultMap>
+
+<!-- 	<resultMap type="MemberDTO" id="memberResultMap"> -->
+<!-- 		<id property="mem_num" column="MS_NO" /> -->
+<!-- 		<result property="mem_id" column="MS_TITLE" /> -->
+<!-- 		<result property="mem_pw" column="MS_SEND_NAME" /> -->
+<!-- 		<result property="mem_name" column="MS_RECP_NAME" /> -->
+<!-- 		<result property="mem_phone" column="MS_SEND_DATE" /> -->
+<!-- 		<result property="mem_joinDate" column="MS_RECP_DATE" /> -->
+<!-- 		<result property="mem_birth" column="MS_READ_YN" /> -->
+<!-- 		<result property="mem_email" column="MEM_EMAIL" /> -->
+<!-- 		<result property="mem_address" column="MEM_ADDRESS" /> -->
+<!-- 		<result property="dept_rank" column="DEPT_RANK" /> -->
+<!-- 		<result property="dept_code" column="DEPT_CODE" /> -->
+<!-- 	</resultMap> -->
+
+	<resultMap type="com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO" id="MsFileResultMap">
+		<id property="fileNo" column="MSF_NO" />
+		<result property="originName" column="MSF_ORIGINAL_NAME" />
+		<result property="saveName" column="MSF_SAVE_NAME" />
+		<result property="savaPath" column="MSF_SAVE_PATH" />
+		<result property="noDate" column="MSF_NODATE" />
+		<result property="deleteYn" column="MS_NO" />
+
+		<association property="msNo" resultMap="MsboardResultMap" />
+	</resultMap>
+
+
+	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT
+			 COUNT(*)
+		FROM MS_BOARD A
+		<where>
+			<if test="searchCondition == 'msTitle'">
+				A.MS_TITLE = #{ searchValue }
+			</if>
+			<if test="searchCondition == 'sendName'">
+				A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+			<if test="searchCondition == 'recpName'">
+				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="selectMsRecpBoard" resultMap="MsboardResultMap">
+		SELECT
+		  A.RNUM
+		, A.MS_NO
+		, A.MS_TITLE
+		, A.MS_SEND_NAME
+		, A.MS_RECP_NAME
+		, A.MS_SEND_DATE
+		, A.MS_RECP_DATE
+		, A.MS_READ_YN
+		, A.MS_GUBUN
+		, A.MEM_NUM
+			 FROM(SELECT  ROWNUM RNUM
+						, B.MS_NO
+						, B.MS_TITLE
+						, B.MS_SEND_NAME
+						, B.MS_RECP_NAME
+						, B.MS_SEND_DATE
+						, B.MS_RECP_DATE
+						, B.MS_READ_YN
+						, B.MS_GUBUN
+						, B.MEM_NUM
+							FROM(SELECT   C.MS_NO
+										, C.MS_TITLE
+										, C.MS_SEND_NAME
+										, C.MS_RECP_NAME
+										, C.MS_SEND_DATE
+										, C.MS_RECP_DATE
+										, C.MS_READ_YN
+										, C.MS_GUBUN
+										, C.MEM_NUM 
+								   FROM MS_BOARD C
+<!-- 								  WHERE C.MS_GUN ={  }  -->
+								   <where>
+							            <if test="searchCondition == 'msTitle'">
+							                C.MS_TITLE = #{ searchValue }
+							            </if>
+							            <if test="searchCondition == 'sendName'">
+							                C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+							            </if>
+							            <if test="searchCondition == 'recpName'">
+							                C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+							            </if>
+								   </where>
+									ORDER BY C.MS_NO DESC )B
+			               <![CDATA[
+			                  WHERE ROWNUM <= #{ endRow }
+			                  ]]>
+					) A
+					WHERE A.RNUM >= #{ startRow }
+				</select>
+
+	
+
+	<insert id="MsboardInsert">
+		INSERT
+		INTO MS_BOARD A
+		(
+		A.MS_NO
+		, A.MS_TITLE
+		, A.MS_SEND_NAME
+		, A.MS_RECP_NAME
+		, A.MS_SEND_DATE
+		, A.MS_RECP_DATE
+		, A.MS_READ_YN
+		, A.MS_GUBUN
+		, A.MEM_NUM
+		)
+		VALUES
+		(
+		SEQ_MS_NO.NEXTVAL
+		, #{ msTitle }
+		, #{ sendName }
+		, #{ recpName }
+		, #{ sendDate }
+		, #{ recpDate }
+		, #{ readYn }
+		, #{ gubun }
+		, #{ memNum }
+		)
+	</insert>
+
+
+	<insert id="MsFileInsert">
+		INSERT
+		INTO MS_FILE A
+		(
+		A.MSF_NO
+		, A.MSF_ORIGINAL_NAME
+		, A.MSF_SAVE_NAME
+		, A.MSF_SAVE_PATH
+		, A.MSF_NODATE
+		, A.MSF_NS_NO
+		)
+		VALUES
+		(
+		SEQ_MSF_NO.NEXTVAL
+		, #{ originName }
+		, #{ saveName
+		}
+		, #{ savaPath }
+		, #{ noDate }
+		, #{ msNo }
+		)
+		<selectKey keyProperty="msNo" resultType="_int"
+			order="BEFORE">
+			SELECT
+			SEQ_MS_NO.CURRVAL
+			FROM DUAL
+		</selectKey>
+	</insert>
+
+
+	<delete id="MsBoardDelete">
+
+		DELETE
+		FROM MS_BOARD
+		WHERE MS_NO = #{ msNo }
+
+	</delete>
+</mapper>

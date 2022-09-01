@@ -33,7 +33,24 @@ public class MemberDTO implements UserDetails {
         return null;
     }
 
-    @Override
+    public String getMem_address() {
+		return mem_address;
+	}
+
+	public void setMem_address(String mem_address) {
+		this.mem_address = mem_address;
+	}
+
+	
+	public String getMem_pw() {
+		return mem_pw;
+	}
+
+	public void setMem_pw(String mem_pw) {
+		this.mem_pw = mem_pw;
+	}
+
+	@Override
     public String getPassword() {
         return mem_pw;
     }

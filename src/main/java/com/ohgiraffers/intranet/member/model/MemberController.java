@@ -1,8 +1,7 @@
 package com.ohgiraffers.intranet.member.model;
 
-import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import com.ohgiraffers.intranet.member.service.MemberService;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+import com.ohgiraffers.intranet.member.service.MemberService;
+
+import lombok.Setter;
 
 @Controller
 @RequestMapping("/member")

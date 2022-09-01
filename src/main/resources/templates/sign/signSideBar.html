@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>sidebar</title>
+</head>
+<body>
+  <div id="contents">
+    <div id="sideBar">
+      <h3>전자결재</h3>
+      <ul>
+        <li class="main"><a href="/sign/registSelect">기안</a>
+          <ul class="sub sub1">
+            <li><a href="/sign/registSelect">기안문 작성</a></li>
+            <li><a href="/sign/requestList">결재요청함</a></li>
+            <li><a href="/sign/tempList">임시저장함</a></li>
+          </ul>
+        </li>
+        <li class="main"><a href="/sign/waitingList">결재</a>
+          <ul class="sub sub2">
+            <li><a href="/sign/waitingList">결재대기함</a></li>
+            <li><a href="/sign/progressList">결재진행함</a></li>
+            <li><a href="/sign/completedList">완료문서함</a></li>
+            <li><a href="/sign/refusedList">반려문서함</a></li>
+            <li><a href="/sign/referenceList">참조/열람문서함</a></li>
+          </ul>
+        </li>
+        <li class="main"><a href="/sign/teamList">발신/수신</a>
+          <ul class="sub sub3">
+            <li><a href="/sign/teamList">부서수신함</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div> <!-- sideBar -->
+</body>
+</html>

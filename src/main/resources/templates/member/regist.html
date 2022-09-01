@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/regist.css}" />
+</head>
+<script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<th:block>
+<header>
+    <h1>Regist Form</h1>
+</header>
+<div class="regist-wrap">
+    <form th:action="@{/member/regist}" method="post">
+        <div class="input-box">
+            <input
+                    id="memId"
+                    name="mem_id"
+                    type="text"
+                    placeholder="아이디"
+                    required
+            />
+            <label for="memId">아이디</label>
+        </div>
+        <div class="input-box">
+            <input
+                    id="memPw"
+                    name="mem_pw"
+                    type="text"
+                    placeholder="비밀번호"
+                    required
+            />
+            <div id="keyShow" style="cursor: pointer">HIDE password</div>
+            <label for="memPw">비밀번호</label>
+        </div>
+        <div class="input-box">
+            <input
+                    id="memName"
+                    name="mem_name"
+                    type="text"
+                    placeholder="이름"
+                    required
+            />
+            <label for="memName">이름</label>
+        </div>
+        <div class="input-box">
+            <input
+                    id="memPhone"
+                    name="mem_phone"
+                    type="text"
+                    placeholder="전화번호"
+                    oninput="autoHypen(this)"
+                    maxlength="13"
+                    required
+            />
+            <label for="memPhone">전화번호</label>
+        </div>
+        <div class="input-box-select">
+            <input
+                    id="memDept"
+                    name="dept_code"
+                    type="text"
+                    placeholder="부서명"
+                    required
+            />
+            <select id="memDepart" onchange="selectBoxChange(this.value);">
+                <option value="인사관리과">인사관리과</option>
+                <option value="재무관리과">재무관리과</option>
+                <option value="냥냥관리과">냥냥관리과</option>
+                <option value="멍멍관리과">멍멍관리과</option>
+            </select>
+            <label for="memDept"></label>
+        </div>
+        <div class="input-box">
+            <input
+                    id="memJoinDate"
+                    name="mem_joinDate"
+                    type="date"
+                    placeholder="입사일자"
+                    required
+            />
+            <label for="memJoinDate">입사일자</label>
+            <div class="input-box">
+                <input
+                        id="memDepartNum"
+                        name="mem_num"
+                        type="text"
+                        placeholder="사원번호"
+                        required
+                />
+                <label for="memBirth">사원번호</label>
+            </div>
+            <div class="input-box">
+                <input
+                        id="memBirth"
+                        name="mem_birth"
+                        type="date"
+                        placeholder="생년월일"
+                        maxlength="10"
+                        required
+                />
+                <label for="memBirth">생년월일</label>
+            </div>
+            <div class="input-box">
+                <input
+                        id="memEmail"
+                        name="mem_email"
+                        type="text"
+                        placeholder="개인 이메일"
+                        required
+                />
+                <label for="memPw">개인 이메일</label>
+            </div>
+            <div class="input-box">
+                <input
+                        id="dept_rank"
+                        name="dept_rank"
+                        type="text"
+                        placeholder="임시직급"
+                        required
+                />
+                <label for="memPw">임시직급</label>
+            </div>
+            <div class="input-box">
+                <input
+                        type="text"
+                        id="sample6_postcode"
+                        name="sample6_postcode"
+                        placeholder="우편번호"
+                        required
+                />
+                <label for="">우편번호</label>
+                <button
+                        class="postcode"
+                        onclick="sample6_execDaumPostcode()"
+                        value="우편번호 찾기"
+                >
+                    우편번호 찾기
+                </button>
+            </div>
+            <div class="input-box">
+                <input type="text" id="memAddre" name="mem_address" placeholder="주소" />
+                <label for="memAddre">주소</label>
+            </div>
+            <div class="input-box">
+                <input
+                        type="text"
+                        id="sample6_detailAddress"
+                        name="mem_address2"
+                        placeholder="상세주소"
+                        required
+                />
+                <label for="sample6_detailAddress">상세주소</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="sample6_extraAddress" placeholder="참고항목" />
+                <label for="sample6_extraAddress">참고항목</label>
+            </div>
+
+            <button class="join" id="regist">회원가입</button>
+    </form>
+
+    <button type="submit" class="logIn" id="logIn">뒤로가기</button>
+
+</div>
+</th:block>
+<script th:src="@{/js/member.js}"></script>
+</html>

@@ -40,6 +40,7 @@ public class NoticeController {
 
         notice.getTitle();
         notice.getContents();
+
         log.info("notice regist : " + notice);
 
         //notice insert

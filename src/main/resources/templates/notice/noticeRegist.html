@@ -49,15 +49,20 @@
         </div>
         <div id="container">
             <h4>공지사항</h4><hr>
-            <form action="/notice/regist" method="post" enctype="multipart/form-data">
+            <form th:action="@{/notice/regist}" method="post" enctype="multipart/form-data">
                 <table>
+                    <input
+                        type="hidden"
+                        id="mem_no"
+                        name="mem_no"
+                        th:value="${ #authentication.getPrincipal().getMem_num() }">
                     <tr>
                         <th>제목</th>
                         <td><input type="text" name="title"></td>
                     </tr>
                     <tr>
                         <th>등록자</th>
-                        <td><span>김올레</span>&nbsp;<span>영업팀</span></td>
+                        <td><span th:text="${ #authentication.getPrincipal().getMem_name() }"></span>&nbsp;<span th:text="${ #authentication.getPrincipal().getDept_code }">영업팀</span></td>
                     </tr>
                 </table>
                     <textarea id="summernote" name="contents"></textarea>
@@ -66,6 +71,7 @@
             </form>
         </div>
     </div>
+</div>
     <script>
         $(document).ready(function() {
             //여기 아래 부분

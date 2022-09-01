@@ -70,7 +70,7 @@
         , SYSDATE
         , DEFAULT
         , #{contents}
-        , 0001
+        , #{num}
         )
     </insert>
 

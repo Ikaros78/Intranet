@@ -63,6 +63,12 @@
                 )
     </insert>
 
+    <select id="findByMemberId" resultMap="MemberResultMap">
+        SELECT *
+        FROM MEMBER A
+        WHERE A.MEM_ID = #{ mem_id }
+    </select>
+
     <select id="selectMemberListForCalendarManage" resultMap="loginMemberResultMap">
 
     </select>

@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.msBoard;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
@@ -30,7 +33,7 @@ public class MsBoardController {
 		
 	}
 	
-	@GetMapping("/recp")
+	@GetMapping(value = "/recp")
 	public ModelAndView selectMsRecpBoard(ModelAndView mv, HttpServletRequest request) {
 		
 		   String currentPage = request.getParameter("currentPage");
@@ -69,14 +72,24 @@ public class MsBoardController {
 	
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
-		mv.setViewName("");
+		mv.setViewName("message/messageRecpBox");
 		
 		return mv;
 	}
 	
 	
-	@GetMapping("/insert")
-	public void MsboardInsert() {}
+	@GetMapping("/msinsert")
+	public String MsboardInsert() {
+		
+		return "message/messageSend";
+	}
+	
+	public String MsboardInsert(@ModelAttribute MsBoardDTO msboardDTO, RedirectAttributes rttr) {
+		
+//		msBoardService.MsboardInsert(msboardDTO);
+		
+		return "";
+	}
 	
 
 	

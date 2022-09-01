@@ -23,6 +23,7 @@ public class MemberService {
         this.memberMapper = memberMapper;
     }
 
+
     @Transactional
     public void memberRegistInsert(MemberDTO member) throws MemberRegistException{
 

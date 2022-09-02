@@ -17,6 +17,7 @@
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
 
+        <association property="department" resultMap="departmentResultMap"/>
         <collection property="authorit" resultMap="authoritResultMap"/>
     </resultMap>
 
@@ -25,9 +26,9 @@
         <result property="auCode" column="AU_CODE"/>
     </resultMap>
 
-    <resultMap id="DepartmentMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
-            <id property="dept_code" column="DEPT_CODE"/>
-            <result property="dept_name" column="DEPT_NAME"/>
+    <resultMap id="departmentResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
     <select id="memberLogin" resultMap="MemberResultMap">
@@ -104,12 +105,32 @@
 
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
         SELECT
-                A.*
-            ,   B.AU_CODE
+               A.MEM_NUM
+             , A.MEM_NAME
+             , A.DEPT_RANK
+             , A.MEM_JOINDATE
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.DEPT_CODE
+             , B.AU_CODE
+             , C.DEPT_NAME
         FROM MEMBER A
+        JOIN DEPARTMENT C ON(A.DEPT_CODE = C.DEPT_CODE)
         LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        <where>
+            <if test="searchCondition != null and searchCondition != 'all'">
+                A.DEPT_CODE = #{ searchCondition }
+            </if>
+        AND (B.AU_CODE IS NULL OR B.AU_CODE = 'CD_ALL' OR B.AU_CODE = 'CD_DEPT')
+        </where>
         ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
 
+    <select id="selectDeptList" resultMap="departmentResultMap">
+        SELECT
+                A.DEPT_CODE
+              , A.DEPT_NAME
+           FROM DEPARTMENT A
+    </select>
 
 </mapper>

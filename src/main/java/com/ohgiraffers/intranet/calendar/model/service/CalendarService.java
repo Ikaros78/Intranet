@@ -1,5 +1,4 @@
 package com.ohgiraffers.intranet.calendar.model.service;
-
 import com.ohgiraffers.intranet.calendar.model.dao.CalendarMapper;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
@@ -15,8 +14,10 @@ public class CalendarService {
 
     private CalendarMapper calendarMapper;
     private final MemberMapper memberMapper;
+
     @Autowired
     public CalendarService(CalendarMapper calendarMapper, MemberMapper memberMapper) {
+
         this.memberMapper = memberMapper;
         this.calendarMapper = calendarMapper;
     }

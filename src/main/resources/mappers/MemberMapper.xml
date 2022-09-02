@@ -25,9 +25,28 @@
         <result property="auCode" column="AU_CODE"/>
     </resultMap>
 
+    <resultMap id="DepartmentMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+            <id property="dept_code" column="DEPT_CODE"/>
+            <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
     <select id="memberLogin" resultMap="MemberResultMap">
-                SELECT *
+                SELECT
+                       A.MEM_NUM
+                     , A.MEM_ID
+                     , A.MEM_PW
+                     , A.MEM_NAME
+                     , A.MEM_PHONE
+                     , A.MEM_JOINDATE
+                     , A.MEM_BIRTH
+                     , A.MEM_EMAIL
+                     , A.MEM_ADDRESS
+                     , A.DEPT_RANK
+                     , A.DEPT_CODE
+                     , B.DEPT_NAME
                   FROM MEMBER A
+                  JOIN DEPARTMENT B
+                    ON (A.DEPT_CODE = B.DEPT_CODE)
                  WHERE A.MEM_ID = #{ mem_id }
     </select>
 
@@ -64,9 +83,23 @@
     </insert>
 
     <select id="findByMemberId" resultMap="MemberResultMap">
-        SELECT *
-        FROM MEMBER A
-        WHERE A.MEM_ID = #{ mem_id }
+            SELECT
+                   A.MEM_NUM
+                 , A.MEM_ID
+                 , A.MEM_PW
+                 , A.MEM_NAME
+                 , A.MEM_PHONE
+                 , A.MEM_JOINDATE
+                 , A.MEM_BIRTH
+                 , A.MEM_EMAIL
+                 , A.MEM_ADDRESS
+                 , A.DEPT_RANK
+                 , A.DEPT_CODE
+                 , B.DEPT_NAME
+              FROM MEMBER A
+              JOIN DEPARTMENT B
+                ON (A.DEPT_CODE = B.DEPT_CODE)
+             WHERE A.MEM_ID = #{ mem_id }
     </select>
 
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">

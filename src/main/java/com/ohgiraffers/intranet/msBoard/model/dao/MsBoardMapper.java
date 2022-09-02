@@ -17,6 +17,9 @@ public interface MsBoardMapper {
 
 	int selectTotalCount(Map<String, String> searchMap);
 
+	MsBoardDTO selectMsBoardDetail(int msNo);
+
+	int YNChangeMsBoard(int msNo);
 
 	
 	

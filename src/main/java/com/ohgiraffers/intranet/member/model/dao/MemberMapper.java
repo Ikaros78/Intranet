@@ -14,11 +14,12 @@ public interface MemberMapper {
 
 //    int updateMember(MemberDTO member); //회원 정보 수정 추후 업데이트 예정 09-01
 
+    /* 시큐리티 세션에서 Id를 확인 */
     MemberDTO findByMemberId(String mem_id);
 
     /* 일정권한 관리를 위한 회원 리스트 조회용 */
     List<MemberDTO> selectMemberListForCalendarManage();
 
-//    /* 일정권한 관리를 위한 회원 리스트의 권한 조회용 */
-//    List<AuthoritDTO> selectMemberAuthoritForCalendarManage();
+    /* 아이디 중복 체크 */
+    String checkMemberById(String mem_id);
 }

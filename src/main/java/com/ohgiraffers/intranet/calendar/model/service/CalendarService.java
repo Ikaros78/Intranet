@@ -1,14 +1,30 @@
 package com.ohgiraffers.intranet.calendar.model.service;
 
-import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-@Service
 public class CalendarService {
+
+    private CalendarMapper calendarMapper;
+
+    @Autowired
+    public CalendarService(CalendarMapper calendarMapper) {
+
+        this.calendarMapper = calendarMapper;
+    }
+
+//    /* DB 캘린더 전체 조회 */
+//    public List<CalendarDTO> selectAllCalendar() {
+//
+//        return calendarMapper.selectAllCalendar();
+//    }
+
+    public List<CalendarDTO> findAllCal() {
+
+        return calendarMapper.findAllCal();
+    }
+
+    public List<CalendarDTO> findAllSc() {
+
+        return calendarMapper.findAllSc();
+    }
 
     private final MemberMapper memberMapper;
 

@@ -49,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**").hasAnyAuthority("ROLE_MEMBER")
+//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**") 일단 주석 처리 22-09-01
                 .mvcMatchers("/**","/member/**").permitAll()
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
@@ -76,13 +76,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //자동 로그인 코드
         http.rememberMe()
-                    .key("heechang!") // token 생성 값. 필수
                     .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
                     .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
                     .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
                     .userDetailsService(userDetailsService()) // 사용자 정보를 받음. 자동 로그인 필수 설정.
 
-                //403 예외처리 핸들링
                .and()
                     .exceptionHandling()
                     .accessDeniedPage("/member/loginFail")

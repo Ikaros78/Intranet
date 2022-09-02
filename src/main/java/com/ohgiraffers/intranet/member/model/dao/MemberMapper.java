@@ -8,7 +8,7 @@ public interface MemberMapper {
 
     int memberRegistInsert(MemberDTO member);
 
-//    int updateMember(MemberDTO member); //마이페이지 정보 수정 추후 작업 예정 09-02
+//    int updateMember(MemberDTO member); //회원 정보 수정 추후 업데이트 예정 09-01
 
     /* 시큐리티 세션에서 Id를 확인 */
     MemberDTO findByMemberId(String mem_id);

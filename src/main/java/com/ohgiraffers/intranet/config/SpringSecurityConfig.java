@@ -59,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/common/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/main/main")
                 .failureUrl("/member/loginFail")
 
            .and()

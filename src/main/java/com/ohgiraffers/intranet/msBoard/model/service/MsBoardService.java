@@ -13,4 +13,9 @@ public interface MsBoardService {
 	int selectTotalCount(Map<String, String> searchMap);
 
 	int MsFileInsert(MsBoardDTO msBoard);
+
+	MsBoardDTO selectMsBoardDetail(int msNo);
+
+	
+	
 }

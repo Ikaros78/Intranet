@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.notice.model.dto;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
+import javax.naming.Name;
 import java.sql.Date;
 
 public class NoticeDTO {
@@ -12,7 +13,6 @@ public class NoticeDTO {
     private Date date;
     private int views;
     private String contents;
-
     private MemberDTO member;
     private NoticeFileDTO file;
     private DepartmentDTO dept;

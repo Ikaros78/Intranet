@@ -3,11 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <title>basic</title>
-<link rel="stylesheet" href="../resources/css/reset.css">
-<link rel="stylesheet" href="../resources/css/basic.css">
-<link rel="stylesheet" href="../resources/css/board.css">
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/basic.css">
+<link rel="stylesheet" href="/css/board.css">
 </head>
+
 <body>
+    <div id="wrap">
+        <div id="header">
+            <h1 class="logo"><a href="../main/main.html"><img src="/images/logo.png" alt="로고 이미지"></a></h1>
+            <ul class="lnb">
+                <li><a href="../common/mypage.html">마이페이지</a></li>
+                <li><a href="../login.html">로그아웃</a></li>
+            </ul>
+            <ul class="gnb">
+                <li><a href="../board/notice/noticeList.html">공지사항</a></li>
+                <li><a href="../board/free/freeList.html">게시판</a></li>
+                <li><a href="../calendar/cd_main.html">일정관리</a></li>
+                <li><a href="../sign/testsignmain.html">전자결재</a></li>
+                <li><a href="/ms/recp">쪽지함</a></li>
+                <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
+            </ul>
+        </div>
 
 	<div id="messageheader">
 		<select class="form-select" aria-label="Default select example"
@@ -24,8 +41,7 @@
 			<div class="search" style="position: absolute; width: 300px; left: 500px; top: 140px;"/>
 				<input type="text" placeholder="검색어 입력"
 					style="width: 100%; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
-				<img src="../resources/images/pngwing.com.png"
-					style="position: absolute; width: 17px; top: 12px; right: -15px; margin: 0;">
+				<img src="/images/pngwing.com.png" style="position: absolute; width: 17px; top: 12px; right: -15px; margin: 0;">
 			</div>
 		</table>
 	</div>
@@ -36,7 +52,7 @@
 	<div id="visual">
 		<div class="table-area"
 			style="position: absolute; top: 250px; left: 350px; width: 1350px;">
-			<table align="center" id="">
+			<table align="center" id="listArea">
 				<tr>
 					<th><input type="checkbox" style="margin: 10px"></th>
 					<th width="100px" style="border: 1px solid black">보낸사람</th>
@@ -44,12 +60,13 @@
 					<th width="100px" style="border: 1px solid black">날짜</th>
 					<th width="100px" style="border: 1px solid black">조회수</th>
 				</tr>
-<!-- 				<tr th:text="ms : ${ recp }"> -->
-<!-- 					<td th:text="${recp.sendName}"></td> -->
-<!-- 					<td th:text="${recp.msTitle}"></td> -->
-<!-- 					<td th:text="${recp.title}"></td> -->
-<!-- 					<td th:text="${recp.writer.nickname}"></td> -->
-<!-- 				</tr> -->
+				<tr th:each="boardList : ${ boardList }">
+					<td><input type="checkbox" style="margin: 10px"></td>
+					<td th:text="${boardList.sendName}"></td>
+					<td th:text="${boardList.msTitle}"></td>
+					<td th:text="${boardList.sendDate}"></td>
+					<td th:text="${boardList.msNo}"></td>					
+				</tr>
 			</table>
 		</div>
 	</div>
@@ -88,12 +105,27 @@
 		<div id="sideBar">
 			<h3>쪽지함</h3>
 			<ul>
-				<li class="main"><a href="./messageSend.html">쪽지보내기</a></li>
+				<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
 				<li class="main"><a href="./messageRecpBox.html">받은쪽지함</a></li>
-				<li class="main"><a href="./messageSendbox.html">보낸쪽지함</a></li>
+				<li class="main"><a href="/ms/recp">보낸쪽지함</a></li>
 				<li class="main"><a href="./messageAllBox.html">쪽지보관함</a></li>
 			</ul>
 		</div>
 	</div>
+</div>
+
+<script>
+    if (document.querySelectorAll("#listArea td")) {
+        const $tds = document.querySelectorAll("#listArea td");
+        for (let i = 0; i < $tds.length; i++) {
+
+            $tds[i].onclick = function() {
+                const msNo = this.parentNode.children[4].innerText;
+                /* chileren[ 행에 있는 index 위치 찾는거 ] */
+            	location.href = "/ms/msdetail?msNo=" + msNo;
+            }
+        }
+    }
+   </script>
 </body>
 </html>

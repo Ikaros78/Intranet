@@ -40,7 +40,7 @@
                     <input type="search" name="searchValue" id="searchValue">
                     <button>검색</button>
                 </form>
-                <table>
+                <table id="listArea">
                     <thead>
                         <tr>
                         <th>번호</th>
@@ -68,5 +68,23 @@
             </div>
         </div>
     </div>
+
+<script th:inline="javascript">
+    if(document.querySelectorAll("#listArea td")){
+        const $tds = document.querySelectorAll("#listArea td");
+        for(let i = 0; i < $tds.length; i++){
+
+            $tds[i].onmouseenter = function(){
+
+                this.parentNode.style.cursor = "pointer";
+            }
+
+            $tds[i].onclick = function() {
+                const no = this.parentNode.children[0].innerText;
+                location.href = "/notice/detail?no=" + no;
+            }
+        }
+    }
+</script>
 </body>
 </html>

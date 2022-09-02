@@ -22,6 +22,9 @@ public class MemberDTO implements UserDetails {
     private String mem_address;
     private String dept_rank;
     private String dept_code;
+    private String dept_name;
+
+    private DepartmentDTO department;
 
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
@@ -114,12 +117,48 @@ public class MemberDTO implements UserDetails {
         this.dept_code = dept_code;
     }
 
+    public String getDept_name() {
+        return dept_name;
+    }
+
+    public void setDept_name(String dept_name) {
+        this.dept_name = dept_name;
+    }
+
+    public DepartmentDTO getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentDTO department) {
+        this.department = department;
+    }
+
     public List<AuthoritDTO> getAuthorit() {
         return authorit;
     }
 
     public void setAuthorit(List<AuthoritDTO> authorit) {
         this.authorit = authorit;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberDTO{" +
+                "mem_num=" + mem_num +
+                ", mem_id='" + mem_id + '\'' +
+                ", mem_pw='" + mem_pw + '\'' +
+                ", mem_name='" + mem_name + '\'' +
+                ", mem_phone='" + mem_phone + '\'' +
+                ", mem_joinDate=" + mem_joinDate +
+                ", mem_birth=" + mem_birth +
+                ", mem_email='" + mem_email + '\'' +
+                ", mem_address='" + mem_address + '\'' +
+                ", dept_rank='" + dept_rank + '\'' +
+                ", dept_code='" + dept_code + '\'' +
+                ", dept_name='" + dept_name + '\'' +
+                ", department=" + department +
+                ", authorit=" + authorit +
+                '}';
     }
 
     @Override
@@ -161,21 +200,5 @@ public class MemberDTO implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "MemberDTO{" +
-                "mem_num=" + mem_num +
-                ", mem_id='" + mem_id + '\'' +
-                ", mem_pw='" + mem_pw + '\'' +
-                ", mem_name='" + mem_name + '\'' +
-                ", mem_phone='" + mem_phone + '\'' +
-                ", mem_joinDate=" + mem_joinDate +
-                ", mem_birth=" + mem_birth +
-                ", mem_email='" + mem_email + '\'' +
-                ", mem_address='" + mem_address + '\'' +
-                ", dept_rank='" + dept_rank + '\'' +
-                ", dept_code='" + dept_code + '\'' +
-                ", authorit=" + authorit +
-                '}';
-    }
+
 }

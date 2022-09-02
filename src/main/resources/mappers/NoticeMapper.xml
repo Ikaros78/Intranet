@@ -165,10 +165,33 @@
         </where>
     </select>
 
-<!--    <select id="selectWriterinfo" resultMap="noticeListResultMap">-->
-<!--        SELECT-->
-<!--               A.-->
-<!--    </select>-->
+    <update id="incresementNoticeCount" parameterType="_int">
+        UPDATE
+               NT_NOTICE A
+           SET A.NT_VIEWS = (SELECT B.NT_VIEWS
+                             FROM NT_NOTICE B
+                             WHERE B.NT_NO = #{ no }
+                            ) + 1
+        WHERE A.NT_NO = #{ no }
+    </update>
 
+    <select id="selectNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
+        SELECT
+               A.NT_NO
+             , A.NT_TITLE
+             , B.MEM_NAME
+             , A.NT_DATE
+             , C.DEPT_NAME
+             , A.NT_VIEWS
+             , D.NTF_ORIGIN_NAME
+             , A.MEM_NUM
+             , A.NT_CONTENTS
+             , D.NTF_SAVE_NAME
+          FROM NT_NOTICE A
+          LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+          LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+          LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
+         WHERE A.NT_NO = #{ no }
+    </select>
 
 </mapper>

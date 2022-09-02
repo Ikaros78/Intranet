@@ -16,6 +16,7 @@
         <result property="mem_address" column="MEM_ADDRESS"/>
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
 
         <collection property="authorit" resultMap="authoritResultMap"/>
     </resultMap>

@@ -25,7 +25,7 @@ public class MemberDTO implements UserDetails {
 
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
-    private DepartmentDTO dept;
+    private DepartmentDTO department;
 
     public int getMem_num() {
         return mem_num;
@@ -123,12 +123,12 @@ public class MemberDTO implements UserDetails {
         this.authorit = authorit;
     }
 
-    public DepartmentDTO getDept() {
-        return dept;
+    public DepartmentDTO getDepartment() {
+        return department;
     }
 
-    public void setDept(DepartmentDTO dept) {
-        this.dept = dept;
+    public void setDepartment(DepartmentDTO department) {
+        this.department = department;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class MemberDTO implements UserDetails {
                 ", dept_rank='" + dept_rank + '\'' +
                 ", dept_code='" + dept_code + '\'' +
                 ", authorit=" + authorit +
-                ", dept=" + dept +
+                ", department=" + department +
                 '}';
     }
 }

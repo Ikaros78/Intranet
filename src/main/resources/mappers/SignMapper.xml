@@ -72,7 +72,7 @@
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
 
-        <association property="dept" resultMap="deptResultMap"/>
+        <association property="department" resultMap="deptResultMap"/>
     </resultMap>
 
     <resultMap type="DepartmentDTO" id="deptResultMap">

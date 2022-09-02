@@ -5,9 +5,15 @@
 #main-container .search-wrap{background: rgba(202, 191, 191, 0.452); height: 100px; padding: 20px; margin: 0 20px;}
 #main-container .list-wrap{padding-left: 20px;margin-top: 20px;}
 
-#main-container .list-wrap table{width: 1630px; text-align: center; border-collapse: collapse;}
-#main-container .list-wrap table th{ border-top: 2px solid #000;border-bottom: 1px solid #000; padding: 13px;}
-#main-container .list-wrap table tbody td{padding: 10px;}
-#main-container .list-wrap table tbody tr td:nth-child(5){text-align: left;}
+#main-container .list-wrap .table{width: 1630px; text-align: center; border-collapse: collapse;}
+#main-container .list-wrap .table th{ border-top: 2px solid #000;border-bottom: 1px solid #000; padding: 13px;}
+#main-container .list-wrap .table tbody td{padding: 10px;}
+#main-container .list-wrap .table thead th:nth-child(3){text-align: left;}
+#main-container .list-wrap .table tbody td:nth-child(3){text-align: left;}
+
+.pagingArea button{width: 30px;height: 30px}
+
+.signAll button{width:100px; height: 40px;
+    background: #000; color: white; font-family: bold; font-size: medium}
 
 

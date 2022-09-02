@@ -75,6 +75,7 @@
                                 <tr>
                                     <th>사원번호</th>
                                     <th>성명</th>
+                                    <th>부서</th>
                                     <th>직책</th>
                                     <th>입사일자</th>
                                     <th>전화번호</th>
@@ -84,118 +85,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>김민수</td>
-                                    <td>사내이사</td>
-                                    <td>22-08-23</td>
-                                    <td>010-1234-5678</td>
-                                    <td>onlyonlyonly@gmail.com</td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                    <td><input type="checkbox" class="check" id="check1"></td>
-                                </tr>
+                                <tr th:each="member : ${ memberList }">
+                                    <td th:text="${ member.mem_num }">1</td>
+                                    <td th:text="${ member.mem_name }">김민수</td>
+                                    <td th:text="${ member.dept_code }">부서1</td>
+                                    <td th:text="${ member.dept_rank }">사내이사</td>
+                                    <td th:text="${ member.mem_joinDate }">22-08-23</td>
+                                    <td th:text="${ member.mem_phone }">010-1234-5678</td>
+                                    <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
+<!--                                    <th:block th:each="authorit : ${ member.authorit }">-->
+<!--                                        <th:block th:if="${ authorit.auCode eq 'CD_ALL' and  authorit.auCode eq 'CD_DEPT' }">-->
+
+                                            <td><input  type="checkbox" class="check1" name="checkAll" checked></td>
+                                            <td><input  type="checkbox" class="check2" name="checkDept" checked></td>
+<!--                                        </th:block>-->
 
 
+<!--                                    </th:block>-->
+<!--                                    <th:block th:each="authorit : ${ member.authorit }">-->
+<!--                                      -->
+<!--                                        <td><input type="checkbox" class="check2" name="checkDept" th:checked="${ authorit.auCode eq 'CD_DEPT'}"></td>-->
+<!--                                    </th:block>-->
+
+
+
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>

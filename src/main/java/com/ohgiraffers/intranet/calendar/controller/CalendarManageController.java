@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.calendar.controller;
 
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
@@ -29,18 +30,12 @@ public class CalendarManageController {
     @GetMapping("/list")
     public ModelAndView CalendarManageList(ModelAndView mv ,HttpServletRequest request){
 
-        String searchCondition = request.getParameter("searchCondition");
-        String searchValue = request.getParameter("");
-
-        SelectCriteria selectCriteria = null;
-
-        List<MemberDTO> memberList = calendarService.selectMemberListForCalendarManage(selectCriteria);
+        List<MemberDTO> memberList = calendarService.selectMemberListForCalendarManage();
 
         log.info("[CalendarManageController] memberList : " + memberList);
 
         mv.addObject("memberList", memberList);
-        mv.addObject("selectCriteria", selectCriteria);
-        log.info("[CalendarManageController] selectCriteria : " + selectCriteria);
+
         mv.setViewName("calendar/cd_calendarManage");
 
         return mv;

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ohgiraffers.intranet.member.model.dao.MemberMapper">
 
-    <resultMap id="loginMemberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+    <resultMap id="MemberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
         <id property="mem_num" column="MEM_NUM"/>
         <result property="mem_id" column="MEM_ID"/>
         <result property="mem_pw" column="MEM_PW"/>
@@ -21,11 +21,11 @@
     </resultMap>
 
     <resultMap id="authoritResultMap" type="com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO">
-        <id property="memNum" column="MEM_NUM"/>
+        <result property="memNum" column="MEM_NUM"/>
         <result property="auCode" column="AU_CODE"/>
     </resultMap>
 
-    <select id="memberLogin" resultMap="loginMemberResultMap">
+    <select id="memberLogin" resultMap="MemberResultMap">
                 SELECT *
                   FROM MEMBER A
                  WHERE A.MEM_ID = #{ mem_id }
@@ -69,7 +69,14 @@
         WHERE A.MEM_ID = #{ mem_id }
     </select>
 
-    <select id="selectMemberListForCalendarManage" resultMap="loginMemberResultMap">
-
+    <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
+        SELECT
+                A.*
+            ,   B.AU_CODE
+        FROM MEMBER A
+        LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
+
+
 </mapper>

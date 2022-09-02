@@ -18,6 +18,24 @@
         <result property="wDate" column="CD_WDATE"/>
     </resultMap>
 
+<!--    &lt;!&ndash; DB 전체 조회용 &ndash;&gt;-->
+<!--    <select id="selectAllCalendar" resultMap="cdResultMap">-->
+<!--        SELECT-->
+<!--               *-->
+<!--          FROM CD_CALENDAR A-->
+<!--    </select>-->
 
+
+    <select id="findAllSc" resultMap="cdResultMap">
+        SELECT
+               *
+          FROM CD_CALENDAR A
+    </select>
+
+    <select id="findAllCal" resultMap="cdResultMap">
+        SELECT
+               *
+          FROM CD_CALENDAR A
+    </select>
 
 </mapper>

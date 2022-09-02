@@ -161,20 +161,6 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
 
                 },
-                events: [
-                    {
-                        title: '회의',
-                        start: '2022-04-01',
-                        backgroundColor: '#8B0000',
-                        borderColor:'#8B0000'
-                    },
-                    {
-                        title: '휴가',
-                        start: '2022-04-07',
-                        end: '2022-04-10',
-                        backgroundColor: '#008404',
-                        borderColor:'#008404'
-                    }],
 
                 footerToolbar: {
                     left: 'custom2',
@@ -279,7 +265,7 @@
             <li><a href="../board/free/freeList.html">게시판</a></li>
             <li><a th:href="@{/calendar/cd_main.html}">일정관리</a></li>
             <li><a href="../sign/testsignmain.html">전자결재</a></li>
-            <li><a href="../message/messageAllBox.html">쪽지함</a></li>
+            <li><a href="/ms/recp">쪽지함</a></li>
             <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
         </ul>
     </div>
@@ -337,7 +323,31 @@
         </div>
     </div>
 </div>
+<script> //종철님 제가 다 ~~ 고쳐놨습니다 한번 확인해보시죠  // <- 외않되요?
+    $(function(){
 
+        $.ajax({
+
+           url: "",
+            success:function(data) {
+
+               console.table(data);
+
+               // const $calendar = $("calendar");
+
+
+
+
+            },
+            error: function(error) {
+
+               console.log(error);
+            }
+
+        });
+
+    });
+</script>
 </body>
 
 </html>

@@ -19,4 +19,8 @@ public interface NoticeMapper {
     int selectTotalCount(Map<String, String> searchMap);
 
     List<NoticeDTO> selectNoticeList(SelectCriteria selectCriteria);
+
+    int incresementNoticeCount(int no);
+
+    NoticeDTO selectNoticeDetail(int no);
 }

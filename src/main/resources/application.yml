@@ -12,6 +12,14 @@ spring:
     suffix: .html
     cache: false
     check-template-location: true
+  servlet: # 파일 업로드시 첨부파일 크기 지정
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+
+  image:
+    image-dir: src/main/resources
 
 # mybatis config
 mybatis:

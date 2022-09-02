@@ -15,7 +15,7 @@
                 <h3>공지사항</h3>
                 <ul>
                     <li class="main">
-                        <a href="">공지사항</a>
+                        <a th:href="@{/notice/list}">공지사항</a>
                     </li>
                     <li class="main">
                         <a href="">사내소식</a>
@@ -40,7 +40,7 @@
                     <input type="search" name="searchValue" id="searchValue">
                     <button>검색</button>
                 </form>
-                <table>
+                <table id="listArea">
                     <thead>
                         <tr>
                         <th>번호</th>
@@ -56,7 +56,7 @@
                             <td th:text="${ notice.no }"></td>
                             <td th:if="${notice.file.originName != null}"><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
                             <td th:if="${notice.file.originName == null}"></td>
-                            <td><a th:text="${ notice.title }" th:href="@{/notice/noticeDetail/{no}(no=${notice.no})}"></a></td>
+                            <td th:text="${ notice.title }"></td>
                             <td><span th:text="${ notice.member.mem_name}"></span>&nbsp;<span th:text="${ notice.getDept().dept_name }"/></td>
                             <td th:text="${ notice.date }"></td>
                             <td th:text="${ notice.views }"></td>
@@ -68,5 +68,23 @@
             </div>
         </div>
     </div>
+
+<script th:inline="javascript">
+    if(document.querySelectorAll("#listArea td")){
+        const $tds = document.querySelectorAll("#listArea td");
+        for(let i = 0; i < $tds.length; i++){
+
+            $tds[i].onmouseenter = function(){
+
+                this.parentNode.style.cursor = "pointer";
+            }
+
+            $tds[i].onclick = function() {
+                const no = this.parentNode.children[0].innerText;
+                location.href = "/notice/detail?no=" + no;
+            }
+        }
+    }
+</script>
 </body>
 </html>

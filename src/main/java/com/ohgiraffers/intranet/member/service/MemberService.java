@@ -24,6 +24,7 @@ public class MemberService {
     }
 
 
+    /* 회원가입 진행 메소드 */
     @Transactional
     public void memberRegistInsert(MemberDTO member) throws MemberRegistException{
 

@@ -1,5 +1,7 @@
 package com.ohgiraffers.intranet.notice.controller;
 
+import com.ohgiraffers.intranet.common.paging.Pagenation;
+import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
 import com.ohgiraffers.intranet.notice.model.service.NoticeService;
@@ -21,7 +23,6 @@ public class NoticeController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final NoticeService noticeService;
-
     public NoticeController(NoticeService noticeService){
 
         this.noticeService = noticeService;
@@ -38,6 +39,7 @@ public class NoticeController {
 
         notice.getTitle();
         notice.getContents();
+
         log.info("notice regist : " + notice);
 
         //notice insert
@@ -90,12 +92,50 @@ public class NoticeController {
     }
 
     @GetMapping("/list")
-    public ModelAndView noticeList(ModelAndView mv){
+    public ModelAndView noticeList(HttpServletRequest request, ModelAndView mv){
 
-        List<NoticeDTO> noticeList = noticeService.selectAllNoticeList();
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)){
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchCondition = request.getParameter("searchCondition");
+        String searchValue = request.getParameter("searchValue");
+
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+        log.info("검색조건 확인 : " +searchMap);
+
+        int totalCount = noticeService.selectTotalCount(searchMap);
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = null;
+
+        if(searchCondition != null && !"".equals(searchCondition)){
+
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
+                    searchCondition, searchValue);{
+
+            }
+        } else {
+
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+        }
+        log.info("selectCriteria 확인 : " + selectCriteria);
+
+        List<NoticeDTO> noticeList = noticeService.selectNoticeList(selectCriteria);
         log.info("noticeList값 확인 : " + noticeList);
 
         mv.addObject("noticeList", noticeList);
+        mv.addObject("selectCriteria", selectCriteria);
+        log.info("selectCriteria 확인 : " + selectCriteria);
+
+        log.info("dept값 가져오나 확인 : " + noticeList);
 
         mv.setViewName("notice/noticeList");
 

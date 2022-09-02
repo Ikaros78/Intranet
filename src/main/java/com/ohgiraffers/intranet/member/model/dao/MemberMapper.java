@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.member.model.dao;
 
-import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,8 +17,11 @@ public interface MemberMapper {
     MemberDTO findByMemberId(String mem_id);
 
     /* 일정권한 관리를 위한 회원 리스트 조회용 */
-    List<MemberDTO> selectMemberListForCalendarManage();
+    List<MemberDTO> selectMemberListForCalendarManage(String searchCondition);
 
     /* 아이디 중복 체크 */
     String selectCheckMember(String mem_id);
+
+    /* 일정권한 관리 셀렉트박스용 부서 조회용 */
+    List<DepartmentDTO> selectDeptList();
 }

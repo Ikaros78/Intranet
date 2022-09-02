@@ -62,12 +62,11 @@ public class MemberController {
         log.info("[MemberController] memberRegistInsert ============");
 
         // 우편번호 API를 통해 받은 데이터를 spring으로 들고 오는 코드
-        String address = request.getParameter("mem_address") + "" + request.getParameter("mem_address2");
+        String address = request.getParameter("mem_address") + request.getParameter("mem_address2");
 
         // spring으로 받은 주소를 DB에 저장하는 코드
         member.setMem_address(address);
 
-        //비밀번호 암호화
         member.setMem_pw(passwordEncoder.encode(member.getMem_pw()));
 
         log.info("[MemberController] registInsert Member : " + member);
@@ -79,7 +78,6 @@ public class MemberController {
                 return "redirect:/";
     }
 
-    /* 아이디 중복 체크 */
     @PostMapping("/checkDupId")
     public ResponseEntity<String> checkDupId(@RequestBody MemberDTO memberDTO) throws JsonProcessingException {
 
@@ -90,7 +88,6 @@ public class MemberController {
         String idCheckResult = "중복된 아이디가 없습니다.";
         log.info("[MEMBER CONTROLLER] 아이디 체크 : " + memberDTO.getMem_id());
 
-        log.info("여기까지 왔니?");
         if("".equals(memberDTO.getMem_id())){
             log.info("[MEMBER CONTROLLER] No Input Member Id");
             idCheckResult = "아이디를 입력해주십시오";

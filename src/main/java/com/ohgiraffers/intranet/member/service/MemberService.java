@@ -24,6 +24,7 @@ public class MemberService {
     }
 
 
+    /* 회원가입 진행 메소드 */
     @Transactional
     public void memberRegistInsert(MemberDTO member) throws MemberRegistException{
 
@@ -40,9 +41,9 @@ public class MemberService {
     }
 
     /* 아이디 중복 체크를 확인하는 메소드 */
-    public boolean checkMemberById(String mem_id) {
+    public boolean selectCheckMember(String mem_id) {
 
-        String checkResult = memberMapper.checkMemberById(mem_id);
+        String checkResult = memberMapper.selectCheckMember(mem_id);
 
         return checkResult != null? true : false;
     }

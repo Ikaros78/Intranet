@@ -26,25 +26,23 @@ a.hs_board_numbering {
     cursor: pointer;
 }
 
-.pagingArea {
+.hs_table_foot {
     width:1550px;
     text-align: center;
     margin-top: 30px;
+}
+
+a.hs_board_numbering:hover {
+    background: #FFA57E;
+    color: white;
+    border-radius: 15px;
 }
 
 .shiftbtn:hover {
     color: black;
 }
 
-.hs_board_numbering:hover {
-    background: #FFA57E;
-    color: white;
-    border-radius: 15px;
-}
-
-
-
-.hs_board_foot_btn {
+input.hs_board_foot_btn {
     background: #404040;
     width: 70px;
     height: 30px;

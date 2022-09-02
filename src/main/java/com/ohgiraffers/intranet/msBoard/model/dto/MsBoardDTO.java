@@ -11,14 +11,16 @@ public class MsBoardDTO {
 	private Date sendDate;
 	private Date recpDate;
 	private String readYn;
-	private String gubun;
+	private String sendDel;
+	private String recpDel;
+	private String recpMun;
 	private int memNum;
 	public MsBoardDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public MsBoardDTO(int msNo, String msTitle, String sendName, String recpName, Date sendDate, Date recpDate,
-			String readYn, String gubun, int memNum) {
+			String readYn, String sendDel, String recpDel, String recpMun, int memNum) {
 		super();
 		this.msNo = msNo;
 		this.msTitle = msTitle;
@@ -27,7 +29,9 @@ public class MsBoardDTO {
 		this.sendDate = sendDate;
 		this.recpDate = recpDate;
 		this.readYn = readYn;
-		this.gubun = gubun;
+		this.sendDel = sendDel;
+		this.recpDel = recpDel;
+		this.recpMun = recpMun;
 		this.memNum = memNum;
 	}
 	public int getMsNo() {
@@ -72,11 +76,23 @@ public class MsBoardDTO {
 	public void setReadYn(String readYn) {
 		this.readYn = readYn;
 	}
-	public String getGubun() {
-		return gubun;
+	public String getSendDel() {
+		return sendDel;
 	}
-	public void setGubun(String gubun) {
-		this.gubun = gubun;
+	public void setSendDel(String sendDel) {
+		this.sendDel = sendDel;
+	}
+	public String getRecpDel() {
+		return recpDel;
+	}
+	public void setRecpDel(String recpDel) {
+		this.recpDel = recpDel;
+	}
+	public String getRecpMun() {
+		return recpMun;
+	}
+	public void setRecpMun(String recpMun) {
+		this.recpMun = recpMun;
 	}
 	public int getMemNum() {
 		return memNum;
@@ -87,9 +103,8 @@ public class MsBoardDTO {
 	@Override
 	public String toString() {
 		return "MsBoardDTO [msNo=" + msNo + ", msTitle=" + msTitle + ", sendName=" + sendName + ", recpName=" + recpName
-				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", gubun=" + gubun
-				+ ", memNum=" + memNum + "]";
+				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendDel=" + sendDel
+				+ ", recpDel=" + recpDel + ", recpMun=" + recpMun + ", memNum=" + memNum + "]";
 	}
-	
-	
+
 }

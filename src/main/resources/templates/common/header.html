@@ -15,12 +15,12 @@
                 <li><a th:href="@{/member/logout}">로그아웃</a></li>
             </ul>
             <ul class="gnb">
-                <li><a href="../board/notice/noticeList.html">공지사항</a></li>
+                <li><a th:href="@{/notice/list}">공지사항</a></li>
                 <li><a href="../board/free/freeList.html">게시판</a></li>
                 <li><a href="../calendar/cd_main.html">일정관리</a></li>
                 <li><a href="/sign/main">전자결재</a></li>
                 <li><a href="/ms/recp">쪽지함</a></li>
-                <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
+                <li><a th:href="@{/emplManage/emplList}">직원관리</a></li>
             </ul>
         </div>
 </body>

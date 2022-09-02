@@ -1,0 +1,56 @@
+
+.shiftbtn {
+    background: transparent;
+    border: 0px;
+    width: 25px;
+    font-family: 'NanumSquare';
+    font-weight: 900;
+    color: lightgray;
+    font-size: 20px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+}
+
+a.hs_board_numbering {
+    width: 24px;
+    height: 20px;
+    padding-top: 5px;
+    padding-right: 1px;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 900;
+    color: #4b4b4b;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.hs_table_foot {
+    width:1550px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+a.hs_board_numbering:hover {
+    background: #FFA57E;
+    color: white;
+    border-radius: 15px;
+}
+
+.shiftbtn:hover {
+    color: black;
+}
+
+input.hs_board_foot_btn {
+    background: #404040;
+    width: 70px;
+    height: 30px;
+    border: 0px;
+    color: white;
+    cursor: pointer;
+}
+
+input.hs_board_foot_btn:hover {
+    background: gray;
+}

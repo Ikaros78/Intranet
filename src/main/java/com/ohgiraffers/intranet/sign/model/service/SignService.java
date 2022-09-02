@@ -32,4 +32,12 @@ public class SignService {
 
         return waitingList;
     }
+
+    /* 전자결재 상세조회용 메소드 */
+    public SignDTO selectSignDetail(String signNo) {
+
+        SignDTO signResult = signMapper.selectSignDetail(signNo);
+
+        return signResult;
+    }
 }

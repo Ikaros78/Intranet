@@ -16,6 +16,8 @@ public interface MsBoardService {
 
 	MsBoardDTO selectMsBoardDetail(int msNo);
 
+	List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria);
+
 	
 	
 }

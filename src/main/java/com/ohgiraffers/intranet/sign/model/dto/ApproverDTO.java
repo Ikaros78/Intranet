@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.sign.model.dto;
 
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import lombok.*;
 
 @Getter
@@ -14,4 +15,6 @@ public class ApproverDTO {
     private java.sql.Date approveDate;
     private String opinion;
     private String signType;
+
+    private MemberDTO approver;
 }

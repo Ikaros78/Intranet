@@ -8,6 +8,7 @@ import com.ohgiraffers.intranet.notice.model.service.NoticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -140,5 +141,19 @@ public class NoticeController {
         mv.setViewName("notice/noticeList");
 
         return mv;
+    }
+
+    @GetMapping("/detail")
+    public String noticeDetailPage(HttpServletRequest request, Model model){
+
+
+        request.getParameter("no");
+
+        log.info("no 값 대체 머야 : " + request.getParameter("no"));
+
+
+
+
+        return "/notice/noticeDetail";
     }
 }

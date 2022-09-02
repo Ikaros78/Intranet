@@ -70,7 +70,7 @@
         , SYSDATE
         , DEFAULT
         , #{contents}
-        , #{num}
+        , 1102
         )
     </insert>
 

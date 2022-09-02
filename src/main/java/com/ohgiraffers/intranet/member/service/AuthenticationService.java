@@ -31,6 +31,7 @@ public class AuthenticationService implements UserDetailsService {
 
         MemberDTO member = memberMapper.findByMemberId(mem_id);
         log.info("[인증 서비스] 여기까지 왔니?");
+        log.info("[인증 서비스] member : " + member);
 
         if(member == null){
             throw new UsernameNotFoundException("확인되지 않은 회원입니다.");

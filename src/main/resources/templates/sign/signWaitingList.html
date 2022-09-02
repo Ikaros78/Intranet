@@ -178,7 +178,23 @@
         }
 
         if(document.querySelectorAll('.waitingList td')){
+            const $tds = document.getElementsByName('title');
+            for(let i = 0; i < $tds.length; i++) {
 
+                $tds[i].onmouseenter = function() {
+                    this.parentNode.style.backgroundColor = "lightgray";
+                    this.style.cursor = "pointer";
+                }
+
+                $tds[i].onmouseout = function() {
+                    this.parentNode.style.backgroundColor = "white";
+                }
+
+                $tds[i].onclick = function() {
+                    const no = this.parentNode.children[1].innerText;
+                    location.href = "/sign/waitingDetail?no=" + no;
+                }
+            }
         }
 
     </script>

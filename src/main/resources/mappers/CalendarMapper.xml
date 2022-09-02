@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ohgiraffers.intranet.member.model.dao.MemberMapper">
+<mapper namespace="com.ohgiraffers.intranet.calendar.model.dao.CalendarMapper">
 
     <resultMap id="cdResultMap" type="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
         <id property="id" column="CD_NO"/>
@@ -18,6 +18,14 @@
         <result property="wDate" column="CD_WDATE"/>
     </resultMap>
 
+    <resultMap id="fkResultMap" type="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
+        <id property="id" column="CD_NO"/>
+        <result property="memNum" column="MEM_NUM"/>
+        <result property="title" column="CD_TITLE"/>
+        <result property="start" column="CD_START"/>
+        <result property="type" column="CD_TYPE"/>
+    </resultMap>
+
 <!--    &lt;!&ndash; DB 전체 조회용 &ndash;&gt;-->
 <!--    <select id="selectAllCalendar" resultMap="cdResultMap">-->
 <!--        SELECT-->
@@ -28,13 +36,34 @@
 
     <select id="findAllSc" resultMap="cdResultMap">
         SELECT
-               *
+               A.MEM_NUM
+             , A.CD_NO
+             , A.CD_GROUP
+             , A.CD_TITLE
+             , A.CD_CONTENT
+             , A.CD_START
+             , A.CD_END
+             , A.CD_ALLDAY
+             , A.CD_COLOR
+             , A.CD_TYPE
+             , A.CD_WDATE
           FROM CD_CALENDAR A
     </select>
 
+    <!-- 필수값만 들어오는 ajax 전체조회 -->
     <select id="findAllCal" resultMap="cdResultMap">
         SELECT
-               *
+               A.MEM_NUM
+             , A.CD_NO
+             , A.CD_GROUP
+             , A.CD_TITLE
+             , A.CD_CONTENT
+             , A.CD_START
+             , A.CD_END
+             , A.CD_ALLDAY
+             , A.CD_COLOR
+             , A.CD_TYPE
+             , A.CD_WDATE
           FROM CD_CALENDAR A
     </select>
 

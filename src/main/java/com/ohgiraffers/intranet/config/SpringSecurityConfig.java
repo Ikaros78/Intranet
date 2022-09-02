@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.config;
 
 import com.ohgiraffers.intranet.member.service.AuthenticationService;
+import com.ohgiraffers.intranet.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-                .mvcMatchers("/notice/**","/msBoard/**","/sign/**").permitAll()
+//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**").hasAnyAuthority("ROLE_MEMBER")
                 .mvcMatchers("/**","/member/**").permitAll()
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
@@ -58,7 +59,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/common/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .defaultSuccessUrl("/main/main") // 로그인 성공시 이동할 페이지
+                .defaultSuccessUrl("/main/main")
                 .failureUrl("/member/loginFail")
 
            .and()
@@ -68,18 +69,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/");
 
-                //중복 로그인 방지용 코드
-        http.sessionManagement()
-                    .maximumSessions(1) //세션 최대 허용 수
-                    .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
+        //중복 로그인 방지용 코드
+    http.sessionManagement()
+            .maximumSessions(1) //세션 최대 허용 수
+            .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
 
                 //자동 로그인 코드
         http.rememberMe()
+                    .key("heechang!") // token 생성 값. 필수
                     .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
                     .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
                     .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
                     .userDetailsService(userDetailsService()) // 사용자 정보를 받음. 자동 로그인 필수 설정.
 
+                //403 예외처리 핸들링
                .and()
                     .exceptionHandling()
                     .accessDeniedPage("/member/loginFail")

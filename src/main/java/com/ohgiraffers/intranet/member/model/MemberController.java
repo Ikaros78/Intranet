@@ -59,8 +59,7 @@ public class MemberController {
         log.info("[MemberController] memberRegistInsert ============");
 
         // 우편번호 API를 통해 받은 데이터를 spring으로 들고 오는 코드
-        String address = request.getParameter("sample6_postcode")
-                + request.getParameter("mem_address") + request.getParameter("mem_address2");
+        String address = request.getParameter("mem_address") + request.getParameter("mem_address2");
 
         // spring으로 받은 주소를 DB에 저장하는 코드
         member.setMem_address(address);
@@ -90,7 +89,8 @@ public class MemberController {
             log.info("[MEMBER CONTROLLER] No Input Member Id");
             idCheckResult = "아이디를 입력해주십시오";
 
-        } else if(memberService.checkMemberById(memberDTO.getMem_id())){
+            log.info("여기까지 왔니?");
+        } else if(memberService.selectCheckMember(memberDTO.getMem_id())){
             log.info("[MEMBER CONTROLLER] Check Same Id");
             idCheckResult = "중복된 아이디입니다.";
         }

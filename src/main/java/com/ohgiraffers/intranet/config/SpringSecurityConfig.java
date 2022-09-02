@@ -38,7 +38,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /* 시큐리티 설정 무시할 리소스 등록. 여러분 작업 화이팅 */
-    public void configure(WebSecurity web) throws Exception{
+    public void configure(WebSecurity web){
 
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/lib/**");
     }
@@ -47,7 +47,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
 
-        http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
+        http.csrf().disable()
                 .authorizeRequests() //요청에 대한 권한 체크
 //                .mvcMatchers("/notice/**","/msBoard/**","/sign/**").hasAnyAuthority("ROLE_MEMBER")
                 .mvcMatchers("/**","/member/**").permitAll()
@@ -56,10 +56,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
            .and()
                 .formLogin() // 로그인 form을 따로 이용하여 로그인.
-                .loginPage("/common/login")
+                .loginPage("/member/login")
                 .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
                 .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
-                .defaultSuccessUrl("/main/main") // 로그인 성공시 이동할 페이지
+                .defaultSuccessUrl("/")
                 .failureUrl("/member/loginFail")
 
            .and()
@@ -69,10 +69,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/");
 
-                //중복 로그인 방지용 코드
-        http.sessionManagement()
-                    .maximumSessions(1) //세션 최대 허용 수
-                    .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
+        //중복 로그인 방지용 코드
+    http.sessionManagement()
+            .maximumSessions(1) //세션 최대 허용 수
+            .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
 
                 //자동 로그인 코드
         http.rememberMe()

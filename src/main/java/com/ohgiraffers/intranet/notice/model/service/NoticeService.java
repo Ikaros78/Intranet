@@ -19,12 +19,13 @@ public class NoticeService {
         this.noticeMapper = noticeMapper;
     }
 
-
+    /* 공지사항 등록을 위한 메소드 */
     public int noticeRegist(NoticeDTO notice) {
 
         return noticeMapper.noticeRegist(notice);
     }
 
+    /* 공지사항 파일 등록을 위한 메소드 */
     public int noticeFileInsert(NoticeFileDTO noticeFile) {
 
         return noticeMapper.fileRegist(noticeFile);
@@ -38,10 +39,25 @@ public class NoticeService {
         return result;
     }
 
+    /* 공지사항 검색을 위한 메소드 */
     public List<NoticeDTO> selectNoticeList(SelectCriteria selectCriteria) {
 
         List<NoticeDTO> noticeList = noticeMapper.selectNoticeList(selectCriteria);
 
         return noticeList;
+    }
+
+
+    /* 공지사항 상세페이지 조회용 메소드 */
+    public NoticeDTO selectNoticeDetail(int no) {
+
+        NoticeDTO noticeDetail = null;
+
+        int result = noticeMapper.incresementNoticeCount(no); //조회수 증가
+
+        if(result > 0){
+            noticeDetail = noticeMapper.selectNoticeDetail(no);
+        }
+        return noticeDetail;
     }
 }

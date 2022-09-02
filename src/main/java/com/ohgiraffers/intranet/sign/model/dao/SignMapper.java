@@ -1,6 +1,5 @@
 package com.ohgiraffers.intranet.sign.model.dao;
 
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,5 +10,5 @@ import java.util.Map;
 public interface SignMapper {
     int selectTotalWaitingCount(Map<String, String> searchMap);
 
-    List<SignDTO> selectWaitingList(SelectCriteria selectCriteria);
+    List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria);
 }

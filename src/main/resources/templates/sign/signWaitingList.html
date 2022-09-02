@@ -45,16 +45,16 @@
                                 </colgroup>
                                 <tbody>
                                     <tr>
-                                        <th scope="row" width="7%">
+                                        <th scope="row">
                                             <labeL>기안자</labeL>
                                         </th>
-                                        <td width="33%">
+                                        <td>
                                             <input type="text" title="기안자" name="searchWriter">
                                         </td>
-                                        <th scope="row" width="7%">
+                                        <th scope="row">
                                             <labeL>양식명</labeL>
                                         </th>
-                                        <td width="33%">
+                                        <td>
                                             <input type="text" title="양식명" name="searchType">
                                         </td>
                                     </tr>
@@ -91,36 +91,23 @@
                 </div>  <!-- search-wrap -->
 
                 <div class="list-wrap">
-                    <table class="table table-borderd">
+                    <table class="table table-borderd waitingList">
                         <thead>
                             <tr>
-                                <th width="20px"><input type="checkbox"></th>
-                                <th width="100px">NO</th>
-                                <th width="150px">서식함</th>
+                                <th width="20px"><input type="checkbox" name="waitingSign" onclick="selectAll(this)"></th>
                                 <th width="80px">문서번호</th>
-                                <th width="800px">문서제목</th>
-                                <th width="80px">기안자</th>
-                                <th width="100px">기안부서</th>
+                                <th width="900px">문서제목</th>
+                                <th width="130px">기안자</th>
+                                <th width="200px">기안부서</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>1</td>
-                                <td>공통</td>
-                                <td>ㅇ</td>
-                                <td>결재요청문</td>
-                                <td>홍길동</td>
-                                <td>영업팀</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>2</td>
-                                <td>공통</td>
-                                <td>ㄴ</td>
-                                <td>결재요청문</td>
-                                <td>홍길동</td>
-                                <td>영업팀</td>
+                            <tr th:each="sign : ${ waitingList }">
+                                <td><input type="checkbox" name="waitingSign"></td>
+                                <td th:text="${sign.signNo}"></td>
+                                <td th:text="${sign.signTitle}" name="title"></td>
+                                <td th:text="${sign.writer.mem_name}"></td>
+                                <td th:text="${sign.writer.dept_code}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -167,9 +154,8 @@
                     </div>
                 </div> <!-- list-wrap -->
 
-                <div class="col-2-offset-8" align="right">
-                    <button>일괄합의</button>
-                    <button>일괄결재</button>
+                <div class="col-2-offset-8 signAll" align="right">
+                    <button id="signChecked">일괄결재</button>
                 </div>
             </div>
         </div>
@@ -182,7 +168,19 @@
             language : "kr",
             todayHighlight : true
         });
-        
+
+        function selectAll(selectAll)  {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked
+            })
+        }
+
+        if(document.querySelectorAll('.waitingList td')){
+
+        }
+
     </script>
 </body>
 </html>

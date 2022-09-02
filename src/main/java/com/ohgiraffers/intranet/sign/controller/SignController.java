@@ -45,6 +45,7 @@ public class SignController {
         String searchValue = request.getParameter("searchValue");
 
         Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("mem_num", "15011092");
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
 
@@ -54,6 +55,8 @@ public class SignController {
          * 검색조건이 있는 경우 검색 조건에 맞는 전체 게시물 수를 조회한다.
          */
         int totalCount = signService.selectTotalWaitingCount(searchMap);
+
+        System.out.println(totalCount);
 
         /* 한 페이지에 보여 줄 게시물 수 */
         int limit = 10;		//얘도 파라미터로 전달받아도 된다.
@@ -70,9 +73,17 @@ public class SignController {
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
         }
 
-        /* 조회해 온다 */
-        List<SignDTO> waitingList = signService.selectWaitingList(selectCriteria);
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("mem_num", "15011092");
+        searchList.put("selectCriteria", selectCriteria);
 
+        System.out.println("searchList = " + searchList);
+
+        /* 조회해 온다 */
+        List<SignDTO> waitingList = signService.selectWaitingList(searchList);
+
+        System.out.println("waitingList = " + waitingList);
+        
         mv.addObject("waitingList", waitingList);
         mv.addObject("selectCriteria", selectCriteria);
 

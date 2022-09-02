@@ -93,7 +93,7 @@
 										, C.MS_GUBUN
 										, C.MEM_NUM 
 								   FROM MS_BOARD C
-<!-- 								  WHERE C.MS_GUN ={  }  -->
+								  WHERE C.MS_READ_YN = 'N' 
 								   <where>
 							            <if test="searchCondition == 'msTitle'">
 							                C.MS_TITLE = #{ searchValue }
@@ -159,8 +159,7 @@
 		(
 		SEQ_MSF_NO.NEXTVAL
 		, #{ originName }
-		, #{ saveName
-		}
+		, #{ saveName }
 		, #{ savaPath }
 		, #{ noDate }
 		, #{ msNo }
@@ -181,4 +180,28 @@
 		WHERE MS_NO = #{ msNo }
 
 	</delete>
+	
+	<select id="selectMsBoardDetail" resultMap="MsboardResultMap">
+		SELECT
+			  A.MS_NO
+			, A.MS_TITLE
+			, A.MS_SEND_NAME
+			, A.MS_RECP_NAME
+			, A.MS_SEND_DATE
+			, A.MS_RECP_DATE
+			, A.MS_READ_YN
+			, A.MS_GUBUN
+			, A.MEM_NUM
+		 FROM MS_BOARD A
+		WHERE A.MS_NO = #{ msNo }
+	</select>
+	
+	<update id="YNChangeMsBoard" >
+        UPDATE
+        MS_BOARD A
+        SET A.MS_READ_YN = 'Y'
+	    WHERE A.MS_NO = #{ msNo }
+	      AND A.MS_READ_YN = 'N'
+    </update>
+
 </mapper>

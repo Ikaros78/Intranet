@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+#main-container{width: 1670px; float: left;}
+#main-container .con-header{height: 70px; line-height: 70px; margin:0 20px; padding-left: 20px; border-bottom: 1px solid #000;}
+#main-container .details{margin:0 20px; padding-left: 20px;}
+#main-container .details .buttons{margin-top: 10px}
+
+#main-container .details #table-form{width: 1630px; border-collapse: collapse}
+#main-container .details .buttons button{width: 90px; height: 40px}
+#main-container .details .buttons .sign{
+    background: #000; color: white}
+

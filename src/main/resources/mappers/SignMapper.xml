@@ -20,22 +20,28 @@
     </resultMap>
 
     <resultMap type="ApproverDTO" id="approverResultMap">
-        <id property="signNo" column="SIGN_NO"/>
+        <result property="signNo" column="SIGN_NO"/>
         <result property="approverNo" column="APPROVER_NO"/>
         <result property="isApproved" column="IS_APPROVED"/>
         <result property="approveDate" column="APPROVE_DATE"/>
         <result property="opinion" column="OPINION"/>
         <result property="signType" column="SIGN_TYPE"/>
+
+        <association property="approver" resultMap="memberResultMap"/>
     </resultMap>
 
     <resultMap type="ReceiverDTO" id="receiverResultMap">
-        <id property="signNo" column="SIGN_NO"/>
+        <result property="signNo" column="SIGN_NO"/>
         <result property="receiverNo" column="RECEIVER_NO"/>
+
+        <association property="receiver" resultMap="memberResultMap"/>
     </resultMap>
 
     <resultMap type="ReferencerDTO" id="referencerResultMap">
-        <id property="signNo" column="SIGN_NO"/>
+        <result property="signNo" column="SIGN_NO"/>
         <result property="referencerNo" column="REFERENCER_NO"/>
+
+        <association property="referencer" resultMap="memberResultMap"/>
     </resultMap>
 
     <resultMap type="SignFileDTO" id="signFileResultMap">
@@ -46,6 +52,11 @@
         <result property="tempPath" column="SF_TEMP_PATH"/>
         <result property="deleteYn" column="SF_DELETE_YN"/>
         <result property="signNo" column="SIGN_NO"/>
+    </resultMap>
+
+    <resultMap type="SignFormDTO" id="signFormResultMap">
+        <id property="code" column="SF_CODE"/>
+        <result property="name" column="SF_NAME"/>
     </resultMap>
 
     <resultMap type="MemberDTO" id="memberResultMap">
@@ -61,6 +72,12 @@
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
 
+        <association property="dept" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap type="DepartmentDTO" id="deptResultMap">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
     <select id="selectTotalWaitingCount" resultType="_int" parameterType="hashmap">
@@ -110,6 +127,31 @@
         /*JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)*/
         WHERE A.RNUM >= #{ selectCriteria.startRow }
         ORDER BY 1 ASC
+    </select>
+
+    <select id="selectSignDetail" resultMap="generalSignResultMap">
+        SELECT
+                A.SIGN_NO
+              , A.SIGN_TITLE
+              , B.MEM_NAME
+              , D.DEPT_NAME
+              , A.SIGN_CONTENT
+              , A.REG_DATE
+              , C.SF_NAME
+              , EM.MEM_NAME
+              , FM.MEM_NAME
+              , GM.MEM_NAME
+          FROM SI_SIGN A
+          JOIN MEMBER B ON (A.SIGN_WRITER = B.MEM_NUM)
+          JOIN DEPARTMENT D ON(B.DEPT_CODE = D.DEPT_CODE)
+          JOIN SF_SIGN_FORM C ON(A.SIGN_FORM = C.SF_CODE)
+          LEFT JOIN APPROVER E ON(A.SIGN_NO = E.SIGN_NO)
+          LEFT JOIN MEMBER EM ON (E.APPROVER_NO = EM.MEM_NUM)
+          LEFT JOIN RECEIVER F ON(A.SIGN_NO = F.SIGN_NO)
+          LEFT JOIN MEMBER FM ON (F.RECEIVER_NO = FM.MEM_NUM)
+          LEFT JOIN REFERENCER G ON(A.SIGN_NO = G.SIGN_NO)
+          LEFT JOIN MEMBER GM ON (G.REFERENCER_NO = GM.MEM_NUM)
+         WHERE A.SIGN_NO = #{ signNo }
     </select>
 
 </mapper>

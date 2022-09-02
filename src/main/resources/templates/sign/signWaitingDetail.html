@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결재대기함 상세보기</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
+    <link rel="stylesheet" type="text/css" href="/css/sign/signdetail.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- summernote -->
+    <script src="/js/summernote/summernote-lite.js"></script>
+    <script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+</head>
+<body>
+
+    <div th:replace="/common/header.html"></div>
+
+    <div th:replace="/sign/signSideBar.html"></div>
+        
+            <div id="main-container">
+                <div class="con-header col-offset-1">
+                    <h2>결재대기함</h2>
+                </div>
+
+                <div class="details">
+                    <div class="buttons" align="right">
+                        <button name="sign" class="sign">결제</button>
+                        <button name="refuse">보류</button>
+                        <button name="addApprover">결재선</button>
+                        <button name="addReferencer">참조자</button>
+                        <button name="process">진행현황</button>
+                        <button name="print">인쇄</button>
+                        <button name="backtoList">목록</button>
+                    </div>
+                    
+                    <div id="detail-header">
+                        <h1 align="center">협조문</h1>
+                    </div>
+
+                    <div id="approve-list" align="right">
+                        <table>
+                            <tr>
+                                <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
+                                <th style="border : 1px solid";>기안</th>
+                            </tr>
+                            <tr>
+                                <td style="border : 1px solid">김올레</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="table-form">
+                        <table class="table detail">
+                            <caption></caption>
+                            <colgroup>
+                                <col style="width: 15%;">
+                                <col style="width: 35%;">
+                                <col style="width: 15%;">
+                                <col style="width: 35%;">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>문서번호</th>
+                                    <td th:text="${signDetail.signNo}"></td>
+                                    <th>기안일자</th>
+                                    <td th:text="${signDetail.regDate}"></td>
+                                </tr>
+                                <tr>
+                                    <th>기안자</th>
+                                    <td th:text="${signDetail.writer.mem_name}"></td>
+                                    <th>기안부서</th>
+                                    <td th:text="${signDetail.writer.dept.dept_name}"></td>
+                                </tr>
+                                <tr>
+                                    <th>참조자</th>
+                                    <td>참조자 여기로</td>
+                                </tr>
+                                <tr>
+                                    <th>수신처</th>
+                                    <td>수신처도 여기로</td>
+                                </tr>
+                                <tr>
+                                    <th>문서제목</th>
+                                    <td th:text="${signDetail.signTitle}"></td>
+                                </tr>
+                                <tr colspan="4">
+                                    <td th:text="${signDetail.signContent}"></td>
+                                </tr>
+                                <tr>
+                                    <td>파일이 여기로</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                       
+                    
+                </div>
+            </div>>
+
+
+
+</body>
+</html>

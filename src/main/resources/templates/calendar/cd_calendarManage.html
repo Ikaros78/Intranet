@@ -93,15 +93,27 @@
                                     <td th:text="${ member.mem_joinDate }">22-08-23</td>
                                     <td th:text="${ member.mem_phone }">010-1234-5678</td>
                                     <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
-<!--                                    <th:block th:each="authorit : ${ member.authorit }">-->
-<!--                                        <th:block th:if="${ authorit.auCode eq 'CD_ALL' and  authorit.auCode eq 'CD_DEPT' }">-->
-
+                                    <th:block th:each="authorit : ${ member.authorit }">
+                                        <th:block th:if="${ authorit.auCode eq 'CD_ALL' and  authorit.auCode eq 'CD_DEPT' }">
                                             <td><input  type="checkbox" class="check1" name="checkAll" checked></td>
                                             <td><input  type="checkbox" class="check2" name="checkDept" checked></td>
+                                        </th:block>
+                                    </th:block>
+<!--                                        <th:block th:if="${ authorit.auCode ne 'CD_ALL' }">-->
+
+<!--                                            <td><input  type="checkbox" class="check1" name="checkAll" ></td>-->
+<!--                                        </th:block>-->
+<!--                                        <th:block th:if="${ authorit.auCode eq 'CD_DEPT' }">-->
+
+<!--                                            <td><input  type="checkbox" class="check1" name="checkAll" checked></td>-->
+<!--                                        </th:block>-->
+<!--                                        <th:block th:if="${ authorit.auCode ne 'CD_DEPT' }">-->
+
+<!--                                            <td><input  type="checkbox" class="check1" name="checkAll" ></td>-->
 <!--                                        </th:block>-->
 
 
-<!--                                    </th:block>-->
+
 <!--                                    <th:block th:each="authorit : ${ member.authorit }">-->
 <!--                                      -->
 <!--                                        <td><input type="checkbox" class="check2" name="checkDept" th:checked="${ authorit.auCode eq 'CD_DEPT'}"></td>-->

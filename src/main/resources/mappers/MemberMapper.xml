@@ -17,6 +17,12 @@
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
 
+        <collection property="authorit" resultMap="authoritResultMap"/>
+    </resultMap>
+
+    <resultMap id="authoritResultMap" type="com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO">
+        <result property="memNum" column="MEM_NUM"/>
+        <result property="auCode" column="AU_CODE"/>
     </resultMap>
 
     <select id="memberLogin" resultMap="MemberResultMap">
@@ -62,5 +68,15 @@
         FROM MEMBER A
         WHERE A.MEM_ID = #{ mem_id }
     </select>
+
+    <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
+        SELECT
+                A.*
+            ,   B.AU_CODE
+        FROM MEMBER A
+        LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        ORDER BY A.MEM_NUM, B.AU_CODE
+    </select>
+
 
 </mapper>

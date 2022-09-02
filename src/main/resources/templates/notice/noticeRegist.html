@@ -49,7 +49,7 @@
                     <tr>
                         <th>등록자</th>
                         <td><span th:text="${ #authentication.getPrincipal().getMem_name() }"></span>&nbsp;
-                            <span th:text="${ #authentication.getPrincipal().getDept_name() }"></span></td>
+                            <span th:text="${ #authentication.getPrincipal().getDepartment().getDept_name() }"></span></td>
                     </tr>
                 </table>
                     <textarea id="summernote" name="contents"></textarea>

@@ -37,13 +37,13 @@
                                 <span>첨부파일다운로드(<span th:text="${ notice.file.originName }"></span>)</span>
                             </a>
                         </p>
-
+                    <input type="hidden" th:value="${ notice.member.mem_num }" name="memberIdx">
                     <div class="body">
                         <p th:utext="${ notice.contents }">
                     </div>
                     <div class="btnArea">
-                        <button class="list update"><a href="noticeUpdate.html">수정</a></button>
-                        <button class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq notice.member.mem_num }" class="list update"><a href="noticeUpdate.html">수정</a></button>
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq notice.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
                         <button class="list"><a href="noticeList.html">목록</a></button>
                     </div>
                 </div>

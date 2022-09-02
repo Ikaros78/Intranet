@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.member.model.dto;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

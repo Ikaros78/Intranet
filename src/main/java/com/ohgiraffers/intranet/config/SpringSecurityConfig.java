@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.config;
 
 import com.ohgiraffers.intranet.member.service.AuthenticationService;
-import com.ohgiraffers.intranet.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

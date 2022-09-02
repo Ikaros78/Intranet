@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.member.model;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.member.service.MemberService;
-
-import lombok.Setter;
 
 @Controller
 @RequestMapping("/member")

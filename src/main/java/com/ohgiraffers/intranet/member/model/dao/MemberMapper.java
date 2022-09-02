@@ -1,7 +1,5 @@
 package com.ohgiraffers.intranet.member.model.dao;
 
-import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 

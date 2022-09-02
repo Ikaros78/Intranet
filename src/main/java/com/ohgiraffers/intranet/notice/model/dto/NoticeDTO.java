@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.notice.model.dto;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
-import javax.naming.Name;
 import java.sql.Date;
 
 public class NoticeDTO {

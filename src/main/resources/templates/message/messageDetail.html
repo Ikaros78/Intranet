@@ -30,7 +30,8 @@
                 <table id="">
                     <tr>
                         <th width="auto">보낸 사람 : </th>
-                        <th width="400px" align="left">
+                        <th width="400px" align="left">&nbsp;
+                        <span th:text="${ #authentication.getPrincipal().getMem_name() }"> </span>
                         </th>
                         
                     </tr>
@@ -62,10 +63,10 @@
             <div id="sideBar">
                 <h3>쪽지함</h3>
                 <ul>
-                    <li class="main"><a href="./messageSend.html">쪽지보내기</a></li>
+                    <li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
                     <li class="main"><a href="/ms/recp">받은쪽지함</a></li>
-                    <li class="main"><a href="./messageSendbox.html">보낸쪽지함</a></li>
-                    <li class="main"><a href="./messageAllBox.html">쪽지보관함</a></li>
+                    <li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+                    <li class="main"><a href="/ms/all">쪽지보관함</a></li>
                 </ul>
             </div>
         </div>

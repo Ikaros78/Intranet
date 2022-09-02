@@ -150,106 +150,127 @@
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: "ko",
-                headerToolbar: {
-                    left: 'prev,next,custom1,today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
 
-                },
 
-                footerToolbar: {
-                    left: 'custom2',
-                    center: '',
-                    right: ''
-                },
-                navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
-                editable: true, // 수정 가능?
-                selectable: true, // 달력 일자 드래그 설정가능
-                nowIndicator: true, // 현재 시간 마크
-                dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
-                eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
-                    console.log(obj);
-                },
-                eventChange: function (obj) { // 이벤트가 수정되면 발생하는 이벤트
-                    console.log(obj);
-                },
-                eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
-                    console.log(obj);
-                },
-                select: function () { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
-                    $(document).ready(function () {
-                        $("#modalPop").modal('show');
+            $.ajax({
+
+                url: "/calendar/findAll",
+                // type get
+                // data findAllCal 쿼리문에서 가져온 값 ==> 이 때 쿼리문의 value값이 fullcalender에서 요구하는 값과 같아야함
+                success:function(data) {
+
+                    console.table(data);
+                    let eventList = [];
+                    let even = {};
+                    for(let idx in data){
+                        even = {
+                            "title": data[idx].title,
+                            "start": data[idx].start,
+                            "end": data[idx].end,
+                        };
+                        eventList.push(even);
+                    }
+                    let calendarEl = $("#calendar")[0];
+                    let calendar = new FullCalendar.Calendar(calendarEl, {
+
+                        locale: "ko",
+                        headerToolbar: {
+                            left: 'prev,next,custom1,today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+
+                        },
+
+                        footerToolbar: {
+                            left: 'custom2',
+                            center: '',
+                            right: ''
+                        },
+                        navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+                        editable: true, // 수정 가능?
+                        selectable: true, // 달력 일자 드래그 설정가능
+                        nowIndicator: true, // 현재 시간 마크
+                        dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+                        eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
+                            console.log(obj);
+                        },
+                        eventChange: function (obj) { // 이벤트가 수정되면 발생하는 이벤트
+                            console.log(obj);
+                        },
+                        eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
+                            console.log(obj);
+                        },
+                        select: function () { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
+                            $(document).ready(function () {
+                                $("#modalPop").modal('show');
+                            });
+                        },
+
+
+                        customButtons: {
+                            custom1: {
+                                text: '일정추가',
+                                click: function () {
+                                    location.href="";
+                                    // jsp로 연결해야함 => cd_insert
+                                }
+                            },
+                            custom2: {
+                                text: '권한요청',
+                                click: function () {
+                                    alert('권한요청 처리를 신청했습니다.');
+                                }
+                            }
+                        },
+
+                        events: eventList
+
                     });
+
+                    FullCalendar.globalLocales.push(function () {
+                        'use strict';
+
+                        var ko = {
+                            code: 'ko',
+                            buttonText: {
+                                today: '오늘',
+                                month: '월',
+                                week: '주',
+                                day: '일',
+                                list: '일정목록',
+                            },
+                            weekText: '주',
+                            allDayText: '종일',
+                            moreLinkText: '개',
+                            noEventsText: '일정이 없습니다',
+                        };
+
+                        return ko;
+
+                    }());
+
+
+
+                    calendar.render();
+
+
                 },
-                customButtons: {
-                    custom1: {
-                        text: '일정추가',
-                        click: function () {
-                            location.href="";
-                            // jsp로 연결해야함 => cd_insert
-                        }
-                    },
-                    custom2: {
-                        text: '권한요청',
-                        click: function () {
-                            alert('권한요청 처리를 신청했습니다.');
-                        }
-                    }
-                },
+                error: function(error) {
 
-                events: [
-                    {
-                        title: '회의',
-                        groupId: '666',
-                        start: '2022-09-01',
-                    },
-                    {
-                        title: '휴가',
-                        start: '2022-09-07',
-                        end: '2022-09-10'
-                    },
-                    {
-
-                        title:'김인턴',
-                        start:'2022-09-20',
-                        end: '2022-09-30'
-
-                    }
-                ]
+                    console.log(error);
+                }
 
             });
 
 
-            calendar.render();
-        });
-        FullCalendar.globalLocales.push(function () {
-            'use strict';
 
-            var ko = {
-                code: 'ko',
-                buttonText: {
-                    today: '오늘',
-                    month: '월',
-                    week: '주',
-                    day: '일',
-                    list: '일정목록',
-                },
-                weekText: '주',
-                allDayText: '종일',
-                moreLinkText: '개',
-                noEventsText: '일정이 없습니다',
-            };
 
-            return ko;
 
-        }());
+
 
     </script>
+
 </head>
 
 <body>
@@ -324,29 +345,7 @@
     </div>
 </div>
 <script> //종철님 제가 다 ~~ 고쳐놨습니다 한번 확인해보시죠  // <- 외않되요?
-    $(function(){
 
-        $.ajax({
-
-           url: "",
-            success:function(data) {
-
-               console.table(data);
-
-               // const $calendar = $("calendar");
-
-
-
-
-            },
-            error: function(error) {
-
-               console.log(error);
-            }
-
-        });
-
-    });
 </script>
 </body>
 

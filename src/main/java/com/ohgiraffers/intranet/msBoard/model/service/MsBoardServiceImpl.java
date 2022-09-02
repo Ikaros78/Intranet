@@ -35,6 +35,16 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		return result;
 	}
+	
+	@Override
+	public List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria) {
+
+		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsSendBoard(selectCriteria);
+
+		return msBoardlist;
+	}
+	
+	
 
 	@Override
 	public int MsFileInsert(MsBoardDTO msBoard) {

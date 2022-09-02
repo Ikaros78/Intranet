@@ -92,10 +92,32 @@ public class SignController {
         return mv;
     }
 
+    @GetMapping("/waitingDetail")
+    public ModelAndView signWaitingDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signWaitingDetail");
+
+        return mv;
+    }
+
+
     @GetMapping("/registSelect")
     public ModelAndView signRegistSelect(ModelAndView mv){
 
         mv.setViewName("sign/signRegistSelectForm");
+
+        return mv;
+    }
+
+    @GetMapping("/registForm")
+    public ModelAndView signRegistForm(ModelAndView mv){
+
+        mv.setViewName("sign/signRegistForm");
 
         return mv;
     }

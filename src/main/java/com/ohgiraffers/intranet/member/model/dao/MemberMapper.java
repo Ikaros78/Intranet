@@ -21,5 +21,5 @@ public interface MemberMapper {
     List<MemberDTO> selectMemberListForCalendarManage();
 
     /* 아이디 중복 체크 */
-    String checkMemberById(String mem_id);
+    String selectCheckMember(String mem_id);
 }

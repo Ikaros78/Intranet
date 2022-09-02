@@ -52,7 +52,7 @@
     </select>
 
     <insert id="memberRegistInsert" parameterType="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
-                INSERT
+                INSERT /* member.dao.MemberMapper#memberRegistInsert*/
                   INTO MEMBER A
                 (
                   A.MEM_NUM
@@ -84,7 +84,7 @@
     </insert>
 
     <select id="findByMemberId" resultMap="MemberResultMap">
-            SELECT
+            SELECT /* member.dao.MemberMapper#findByMemberId*/
                    A.MEM_NUM
                  , A.MEM_ID
                  , A.MEM_PW
@@ -103,6 +103,14 @@
              WHERE A.MEM_ID = #{ mem_id }
     </select>
 
+
+    <select id="selectCheckMember" resultType="String">
+        SELECT /* member.dao.MemberMapper#selectMember*/
+               A.MEM_ID
+          FROM MEMBER A
+         WHERE A.MEM_ID = #{ mem_id }
+    </select>
+
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
         SELECT
                 A.*
@@ -111,6 +119,5 @@
         LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
         ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
-
 
 </mapper>

@@ -25,7 +25,7 @@ public class MemberDTO implements UserDetails {
     private String dept_name;
 
     // 공지사항 부서명 조회를 위해 추가
-    private List<DepartmentDTO> department;
+    private DepartmentDTO department;
 
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
@@ -78,7 +78,7 @@ public class MemberDTO implements UserDetails {
         return dept_name;
     }
 
-    public List<DepartmentDTO> getDepartment() {
+    public DepartmentDTO getDepartment() {
         return department;
     }
 
@@ -134,7 +134,7 @@ public class MemberDTO implements UserDetails {
         this.dept_name = dept_name;
     }
 
-    public void setDepartment(List<DepartmentDTO> department) {
+    public void setDepartment(DepartmentDTO department) {
         this.department = department;
     }
 

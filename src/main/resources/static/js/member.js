@@ -1,5 +1,5 @@
 //아이디 유효성 검사
-let userId = document.querySelector("#memId");
+let userId = document.querySelector("#mem_id");
 userId.addEventListener("change", (e) => {
   validId(e.target);
 });
@@ -47,33 +47,28 @@ $("#keyShow").on("click", function () {
   }
 });
 
-//     아이디 중복체크 기능
-    	$("#overlapCheckId").click(function(){
-    		
-    		const memId = $("#memId").val();
-    		
-    		$.ajax({
-    			url: "${ pageContext.servletContext.contextPath }/member/overlapCheck",
-    			type: "get",
-    			data: {
-    				memId: memId
-    			},
-    			success: function(data){
-    				
-    				console.log(data);
-    				if(data == "true"){
-    					alert("사용가능한 아이디입니다.");
-    					
-    				} else {
-    					alert("이미 사용중인 아이디입니다.");
-    					return false;
-    				}
-    			},
-    			error: function(error){
-    				console.log(error);
-    			}
-    		});
-    	});
+//   아이디 중복체크 기능
+
+    	if(document.getElementById("checkDup")){
+
+            const $dupCheck = document.getElementById("checkDup");
+
+            $dupCheck.onclick = function (){
+                let mem_id = document.getElementById("mem_id").value.trim();
+
+                fetch("/member/checkDupId",{
+                    method:"POST",
+                    headers: {
+                        'Content-Type' : 'application/json;charset-UTF-8'
+                    },
+                    body: JSON.stringify({mem_id: mem_id})
+                })
+                    .then(result => result.text())
+                    .then(result => alert(result))
+                    .catch((error) => error.text().then((res) => alert(res)));
+            }
+        }
+
 
 //이름 유효성 검사
 let userName = document.querySelector("#memName");

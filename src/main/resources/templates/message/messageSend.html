@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>basic</title>
-    <link rel="stylesheet" href="../resources/css/reset.css">
-    <link rel="stylesheet" href="../resources/css/basic.css">
-    <link rel="stylesheet" href="../resources/css/board.css">    
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/board.css">    
 </head>
 <body>
     <div id="wrap">
         <div id="header">
-            <h1 class="logo"><a href="../main/main.html"><img src="../resources/images/logo.png" alt="로고 이미지"></a></h1>
+            <h1 class="logo"><a href="../main/main.html"><img src="/images/logo.png" alt="로고 이미지"></a></h1>
             <ul class="lnb">
                 <li><a href="../common/mypage.html">마이페이지</a></li>
                 <li><a href="../login.html">로그아웃</a></li>
@@ -60,12 +60,13 @@
             <div id="sideBar">
                 <h3>쪽지함</h3>
                 <ul>
-                    <li class="main"><a href="./messageSend.html">쪽지보내기</a></li>
-                    <li class="main"><a href="./messageRecpBox.html">받은쪽지함</a></li>
+                    <li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+                    <li class="main"><a href="/ms/recp">받은쪽지함</a></li>
                     <li class="main"><a href="./messageSendbox.html">보낸쪽지함</a></li>
                     <li class="main"><a href="./messageAllBox.html">쪽지보관함</a></li>
                 </ul>
             </div>
+        </div>
         </div>
 </body>
 </html>

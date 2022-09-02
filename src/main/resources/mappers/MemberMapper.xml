@@ -46,13 +46,11 @@
                      , A.DEPT_CODE
                      , B.DEPT_NAME
                   FROM MEMBER A
-                  JOIN DEPARTMENT B
-                    ON (A.DEPT_CODE = B.DEPT_CODE)
                  WHERE A.MEM_ID = #{ mem_id }
     </select>
 
     <insert id="memberRegistInsert" parameterType="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
-                INSERT
+                INSERT /* member.dao.MemberMapper#memberRegistInsert*/
                   INTO MEMBER A
                 (
                   A.MEM_NUM
@@ -101,6 +99,13 @@
               JOIN DEPARTMENT B
                 ON (A.DEPT_CODE = B.DEPT_CODE)
              WHERE A.MEM_ID = #{ mem_id }
+    </select>
+
+    <select id="selectCheckMember" resultType="String">
+        SELECT /* member.dao.MemberMapper#selectMember*/
+               A.MEM_ID
+          FROM MEMBER A
+         WHERE A.MEM_ID = #{ mem_id }
     </select>
 
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">

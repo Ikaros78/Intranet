@@ -17,13 +17,15 @@
     <form th:action="@{/member/regist}" method="post">
         <div class="input-box">
             <input
-                    id="memId"
+                    id="mem_id"
                     name="mem_id"
                     type="text"
                     placeholder="아이디"
                     required
             />
-            <label for="memId">아이디</label>
+            <label for="mem_id">아이디</label>
+            <button id="checkDup" style="width: 350px; height:30px; font-size: 0.9rem;">
+                아이디 중복 체크</button>
         </div>
         <div class="input-box">
             <input
@@ -67,6 +69,7 @@
                     required
             />
             <select id="memDepart" onchange="selectBoxChange(this.value);">
+                <option value="">부서 선택</option>
                 <option value="D1">인사부</option>
                 <option value="D2">기술지원부</option>
                 <option value="D3">영업1부</option>

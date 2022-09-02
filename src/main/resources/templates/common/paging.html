@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>paging</title>
+  <link rel="stylesheet" th:href="@{/css/common/paging.css}">
+</head>
+<body>
+
+<!-- 페이지 처리 -->
+<div class="pagingArea" align="center">
+  <!-- 맨 앞으로 이동 버튼 -->
+  <button class="hs_board_lshift shiftbtn"
+          th:onclick="'location.href=\'/notice/list?currentPage='+ @{${selectCriteria.startPage}} + '\''"
+          th:disabled="${selectCriteria.pageNo == 1}"
+  >
+    <<
+  </button>
+  <!-- 이전 페이지 버튼 -->
+  <button class="hs_board_lshift shiftbtn"
+          th:onclick="'location.href=\'/notice/list?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
+          th:disabled="${selectCriteria.pageNo == 1}"
+  >
+    <
+  </button>
+  <!-- 숫자 버튼 -->
+  <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+    <button class="hs_board_left shiftbtn hs_board_numbering"
+            th:text="${ page }"
+            th:onclick="'location.href=\'/notice/list?currentPage='+ @{${page}} + '\''"
+            th:disabled="${ selectCriteria.pageNo eq page }">
+    </button>
+  </th:block>
+
+  <!-- 다음 페이지 버튼 -->
+  <button class="hs_board_right shiftbtn"
+          th:onclick="'location.href=\'/notice/list?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
+          th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+  >
+    >
+  </button>
+  <!-- 마지막 페이지로 이동 버튼 -->
+  <button class="hs_board_right shiftbtn"
+          th:onclick="'location.href=\'/notice/list?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
+          th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+  >
+    >>
+  </button>
+</div>
+</body>
+</html>

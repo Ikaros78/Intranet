@@ -16,7 +16,6 @@
         <result property="mem_address" column="MEM_ADDRESS"/>
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
-        <result property="dept_name" column="DEPT_NAME"/>
 
         <association property="department" resultMap="departmentResultMap"/>
         <collection property="authorit" resultMap="authoritResultMap"/>
@@ -47,6 +46,8 @@
                      , A.DEPT_CODE
                      , B.DEPT_NAME
                   FROM MEMBER A
+                    JOIN DEPARTMENT B
+                        ON (A.DEPT_CODE = B.DEPT_CODE)
                  WHERE A.MEM_ID = #{ mem_id }
     </select>
 

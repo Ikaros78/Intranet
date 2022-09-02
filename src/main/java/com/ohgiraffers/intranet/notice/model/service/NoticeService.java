@@ -44,4 +44,9 @@ public class NoticeService {
 
         return noticeList;
     }
+
+    public List<NoticeDTO> selectWriterinfo() {
+
+        return noticeMapper.selectWriterinfo();
+    }
 }

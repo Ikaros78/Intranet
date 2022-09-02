@@ -165,5 +165,10 @@
         </where>
     </select>
 
+<!--    <select id="selectWriterinfo" resultMap="noticeListResultMap">-->
+<!--        SELECT-->
+<!--               A.-->
+<!--    </select>-->
+
 
 </mapper>

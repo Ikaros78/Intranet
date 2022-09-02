@@ -8,6 +8,7 @@ import com.ohgiraffers.intranet.notice.model.service.NoticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,11 @@ public class NoticeController {
     }
 
     @GetMapping("/regist")
-    public String noticeRegistPage(){
+    public String noticeRegistPage(Model model){
+
+        List<NoticeDTO> noticeList = noticeService.selectWriterinfo();
+
+        log.info("작성자 값 불러와졌는지 확인 : " + noticeList);
 
         return "notice/noticeRegist";
     }

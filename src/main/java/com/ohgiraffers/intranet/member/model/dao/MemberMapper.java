@@ -20,7 +20,7 @@ public interface MemberMapper {
     List<MemberDTO> selectMemberListForCalendarManage(String searchCondition);
 
     /* 아이디 중복 체크 */
-    String checkMemberById(String mem_id);
+    String selectCheckMember(String mem_id);
 
     /* 일정권한 관리 셀렉트박스용 부서 조회용 */
     List<DepartmentDTO> selectDeptList();

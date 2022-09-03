@@ -4,13 +4,17 @@ import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/sign/*")
 public class SignController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final SignService signService;
 
     @Autowired
@@ -28,7 +33,7 @@ public class SignController {
     }
 
     @GetMapping(value = {"/main", "/waitingList"})
-    public ModelAndView signWaitingList(HttpServletRequest request, ModelAndView mv){
+    public ModelAndView signWaitingList(HttpServletRequest request, ModelAndView mv, HttpSession httpSession){
 
         /*
          * 목록보기를 눌렀을 시 가장 처음에 보여지는 페이지는 1페이지이다.
@@ -43,9 +48,12 @@ public class SignController {
 
         String searchCondition = request.getParameter("searchCondition");
         String searchValue = request.getParameter("searchValue");
+        int mem_num = (Integer) httpSession.getAttribute("mem_num");
 
-        Map<String, String> searchMap = new HashMap<>();
-        searchMap.put("mem_num", "15011092");
+        log.info("memId = " + mem_num);
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("mem_num", mem_num);
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
 
@@ -74,7 +82,7 @@ public class SignController {
         }
 
         Map<String, Object> searchList = new HashMap<>();
-        searchList.put("mem_num", "15011092");
+        searchList.put("mem_num", mem_num);
         searchList.put("selectCriteria", selectCriteria);
 
         System.out.println("searchList = " + searchList);
@@ -97,6 +105,8 @@ public class SignController {
 
         String signNo = request.getParameter("no");
         SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
 
         mv.addObject("signDetail" , signDetail);
 

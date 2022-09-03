@@ -7,12 +7,13 @@
         <id property="signNo" column="SIGN_NO"/>
         <result property="signWriter" column="SIGN_WRITER"/>
         <result property="signTitle" column="SIGN_TITLE"/>
-        <result property="signForm" column="SIGN_FORM"/>
+        <result property="signFormCode" column="SIGN_FORM"/>
         <result property="signContent" column="SIGN_CONTENT"/>
         <result property="regDate" column="REG_DATE"/>
         <result property="isTemp" column="IS_TEMP"/>
 
         <association property="writer" resultMap="memberResultMap"/>
+        <association property="signForm" resultMap="signFormResultMap"/>
         <collection property="approver" resultMap="approverResultMap"/>
         <collection property="receiver" resultMap="receiverResultMap"/>
         <collection property="referencer" resultMap="referencerResultMap"/>

@@ -42,17 +42,21 @@
                     </div>
                     
                     <div id="detail-header">
-                        <h1 align="center">협조문</h1>
+                        <h1 align="center" th:text="${signDetail.signForm.name}"></h1>
                     </div>
 
                     <div id="approve-list" align="right">
                         <table>
                             <tr>
                                 <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
-                                <th style="border : 1px solid";>기안</th>
+                                <th:block th:each="approve : ${signDetail.approver}">
+                                    <th th:text="${approve.approver.department.dept_name}" style="border : 1px solid";></th>
+                                </th:block>
                             </tr>
                             <tr>
-                                <td style="border : 1px solid">김올레</td>
+                                <th:block th:each="approve : ${signDetail.approver}">
+                                    <td th:text="${approve.approver.mem_name}" style="border : 1px solid"></td>
+                                </th:block>
                             </tr>
                         </table>
                     </div>
@@ -81,11 +85,15 @@
                                 </tr>
                                 <tr>
                                     <th>참조자</th>
-                                    <td>참조자 여기로</td>
+                                    <th:block th:each="reference : ${signDetail.referencer}">
+                                        <td th:text="${ reference.referencer.mem_name}"></td>
+                                    </th:block>
                                 </tr>
                                 <tr>
                                     <th>수신처</th>
-                                    <td>수신처도 여기로</td>
+                                    <th:block  th:each="receive : ${signDetail.receiver}">
+                                        <td th:text="${ receive.receiver.mem_name}"></td>
+                                    </th:block>
                                 </tr>
                                 <tr>
                                     <th>문서제목</th>

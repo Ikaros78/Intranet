@@ -45,17 +45,22 @@ public class SignController {
         if(currentPage != null && !"".equals(currentPage)) {
             pageNo = Integer.parseInt(currentPage);
         }
-
-        String searchCondition = request.getParameter("searchCondition");
-        String searchValue = request.getParameter("searchValue");
+        String searchWriter = request.getParameter("searchWriter");
+        String searchForm = request.getParameter("searchForm");
+        String searchTitle = request.getParameter("searchTitle");
+        String searchStartDate = request.getParameter("searchStartDate");
+        String searchEndDate = request.getParameter("searchEndDate");
         int mem_num = (Integer) httpSession.getAttribute("mem_num");
 
         log.info("memId = " + mem_num);
 
         Map<String, Object> searchMap = new HashMap<>();
         searchMap.put("mem_num", mem_num);
-        searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchValue", searchValue);
+        searchMap.put("searchWriter", searchWriter);
+        searchMap.put("searchForm", searchForm);
+        searchMap.put("searchTitle", searchTitle);
+        searchMap.put("searchStartDate", searchStartDate);
+        searchMap.put("searchEndDate", searchEndDate);
 
         /*
          * 전체 게시물 수가 필요하다.
@@ -75,15 +80,16 @@ public class SignController {
         /* 페이징 처리를 위한 로직 호출 후 페이징 처리에 관한 정보를 담고 있는 인스턴스를 반환받는다. */
         SelectCriteria selectCriteria = null;
 
-        if(searchCondition != null && !"".equals(searchCondition)) {
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-        } else {
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-        }
+        selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 
         Map<String, Object> searchList = new HashMap<>();
         searchList.put("mem_num", mem_num);
         searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchWriter", searchWriter);
+        searchList.put("searchForm", searchForm);
+        searchList.put("searchTitle", searchTitle);
+        searchList.put("searchStartDate", searchStartDate);
+        searchList.put("searchEndDate", searchEndDate);
 
         System.out.println("searchList = " + searchList);
 
@@ -94,6 +100,7 @@ public class SignController {
         
         mv.addObject("waitingList", waitingList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signWaitingList");
 

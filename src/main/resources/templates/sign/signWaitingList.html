@@ -33,7 +33,7 @@
 
                 <div class="search-wrap">
                     <div class="form-group">
-                        <form id="searchForm" action="" method="get">
+                        <form id="searchForm" action="/sign/waitingList" method="get">
                             <input type="hidden" name="currentPage" value="1">
 
                             <table>
@@ -55,7 +55,7 @@
                                             <labeL>양식명</labeL>
                                         </th>
                                         <td>
-                                            <input type="text" title="양식명" name="searchType">
+                                            <input type="text" title="양식명" name="searchForm">
                                         </td>
                                     </tr>
                                     <tr>
@@ -73,7 +73,7 @@
                                             <span>~</span>
                                             <input type="text" title="종료일" name="searchEndDate" class="datePicker">     
                                             <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
-                                            <button type="button" class="btn btn-color7">검색</button>
+                                            <button type="submit" class="btn btn-color7">검색</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -96,9 +96,11 @@
                             <tr>
                                 <th width="20px"><input type="checkbox" name="waitingSign" onclick="selectAll(this)"></th>
                                 <th width="80px">문서번호</th>
-                                <th width="900px">문서제목</th>
+                                <th width="600px">문서제목</th>
+                                <th width="200px">양식명</th>
                                 <th width="130px">기안자</th>
-                                <th width="200px">기안부서</th>
+                                <th width="150px">기안부서</th>
+                                <th width="150px">기안일</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,8 +108,10 @@
                                 <td><input type="checkbox" name="waitingSign"></td>
                                 <td th:text="${sign.signNo}"></td>
                                 <td th:text="${sign.signTitle}" name="title"></td>
+                                <td th:text="${sign.signForm.name}"></td>
                                 <td th:text="${sign.writer.mem_name}"></td>
                                 <td th:text="${sign.writer.dept_code}"></td>
+                                <td th:text="${sign.regDate}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -123,7 +127,7 @@
                         </button>
                         <!-- 이전 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/waitingList?currentPage='+ ${selectCriteria.pageNo - 1}} + '\''"
+                                th:onclick="'location.href=\'/sign/waitingList?currentPage='+ @${selectCriteria.pageNo - 1}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <
@@ -196,6 +200,22 @@
                 }
             }
         }
+
+        /*if(document.getElementById('signChecked')){
+
+            const $signCheck = document.getElementById('signChecked');
+
+
+            $signCheck.onclick = function (){
+
+                let checkArr = [];
+                $("input[name='waitingSign']:checked").each(function(i)) {
+                    checkArr.push($(this).parentNode.children[1].innerText);
+                }
+
+            }
+
+        }*/
 
     </script>
 </body>

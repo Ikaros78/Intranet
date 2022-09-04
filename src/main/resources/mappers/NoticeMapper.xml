@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ohgiraffers.intranet.notice.model.dao.NoticeMapper">
 
+    <!--                          공지사항                                 -->
     <resultMap id="noticeResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
@@ -54,12 +55,6 @@
 
     <!-- 공지사항 등록 -->
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
-<!--        <selectKey keyProperty="mem_num" order="BEFORE" resultType="_int">-->
-<!--            SELECT-->
-<!--                    MEM_NUM-->
-<!--               FROM MEMBER-->
-<!--              WHERE MEM_NUM = #{ mem_num }-->
-<!--        </selectKey>-->
         INSERT
           INTO NT_NOTICE
         (
@@ -81,12 +76,13 @@
         )
     </insert>
 
+    <!-- 공지사항 파일 등록 -->
     <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
-<!--        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">-->
-<!--            SELECT-->
-<!--                    SEQ_NOTICE_NO.CURRVAL-->
-<!--            FROM DUAL-->
-<!--        </selectKey>-->
+        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
+            SELECT
+                    SEQ_NOTICE_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
         INSERT
           INTO NTF_NOTICE_FILE
         (
@@ -182,6 +178,7 @@
         WHERE A.NT_NO = #{ no }
     </update>
 
+    <!-- 공지사항 상세보기 -->
     <select id="selectNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
         SELECT
                A.NT_NO
@@ -224,9 +221,205 @@
          WHERE NT_NO = #{ no }
     </delete>
 
-    <!-- 사내소식 등록 -->
-    <insert id="newsRegist">
+    <!--                          사내 소식                                 -->
+    <resultMap id="newsResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        <id property="no" column="NW_NO"/>
+        <result property="title" column="NW_TITLE"/>
+        <result property="date" column="NW_DATE"/>
+        <result property="views" column="NW_VIEWS"/>
+        <result property="contents" column="NW_CONTENTS"/>
+        <result property="num" column="MEM_NUM"/>
+    </resultMap>
 
+    <resultMap id="addNewsFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+        <id property="no" column="NEWF_NO"/>
+        <result property="originName" column="NEWF_ORIGIN_NAME"/>
+        <result property="saveName" column="NEWF_SAVE_NAME"/>
+        <result property="savePath" column="NEWF_SAVE_PATH"/>
+        <result property="deleteYn" column="DELETE_YN"/>
+        <result property="nwNo" column="NW_NO"/>
+    </resultMap>
+
+    <resultMap id="newsListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        <id property="no" column="NW_NO"/>
+        <result property="title" column="NW_TITLE"/>
+        <result property="date" column="NW_DATE"/>
+        <result property="views" column="NW_VIEWS"/>
+        <result property="contents" column="NW_CONTENTS"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="file" resultMap="addNewsFileResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <!-- 사내소식 등록 -->
+    <insert id="newsRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        INSERT
+        INTO NW_NEWS
+        (
+          NW_NO
+        , NW_TITLE
+        , NW_DATE
+        , NW_VIEWS
+        , NW_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+            (
+              SEQ_NEWS_NO.NEXTVAL
+            , #{title}
+            , SYSDATE
+            , DEFAULT
+            , #{contents}
+            , #{mem_num}
+            )
     </insert>
+
+    <!-- 사내소식 파일 등록 -->
+    <insert id="newsFileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+        <selectKey keyProperty="nwNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_NEWS_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO NEWF_NEWS_FILE
+        (
+          NEWF_NO
+        , NEWF_ORIGIN_NAME
+        , NEWF_SAVE_NAME
+        , NEWF_SAVE_PATH
+        , NEWF_DELETE_YN
+        , NW_NO
+        )
+        VALUES
+        (
+          SEQ_NEWS_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{nwNo}
+        )
+    </insert>
+
+    <!-- 사내소식 전체 게시글 수 조회 -->
+    <select id="selectNewsTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+
+        FROM NW_NEWS A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.NW_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 사내소식 리스트 조회 -->
+    <select id="selectNewsList" resultMap="newsListResultMap">
+        SELECT A.RNUM
+        , A.NW_NO
+        , A.NW_TITLE
+        , D.MEM_NAME
+        , A.NW_DATE
+        , E.DEPT_NAME
+        , A.NW_VIEWS
+        , F.NEWF_ORIGIN_NAME
+        , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+        , B.NW_NO
+        , B.NW_TITLE
+        , B.NW_DATE
+        , B.NW_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+        C.NW_NO
+        , C.NW_TITLE
+        , C.NW_DATE
+        , C.NW_VIEWS
+        , C.MEM_NUM
+        FROM NW_NEWS C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NW_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.NW_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        LEFT JOIN NEWF_NEWS_FILE F ON(A.NW_NO = F.NW_NO)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <!-- 사내소식 조회수 증가 쿼리문 -->
+    <update id="incresementNewsCount" parameterType="_int">
+        UPDATE
+            NW_NEWS A
+        SET A.NW_VIEWS = (SELECT B.NW_VIEWS
+                          FROM NW_NEWS B
+                          WHERE B.NW_NO = #{ no }
+                         ) + 1
+        WHERE A.NW_NO = #{ no }
+    </update>
+
+    <!-- 사내소식 상세보기 -->
+    <select id="selectNewsDetail" parameterType="_int" resultMap="newsListResultMap">
+        SELECT
+            A.NW_NO
+             , A.NW_TITLE
+             , B.MEM_NAME
+             , A.NW_DATE
+             , C.DEPT_NAME
+             , A.NW_VIEWS
+             , D.NEWF_ORIGIN_NAME
+             , A.MEM_NUM
+             , A.NW_CONTENTS
+             , D.NEWF_SAVE_NAME
+        FROM NW_NEWS A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+                 LEFT JOIN NEWF_NEWS_FILE D ON(A.NW_NO = D.NW_NO)
+        WHERE A.NW_NO = #{ no }
+    </select>
+
+    <!-- 사내소식 업데이트 -->
+    <update id="newsUpdate">
+        UPDATE
+            NW_NEWS
+        SET NW_TITLE = #{ title }
+          , NW_CONTENTS = #{ contents }
+        WHERE NW_NO = #{ no }
+    </update>
+
+    <!-- 사내소식 파일 삭제 -->
+    <delete id="deleteNewsFile">
+        DELETE
+        FROM NEWF_NEWS_FILE
+        WHERE NW_NO = #{ nwNo }
+    </delete>
+
+    <!-- 사내소식 삭제 -->
+    <delete id="newsDelete" parameterType="int">
+        DELETE
+        FROM NW_NEWS
+        WHERE NW_NO = #{ no }
+    </delete>
 
 </mapper>

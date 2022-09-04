@@ -18,7 +18,7 @@
                         <a th:href="@{/notice/list}">공지사항</a>
                     </li>
                     <li class="main">
-                        <a href="">사내소식</a>
+                        <a th:href="@{/notice/news/list}">사내소식</a>
                     </li>
                     <li class="main">
                         <a href="">갤러리</a>
@@ -27,7 +27,7 @@
             </div>
             <div id="container">
                 <h4>공지사항</h4><hr>
-                <p>전체 <span th:text="${ noticeList.size() }"></span></p>
+                <p>전체 <span th:text="${ selectCriteria.totalCount }"></span></p>
                 <form th:action="@{/notice/list}" method="get">
                     <input type="hidden" name="currentPage" value="1">
 <!--                    <div class="date">-->
@@ -68,7 +68,6 @@
             </div>
         </div>
     </div>
-
     <script th:inline="javascript">
         //게시글 상세조회를 위한 스크립트
         if(document.querySelectorAll("#listArea td")){
@@ -90,7 +89,7 @@
         //게시글 수정 완료 시 알럿창 띄우기
         let message = [[${message}]];
 
-        if(message != null && message !== '') {
+        if(message != null && message != '') {
             alert(message);
         }
     </script>

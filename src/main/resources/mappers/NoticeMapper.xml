@@ -52,7 +52,14 @@
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
+    <!-- 공지사항 등록 -->
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+<!--        <selectKey keyProperty="mem_num" order="BEFORE" resultType="_int">-->
+<!--            SELECT-->
+<!--                    MEM_NUM-->
+<!--               FROM MEMBER-->
+<!--              WHERE MEM_NUM = #{ mem_num }-->
+<!--        </selectKey>-->
         INSERT
           INTO NT_NOTICE
         (
@@ -70,16 +77,16 @@
         , SYSDATE
         , DEFAULT
         , #{contents}
-        , 1102
+        , #{mem_num}
         )
     </insert>
 
     <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
-        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
-            SELECT
-            SEQ_NOTICE_NO.CURRVAL
-            FROM DUAL
-        </selectKey>
+<!--        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">-->
+<!--            SELECT-->
+<!--                    SEQ_NOTICE_NO.CURRVAL-->
+<!--            FROM DUAL-->
+<!--        </selectKey>-->
         INSERT
           INTO NTF_NOTICE_FILE
         (
@@ -193,5 +200,33 @@
           LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
          WHERE A.NT_NO = #{ no }
     </select>
+
+    <!-- 파일 삭제 -->
+    <delete id="deleteFile">
+        DELETE
+          FROM NTF_NOTICE_FILE
+         WHERE NT_NO = #{ ntNo }
+    </delete>
+
+    <!-- 공지사항 업데이트 -->
+    <update id="noticeUpdate">
+        UPDATE
+               NT_NOTICE
+           SET NT_TITLE = #{ title }
+             , NT_CONTENTS = #{ contents }
+         WHERE NT_NO = #{ no }
+    </update>
+
+    <!-- 공지사항 삭제-->
+    <delete id="noticeDelete" parameterType="int">
+        DELETE
+          FROM NT_NOTICE
+         WHERE NT_NO = #{ no }
+    </delete>
+
+    <!-- 사내소식 등록 -->
+    <insert id="newsRegist">
+
+    </insert>
 
 </mapper>

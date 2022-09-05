@@ -9,7 +9,7 @@ import java.util.Map;
 @Mapper
 public interface SignMapper {
 
-    int selectTotalWaitingCount(Map<String, String> searchMap);
+    int selectTotalWaitingCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria);
 

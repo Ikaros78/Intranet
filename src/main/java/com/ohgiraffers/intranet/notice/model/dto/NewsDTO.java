@@ -3,25 +3,24 @@ package com.ohgiraffers.intranet.notice.model.dto;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
-import javax.naming.Name;
 import java.sql.Date;
 
-public class NoticeDTO {
+public class NewsDTO {
 
     private int no;
     private String title;
     private Date date;
     private int views;
     private String contents;
-    private int mem_num; //공지사항 게시글에 memberNumber넣기 위함...
+    private int mem_num;
     private MemberDTO member;
-    private NoticeFileDTO file;
+    private NewsFileDTO file;
     private DepartmentDTO dept;
 
-    public NoticeDTO() {
+    public NewsDTO() {
     }
 
-    public NoticeDTO(int no, String title, Date date, int views, String contents, int mem_num, MemberDTO member, NoticeFileDTO file, DepartmentDTO dept) {
+    public NewsDTO(int no, String title, Date date, int views, String contents, int mem_num, MemberDTO member, NewsFileDTO file, DepartmentDTO dept) {
         this.no = no;
         this.title = title;
         this.date = date;
@@ -73,6 +72,14 @@ public class NoticeDTO {
         this.contents = contents;
     }
 
+    public int getMem_num() {
+        return mem_num;
+    }
+
+    public void setMem_num(int mem_num) {
+        this.mem_num = mem_num;
+    }
+
     public MemberDTO getMember() {
         return member;
     }
@@ -81,11 +88,11 @@ public class NoticeDTO {
         this.member = member;
     }
 
-    public NoticeFileDTO getFile() {
+    public NewsFileDTO getFile() {
         return file;
     }
 
-    public void setFile(NoticeFileDTO file) {
+    public void setFile(NewsFileDTO file) {
         this.file = file;
     }
 
@@ -97,17 +104,9 @@ public class NoticeDTO {
         this.dept = dept;
     }
 
-    public int getMem_num() {
-        return mem_num;
-    }
-
-    public void setMem_num(int mem_num) {
-        this.mem_num = mem_num;
-    }
-
     @Override
     public String toString() {
-        return "NoticeDTO{" +
+        return "NewsDTO{" +
                 "no=" + no +
                 ", title='" + title + '\'' +
                 ", date=" + date +

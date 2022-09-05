@@ -156,7 +156,7 @@ public class SignController {
         if(count == signNoList.length){
 
             mv.setViewName("redirect:/sign/waitingList");
-            rttr.addFlashAttribute("message", "일괄 결재에  성공하였습니다.");
+            rttr.addFlashAttribute("message", "일괄 결재에 성공하였습니다.");
 
         }else{
 

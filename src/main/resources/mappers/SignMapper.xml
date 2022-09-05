@@ -123,7 +123,7 @@
         , A.SIGN_WRITER
         , A.REG_DATE
         , D.MEM_NAME
-        , D.DEPT_CODE
+        , G.DEPT_NAME
         , A.SF_NAME
         FROM (SELECT ROWNUM RNUM
         , B.SIGN_NO
@@ -169,7 +169,7 @@
                   ]]>
         ) A
         JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
-        /*JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)*/
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
         WHERE A.RNUM >= #{ selectCriteria.startRow }
         ORDER BY 1 ASC
     </select>

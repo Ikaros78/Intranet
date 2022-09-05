@@ -18,7 +18,7 @@ public class SignService {
     }
 
     /* 결재대기함 전체 갯수 조회용 메소드 */
-    public int selectTotalWaitingCount(Map<String, String> searchMap) {
+    public int selectTotalWaitingCount(Map<String, Object> searchMap) {
 
         int result = signMapper.selectTotalWaitingCount(searchMap);
 

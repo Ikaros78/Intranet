@@ -39,8 +39,8 @@
                 <table>
                     <input
                         type="hidden"
-                        id="mem_no"
-                        name="mem_no"
+                        id="mem_num"
+                        name="mem_num"
                         th:value="${ #authentication.getPrincipal().getMem_num() }">
                     <tr>
                         <th>제목</th>
@@ -49,7 +49,7 @@
                     <tr>
                         <th>등록자</th>
                         <td><span th:text="${ #authentication.getPrincipal().getMem_name() }"></span>&nbsp;
-                            <span th:text="${ #authentication.getPrincipal().getDept_name() }"></span></td>
+                            <span th:text="${ #authentication.getPrincipal().getDepartment().getDept_name() }"></span></td>
                     </tr>
                 </table>
                     <textarea id="summernote" name="contents"></textarea>
@@ -74,8 +74,8 @@
                     ['color', ['forecolor','color']],
                     ['table', ['table']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']],
-                    ['insert',['picture','link','video']]
+                    ['height', ['height']]
+                    ['insert',['link','video']]
                 ],
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
                 fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']

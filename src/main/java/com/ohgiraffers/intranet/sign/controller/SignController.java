@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.sign.controller;
 
+import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,11 +47,13 @@ public class SignController {
         if(currentPage != null && !"".equals(currentPage)) {
             pageNo = Integer.parseInt(currentPage);
         }
+
         String searchWriter = request.getParameter("searchWriter");
         String searchForm = request.getParameter("searchForm");
         String searchTitle = request.getParameter("searchTitle");
         String searchStartDate = request.getParameter("searchStartDate");
         String searchEndDate = request.getParameter("searchEndDate");
+        String searchNum = request.getParameter("searchNum");
         int mem_num = (Integer) httpSession.getAttribute("mem_num");
 
         log.info("memId = " + mem_num);
@@ -61,6 +65,7 @@ public class SignController {
         searchMap.put("searchTitle", searchTitle);
         searchMap.put("searchStartDate", searchStartDate);
         searchMap.put("searchEndDate", searchEndDate);
+        searchMap.put("searchNum", searchNum);
 
         /*
          * 전체 게시물 수가 필요하다.
@@ -90,6 +95,7 @@ public class SignController {
         searchList.put("searchTitle", searchTitle);
         searchList.put("searchStartDate", searchStartDate);
         searchList.put("searchEndDate", searchEndDate);
+        searchList.put("searchNum", searchNum);
 
         System.out.println("searchList = " + searchList);
 
@@ -122,6 +128,43 @@ public class SignController {
         return mv;
     }
 
+    @GetMapping("/signChecked")
+    public ModelAndView signChecked(ModelAndView mv, HttpServletRequest request, HttpSession session, RedirectAttributes rttr) throws SignApproveException {
+
+        String getSignList = request.getParameter("checkArr");
+        String[] signNoList = getSignList.split(",");
+
+        log.info("signNoList = " + signNoList);
+
+        int mem_num = (Integer) session.getAttribute("mem_num");
+
+        Map<String, Object> signMap = new HashMap<>();
+        signMap.put("mem_num", mem_num);
+
+        int count = 0;
+
+        for(String sign : signNoList){
+
+            signMap.put("sign", sign);
+
+            int result = signService.updateSignChecked(signMap);
+            count += result;
+        }
+
+        log.info("count = " + count);
+
+        if(count == signNoList.length){
+
+            mv.setViewName("redirect:/sign/waitingList");
+            rttr.addFlashAttribute("message", "일괄 결재에  성공하였습니다.");
+
+        }else{
+
+            throw new SignApproveException("일괄결재에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return mv;
+    }
 
     @GetMapping("/registSelect")
     public ModelAndView signRegistSelect(ModelAndView mv){

@@ -14,4 +14,6 @@ public interface SignMapper {
     List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria);
 
     SignDTO selectSignDetail(String signNo);
+
+    int updateSignChecked(Map<String, Object> signMap);
 }

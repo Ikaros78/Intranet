@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.sign.model.service;
 
+import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,17 @@ public class SignService {
         SignDTO signResult = signMapper.selectSignDetail(signNo);
 
         return signResult;
+    }
+
+    /* 전자결재 일괄결재용 메소드 */
+    public int updateSignChecked(Map<String, Object> signMap) throws SignApproveException {
+
+        int result = signMapper.updateSignChecked(signMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
     }
 }

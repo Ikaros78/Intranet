@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,8 +55,20 @@ public class CalendarManageController {
     }
 
 //    @PostMapping("/updateList")
-//    public ModelAndView UpdateCalendarAuthority(ModelAndView mv, AuthoritDTO authorit){
+//    public String UpdateCalendarAuthority(@ModelAttribute AuthoritDTO authorit, HttpServletRequest request){
 //
+//        String name = request.getParameter("name");
+//        String dept = request.getParameter("dept");
+//
+//        Map<String, String> memInfo = new HashMap<>();
+//        memInfo.put("name", name);
+//        memInfo.put("dept", dept);
+//        memInfo.put("authorit", String.valueOf(authorit)); // 이게 맞나.. 흐으으음
+//
+//
+//        calendarService.updateAuthority(memInfo);
+//
+//        return "redirect:/calendar/cd_calendarManage";
 //
 //    }
 

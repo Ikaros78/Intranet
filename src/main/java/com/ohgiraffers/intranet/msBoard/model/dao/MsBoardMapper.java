@@ -13,17 +13,18 @@ public interface MsBoardMapper {
 
 	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
 
+	int selectTotalCount(Map<String, String> searchMap);
+
 	List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria);
 
-	int MsFileInsert(MsBoardDTO msBoard);
+	int selectSendTotalCount(Map<String, String> searchMap);
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int MsFileInsert(MsBoardDTO msBoard);
 
 	MsBoardDTO selectMsBoardDetail(int msNo);
 
 	int YNChangeMsBoard(int msNo);
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
-	
-	
+
 }

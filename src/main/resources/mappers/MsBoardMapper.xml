@@ -15,7 +15,7 @@
 		<result property="memNum" column="MEM_NUM" />
 		<result property="sendDel" column="MS_SEND_DEL" />
 		<result property="recpDel" column="MS_RECP_DEL" />
-		<result property="recpMun" column="MS_RECP_NUM" />
+		<result property="recpNum" column="MS_RECP_NUM" />
 		<result property="contents" column="MS_CONTENTS" />
 
 <!-- 		<association property="NAME" resultMap="memberResultMap" /> -->
@@ -52,6 +52,24 @@
 			 COUNT(*)
 		FROM MS_BOARD A
 	   WHERE A.MS_READ_YN = 'N' 	
+		<where>
+			<if test="searchCondition == 'msTitle'">
+				A.MS_TITLE = #{ searchValue }
+			</if>
+			<if test="searchCondition == 'sendName'">
+				A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+			<if test="searchCondition == 'recpName'">
+				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectsendTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT
+			 COUNT(*)
+		FROM MS_BOARD A
+	   WHERE 	
 		<where>
 			<if test="searchCondition == 'msTitle'">
 				A.MS_TITLE = #{ searchValue }
@@ -138,6 +156,8 @@
 		, A.MS_SEND_NAME
 		, A.MS_RECP_NAME
 		, A.MS_SEND_DATE
+		, A.MS_MEM_NUM
+		, A.MS_RECP_NUM
 		)
 		VALUES
 		(
@@ -147,6 +167,8 @@
 		, #{ sendName } 
 		, #{ recpName }
 		, SYSDATE
+		, #{ memNum }
+		, #{ recpNum }
 		)
 	</insert>
 
@@ -207,7 +229,7 @@
               MS_BOARD A
           SET A.MS_READ_YN = 'Y'
 	        , A.MS_RECP_DATE = SYSDATE
-	    WHERE A.MS_NO = #{ msNo }
+	    WHERE A.MS_NO = #{ msNo } 
 	      AND A.MS_READ_YN = 'N'
     <!-- 메세지를 보낼때 상세보기를 클릭할경우 RECP- DATE가 상세보기 버튼을 클릭한 시간으로 DB에 들어간다. -->
     </update>

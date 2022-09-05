@@ -99,7 +99,7 @@ public class MsBoardController {
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
 
-		int totalCount = msBoardService.selectTotalCount(searchMap);
+		int totalCount = msBoardService.selectSendTotalCount(searchMap);
 
 		/* 한 페이지에 보여 줄 게시물 수 */
 		int limit = 10; // 얘도 파라미터로 전달받아도 된다.
@@ -141,12 +141,14 @@ public class MsBoardController {
 		msBoardDTO.getSendName();
 		msBoardDTO.getRecpName();
 		msBoardDTO.getSendDate();
+		msBoardDTO.getMemNum();
+		msBoardDTO.getRecpNum();
 		
 		int result = msBoardService.MsboardInsert(msBoardDTO);
 		
 		
 		String multiFileDescription = request.getParameter("multiFileDescription");
-		String root = request.getSession().getServletContext().getRealPath("file.msfile");
+		String root = request.getSession().getServletContext().getRealPath("file/msfile");
 		String filePath = root + "\\uploadFiles";
 		
 		File mkdir = new File(filePath);

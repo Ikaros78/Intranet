@@ -20,6 +20,8 @@ public interface MsBoardService {
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
 
+	int selectSendTotalCount(Map<String, String> searchMap);
+
 	
 	
 }

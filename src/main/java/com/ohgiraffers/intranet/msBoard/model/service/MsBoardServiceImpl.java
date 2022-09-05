@@ -40,6 +40,14 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		return result;
 	}
+
+	
+	public int selectSendTotalCount(Map<String, String> searchMap) {
+		
+		int result = msBoardMapper.selectSendTotalCount(searchMap);
+		
+		return result;
+	}
 	
 	
 	@Override

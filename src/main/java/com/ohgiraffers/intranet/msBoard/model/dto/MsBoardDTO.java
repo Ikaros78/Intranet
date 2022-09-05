@@ -13,7 +13,7 @@ public class MsBoardDTO {
 	private String readYn;
 	private String sendDel;
 	private String recpDel;
-	private String recpMun;
+	private String recpNum;
 	private String contents;
 	private int memNum;
 	public MsBoardDTO() {
@@ -21,7 +21,7 @@ public class MsBoardDTO {
 		// TODO Auto-generated constructor stub
 	}
 	public MsBoardDTO(int msNo, String msTitle, String sendName, String recpName, Date sendDate, Date recpDate,
-			String readYn, String sendDel, String recpDel, String recpMun, String contents, int memNum) {
+			String readYn, String sendDel, String recpDel, String recpNum, String contents, int memNum) {
 		super();
 		this.msNo = msNo;
 		this.msTitle = msTitle;
@@ -32,7 +32,7 @@ public class MsBoardDTO {
 		this.readYn = readYn;
 		this.sendDel = sendDel;
 		this.recpDel = recpDel;
-		this.recpMun = recpMun;
+		this.recpNum = recpNum;
 		this.contents = contents;
 		this.memNum = memNum;
 	}
@@ -90,11 +90,11 @@ public class MsBoardDTO {
 	public void setRecpDel(String recpDel) {
 		this.recpDel = recpDel;
 	}
-	public String getRecpMun() {
-		return recpMun;
+	public String getRecpNum() {
+		return recpNum;
 	}
-	public void setRecpMun(String recpMun) {
-		this.recpMun = recpMun;
+	public void setRecpNum(String recpNum) {
+		this.recpNum = recpNum;
 	}
 	public String getContents() {
 		return contents;
@@ -112,9 +112,8 @@ public class MsBoardDTO {
 	public String toString() {
 		return "MsBoardDTO [msNo=" + msNo + ", msTitle=" + msTitle + ", sendName=" + sendName + ", recpName=" + recpName
 				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendDel=" + sendDel
-				+ ", recpDel=" + recpDel + ", recpMun=" + recpMun + ", contents=" + contents + ", memNum=" + memNum
+				+ ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", contents=" + contents + ", memNum=" + memNum
 				+ "]";
 	}
-
 
 }

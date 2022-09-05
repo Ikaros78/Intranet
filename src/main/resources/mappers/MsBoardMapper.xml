@@ -16,6 +16,7 @@
 		<result property="sendDel" column="MS_SEND_DEL" />
 		<result property="recpDel" column="MS_RECP_DEL" />
 		<result property="recpMun" column="MS_RECP_NUM" />
+		<result property="contents" column="MS_CONTENTS" />
 
 <!-- 		<association property="NAME" resultMap="memberResultMap" /> -->
 	</resultMap>
@@ -78,6 +79,7 @@
 		, A.MS_SEND_DEL
 		, A.MS_RECP_DEL
 		, A.MS_RECP_NUM
+		, A.MS_CONTENTS
 			 FROM(SELECT  ROWNUM RNUM
 						, B.MS_NO
 						, B.MS_TITLE
@@ -90,6 +92,7 @@
 						, B.MS_SEND_DEL
 						, B.MS_RECP_DEL
 						, B.MS_RECP_NUM
+						, B.MS_CONTENTS
 							FROM(SELECT   C.MS_NO
 										, C.MS_TITLE
 										, C.MS_SEND_NAME
@@ -101,6 +104,7 @@
 										, C.MS_SEND_DEL
 										, C.MS_RECP_DEL
 										, C.MS_RECP_NUM
+										, C.MS_CONTENTS
 								   FROM MS_BOARD C
 								  WHERE C.MS_READ_YN = 'N' 
 								   <where>
@@ -130,22 +134,19 @@
 		(
 		  A.MS_NO
 		, A.MS_TITLE
+		, A.MS_CONTENTS
 		, A.MS_SEND_NAME
 		, A.MS_RECP_NAME
 		, A.MS_SEND_DATE
-		, A.MS_RECP_DATE
-		, A.MEM_NUM
 		)
 		VALUES
 		(
 		SEQ_MS_NO.NEXTVAL
 		, #{ msTitle }
-		, #{ sendName }
+		, #{ contents }
+		, #{ sendName } 
 		, #{ recpName }
-		, #{ sendDate }
-		, #{ recpDate }
-		, #{ readYn }
-		, #{ memNum }
+		, SYSDATE
 		)
 	</insert>
 
@@ -203,10 +204,12 @@
 	
 	<update id="YNChangeMsBoard" >
         UPDATE
-        MS_BOARD A
-        SET A.MS_READ_YN = 'Y'
+              MS_BOARD A
+          SET A.MS_READ_YN = 'Y'
+	        , A.MS_RECP_DATE = SYSDATE
 	    WHERE A.MS_NO = #{ msNo }
 	      AND A.MS_READ_YN = 'N'
+    <!-- 메세지를 보낼때 상세보기를 클릭할경우 RECP- DATE가 상세보기 버튼을 클릭한 시간으로 DB에 들어간다. -->
     </update>
 
 </mapper>

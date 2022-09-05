@@ -23,7 +23,7 @@ public interface MsBoardMapper {
 
 	int YNChangeMsBoard(int msNo);
 
-
+	int MsboardInsert(MsBoardDTO msBoardDTO);
 	
 	
 }

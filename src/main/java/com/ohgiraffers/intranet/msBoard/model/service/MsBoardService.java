@@ -18,6 +18,8 @@ public interface MsBoardService {
 
 	List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria);
 
+	int MsboardInsert(MsBoardDTO msBoardDTO);
+
 	
 	
 }

@@ -54,7 +54,9 @@
                     <button type="submit">검색</button>
                 </form>
 
-                <form id="list" action="">
+
+
+                <form id="list" th:action="@{ /calendarManage/updateList }" method="post">
                     <div class="scroll">
                         <table id="tableData">
                             <thead>
@@ -73,8 +75,8 @@
                             <tbody>
                                 <tr th:each="member : ${ memberList }">
                                     <td th:text="${ member.mem_num }">1</td>
-                                    <td th:text="${ member.mem_name }">김민수</td>
-                                    <td th:text="${ member.department.dept_name }">부서1</td>
+                                    <td th:name="name" th:text="${ member.mem_name }">홍길동</td>
+                                    <td th:name="dept" th:text="${ member.department.dept_name }">부서1</td>
                                     <td th:text="${ member.dept_rank }">사내이사</td>
                                     <td th:text="${ member.mem_joinDate }">22-08-23</td>
                                     <td th:text="${ member.mem_phone }">010-1234-5678</td>

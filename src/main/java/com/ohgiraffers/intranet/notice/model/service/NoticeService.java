@@ -73,22 +73,19 @@ public class NoticeService {
     @Transactional
     public int noticeUpdate(NoticeDTO notice) {
 
-        int result = noticeMapper.noticeUpdate(notice);
-
-        // 파일이 존재할 경우 기존 파일 삭제 후 게시글 및 파일 등록
-        if (notice.getFile() != null) {
-            log.info("기존 파일 존재함...");
-            int deleteFileResult = noticeMapper.deleteFile(notice.getFile().getNtNo());
-
-            //삭제 완료되었을 경우
-            if (deleteFileResult > 0) {
-                NoticeFileDTO noticeFile = notice.getFile();
-                noticeFile.setNtNo(notice.getFile().getNtNo());
-                //파일 다시 넣어줌
-                int insertFileResult = noticeMapper.fileRegist(noticeFile);
-            }
-        }
         return noticeMapper.noticeUpdate(notice);
+    }
+
+    /* 공지사항 파일 다시 넣기 메소드 */
+    public void noticeFileUpdate(NoticeFileDTO noticeFile) {
+
+        noticeMapper.noticeFileUpdate(noticeFile);
+    }
+
+    /* 공지사항 파일 삭제용 메소드 */
+    public int noticeFileDelete(int no) {
+
+        return noticeMapper.deleteFile(no);
     }
 
     /* 공지사항 삭제용 메소드 */
@@ -113,6 +110,8 @@ public class NoticeService {
 
         return noticeMapper.newsFileRegist(newsFile);
     }
+
+
 
     /* 사내소식 전체 게시글 수 조회용 메소드 */
     public int selectNewsTotalCount(Map<String, String> searchMap) {
@@ -172,4 +171,7 @@ public class NoticeService {
         int result1 = noticeMapper.deleteNewsFile(news.getNo());
         int result2 = noticeMapper.newsDelete(news.getNo());
     }
+
+
+
 }

@@ -18,6 +18,8 @@ public interface NoticeMapper {
 
     int fileRegist(NoticeFileDTO noticeFile);
 
+    int noticeFileUpdate(NoticeFileDTO noticeFile);
+
     int selectTotalCount(Map<String, String> searchMap);
 
     List<NoticeDTO> selectNoticeList(SelectCriteria selectCriteria);

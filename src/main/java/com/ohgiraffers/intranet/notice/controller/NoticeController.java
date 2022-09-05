@@ -2,13 +2,11 @@ package com.ohgiraffers.intranet.notice.controller;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
 import com.ohgiraffers.intranet.notice.model.service.NoticeService;
-import org.apache.ibatis.annotations.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -199,13 +197,25 @@ public class NoticeController {
             ext = originFileName.substring(originFileName.lastIndexOf("."));
             saveName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-            noticeFile.setOriginName(originFileName);
-            noticeFile.setSaveName(saveName);
-            noticeFile.setSavePath(fileUploadDirectory);
+            int result = noticeService.noticeUpdate(notice);
+
+            if(result > 0 ){
+
+                int result2 = noticeService.noticeFileDelete(notice.getNo());
+
+                if(result2 > 0){
+
+                    noticeFile.setNtNo(notice.getNo());
+                    noticeFile.setOriginName(originFileName);
+                    noticeFile.setSaveName(saveName);
+                    noticeFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.noticeFileUpdate(noticeFile);
+                }
+            }
 
             log.info("noticeFileDTO값 확인 : " + noticeFile);
             // file insert
-            int fileResult = noticeService.noticeFileInsert(noticeFile);
 
             try {
                 originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
@@ -219,7 +229,7 @@ public class NoticeController {
 
         log.info("notice값 불러오나 확인 " + notice);
 
-        int updateResult = noticeService.noticeUpdate(notice);
+
         rttr.addFlashAttribute("message", "수정이 완료되었습니다");
 
         return "redirect:/notice/list";

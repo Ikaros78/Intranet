@@ -56,9 +56,9 @@
     <!-- 공지사항 등록 -->
     <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
         INSERT
-          INTO NT_NOTICE
+        INTO NT_NOTICE
         (
-          NT_NO
+            NT_NO
         , NT_TITLE
         , NT_DATE
         , NT_VIEWS
@@ -66,25 +66,48 @@
         , MEM_NUM
         )
         VALUES
-        (
-        SEQ_NOTICE_NO.NEXTVAL
-        , #{title}
-        , SYSDATE
-        , DEFAULT
-        , #{contents}
-        , #{mem_num}
-        )
+            (
+                SEQ_NOTICE_NO.NEXTVAL
+            , #{title}
+            , SYSDATE
+            , DEFAULT
+            , #{contents}
+            , #{mem_num}
+            )
     </insert>
 
     <!-- 공지사항 파일 등록 -->
     <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
         <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
             SELECT
-                    SEQ_NOTICE_NO.CURRVAL
+            SEQ_NOTICE_NO.CURRVAL
             FROM DUAL
         </selectKey>
         INSERT
-          INTO NTF_NOTICE_FILE
+        INTO NTF_NOTICE_FILE
+        (
+        NTF_NO
+        , NTF_ORIGIN_NAME
+        , NTF_SAVE_NAME
+        , NTF_SAVE_PATH
+        , NTF_DELETE_YN
+        , NT_NO
+        )
+        VALUES
+        (
+        SEQ_NOTICE_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{ntNo}
+        )
+    </insert>
+
+    <!-- 공지사항 파일 등록 -->
+    <insert id="noticeFileUpdate" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+        INSERT
+        INTO NTF_NOTICE_FILE
         (
           NTF_NO
         , NTF_ORIGIN_NAME
@@ -106,26 +129,26 @@
 
     <select id="selectNoticeList" resultMap="noticeListResultMap">
         SELECT A.RNUM
-             , A.NT_NO
-             , A.NT_TITLE
-             , D.MEM_NAME
-             , A.NT_DATE
-             , E.DEPT_NAME
-             , A.NT_VIEWS
-             , F.NTF_ORIGIN_NAME
-             , A.MEM_NUM
+        , A.NT_NO
+        , A.NT_TITLE
+        , D.MEM_NAME
+        , A.NT_DATE
+        , E.DEPT_NAME
+        , A.NT_VIEWS
+        , F.NTF_ORIGIN_NAME
+        , A.MEM_NUM
         FROM (SELECT ROWNUM RNUM
-             , B.NT_NO
-             , B.NT_TITLE
-             , B.NT_DATE
-             , B.NT_VIEWS
-             , B.MEM_NUM
+        , B.NT_NO
+        , B.NT_TITLE
+        , B.NT_DATE
+        , B.NT_VIEWS
+        , B.MEM_NUM
         FROM (SELECT
-               C.NT_NO
-             , C.NT_TITLE
-             , C.NT_DATE
-             , C.NT_VIEWS
-             , C.MEM_NUM
+        C.NT_NO
+        , C.NT_TITLE
+        , C.NT_DATE
+        , C.NT_VIEWS
+        , C.MEM_NUM
         FROM NT_NOTICE C
         <if test="searchCondition == 'writer'">
             JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
@@ -139,11 +162,11 @@
             </if>
         </where>
         ORDER BY C.NT_NO DESC
-             ) B
-            <![CDATA[
+        ) B
+        <![CDATA[
               WHERE ROWNUM <= #{ endRow }
               ]]>
-             ) A
+        ) A
         LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
         LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
         LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
@@ -154,7 +177,7 @@
     <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
 
-          FROM NT_NOTICE A
+        FROM NT_NOTICE A
         <if test="searchCondition == 'writer'">
             JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
         </if>
@@ -170,18 +193,18 @@
 
     <update id="incresementNoticeCount" parameterType="_int">
         UPDATE
-               NT_NOTICE A
-           SET A.NT_VIEWS = (SELECT B.NT_VIEWS
-                             FROM NT_NOTICE B
-                             WHERE B.NT_NO = #{ no }
-                            ) + 1
+            NT_NOTICE A
+        SET A.NT_VIEWS = (SELECT B.NT_VIEWS
+                          FROM NT_NOTICE B
+                          WHERE B.NT_NO = #{ no }
+                         ) + 1
         WHERE A.NT_NO = #{ no }
     </update>
 
     <!-- 공지사항 상세보기 -->
     <select id="selectNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
         SELECT
-               A.NT_NO
+            A.NT_NO
              , A.NT_TITLE
              , B.MEM_NAME
              , A.NT_DATE
@@ -191,34 +214,34 @@
              , A.MEM_NUM
              , A.NT_CONTENTS
              , D.NTF_SAVE_NAME
-          FROM NT_NOTICE A
-          LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
-          LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
-          LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
-         WHERE A.NT_NO = #{ no }
+        FROM NT_NOTICE A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+                 LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
+        WHERE A.NT_NO = #{ no }
     </select>
 
     <!-- 파일 삭제 -->
     <delete id="deleteFile">
         DELETE
-          FROM NTF_NOTICE_FILE
-         WHERE NT_NO = #{ ntNo }
+        FROM NTF_NOTICE_FILE
+        WHERE NT_NO = #{ ntNo }
     </delete>
 
     <!-- 공지사항 업데이트 -->
     <update id="noticeUpdate">
         UPDATE
-               NT_NOTICE
-           SET NT_TITLE = #{ title }
-             , NT_CONTENTS = #{ contents }
-         WHERE NT_NO = #{ no }
+            NT_NOTICE
+        SET NT_TITLE = #{ title }
+          , NT_CONTENTS = #{ contents }
+        WHERE NT_NO = #{ no }
     </update>
 
     <!-- 공지사항 삭제-->
     <delete id="noticeDelete" parameterType="int">
         DELETE
-          FROM NT_NOTICE
-         WHERE NT_NO = #{ no }
+        FROM NT_NOTICE
+        WHERE NT_NO = #{ no }
     </delete>
 
     <!--                          사내 소식                                 -->
@@ -256,7 +279,7 @@
         INSERT
         INTO NW_NEWS
         (
-          NW_NO
+            NW_NO
         , NW_TITLE
         , NW_DATE
         , NW_VIEWS
@@ -265,7 +288,7 @@
         )
         VALUES
             (
-              SEQ_NEWS_NO.NEXTVAL
+                SEQ_NEWS_NO.NEXTVAL
             , #{title}
             , SYSDATE
             , DEFAULT
@@ -284,7 +307,7 @@
         INSERT
         INTO NEWF_NEWS_FILE
         (
-          NEWF_NO
+        NEWF_NO
         , NEWF_ORIGIN_NAME
         , NEWF_SAVE_NAME
         , NEWF_SAVE_PATH
@@ -293,7 +316,7 @@
         )
         VALUES
         (
-          SEQ_NEWS_FILE_NO.NEXTVAL
+        SEQ_NEWS_FILE_NO.NEXTVAL
         , #{originName}
         , #{saveName}
         , #{savePath}

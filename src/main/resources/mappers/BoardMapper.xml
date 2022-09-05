@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+    <!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.ohgiraffers.intranet.board.model.dao.BoardMapper" >
+
+            <resultMap id="boardResultMap" type="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
+                <id property="no" column="FR_NO"/>
+                <result property="title" column="FR_TITLE"/>
+                <result property="date" column="FR_DATE"/>
+                <result property="views" column="FR_VIEWS"/>
+                <result property="contents" column="FR_CONTENTS"/>
+                <result property="num" column="MEM_NUM"/>
+            </resultMap>
+
+    <resultMap id="noticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        <id property="no" column="NT_NO"/>
+        <result property="title" column="NT_TITLE"/>
+        <result property="date" column="NT_DATE"/>
+        <result property="views" column="NT_VIEWS"/>
+        <result property="contents" column="NT_CONTENTS"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
+        <insert id="freeinsert" parameterMap="boardResultMap">
+            insert
+            INTO FR_FREE A(
+
+    A.FR_NO
+   ,A.FR_TITLE
+   ,A.FR_DATE
+   ,A.FR_VIEWS
+   ,A.FR_CONTENTS
+   ,A.MEM_NUM
+   ) VALUES(
+                SEQ_FR_NO.NEXTVAL
+                    ,#{title}
+                    ,SYSDATE
+                    ,DEFAULT
+                    ,#{contetns}
+                    ,3333
+                A.FR_NO
+                    ,A.FR_TITLE
+                    ,A.FR_DATE
+                    ,A.FR_VIEWS
+                    ,A.FR_CONTENTS
+                    ,A.MEM_NUM
+                ) VALUES(
+                SEQ_FR_NO.NEXTVAL
+                    ,#{title}
+                    ,SYSDATE
+                    ,DEFAULT
+                    ,#{contetns}
+                    ,3333
+                )
+
+
+
+        </insert>
+
+
+    <select id="selectNoticeList" resultMap="noticeListResultMap">
+        SELECT A.RNUM
+        , A.NT_NO
+        , A.NT_TITLE
+        , D.MEM_NAME
+        , A.NT_DATE
+        , E.DEPT_NAME
+        , A.NT_VIEWS
+        , F.NTF_ORIGIN_NAME
+        , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+        , B.NT_NO
+        , B.NT_TITLE
+        , B.NT_DATE
+        , B.NT_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+        C.NT_NO
+        , C.NT_TITLE
+        , C.NT_DATE
+        , C.NT_VIEWS
+        , C.MEM_NUM
+        FROM NT_NOTICE C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.NT_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+
+        FROM NT_NOTICE A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    </mapper>

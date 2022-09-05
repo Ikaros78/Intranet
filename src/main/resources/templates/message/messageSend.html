@@ -9,51 +9,48 @@
 </head>
 <body>
     <div id="wrap">
-        <div id="header">
-            <h1 class="logo"><a href="../main/main.html"><img src="/images/logo.png" alt="로고 이미지"></a></h1>
-            <ul class="lnb">
-                <li><a href="../common/mypage.html">마이페이지</a></li>
-                <li><a href="../login.html">로그아웃</a></li>
-            </ul>
-            <ul class="gnb">
-                <li><a href="../board/notice/noticeList.html">공지사항</a></li>
-                <li><a href="../board/free/freeList.html">게시판</a></li>
-                <li><a href="../calendar/cd_main.html">일정관리</a></li>
-                <li><a href="../sign/testsignmain.html">전자결재</a></li>
-                <li><a href="/ms/recp">쪽지함</a></li>
-                <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
-            </ul>
-        </div>
+    <div th:replace="common/header.html"></div>
+
+
 
      <div id="visual" >
+       <form th:action="@{/ms/msinsert}" method="post" enctype="multipart/form-data">
             <div class="table-area" style="position: absolute; top: 250px;left: 350px;width: 1350px;" >     
                 <table align="center" id="">
+                
+                
+                 <input type="text" id="mem_num" name="memNum"
+                        th:value="${ #authentication.getPrincipal().getMem_num()}">
+                 <input type="text" id="sendName" name="sendName"
+                        th:value="${ #authentication.getPrincipal().getMem_name()}">
+                 
                     <tr>
                         <th width="auto">제목</th>
                         <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="text" size="20" style="width:100%; border: 1px;">
+                            <input type="text" name="msTitle" size="20" style="width:100%; border: 1px;">
                         </th>
                     </tr>
                     <tr>
                         <th width="auto">받는사람</th>
                         <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="text" size="20" style="width:100%; border: 1px;">
+                            <input type="text" name="recpName" size="20" style="width:100%; border: 1px;">
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2" style="border: 1px solid black">
-                            <textarea name="content" rows="10" style="width:100%; border: 0; resize: none;"></textarea>
+                            <textarea name="contents" rows="10" style="width:100%; border: 0; resize: none;"></textarea>
                         </th>
                     </tr>
                     <tr>
                         <th colspan="2">
-                            <input type="file">
+							<input type="file" name="msfile" multiple><br>
                         </th>
                     </tr>
-                    <button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px;" >등록</button>
-                    <button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px;" >뒤로가기</button>
+                    <button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px" >등록</button>
+                    <button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px" >뒤로가기</button>
                 </table>
-            </div>
+         	   </div>
+			</form>
         </div>
 
         <div id="contents">
@@ -67,6 +64,6 @@
                 </ul>
             </div>
         </div>
-        </div>
+    </div>
 </body>
 </html>

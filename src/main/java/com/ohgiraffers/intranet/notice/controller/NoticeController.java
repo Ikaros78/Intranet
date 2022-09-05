@@ -199,7 +199,9 @@ public class NoticeController {
 
             int result = noticeService.noticeUpdate(notice);
 
-            if(result > 0 ){
+            if(result > 0){
+
+                if(notice.getFile() != null){
 
                 int result2 = noticeService.noticeFileDelete(notice.getNo());
 
@@ -212,6 +214,17 @@ public class NoticeController {
 
                     noticeService.noticeFileUpdate(noticeFile);
                 }
+
+                } else {
+
+                    noticeFile.setNtNo(notice.getNo());
+                    noticeFile.setOriginName(originFileName);
+                    noticeFile.setSaveName(saveName);
+                    noticeFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.noticeFileUpdate(noticeFile);
+                }
+
             }
 
             log.info("noticeFileDTO값 확인 : " + noticeFile);
@@ -378,7 +391,7 @@ public class NoticeController {
     }
 
     @PostMapping("/news/update")
-    public String newsUpdate(@ModelAttribute NewsDTO news, RedirectAttributes rttr, @RequestParam(name="originName", required=false) MultipartFile originName) throws FileNotFoundException {
+    public String noticeUpdate(@ModelAttribute NewsDTO news, RedirectAttributes rttr, @RequestParam(name="originName", required=false) MultipartFile originName) throws FileNotFoundException {
 
         NewsFileDTO newsFile = new NewsFileDTO();
 
@@ -402,13 +415,35 @@ public class NoticeController {
             ext = originFileName.substring(originFileName.lastIndexOf("."));
             saveName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-            newsFile.setOriginName(originFileName);
-            newsFile.setSaveName(saveName);
-            newsFile.setSavePath(fileUploadDirectory);
+            int result = noticeService.newsUpdate(news);
 
+            if(result > 0){
+
+                if(news.getFile() != null){
+
+                    int result2 = noticeService.newsFileDelete(news.getNo());
+
+                    if(result2 > 0){
+
+                        newsFile.setNwNo(news.getNo());
+                        newsFile.setOriginName(originFileName);
+                        newsFile.setSaveName(saveName);
+                        newsFile.setSavePath(fileUploadDirectory);
+
+                        noticeService.newsFileUpdate(newsFile);
+                    }
+
+                } else {
+
+                    newsFile.setNwNo(news.getNo());
+                    newsFile.setOriginName(originFileName);
+                    newsFile.setSaveName(saveName);
+                    newsFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.newsFileUpdate(newsFile);
+                }
+            }
             // file insert
-            int fileResult = noticeService.newsFileInsert(newsFile);
-
             try {
                 originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
             } catch (IOException e) {
@@ -419,7 +454,6 @@ public class NoticeController {
 
         }
 
-        int updateResult = noticeService.newsUpdate(news);
         rttr.addFlashAttribute("message", "수정이 완료되었습니다");
 
         return "redirect:/notice/news/list";
@@ -433,5 +467,12 @@ public class NoticeController {
         noticeService.newsDelete(news);
 
         return "redirect:/notice/news/list";
+    }
+
+    /* 갤러리 등록 */
+    @GetMapping("/gallery/regist")
+    public String galleryRegistPage(){
+
+        return "notice/gallery/galleryRegist";
     }
 }

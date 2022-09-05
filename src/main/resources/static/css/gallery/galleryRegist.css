@@ -17,16 +17,21 @@ img{border: 0;vertical-align: top;}
 #contents #container h4{font-size: 20px;}
 #contents #container hr{width: 1550px; margin : 7px 0 30px 0; border:1px solid #ccc;}
 
-#contents #container table{width: 1550px; height: 70px; font-size: 17px; margin-bottom: 30px;}
+#contents #container table{width: 1550px; height: 500px; font-size: 17px; margin-bottom: 30px;}
 #contents #container table tr{border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;}
 #contents #container table tr th{background-color: #eee; width: 150px; padding-right: 20px; text-align: right;}
 #contents #container table tr td{padding-left: 20px;}
-#contents #container table tr td input{width: 1360px; border: 1px solid #ddd;}
+#contents #container table tr td input{width: 1360px; border: none;}
+
+#contents #container table .imgArea td div{float: left; margin-right: 23px; border: 1px dashed #ddd;}
+#contents #container table .imgArea td div:last-child{margin-right: 0;}
 
 #contents #container form .registBtn{width: 80px; height: 40px; font-size: 15px; border : none; border-radius: 5px; cursor:pointer;background-color: #FFA57E; color: #fff;
     margin: 30px 0 0 735px;}
 #contents #container form .registBtn:hover{background-color: #e25f27; transition: all .3s; color: #fff;}
 
-#contents #container #summernote{height: 565px; overflow: auto;;}
+#contents #container #summernote{height: 565px; overflow: auto;}
+
+div.note-editor.note-frame.panel.panel-default{margin-bottom: 10px;}
 
 

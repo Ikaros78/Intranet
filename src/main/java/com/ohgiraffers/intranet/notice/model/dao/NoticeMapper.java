@@ -51,4 +51,6 @@ public interface NoticeMapper {
     int deleteNewsFile(int no);
 
     int newsDelete(int no);
+
+    void newsFileUpdate(NewsFileDTO newsFile);
 }

@@ -431,6 +431,29 @@
         WHERE NW_NO = #{ no }
     </update>
 
+    <!-- 사내소식 파일 다시 업로드 -->
+    <insert id="newsFileUpdate" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+        INSERT
+        INTO NEWF_NEWS_FILE
+        (
+        NEWF_NO
+        , NEWF_ORIGIN_NAME
+        , NEWF_SAVE_NAME
+        , NEWF_SAVE_PATH
+        , NEWF_DELETE_YN
+        , NW_NO
+        )
+        VALUES
+        (
+        SEQ_NEWS_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{nwNo}
+        )
+    </insert>
+
     <!-- 사내소식 파일 삭제 -->
     <delete id="deleteNewsFile">
         DELETE

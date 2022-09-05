@@ -173,5 +173,13 @@ public class NoticeService {
     }
 
 
+    public int newsFileDelete(int no) {
 
+        return noticeMapper.deleteNewsFile(no);
+    }
+
+    public void newsFileUpdate(NewsFileDTO newsFile) {
+
+        noticeMapper.newsFileUpdate(newsFile);
+    }
 }

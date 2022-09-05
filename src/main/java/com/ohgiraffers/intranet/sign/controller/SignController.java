@@ -4,13 +4,17 @@ import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/sign/*")
 public class SignController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final SignService signService;
 
     @Autowired
@@ -28,7 +33,7 @@ public class SignController {
     }
 
     @GetMapping(value = {"/main", "/waitingList"})
-    public ModelAndView signWaitingList(HttpServletRequest request, ModelAndView mv){
+    public ModelAndView signWaitingList(HttpServletRequest request, ModelAndView mv, HttpSession httpSession){
 
         /*
          * 목록보기를 눌렀을 시 가장 처음에 보여지는 페이지는 1페이지이다.
@@ -40,14 +45,22 @@ public class SignController {
         if(currentPage != null && !"".equals(currentPage)) {
             pageNo = Integer.parseInt(currentPage);
         }
+        String searchWriter = request.getParameter("searchWriter");
+        String searchForm = request.getParameter("searchForm");
+        String searchTitle = request.getParameter("searchTitle");
+        String searchStartDate = request.getParameter("searchStartDate");
+        String searchEndDate = request.getParameter("searchEndDate");
+        int mem_num = (Integer) httpSession.getAttribute("mem_num");
 
-        String searchCondition = request.getParameter("searchCondition");
-        String searchValue = request.getParameter("searchValue");
+        log.info("memId = " + mem_num);
 
-        Map<String, String> searchMap = new HashMap<>();
-        searchMap.put("mem_num", "15011092");
-        searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchValue", searchValue);
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("mem_num", mem_num);
+        searchMap.put("searchWriter", searchWriter);
+        searchMap.put("searchForm", searchForm);
+        searchMap.put("searchTitle", searchTitle);
+        searchMap.put("searchStartDate", searchStartDate);
+        searchMap.put("searchEndDate", searchEndDate);
 
         /*
          * 전체 게시물 수가 필요하다.
@@ -67,15 +80,16 @@ public class SignController {
         /* 페이징 처리를 위한 로직 호출 후 페이징 처리에 관한 정보를 담고 있는 인스턴스를 반환받는다. */
         SelectCriteria selectCriteria = null;
 
-        if(searchCondition != null && !"".equals(searchCondition)) {
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-        } else {
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-        }
+        selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 
         Map<String, Object> searchList = new HashMap<>();
-        searchList.put("mem_num", "15011092");
+        searchList.put("mem_num", mem_num);
         searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchWriter", searchWriter);
+        searchList.put("searchForm", searchForm);
+        searchList.put("searchTitle", searchTitle);
+        searchList.put("searchStartDate", searchStartDate);
+        searchList.put("searchEndDate", searchEndDate);
 
         System.out.println("searchList = " + searchList);
 
@@ -86,6 +100,7 @@ public class SignController {
         
         mv.addObject("waitingList", waitingList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signWaitingList");
 
@@ -97,6 +112,8 @@ public class SignController {
 
         String signNo = request.getParameter("no");
         SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
 
         mv.addObject("signDetail" , signDetail);
 

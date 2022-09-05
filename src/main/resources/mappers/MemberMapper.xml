@@ -61,6 +61,8 @@
                      , A.DEPT_CODE
                      , B.DEPT_NAME
                   FROM MEMBER A
+                    JOIN DEPARTMENT B
+                        ON (A.DEPT_CODE = B.DEPT_CODE)
                  WHERE A.MEM_ID = #{ mem_id }
     </select>
 
@@ -151,6 +153,13 @@
                 A.DEPT_CODE
               , A.DEPT_NAME
            FROM DEPARTMENT A
+    </select>
+
+    <select id="selectMemNumById" resultType="_int">
+        SELECT
+                A.MEM_NUM
+        FROM MEMBER A
+       WHERE A.MEM_ID = #{mem_id}
     </select>
 
 </mapper>

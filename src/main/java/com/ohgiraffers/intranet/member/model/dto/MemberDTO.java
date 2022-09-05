@@ -3,11 +3,11 @@ package com.ohgiraffers.intranet.member.model.dto;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class MemberDTO implements UserDetails {
 
@@ -26,6 +26,7 @@ public class MemberDTO implements UserDetails {
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
     private DepartmentDTO department;
+//    private Au_AuthorizationDTO au_authorization;
 
     public int getMem_num() {
         return mem_num;
@@ -131,10 +132,45 @@ public class MemberDTO implements UserDetails {
         this.department = department;
     }
 
+//    public Au_AuthorizationDTO getAu_authorization() {
+//        return au_authorization;
+//    }
+//
+//    public void setAu_authorization (Au_AuthorizationDTO au_authorization) {
+//        this.au_authorization = au_authorization;
+//    }
+
+    @Override
+    public String toString() {
+        return "MemberDTO{" +
+                "mem_num=" + mem_num +
+                ", mem_id='" + mem_id + '\'' +
+                ", mem_pw='" + mem_pw + '\'' +
+                ", mem_name='" + mem_name + '\'' +
+                ", mem_phone='" + mem_phone + '\'' +
+                ", mem_joinDate=" + mem_joinDate +
+                ", mem_birth=" + mem_birth +
+                ", mem_email='" + mem_email + '\'' +
+                ", mem_address='" + mem_address + '\'' +
+                ", dept_rank='" + dept_rank + '\'' +
+                ", dept_code='" + dept_code + '\'' +
+                ", authorit=" + authorit +
+                ", department=" + department +
+//                ", au_authorization=" + au_authorization +
+                '}';
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
+
+    //    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(getAuthorities());
+//        return authorities;
+//        }
+
 
     @Override
     public String getPassword() {
@@ -170,22 +206,4 @@ public class MemberDTO implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "MemberDTO{" +
-                "mem_num=" + mem_num +
-                ", mem_id='" + mem_id + '\'' +
-                ", mem_pw='" + mem_pw + '\'' +
-                ", mem_name='" + mem_name + '\'' +
-                ", mem_phone='" + mem_phone + '\'' +
-                ", mem_joinDate=" + mem_joinDate +
-                ", mem_birth=" + mem_birth +
-                ", mem_email='" + mem_email + '\'' +
-                ", mem_address='" + mem_address + '\'' +
-                ", dept_rank='" + dept_rank + '\'' +
-                ", dept_code='" + dept_code + '\'' +
-                ", authorit=" + authorit +
-                ", department=" + department +
-                '}';
-    }
 }

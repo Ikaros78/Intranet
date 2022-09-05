@@ -19,6 +19,7 @@
 
         <association property="department" resultMap="departmentResultMap"/>
         <collection property="authorit" resultMap="authoritResultMap"/>
+<!--        <collection property="au_authoritzation" resultMap="au_authorizationResultMap"/>-->
     </resultMap>
 
     <resultMap id="authoritResultMap" type="com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO">
@@ -30,6 +31,20 @@
         <id property="dept_code" column="DEPT_CODE"/>
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
+
+<!--    <resultMap id="au_authorizationResultMap" type="com.ohgiraffers.intranet.member.model.dto.Au_AuthorizationDTO">-->
+<!--        <result property="all_all" column="ALL_ALL"/>-->
+<!--        <result property="nt_all" column="NT_ALL"/>-->
+<!--        <result property="db_all" column="DB_ALL"/>-->
+<!--        <result property="fr_all" column="FR_ALL"/>-->
+<!--        <result property="nb_all" column="NB_ALL"/>-->
+<!--        <result property="em_read" column="EM_READ"/>-->
+<!--        <result property="em_all" column="EM_ALL"/>-->
+<!--        <result property="hr_read" column="HR_READ"/>-->
+<!--        <result property="hr_all" column="HR_ALL"/>-->
+<!--        <result property="cd_all" column="CD_ALL"/>-->
+<!--        <result property="cd_dept" column="CD_DEPT"/>-->
+<!--    </resultMap>-->
 
     <select id="memberLogin" resultMap="MemberResultMap">
                 SELECT

@@ -40,7 +40,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     /* 시큐리티 설정 무시할 리소스 등록. 여러분 작업 화이팅 */
     public void configure(WebSecurity web) throws Exception{
 
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/lib/**");
+        web.ignoring().antMatchers("/resources/**");
     }
 
     /* HTTP 요청에 대한 권한 설정 코드 */
@@ -49,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
+                .mvcMatchers("/resources/**").permitAll()
 //                .mvcMatchers("/notice/**","/msBoard/**","/sign/**").hasAnyAuthority("ROLE_MEMBER")
                 .mvcMatchers("/**","/member/**").permitAll()
                 .anyRequest().permitAll()

@@ -12,7 +12,6 @@
         <result property="contents" column="FR_CONTENTS"/>
         <result property="mem_num" column="MEM_NUM"/>
 
-        <association property="member" resultMap="memberResultMap"/>
     </resultMap>
 
     <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
@@ -81,7 +80,6 @@
         ) A
         LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
         LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
---         LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
         WHERE A.RNUM >= #{ startRow }
         ORDER BY 1 ASC
     </select>
@@ -102,4 +100,46 @@
         </where>
     </select>
 
-    </mapper>
+<!--    <select id="selectDetail" parameterType="_int" resultMap="noticeListResultMap">-->
+<!--        SELECT-->
+<!--            A.NT_NO-->
+<!--             , A.NT_TITLE-->
+<!--             , B.MEM_NAME-->
+<!--             , A.NT_DATE-->
+<!--             , C.DEPT_NAME-->
+<!--             , A.NT_VIEWS-->
+<!--             , D.NTF_ORIGIN_NAME-->
+<!--             , A.MEM_NUM-->
+<!--             , A.NT_CONTENTS-->
+<!--             , D.NTF_SAVE_NAME-->
+<!--        FROM NT_NOTICE A-->
+<!--                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)-->
+<!--                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)-->
+<!--                 LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)-->
+<!--        WHERE A.NT_NO = #{ no }-->
+<!--    </select>-->
+
+
+        <insert id="freeinsert" parameterType="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
+        INSERT
+
+        INTO FR_FREE A(
+            A.FR_NO
+           ,A.FR_TITLE
+           ,A.FR_DATE
+           ,A.FR_VIEWS
+           ,A.FR_CONTENTS
+           ,A.MEM_NUM
+           ) VALUES(
+                    SEQ_FR_NO.NEXTVAL
+                        ,#{title}
+                        ,SYSDATE
+                        ,DEFAULT
+                        ,#{contents}
+                        ,3333
+
+            )
+    </insert>
+
+
+</mapper>

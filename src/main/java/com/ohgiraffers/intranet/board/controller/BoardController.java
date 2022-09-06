@@ -40,13 +40,13 @@ public class BoardController {
 
         freeinsert.getTitle();
         freeinsert.getContents();
-        log.info("free insrt : " + freeinsert);
+        log.info("free insert : " + freeinsert);
 
         int registResult = boardService.freeinsert(freeinsert);
         return "";
 
     }
-    @GetMapping("/borad/list")
+    @GetMapping("/list")
     public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv){
 
         String currentPage = request.getParameter("currentPage");
@@ -92,7 +92,7 @@ public class BoardController {
 
         log.info("dept값 가져오나 확인 : " + boardList);
 
-        mv.setViewName("board/boardList");
+      mv.setViewName("freelist/freelist");
 
         return mv;
     }

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../../resources/css/reset.css">
     <link rel="stylesheet" href="../../resources/css/basic.css">
     <link rel="stylesheet" href="../../resources/css/paging.css">
-    <link rel="stylesheet" href="../../resources/css/noticeList.css">
+    <link rel="stylesheet" href="../../resources/css/freelist.css">
 </head>
 <body>
 <div id="wrap">
@@ -18,7 +18,7 @@
         </ul>
         <ul class="gnb">
             <li><a href="../notice/noticeList.html">공지사항</a></li>
-            <li><a href="../free/freeList.html">게시판</a></li>
+            <li><a href="../freelist/freeList.html">게시판</a></li>
             <li><a href="../../calendar/cd_main.html">일정관리</a></li>
             <li><a href="../../sign/testsignmain.html">전자결재</a></li>
             <li><a href="../../message/messageAllBox.html">쪽지함</a></li>
@@ -30,7 +30,7 @@
             <h3>게시판</h3>
             <ul>
                 <li class="main">
-                    <a href="#">게시판 목록</a>
+                    <a th:href="@{/freelist/list}">게시판 목록</a>
                 </li>
                 <li class="main">
                     <a href="#">부서별 게시판</a>
@@ -91,7 +91,7 @@
                     <td>999999</td>
                     <td><img src="../../resources/images/clip.png" alt="첨부파일"></td>
                     <td>폰트 및 정렬 확인용 텍스트 입니다</td>
-                    <td>주이슬 인사팀</td>
+                    <td>이현석 인사팀</td>
                     <td>22-08-23</td>
                     <td>1</td>
                 </tr>

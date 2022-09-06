@@ -24,6 +24,7 @@ spring:
 # mybatis config
 mybatis:
   mapper-locations: mappers/**/*.xml
-  type-aliases-package: com.ohgiraffers.intranet
+  type-aliases-package: com.ohgiraffers.intranet,
+                        com.ohgiraffers.intranet.notice.model.dto
   configuration:
     map-underscore-to-camel-case: true

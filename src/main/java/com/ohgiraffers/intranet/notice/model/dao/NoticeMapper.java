@@ -1,10 +1,7 @@
 package com.ohgiraffers.intranet.notice.model.dao;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -53,4 +50,8 @@ public interface NoticeMapper {
     int newsDelete(int no);
 
     void newsFileUpdate(NewsFileDTO newsFile);
+
+    int galleryRegist(GalleryDTO gallery);
+
+    int galleryFileRegist(GalleryFileDTO galleryFileDTO);
 }

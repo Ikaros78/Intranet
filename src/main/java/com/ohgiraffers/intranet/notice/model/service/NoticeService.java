@@ -2,10 +2,7 @@ package com.ohgiraffers.intranet.notice.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.notice.model.dao.NoticeMapper;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -172,14 +169,45 @@ public class NoticeService {
         int result2 = noticeMapper.newsDelete(news.getNo());
     }
 
-
+    /* 사내 소식 파일 삭제용 메소드 */
+    @Transactional
     public int newsFileDelete(int no) {
 
         return noticeMapper.deleteNewsFile(no);
     }
 
+    /* 사내 소식 파일 수정용 메소드 */
+    @Transactional
     public void newsFileUpdate(NewsFileDTO newsFile) {
 
         noticeMapper.newsFileUpdate(newsFile);
+    }
+
+    /* 갤러리 게시판 등록용 메소드 */
+    @Transactional
+    public void galleryRegist(GalleryDTO gallery) {
+
+        int result = 0;
+        // gallery 테이블 insert
+        int galleryResult = noticeMapper.galleryRegist(gallery);
+
+        List<GalleryFileDTO> galleryFile = gallery.getGalleryFile();
+
+        // 파일에 galleryNo 넣기
+        for(int i = 0; i < galleryFile.size(); i++){
+            galleryFile.get(i).setGalNo(gallery.getNo());
+        log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
+        }
+
+        //galleryFileInsert
+        int galleryFileResult = 0;
+        for(int i = 0; i < galleryFile.size(); i++){
+            galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+        }
+
+//        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
+//            throw new galleryRegistException("")
+//        }
+
     }
 }

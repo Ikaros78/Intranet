@@ -2,13 +2,12 @@ package com.ohgiraffers.intranet.notice.controller;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.*;
 import com.ohgiraffers.intranet.notice.model.service.NoticeService;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -28,6 +27,7 @@ import java.util.*;
 @RequestMapping(value = {"/notice/*"})
 public class NoticeController {
 
+    @Value("src/main/resources")
     private String IMAGE_DIR;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final NoticeService noticeService;
@@ -475,4 +475,131 @@ public class NoticeController {
 
         return "notice/gallery/galleryRegist";
     }
-}
+
+    @PostMapping("gallery/regist")
+    public String galleryRegist(@ModelAttribute GalleryDTO gallery, HttpServletRequest request,
+                                @RequestParam("thumbnailImg1") MultipartFile thumbnailImg1,
+                                @RequestParam("thumbnailImg2") MultipartFile thumbnailImg2,
+                                @RequestParam("thumbnailImg3") MultipartFile thumbnailImg3,
+                                @RequestParam("thumbnailImg4") MultipartFile thumbnailImg4,
+                                @RequestParam("thumbnailImg5") MultipartFile thumbnailImg5,
+                                @RequestParam("thumbnailImg6") MultipartFile thumbnailImg6,
+                                @RequestParam("thumbnailImg7") MultipartFile thumbnailImg7,
+                                @RequestParam("thumbnailImg8") MultipartFile thumbnailImg8,
+                                RedirectAttributes rttr) throws FileNotFoundException {
+
+        String rootLocation = IMAGE_DIR;
+
+        String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
+
+        String fileUploadDirectory = filePath + "/galleryFile";
+        String thumbnailDirectory = filePath + "/thumbnailFile";
+
+        File directory = new File(fileUploadDirectory);
+        File directory2 = new File(thumbnailDirectory);
+
+        if(!directory.exists() || !directory2.exists()){
+
+            directory.mkdirs();
+            directory2.mkdirs();
+        }
+
+        List<Map<String, String>> fileList = new ArrayList<>();
+
+        List<MultipartFile> paramFileList = new ArrayList<>();
+        paramFileList.add(thumbnailImg1);
+        paramFileList.add(thumbnailImg2);
+        paramFileList.add(thumbnailImg3);
+        paramFileList.add(thumbnailImg4);
+        paramFileList.add(thumbnailImg5);
+        paramFileList.add(thumbnailImg6);
+        paramFileList.add(thumbnailImg7);
+        paramFileList.add(thumbnailImg8);
+
+        for(MultipartFile paramFile : paramFileList) {
+
+            if (paramFile.getSize() > 0) {
+                String originFileName = paramFile.getOriginalFilename();
+
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String savedFileName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+                try {
+                    paramFile.transferTo(new File(fileUploadDirectory + "/" + savedFileName));
+
+                    Map<String, String> fileMap = new HashMap<>();
+                    fileMap.put("originFileName", originFileName);
+                    fileMap.put("savedFileName", savedFileName);
+                    fileMap.put("savePath", fileUploadDirectory);
+
+                    String filedName = paramFile.getName();
+
+                    int width = 150;
+                    int height = 150;
+
+                    Thumbnails.of(fileUploadDirectory + "/" + savedFileName).size(width, height)
+                            .toFile(thumbnailDirectory + "/thumb_" + savedFileName);
+
+                    fileMap.put("thumbnailPath", "/upload/thumbnailFile/thumb_" + savedFileName);
+
+                    fileList.add(fileMap);
+
+                    // galleryDTO에 값 담기
+
+                    gallery.setGalleryFile(new ArrayList<GalleryFileDTO>());
+                    List<GalleryFileDTO> list = gallery.getGalleryFile();
+                    for (int i = 0; i < fileList.size(); i++) {
+                        Map<String, String> file = fileList.get(i);
+
+                        GalleryFileDTO tempFileInfo = new GalleryFileDTO();
+                        tempFileInfo.setOriginName(file.get("originFileName"));
+                        tempFileInfo.setSaveName(file.get("savedFileName"));
+                        tempFileInfo.setSavePath(file.get("savePath"));
+                        tempFileInfo.setThumbnailPath(file.get("thumbnailPath"));
+
+                        list.add(tempFileInfo);
+                    }
+
+                    noticeService.galleryRegist(gallery); //gallery insert
+
+                    rttr.addFlashAttribute("message", "갤러리 등록이 완료되었습니다.");
+
+
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                    //Exception 발생 시 파일 삭제
+                    int cnt = 0;
+                    for (int i = 0; i < fileList.size(); i++) {
+                        Map<String, String> file = fileList.get(i);
+
+                        File deleteFile = new File(fileUploadDirectory + "/" + file.get("savedFileName"));
+                        boolean isDeleted1 = deleteFile.delete();
+
+                        File deleteThumbnail = new File(thumbnailDirectory + "/thumb_" + file.get("savedFileName"));
+                        boolean isDeleted2 = deleteThumbnail.delete();
+
+                        if (isDeleted1 && isDeleted2) {
+                            cnt++;
+                        }
+                    }
+
+                    if (cnt == fileList.size()) {
+                        log.info("업로드 실패한 사진 삭제 완료");
+                        e.printStackTrace();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+        return "redirect:/notice/gallery/list";
+        }
+
+//        public ModelAndView galleryPage(ModelAndView mv){
+//
+//        List<GalleryDTO> galleryList = noticeService.selectAllGalleryList();
+//        }
+
+    }
+

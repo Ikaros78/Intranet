@@ -5,7 +5,7 @@
 <mapper namespace="com.ohgiraffers.intranet.notice.model.dao.NoticeMapper">
 
     <!--                          공지사항                                 -->
-    <resultMap id="noticeResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <resultMap id="noticeResultMap" type="NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
         <result property="date" column="NT_DATE"/>
@@ -14,7 +14,7 @@
         <result property="num" column="MEM_NUM"/>
     </resultMap>
 
-    <resultMap id="addFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+    <resultMap id="addFileResultMap" type="NoticeFileDTO">
         <id property="no" column="NTF_NO"/>
         <result property="originName" column="NTF_ORIGIN_NAME"/>
         <result property="saveName" column="NTF_SAVE_NAME"/>
@@ -23,7 +23,7 @@
         <result property="ntNo" column="NT_NO"/>
     </resultMap>
 
-    <resultMap id="noticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <resultMap id="noticeListResultMap" type="NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
         <result property="date" column="NT_DATE"/>
@@ -54,7 +54,7 @@
     </resultMap>
 
     <!-- 공지사항 등록 -->
-    <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <insert id="noticeRegist" parameterType="NoticeDTO">
         INSERT
         INTO NT_NOTICE
         (
@@ -77,7 +77,7 @@
     </insert>
 
     <!-- 공지사항 파일 등록 -->
-    <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+    <insert id="fileRegist" parameterType="NoticeFileDTO">
         <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
             SELECT
             SEQ_NOTICE_NO.CURRVAL
@@ -105,7 +105,7 @@
     </insert>
 
     <!-- 공지사항 파일 등록 -->
-    <insert id="noticeFileUpdate" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+    <insert id="noticeFileUpdate" parameterType="NoticeFileDTO">
         INSERT
         INTO NTF_NOTICE_FILE
         (
@@ -245,7 +245,7 @@
     </delete>
 
     <!--                          사내 소식                                 -->
-    <resultMap id="newsResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <resultMap id="newsResultMap" type="NewsDTO">
         <id property="no" column="NW_NO"/>
         <result property="title" column="NW_TITLE"/>
         <result property="date" column="NW_DATE"/>
@@ -254,7 +254,7 @@
         <result property="num" column="MEM_NUM"/>
     </resultMap>
 
-    <resultMap id="addNewsFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+    <resultMap id="addNewsFileResultMap" type="NewsFileDTO">
         <id property="no" column="NEWF_NO"/>
         <result property="originName" column="NEWF_ORIGIN_NAME"/>
         <result property="saveName" column="NEWF_SAVE_NAME"/>
@@ -263,7 +263,7 @@
         <result property="nwNo" column="NW_NO"/>
     </resultMap>
 
-    <resultMap id="newsListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <resultMap id="newsListResultMap" type="NewsDTO">
         <id property="no" column="NW_NO"/>
         <result property="title" column="NW_TITLE"/>
         <result property="date" column="NW_DATE"/>
@@ -275,7 +275,7 @@
     </resultMap>
 
     <!-- 사내소식 등록 -->
-    <insert id="newsRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <insert id="newsRegist" parameterType="NewsDTO">
         INSERT
         INTO NW_NEWS
         (
@@ -298,7 +298,7 @@
     </insert>
 
     <!-- 사내소식 파일 등록 -->
-    <insert id="newsFileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+    <insert id="newsFileRegist" parameterType="NewsFileDTO">
         <selectKey keyProperty="nwNo" order="BEFORE" resultType="_int">
             SELECT
             SEQ_NEWS_NO.CURRVAL
@@ -432,7 +432,7 @@
     </update>
 
     <!-- 사내소식 파일 다시 업로드 -->
-    <insert id="newsFileUpdate" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+    <insert id="newsFileUpdate" parameterType="NewsFileDTO">
         INSERT
         INTO NEWF_NEWS_FILE
         (
@@ -467,5 +467,83 @@
         FROM NW_NEWS
         WHERE NW_NO = #{ no }
     </delete>
+
+    <!--                          갤러리                                 -->
+    <resultMap id="galleryResultMap" type="GalleryDTO">
+        <id property="no" column="GAL_NO"/>
+        <result property="title" column="GAL_TITLE"/>
+        <result property="date" column="GAL_DATE"/>
+        <result property="views" column="GAL_VIEWS"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+
+        <collection property="galleryFile" resultMap="galleryFileResultMap"/>
+    </resultMap>
+
+    <resultMap id="galleryFileResultMap" type="GalleryFileDTO">
+        <id property="no" column="GF_NO"/>
+        <result property="originName" column="GF_ORIGIN_NAME"/>
+        <result property="saveName" column="GF_SAVE_NAME"/>
+        <result property="savePath" column="GF_SAVE_PATH"/>
+        <result property="deleteYn" column="GF_DELETE_YN"/>
+        <result property="thumbnailPath" column="GF_THUMBNAIL_PATH"/>
+        <result property="galNo" column="GAL_NO"/>
+    </resultMap>
+
+    <!-- 갤러리 내용 insert -->
+    <insert id="galleryRegist">
+        INSERT
+        INTO GALLERY
+        (
+          GAL_NO
+        , GAL_TITLE
+        , GAL_DATE
+        , GAL_VIEWS
+        , GAL_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+        (
+          SEQ_GALLERY_NO.NEXTVAL
+        , #{ title }
+        , SYSDATE
+        , DEFAULT
+        , #{ contents }
+        , #{ mem_num }
+        )
+        <selectKey keyProperty="no" resultType="_int" order="AFTER">
+            SELECT
+            SEQ_GALLERY_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+    </insert>
+
+    <!-- 갤러리 첨부이미지 insert -->
+    <insert id="galleryFileRegist">
+        INSERT
+        INTO GF_GALLARY_FILE
+        (
+          GF_NO
+        , GF_ORIGIN_NAME
+        , GF_SAVE_NAME
+        , GF_SAVE_PATH
+        , GF_DELETE_YN
+        , GF_THUMBNAIL_PATH
+        , GAL_NO
+        )
+        VALUES
+        (
+          SEQ_GALLERY_FILE_NO.NEXTVAL
+        , #{ originName }
+        , #{ saveName }
+        , #{ savePath }
+        , DEFAULT
+        , #{ thumbnailPath }
+        , #{ galNo }
+        )
+    </insert>
+
+
 
 </mapper>

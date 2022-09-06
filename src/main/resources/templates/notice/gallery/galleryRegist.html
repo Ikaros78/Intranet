@@ -34,7 +34,7 @@
             </ul>
         </div>
         <div id="container">
-            <h4>사내소식</h4><hr>
+            <h4>갤러리</h4><hr>
             <form th:action="@{/notice/gallery/regist}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="currentPage" value="1">
             <table>
@@ -84,15 +84,19 @@
                 <tr>
                     <th>사진 메모</th>
                     <td colspan="3" style="padding-top : 10px;">
-                        <textarea id="summernote" name="memo"></textarea>
+                        <textarea id="summernote" name="contents"></textarea>
                     </td>
                 </tr>
             </table>
-                <div class="thumbnail-file-area">
+                <div class="thumbnail-file-area" style="display: none">
                     <input type="file" id="thumbnailImg1" name="thumbnailImg1" onchange="loadImg(this,1)">
                     <input type="file" id="thumbnailImg2" name="thumbnailImg2" onchange="loadImg(this,2)">
                     <input type="file" id="thumbnailImg3" name="thumbnailImg3" onchange="loadImg(this,3)">
                     <input type="file" id="thumbnailImg4" name="thumbnailImg4" onchange="loadImg(this,4)">
+                    <input type="file" id="thumbnailImg5" name="thumbnailImg5" onchange="loadImg(this,5)">
+                    <input type="file" id="thumbnailImg6" name="thumbnailImg6" onchange="loadImg(this,6)">
+                    <input type="file" id="thumbnailImg7" name="thumbnailImg7" onchange="loadImg(this,7)">
+                    <input type="file" id="thumbnailImg8" name="thumbnailImg8" onchange="loadImg(this,8)">
                 </div>
                 <button class="registBtn" type="submit">등록하기</button>
             </form>
@@ -100,6 +104,7 @@
     </div>
 </div>
 <script>
+    /* 썸머노트 스크립트 */
     $(document).ready(function() {
         //여기 아래 부분
         $('#summernote').summernote({
@@ -114,63 +119,83 @@
     });
 
     /* 이미지 미리보기 관련 스크립트 */
-    const $titleImgArea = document.getElementById("titleImgArea");
     const $contentImgArea1 = document.getElementById("contentImgArea1");
     const $contentImgArea2 = document.getElementById("contentImgArea2");
     const $contentImgArea3 = document.getElementById("contentImgArea3");
+    const $contentImgArea4 = document.getElementById("contentImgArea4");
+    const $contentImgArea5 = document.getElementById("contentImgArea5");
+    const $contentImgArea6 = document.getElementById("contentImgArea6");
+    const $contentImgArea7 = document.getElementById("contentImgArea7");
+    const $contentImgArea8 = document.getElementById("contentImgArea8");
 
-    $titleImgArea.onclick = function() {
+
+    $contentImgArea1.onclick = function() {
         document.getElementById("thumbnailImg1").click();
     }
 
-    $contentImgArea1.onclick = function() {
+    $contentImgArea2.onclick = function() {
         document.getElementById("thumbnailImg2").click();
     }
 
-    $contentImgArea2.onclick = function() {
+    $contentImgArea3.onclick = function() {
         document.getElementById("thumbnailImg3").click();
     }
 
-    $contentImgArea3.onclick = function() {
+    $contentImgArea4.onclick = function() {
         document.getElementById("thumbnailImg4").click();
+    }
+
+    $contentImgArea5.onclick = function() {
+        document.getElementById("thumbnailImg5").click();
+    }
+
+    $contentImgArea6.onclick = function() {
+        document.getElementById("thumbnailImg6").click();
+    }
+
+    $contentImgArea7.onclick = function() {
+        document.getElementById("thumbnailImg7").click();
+    }
+
+    $contentImgArea8.onclick = function() {
+        document.getElementById("thumbnailImg8").click();
     }
 
     /* 이미지 미리보기 관련 함수(File API 활용하기) */
     function loadImg(value, num) {
 
-        /* https://developer.mozilla.org/ko/docs/Web/API/FileReader 참고 (MDN 사이트 참고)*/
-        if (value.files && value.files[0]) {			// value.files[0]는 파일 이름
+        if (value.files && value.files[0]) {
             const reader = new FileReader();
 
-            /*
-                FileReader 객체는 웹 애플리케이션이 비동기적으로 데이터를 읽기 위하여 읽을 파일을 가리키는 File 혹은 Blob 객체를
-                이용해 파일의 내용을(혹은 raw data버퍼로) 읽고 사용자의 컴퓨터에 저장하는 것을 가능하게 하는 것
-                Blob(Binary large object) : 파일류의 불변하는 미가공 데이터로 텍스트와 이진 데이터의 형태로 읽을 수 있음
-            */
-
-            // reader.readAsText(value.files[0]);			// 텍스트 파일을 읽을 때 사용 (이미지 파일을 텍스트로 읽어서 글자가 깨짐)
-            // reader.readAsArrayBuffer(value.files[0]);	// 데이터를 일정한 크기로 조금씩(파일을 표현하는 ArrayBuffer) 서버로 보낼 때
-            // reader.readAsBinaryString(value.files[0]);	// 이진 데이터를 서버로 보낼 때 사용
-            reader.readAsDataURL(value.files[0]);		// Base64방식으로 파일을 FileReader에 전달 (Base64로 인코딩한 것은 브라우저가 원래 데이터로 만들게 됨)
-
-            /* load 이벤트의 핸들러로 읽기 동작이 성공적으로 완료 되었을 때마다 발생한다. */
-            reader.onload = function(e) {				// load EventListener에 function 등록 (FileReader에서 전달 받은 파일을 다 읽으면 리스너에 등록한 function이 호출 됨)
+            reader.onload = function(e) {
                 switch(num){
                     case 1:
-                        console.log(e.target.result);		// e.target.result는 인코딩한 결과로 img태그의 src로 사용할 수 있음
-                        document.getElementById("titleImg").src = e.target.result;
-                        break;
-                    case 2:
                         document.getElementById("contentImg1").src = e.target.result;
                         break;
-                    case 3:
+                    case 2:
                         document.getElementById("contentImg2").src = e.target.result;
                         break;
-                    case 4:
+                    case 3:
                         document.getElementById("contentImg3").src = e.target.result;
+                        break;
+                    case 4:
+                        document.getElementById("contentImg4").src = e.target.result;
+                        break;
+                    case 5:
+                        document.getElementById("contentImg5").src = e.target.result;
+                        break;
+                    case 6:
+                        document.getElementById("contentImg6").src = e.target.result;
+                        break;
+                    case 7:
+                        document.getElementById("contentImg7").src = e.target.result;
+                        break;
+                    case 8:
+                        document.getElementById("contentImg8").src = e.target.result;
                         break;
                 }
             }
+            reader.readAsDataURL(value.files[0]);
         }
     }
 </script>

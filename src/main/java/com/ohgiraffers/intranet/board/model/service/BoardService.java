@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.board.model.service;
 
 import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
-import com.ohgiraffers.intranet.board.model.dto.BoardDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;

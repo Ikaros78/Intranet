@@ -3,10 +3,12 @@ package com.ohgiraffers.intranet.member.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.coyote.Request;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -101,7 +103,12 @@ public class MemberController {
 
         return ResponseEntity.ok(idCheckResult);
 
+    }
+    /* 마이페이지 개인 정보 조회 */
+    @PostMapping("/mypage")
+    public String memberInfoView(@ModelAttribute MemberDTO memberDTO, HttpServletRequest Request, RedirectAttributes attr){
 
+        return "/member/mypage";
     }
 
 

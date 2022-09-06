@@ -168,7 +168,7 @@
             <button class="join" id="regist">회원가입</button>
     </form>
 
-    <button onclock="location.href='/common/login.html'"
+    <button th:onclick="|location.href='@{/member/login}'|"
              class="logIn" id="logIn">뒤로가기</button>
 
 </div>

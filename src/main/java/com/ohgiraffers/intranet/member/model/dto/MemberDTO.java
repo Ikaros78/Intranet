@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Date;
 import java.util.*;
 
-public class MemberDTO implements UserDetails {
+public class MemberDTO {
 
     private int mem_num;
     private String mem_id;
@@ -26,7 +26,27 @@ public class MemberDTO implements UserDetails {
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
     private DepartmentDTO department;
-//    private Au_AuthorizationDTO au_authorization;
+    private List<Au_AuthorizationDTO> au_authorization;
+
+    public MemberDTO() {
+    }
+
+    public MemberDTO(int mem_num, String mem_id, String mem_pw, String mem_name, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code, List<AuthoritDTO> authorit, DepartmentDTO department, List<Au_AuthorizationDTO> au_authorization) {
+        this.mem_num = mem_num;
+        this.mem_id = mem_id;
+        this.mem_pw = mem_pw;
+        this.mem_name = mem_name;
+        this.mem_phone = mem_phone;
+        this.mem_joinDate = mem_joinDate;
+        this.mem_birth = mem_birth;
+        this.mem_email = mem_email;
+        this.mem_address = mem_address;
+        this.dept_rank = dept_rank;
+        this.dept_code = dept_code;
+        this.authorit = authorit;
+        this.department = department;
+        this.au_authorization = au_authorization;
+    }
 
     public int getMem_num() {
         return mem_num;
@@ -132,13 +152,13 @@ public class MemberDTO implements UserDetails {
         this.department = department;
     }
 
-//    public Au_AuthorizationDTO getAu_authorization() {
-//        return au_authorization;
-//    }
-//
-//    public void setAu_authorization (Au_AuthorizationDTO au_authorization) {
-//        this.au_authorization = au_authorization;
-//    }
+    public List<Au_AuthorizationDTO> getAu_authorization() {
+        return au_authorization;
+    }
+
+    public void setAu_authorization(List<Au_AuthorizationDTO> au_authorization) {
+        this.au_authorization = au_authorization;
+    }
 
     @Override
     public String toString() {
@@ -156,54 +176,7 @@ public class MemberDTO implements UserDetails {
                 ", dept_code='" + dept_code + '\'' +
                 ", authorit=" + authorit +
                 ", department=" + department +
-//                ", au_authorization=" + au_authorization +
+                ", au_authorization=" + au_authorization +
                 '}';
     }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    //    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(getAuthorities());
-//        return authorities;
-//        }
-
-
-    @Override
-    public String getPassword() {
-        return mem_pw;
-    }
-
-    @Override
-    public String getUsername() {
-        return mem_id;
-    }
-
-    // 계정 만료 여부 -> true. 만료되지 않음.
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    // 계정 잠김 여부 -> true. 잠기지 않음.
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    // 비밀번호 만료 여부 -> true. 만료되지 않음.
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    // 계정 활성화 여부
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }

@@ -25,6 +25,4 @@ public interface MemberMapper {
     /* 일정권한 관리 셀렉트박스용 부서 조회용 */
     List<DepartmentDTO> selectDeptList();
 
-    /* 로그인 id로 memNum값 불러오기 */
-    int selectMemNumById(String mem_id);
 }

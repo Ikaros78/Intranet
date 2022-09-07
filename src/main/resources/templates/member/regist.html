@@ -31,7 +31,7 @@
             <input
                     id="memPw"
                     name="mem_pw"
-                    type="text"
+                    type="password"
                     placeholder="비밀번호"
                     required
             />
@@ -87,6 +87,7 @@
                     required
             />
             <label for="memJoinDate">입사일자</label>
+        </div>
             <div class="input-box">
                 <input
                         id="memDepartNum"
@@ -126,7 +127,7 @@
                         placeholder="임시직급"
                         required
                 />
-                <label for="memPw">임시직급</label>
+                <label for="memPw">직급</label>
             </div>
             <div class="input-box">
                 <input
@@ -136,7 +137,7 @@
                         placeholder="우편번호"
                         required
                 />
-                <label for="">우편번호</label>
+                <label for="sample6_postcode">우편번호</label>
                 <button
                         class="postcode"
                         onclick="sample6_execDaumPostcode()"
@@ -167,9 +168,10 @@
             <button class="join" id="regist">회원가입</button>
     </form>
 
-    <button type="submit" class="logIn" id="logIn">뒤로가기</button>
+    <button th:onclick="|location.href='@{/member/login}'|"
+             class="logIn" id="logIn">뒤로가기</button>
 
 </div>
 </th:block>
-<script th:src="@{/js/member.js}"></script>
+<script type="text/javascript" th:src="@{/js/member.js}"></script>
 </html>

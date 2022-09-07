@@ -163,18 +163,31 @@
                     console.table(data);
                     let eventList = [];
                     let even = {};
+
                     for(let idx in data){
                         even = {
+
                             "title": data[idx].title,
                             "start": data[idx].start,
                             "end": data[idx].end,  // 종료날짜 20일로지정하면 19일로 출력 됨
+                            "color": data[idx].color,
+
                         };
+
                         eventList.push(even);
+
                     }
                     let calendarEl = $("#calendar")[0];
                     let calendar = new FullCalendar.Calendar(calendarEl, {
 
                         locale: "ko",
+                        buttonText: {
+                            today: '오늘',
+                            month: '월',
+                            week: '주',
+                            day: '일',
+                            list: '일정목록',
+                        },
                         headerToolbar: {
                             left: 'prev,next,custom1,today',
                             center: 'title',
@@ -187,6 +200,9 @@
                             center: '',
                             right: ''
                         },
+
+                        defaultAllDay: true, // allDay 기본 값 true 지정
+                        forceEventDuration: false, // 지정된 종료값 생략
                         navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
                         editable: true, // 수정 가능?
                         selectable: true, // 달력 일자 드래그 설정가능
@@ -207,12 +223,12 @@
                             });
                         },
 
-
                         customButtons: {
                             custom1: {
                                 text: '일정추가',
                                 click: function () {
-                                    location.href="";
+                                    location.href="/calendar/insert";
+                                    // location.href="cd_insert.html"; // <-- 이게 되네;
                                     // jsp로 연결해야함 => cd_insert
                                 }
                             },
@@ -223,32 +239,35 @@
                                 }
                             }
                         },
+                        eventClick: function() {
+                            location.href="/calendar/detail";
+                        },
 
                         events: eventList
 
                     });
 
-                    FullCalendar.globalLocales.push(function () {
-                        'use strict';
-
-                        var ko = {
-                            code: 'ko',
-                            buttonText: {
-                                today: '오늘',
-                                month: '월',
-                                week: '주',
-                                day: '일',
-                                list: '일정목록',
-                            },
-                            weekText: '주',
-                            allDayText: '종일',
-                            moreLinkText: '개',
-                            noEventsText: '일정이 없습니다',
-                        };
-
-                        return ko;
-
-                    }());
+                    // FullCalendar.globalLocales.push(function () {
+                    //     'use strict';
+                    //
+                    //     var ko = {
+                    //         code: 'ko',
+                    //         buttonText: {
+                    //             today: '오늘',
+                    //             month: '월',
+                    //             week: '주',
+                    //             day: '일',
+                    //             list: '일정목록',
+                    //         },
+                    //         weekText: '주',
+                    //         allDayText: '종일',
+                    //         moreLinkText: '개',
+                    //         noEventsText: '일정이 없습니다',
+                    //     };
+                    //
+                    //     return ko;
+                    //
+                    // }());
 
 
 
@@ -275,21 +294,7 @@
 
 <body>
 <div id="wrap">
-    <div id="header">
-        <h1 class="logo"><a href="../main/main.html"><img src="/images/logo.png" alt="로고 이미지"></a></h1>
-        <ul class="lnb">
-            <li><a href="../common/mypage.html">마이페이지</a></li>
-            <li><a href="../login.html">로그아웃</a></li>
-        </ul>
-        <ul class="gnb">
-            <li><a href="../board/notice/noticeList.html">공지사항</a></li>
-            <li><a href="../board/free/freeList.html">게시판</a></li>
-            <li><a th:href="@{/calendar/cd_main.html}">일정관리</a></li>
-            <li><a href="../sign/testsignmain.html">전자결재</a></li>
-            <li><a href="/ms/recp">쪽지함</a></li>
-            <li><a href="../manage/emplManage/emplList.html">직원관리</a></li>
-        </ul>
-    </div>
+    <div th:include="common/header.html"></div>
     <div id="contents">
         <div id="sideBar">
             <h3>일정관리</h3>

@@ -27,3 +27,4 @@ mybatis:
   type-aliases-package: com.ohgiraffers.intranet
   configuration:
     map-underscore-to-camel-case: true
+    jdbc-type-for-null: NULL

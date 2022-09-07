@@ -44,4 +44,5 @@ public class MainController {
         System.out.println("user : " + user);
         return "main/main";
     }
+
 }

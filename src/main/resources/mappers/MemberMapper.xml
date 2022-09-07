@@ -24,6 +24,7 @@
     <resultMap id="authoritResultMap" type="com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO">
         <result property="memNum" column="MEM_NUM"/>
         <result property="auCode" column="AU_CODE"/>
+        <collection property="au_authorization" resultMap="au_authorizationResultMap"/>
     </resultMap>
 
     <resultMap id="departmentResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
@@ -31,25 +32,38 @@
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
-    <select id="memberLogin" resultMap="MemberResultMap">
-                SELECT
-                       A.MEM_NUM
-                     , A.MEM_ID
-                     , A.MEM_PW
-                     , A.MEM_NAME
-                     , A.MEM_PHONE
-                     , A.MEM_JOINDATE
-                     , A.MEM_BIRTH
-                     , A.MEM_EMAIL
-                     , A.MEM_ADDRESS
-                     , A.DEPT_RANK
-                     , A.DEPT_CODE
-                     , B.DEPT_NAME
-                  FROM MEMBER A
-                    JOIN DEPARTMENT B
-                        ON (A.DEPT_CODE = B.DEPT_CODE)
-                 WHERE A.MEM_ID = #{ mem_id }
-    </select>
+    <resultMap id="au_authorizationResultMap" type="com.ohgiraffers.intranet.member.model.dto.Au_AuthorizationDTO">
+        <id property="au_code" column="AU_CODE"/>
+        <result property="au_name" column="AU_NAME"/>
+        <result property="au_contents" column="AU_CONTENTS"/>
+    </resultMap>
+
+<!--    <select id="memberLogin" resultMap="MemberResultMap">-->
+<!--        SELECT-->
+<!--               A.MEM_NUM-->
+<!--             , A.MEM_ID-->
+<!--             , A.MEM_PW-->
+<!--             , A.MEM_NAME-->
+<!--             , A.MEM_PHONE-->
+<!--             , A.MEM_JOINDATE-->
+<!--             , A.MEM_BIRTH-->
+<!--             , A.MEM_EMAIL-->
+<!--             , A.MEM_ADDRESS-->
+<!--             , A.DEPT_RANK-->
+<!--             , A.DEPT_CODE-->
+<!--             , B.DEPT_NAME-->
+<!--             , B.DEPT_CODE-->
+<!--             , C.AU_CODE-->
+<!--             , C.MEM_NUM-->
+<!--             , D.AU_CODE-->
+<!--             , D.AU_NAME-->
+<!--             , D.AU_CONTENTS-->
+<!--          FROM MEMBER A-->
+<!--          LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)-->
+<!--          LEFT JOIN AUTHORIT C on (A.MEM_NUM = C.MEM_NUM)-->
+<!--          LEFT JOIN AU_AUTHORIZATION D ON (C.AU_CODE = D.AU_CODE)-->
+<!--         WHERE A.MEM_ID = #{ mem_id }-->
+<!--    </select>-->
 
     <insert id="memberRegistInsert" parameterType="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
                 INSERT /* member.dao.MemberMapper#memberRegistInsert*/
@@ -84,23 +98,27 @@
     </insert>
 
     <select id="findByMemberId" resultMap="MemberResultMap">
-            SELECT
-                   A.MEM_NUM
-                 , A.MEM_ID
-                 , A.MEM_PW
-                 , A.MEM_NAME
-                 , A.MEM_PHONE
-                 , A.MEM_JOINDATE
-                 , A.MEM_BIRTH
-                 , A.MEM_EMAIL
-                 , A.MEM_ADDRESS
-                 , A.DEPT_RANK
-                 , A.DEPT_CODE
-                 , B.DEPT_NAME
-              FROM MEMBER A
-              JOIN DEPARTMENT B
-                ON (A.DEPT_CODE = B.DEPT_CODE)
-             WHERE A.MEM_ID = #{ mem_id }
+        SELECT
+               A.MEM_NUM
+             , A.MEM_ID
+             , A.MEM_PW
+             , A.MEM_NAME
+             , A.MEM_PHONE
+             , A.MEM_JOINDATE
+             , A.MEM_BIRTH
+             , A.MEM_EMAIL
+             , A.MEM_ADDRESS
+             , A.DEPT_RANK
+             , A.DEPT_CODE
+             , B.DEPT_NAME
+             , C.AU_CODE
+             , D.AU_NAME
+             , D.AU_CONTENTS
+        FROM MEMBER A
+        LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)
+        LEFT JOIN AUTHORIT C on (A.MEM_NUM = C.MEM_NUM)
+        LEFT JOIN AU_AUTHORIZATION D ON (C.AU_CODE = D.AU_CODE)
+        WHERE A.MEM_ID = #{ mem_id }
     </select>
 
     <select id="selectCheckMember" resultType="String">

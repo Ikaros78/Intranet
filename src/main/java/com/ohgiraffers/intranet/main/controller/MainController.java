@@ -37,12 +37,4 @@ public class MainController {
         return mv;
     }
 
-    /* userImpl을 통해 로그인 시 세션에 들고온 해당 계정의 정보를 들고 오는 방법입니다. */
-    @GetMapping(value = {"/", "/main"})
-    public String main(@AuthenticationPrincipal User user){
-
-        System.out.println("user : " + user);
-        return "main/main";
-    }
-
 }

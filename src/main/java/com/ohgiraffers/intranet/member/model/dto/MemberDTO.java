@@ -26,12 +26,12 @@ public class MemberDTO {
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
     private DepartmentDTO department;
-    private List<Au_AuthorizationDTO> au_authorization;
+    private Au_AuthorizationDTO au_authorization;
 
     public MemberDTO() {
     }
 
-    public MemberDTO(int mem_num, String mem_id, String mem_pw, String mem_name, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code, List<AuthoritDTO> authorit, DepartmentDTO department, List<Au_AuthorizationDTO> au_authorization) {
+    public MemberDTO(int mem_num, String mem_id, String mem_pw, String mem_name, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code, List<AuthoritDTO> authorit, DepartmentDTO department, Au_AuthorizationDTO au_authorization) {
         this.mem_num = mem_num;
         this.mem_id = mem_id;
         this.mem_pw = mem_pw;
@@ -152,11 +152,11 @@ public class MemberDTO {
         this.department = department;
     }
 
-    public List<Au_AuthorizationDTO> getAu_authorization() {
+    public Au_AuthorizationDTO getAu_authorization() {
         return au_authorization;
     }
 
-    public void setAu_authorization(List<Au_AuthorizationDTO> au_authorization) {
+    public void setAu_authorization(Au_AuthorizationDTO au_authorization) {
         this.au_authorization = au_authorization;
     }
 

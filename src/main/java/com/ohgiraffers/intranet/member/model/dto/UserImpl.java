@@ -26,7 +26,7 @@ public class UserImpl extends User {
     // 권한 관리를 위해 추가
     private List<AuthoritDTO> authorit;
     private DepartmentDTO department;
-    private List<Au_AuthorizationDTO> au_authorization;
+    private Au_AuthorizationDTO au_authorization;
 
     /* 유저 id, pw, 권한을 담는 UserImpl (id, pw, 권한만 담겨집니다) */
     public UserImpl(String mem_id, String mem_pw, Collection<? extends GrantedAuthority> authorities){
@@ -105,7 +105,7 @@ public class UserImpl extends User {
         return department;
     }
 
-    public List<Au_AuthorizationDTO> getAu_authorization() {
+    public Au_AuthorizationDTO getAu_authorization() {
         return au_authorization;
     }
 

@@ -49,8 +49,8 @@ public class AuthenticationService implements UserDetailsService {
 
             for(int i = 0; i < authorList.size(); i++) {
 
-                List<Au_AuthorizationDTO> au_authorization = authorList.get(i).getAu_authorization();
-                authorities.add(new SimpleGrantedAuthority(au_authorization.toString()));
+                Au_AuthorizationDTO au_authorization = authorList.get(i).getAu_authorization();
+                authorities.add(new SimpleGrantedAuthority(au_authorization.getAu_code()));
             }
         }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +18,12 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .fc-toolbar-chunk #fc-dom-1 {
             /* 년, 월 크기 */
@@ -163,7 +170,6 @@
                     console.table(data);
                     let eventList = [];
                     let even = {};
-
                     for(let idx in data){
                         even = {
 
@@ -177,9 +183,7 @@
 
 
                         };
-
                         eventList.push(even);
-
                     }
                     let calendarEl = $("#calendar")[0];
                     let calendar = new FullCalendar.Calendar(calendarEl, {
@@ -227,6 +231,7 @@
                             });
                         },
 
+
                         customButtons: {
                             custom1: {
                                 text: '일정추가',
@@ -235,17 +240,18 @@
                                     // location.href="cd_insert.html"; // <-- 이게 되네;
                                     // jsp로 연결해야함 => cd_insert
                                 }
-                            },
-                            custom2: {
-                                text: '권한요청',
-                                click: function () {
-                                    alert('권한요청 처리를 신청했습니다.');
-                                }
                             }
+                            // custom2: {
+                            //     text: '권한요청',
+                            //     click: function () {
+                            //         alert('권한요청 처리를 신청했습니다.');
+                            //         location.href="/calendar/button";
+                            //
+                            //     }
+                            // }
                         },
-
                         eventClick: function() {
-
+                            location.href="/calendar/detail";
                             // location.href="/calendar/detail?id=";
                             // $(location.href="/calendar/detail?id=").append(id)
 
@@ -255,7 +261,12 @@
 
                     });
 
+
+
+
                     calendar.render();
+
+
                 },
                 error: function(error) {
 
@@ -288,6 +299,22 @@
                         <li><a href="#">개인 일정</a></li>
                     </ul>
                 </li>
+<!--                <sec:authorize access="hasAnyRole('ROLE_CD_ALL','ROLE_CD_DEPT')">-->
+<!--                    <li class="main"><a>일정 권한 관리</a>-->
+<!--                        <ul class="sub sub2">-->
+<!--                            <li><a href="#">권한 요청</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                </sec:authorize>-->
+
+                <th:block sec:authorize="hasRole('CD_DEPT')">
+                    <li class="main"><a href="javascript:void(0);">일정 권한 관리</a>
+                        <ul class="sub sub2">
+                            <li><a href="javascript:void(0);">권한 요청</a></li>
+                        </ul>
+                    </li>
+                </th:block>
+
             </ul>
         </div>
 

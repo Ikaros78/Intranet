@@ -167,10 +167,14 @@
                     for(let idx in data){
                         even = {
 
+                            "id": data[idx].id,
                             "title": data[idx].title,
                             "start": data[idx].start,
                             "end": data[idx].end,  // 종료날짜 20일로지정하면 19일로 출력 됨
                             "color": data[idx].color,
+                            "url": "/calendar/detail?id=" + data[idx].id,
+                            // "url": "detail?id=".data[idx].id,  // 에러
+
 
                         };
 
@@ -239,41 +243,19 @@
                                 }
                             }
                         },
+
                         eventClick: function() {
-                            location.href="/calendar/detail";
+
+                            // location.href="/calendar/detail?id=";
+                            // $(location.href="/calendar/detail?id=").append(id)
+
                         },
 
                         events: eventList
 
                     });
 
-                    // FullCalendar.globalLocales.push(function () {
-                    //     'use strict';
-                    //
-                    //     var ko = {
-                    //         code: 'ko',
-                    //         buttonText: {
-                    //             today: '오늘',
-                    //             month: '월',
-                    //             week: '주',
-                    //             day: '일',
-                    //             list: '일정목록',
-                    //         },
-                    //         weekText: '주',
-                    //         allDayText: '종일',
-                    //         moreLinkText: '개',
-                    //         noEventsText: '일정이 없습니다',
-                    //     };
-                    //
-                    //     return ko;
-                    //
-                    // }());
-
-
-
                     calendar.render();
-
-
                 },
                 error: function(error) {
 

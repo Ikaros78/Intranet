@@ -102,18 +102,6 @@
     </insert>
 
     <!-- 캘린더 상세조회 -->
-    <update id="findCdCont" parameterType="long">
-        UPDATE
-               CD_CALENDAR A
-           SET A.CD_NO = (SELECT B.CD_NO
-                            FROM CD_CALENDAR B
-                           WHERE
-                              )
-
-
-    </update>
-
-    <!-- 캘린더 상세조회 -->
     <select id="selectCdDetail" resultMap="cdResultMap">
         SELECT
                A.MEM_NUM

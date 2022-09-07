@@ -44,7 +44,8 @@ public class AuthenticationService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if(member.getAuthorit() != null){
+        // 세션 내 사용자의 권한 정보를 리턴하는 코드
+        if(member.getAuthorit().get(0).getAuCode() != null){
             List<AuthoritDTO> authorList = member.getAuthorit();
 
             for(int i = 0; i < authorList.size(); i++) {
@@ -54,6 +55,7 @@ public class AuthenticationService implements UserDetailsService {
             }
         }
 
+        // 세션에 담긴 사용자의 정보를 꺼내 쓸 수 있도록 하는 코드
         UserImpl user = new UserImpl(member.getMem_id(),member.getMem_pw(), authorities);
         user.setDetails(member);
 

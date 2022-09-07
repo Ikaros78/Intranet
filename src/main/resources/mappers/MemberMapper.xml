@@ -158,11 +158,4 @@
            FROM DEPARTMENT A
     </select>
 
-    <select id="selectMemNumById" resultType="_int">
-        SELECT
-                A.MEM_NUM
-        FROM MEMBER A
-       WHERE A.MEM_ID = #{mem_id}
-    </select>
-
 </mapper>

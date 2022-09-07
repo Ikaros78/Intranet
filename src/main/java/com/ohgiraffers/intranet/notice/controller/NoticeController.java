@@ -124,9 +124,7 @@ public class NoticeController {
         if(searchCondition != null && !"".equals(searchCondition)){
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);{
-
-            }
+                    searchCondition, searchValue);
         } else {
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
@@ -346,9 +344,7 @@ public class NoticeController {
         if(searchCondition != null && !"".equals(searchCondition)){
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);{
-
-            }
+                    searchCondition, searchValue);
         } else {
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
@@ -534,8 +530,8 @@ public class NoticeController {
 
                     String filedName = paramFile.getName();
 
-                    int width = 150;
-                    int height = 150;
+                    int width = 400;
+                    int height = 400;
 
                     Thumbnails.of(fileUploadDirectory + "/" + savedFileName).size(width, height)
                             .toFile(thumbnailDirectory + "/thumb_" + savedFileName);
@@ -596,10 +592,58 @@ public class NoticeController {
         return "redirect:/notice/gallery/list";
         }
 
-//        public ModelAndView galleryPage(ModelAndView mv){
-//
-//        List<GalleryDTO> galleryList = noticeService.selectAllGalleryList();
-//        }
+        /* 갤러리 리스트 조회 */
+        @GetMapping("/gallery/list")
+        public ModelAndView gallryList(HttpServletRequest request, ModelAndView mv){
+
+            String currentPage = request.getParameter("currentPage");
+            int pageNo = 1;
+
+            if(currentPage != null && !"".equals(currentPage)){
+                pageNo = Integer.parseInt(currentPage);
+            }
+
+            if(pageNo <= 0){
+                pageNo = 1;
+            }
+
+            String searchCondition = null;
+            String searchValue = request.getParameter("searchValue");
+
+            if(searchValue != null){
+                searchCondition = "title";
+            }
+
+            Map<String, String> searchMap = new HashMap<>();
+            searchMap.put("searchCondition", searchCondition);
+            searchMap.put("searchValue", searchValue);
+
+            int totalCount = noticeService.selectGalleryTotalCount(searchMap);
+
+            int limit = 10;
+            int buttonAmount = 5;
+
+            SelectCriteria selectCriteria = null;
+
+            if(searchCondition != null && !"".equals(searchCondition)){
+
+                selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
+                        searchCondition, searchValue);
+            } else {
+
+                selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+            }
+            log.info("selectCriteria 확인 : " + selectCriteria);
+
+            List<GalleryDTO> galleryList = noticeService.selectGalleryList(selectCriteria);
+
+            mv.addObject("galleryList", galleryList);
+            mv.addObject("selectCriteria", selectCriteria);
+
+            mv.setViewName("notice/gallery/galleryList");
+
+            return mv;
+        }
 
     }
 

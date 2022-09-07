@@ -118,7 +118,7 @@ public class NoticeService {
         return result;
     }
 
-    /* 사내소식 검색 게시글 수 조회용 메소드 */
+    /* 사내소식 검색 게시글 조회용 메소드 */
     public List<NewsDTO> selectNewsList(SelectCriteria selectCriteria) {
 
         List<NewsDTO> newsList = noticeMapper.selectNewsList(selectCriteria);
@@ -204,10 +204,21 @@ public class NoticeService {
         for(int i = 0; i < galleryFile.size(); i++){
             galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
         }
+    }
 
-//        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
-//            throw new galleryRegistException("")
-//        }
+    /* 갤러리 전체 게시글 수 조회 */
+    public int selectGalleryTotalCount(Map<String, String> searchMap) {
 
+        int result = noticeMapper.selectGalleryTotalCount(searchMap);
+
+        return result;
+    }
+
+    /* 갤러리 검색 게시글 조회용 메소드 */
+    public List<GalleryDTO> selectGalleryList(SelectCriteria selectCriteria) {
+
+        List<GalleryDTO> galleryList = noticeMapper.selectGalleryList(selectCriteria);
+
+        return galleryList;
     }
 }

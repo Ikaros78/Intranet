@@ -17,6 +17,17 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  web:
+      resources:
+                static-locations: classpath:/upload/
+      image:
+        image-dir: src/main/resources
+      devtools:
+        livereload:
+          enabled: true
+        remote:
+          restart:
+            enabled: true
 
   image:
     image-dir: src/main/resources

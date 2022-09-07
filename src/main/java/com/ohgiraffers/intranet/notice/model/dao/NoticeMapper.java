@@ -54,4 +54,10 @@ public interface NoticeMapper {
     int galleryRegist(GalleryDTO gallery);
 
     int galleryFileRegist(GalleryFileDTO galleryFileDTO);
+
+    List<GalleryDTO> selectAllGalleryList();
+
+    int selectGalleryTotalCount(Map<String, String> searchMap);
+
+    List<GalleryDTO> selectGalleryList(SelectCriteria selectCriteria);
 }

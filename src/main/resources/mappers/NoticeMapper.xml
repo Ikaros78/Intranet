@@ -279,7 +279,7 @@
         INSERT
         INTO NW_NEWS
         (
-            NW_NO
+          NW_NO
         , NW_TITLE
         , NW_DATE
         , NW_VIEWS
@@ -522,7 +522,7 @@
     <!-- 갤러리 첨부이미지 insert -->
     <insert id="galleryFileRegist">
         INSERT
-        INTO GF_GALLARY_FILE
+        INTO GF_GALLERY_FILE
         (
           GF_NO
         , GF_ORIGIN_NAME
@@ -543,6 +543,60 @@
         , #{ galNo }
         )
     </insert>
+
+    <!-- 갤러리 전체 게시글 수 조회 -->
+    <select id="selectGalleryTotalCount" resultType="_int">
+        SELECT
+               COUNT(*)
+          FROM GALLERY
+        <where>
+            <if test="searchCondition != null">
+                GAL_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 갤러리 리스트 조회 -->
+    <select id="selectGalleryList" resultMap="galleryResultMap">
+        SELECT A.RNUM
+        , A.GAL_NO
+        , A.GAL_TITLE
+        , D.GF_THUMBNAIL_PATH
+        FROM (SELECT ROWNUM RNUM
+        , B.GAL_NO
+        , B.GAL_TITLE
+        FROM (SELECT
+          C.GAL_NO
+        , C.GAL_TITLE
+        FROM GALLERY C
+        <where>
+            <if test="searchCondition != null">
+                C.GAL_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.GAL_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)
+        WHERE A.GAL_NO = 33
+        AND ROWNUM = 1
+        AND A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+<!--    SELECT-->
+<!--    A.GAL_NO-->
+<!--    , A.GAL_TITLE-->
+<!--    , D.GF_THUMBNAIL_PATH-->
+<!--    FROM GALLERY A-->
+<!--    LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)-->
+<!--    WHERE A.GAL_NO = 31-->
+<!--    AND ROWNUM = 1-->
+<!--    ORDER BY 1 ASC-->
+
 
 
 

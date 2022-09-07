@@ -17,6 +17,17 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
       enabled: true
+  web:
+      resources:
+                static-locations: classpath:/upload/
+      image:
+        image-dir: src/main/resources
+      devtools:
+        livereload:
+          enabled: true
+        remote:
+          restart:
+            enabled: true
 
   image:
     image-dir: src/main/resources
@@ -24,6 +35,7 @@ spring:
 # mybatis config
 mybatis:
   mapper-locations: mappers/**/*.xml
-  type-aliases-package: com.ohgiraffers.intranet
+  type-aliases-package: com.ohgiraffers.intranet,
+                        com.ohgiraffers.intranet.notice.model.dto
   configuration:
     map-underscore-to-camel-case: true

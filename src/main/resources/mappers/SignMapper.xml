@@ -259,4 +259,13 @@
             WHERE A.RNUM >= #{ selectCriteria.startRow }
     </select>
 
+    <select id="selectFormByCode" resultMap="signFormResultMap">
+        SELECT
+            A.SF_CODE
+          , A.SF_NAME
+          FROM SF_SIGN_FORM A
+         WHERE A.SF_CODE = #{ formCode }
+    </select>
+
+
 </mapper>

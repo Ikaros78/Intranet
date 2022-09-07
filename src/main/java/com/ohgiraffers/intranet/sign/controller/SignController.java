@@ -4,6 +4,7 @@ import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.UserImpl;
+import com.ohgiraffers.intranet.member.service.MemberService;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
@@ -29,11 +30,14 @@ public class SignController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final SignService signService;
+    private final MemberService memberService;
+
 
     @Autowired
-    public SignController(SignService signService){
+    public SignController(SignService signService, MemberService memberService){
 
         this.signService = signService;
+        this.memberService = memberService;
     }
 
     @GetMapping(value = {"/main", "/waitingList"})
@@ -167,14 +171,14 @@ public class SignController {
     @GetMapping("/registSelect")
     public ModelAndView signRegistSelect(ModelAndView mv, @AuthenticationPrincipal User user, HttpServletRequest request){
 
-        int mem_num = ((UserImpl)user).getMem_num();
-
         String currentPage = request.getParameter("currentPage");
         int pageNo = 1;
 
         if(currentPage != null && !"".equals(currentPage)) {
             pageNo = Integer.parseInt(currentPage);
         }
+
+        int mem_num = ((UserImpl)user).getMem_num();
 
         String searchName = request.getParameter("searchName");
 
@@ -213,7 +217,24 @@ public class SignController {
     }
 
     @GetMapping("/registForm")
-    public ModelAndView signRegistForm(ModelAndView mv){
+    public ModelAndView signRegistForm(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        int mem_num = userInfo.getMem_num();
+
+        String formCode = request.getParameter("code");
+
+        SignFormDTO selectForm = signService.selectFormByCode(formCode);
+
+        String deptName = memberService.selectDeptByNum(mem_num);
+
+        Map<String , Object> formMap = new HashMap<>();
+        formMap.put("userInfo", userInfo);
+        formMap.put("selectForm", selectForm);
+        formMap.put("deptName", deptName);
+
+        mv.addObject("formMap", formMap);
 
         mv.setViewName("sign/signRegistForm");
 

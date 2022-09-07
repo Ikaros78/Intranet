@@ -79,5 +79,11 @@ public class SignService {
         return formList;
     }
 
+    /* formCode로 하나의 form 조회용 메소드 */
+    public SignFormDTO selectFormByCode(String formCode) {
 
+        SignFormDTO selectForm = signMapper.selectFormByCode(formCode);
+
+        return selectForm;
+    }
 }

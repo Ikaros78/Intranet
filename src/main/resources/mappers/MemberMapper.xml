@@ -158,4 +158,12 @@
            FROM DEPARTMENT A
     </select>
 
+    <select id="selectDeptByNum" resultType="java.lang.String">
+        SELECT
+                A.DEPT_NAME
+          FROM DEPARTMENT A
+          JOIN MEMBER B ON(B.DEPT_CODE = A.DEPT_CODE)
+         WHERE B.MEM_NUM = #{ mem_num }
+    </select>
+
 </mapper>

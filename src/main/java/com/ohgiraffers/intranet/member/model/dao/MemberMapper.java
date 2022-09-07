@@ -25,4 +25,5 @@ public interface MemberMapper {
     /* 일정권한 관리 셀렉트박스용 부서 조회용 */
     List<DepartmentDTO> selectDeptList();
 
+    String selectDeptByNum(int mem_num);
 }

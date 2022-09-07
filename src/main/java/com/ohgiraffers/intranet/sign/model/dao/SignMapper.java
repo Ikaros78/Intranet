@@ -23,4 +23,6 @@ public interface SignMapper {
     int selectTotalFormCount(Map<String, Object> searchMap);
 
     List<SignFormDTO> selectAllForm(Map<String, Object> searchList);
+
+    SignFormDTO selectFormByCode(String formCode);
 }

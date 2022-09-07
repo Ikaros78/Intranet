@@ -1,69 +1,135 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>basic</title>
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/basic.css">
-    <link rel="stylesheet" href="/css/board.css">    
+<meta charset="UTF-8">
+<title>basic</title>
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/basic.css">
+<link rel="stylesheet" href="/css/board.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="wrap">
-    <div th:replace="common/header.html"></div>
+	<select class="selectDept" name="" id="selectDept" onchange="">
+		<option value="" data-value="">== 부서명 ==</option>
+	</select>
+	<select class="selectName" name="" id="selectName" onchange="">
+		<option value="">== 이름 ==</option>
+	</select>
+	
+	<script>
+	
+		$.ajax({
+			url : "getdeptList",
+			contentType : "application/json;charset=UTF-8",
+			dataType : "json",
+//				async:false, //비동기 동기 설정
+			success : function(data) {
+				
+				for (let index in data) {
+					/* 초기화를 어떻게 하나요? */
+					var deptCode = data[index].dept_code; 
+					var deptName = data[index].dept_name;
+					
+// 					중복되는 부서코드를 제거해야하고
+    
+					$("#selectDept").append("<option id="+"name("+index+")"+" value="+data[index].dept_name+
+					  " data-value="+data[index].dept_name+">"+data[index].dept_name+"</option>"); 
+				}
+			},
+			error : function(error) {
+
+				console.log('error');
+			}
+		});
+	
+		$("#selectDept").on("change",function(e){
+		   console.log(e.target.value);
+		   e.preventDefault();
+		   // e.target.value ==> 선택한 값(기술지원부)
+		   	$.ajax({
+				   	url : "getMemberList",
+					contentType : "application/json;charset=UTF-8",
+					dataType : "json",
+					data : "e.target.value",
+// 					async:false, //비동기 동기 설정
+					success : function(data) {
+		
+						for (let index in data) {
+							/* 초기화를 어떻게 하나요? */
+							var no = data[index].memNum; 
+							var name = data[index].name;
+							var deptCode = data[index].deptCode; 
+							var deptName = data[index].deptName;
+				
+		   
+		   $("#selectName").append("<option id="+"name("+e.target.selectedIndex+")"+" value="+e.target.value+
+					  " data-value="+e.target.value+">"+e.target.value+"</option>"); 
+  
+				}
+			},
+		});
+	});
+	
+	</script>
+
+	<div id="wrap">
 
 
+		<div th:replace="common/header.html"></div>
+		
+		
+		<div id="visual">
+<!-- 			<form id="frm" name="" method="post" enctype="multipart/form-data"> -->
+			<form th:action="@{/ms/msinsert}" method="post" enctype="multipart/form-data">
+				<div class="table-area"
+					style="position: absolute; top: 250px; left: 350px; width: 1350px;">
+					<table align="center" id="MSINSERT">
 
-     <div id="visual" >
-       <form th:action="@{/ms/msinsert}" method="post" enctype="multipart/form-data">
-            <div class="table-area" style="position: absolute; top: 250px;left: 350px;width: 1350px;" >     
-                <table align="center" id="">
-                
-                
-                 <input type="text" id="mem_num" name="memNum"
-                        th:value="${ #authentication.getPrincipal().getMem_num()}">
-                 <input type="text" id="sendName" name="sendName"
-                        th:value="${ #authentication.getPrincipal().getMem_name()}">
-                 
-                    <tr>
-                        <th width="auto">제목</th>
-                        <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="msTitle" size="20" style="width:100%; border: 1px;">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th width="auto">받는사람</th>
-                        <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="recpName" size="20" style="width:100%; border: 1px;">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2" style="border: 1px solid black">
-                            <textarea name="contents" rows="10" style="width:100%; border: 0; resize: none;"></textarea>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-							<input type="file" name="msfile" multiple><br>
-                        </th>
-                    </tr>
-                    <button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px" >등록</button>
-                    <button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px" >뒤로가기</button>
-                </table>
-         	   </div>
+
+						<input type="hidden" id="mem_num" name="memNum" th:value="${ #authentication.getPrincipal().getMem_num()}">
+						<input type="hidden" id="sendName" name="sendName" th:value="${ #authentication.getPrincipal().getMem_name()}">
+
+						<tr>
+							<th width="auto">제목</th>
+							<th width="400px" style="border: 1px solid black">
+							<input type="text" name="msTitle" size="20"	style="width: 100%; border: 1px;"></th>
+						</tr>
+							
+						<tr>
+							<th width="auto">받는사람</th>
+
+
+							<th width="400px" style="border: 1px solid black">
+							<input type="text" name="recpName" size="20" style="width: 100%; border: 1px;"></th>
+						</tr>
+
+						<tr>
+							<th colspan="2" style="border: 1px solid black">
+							<textarea name="contents" rows="10"	style="width: 100%; border: 0; resize: none;"></textarea></th>
+						</tr>
+						<tr>
+							<th colspan="2"><input type="file" name="msfile" multiple><br>
+							</th>
+						</tr>
+						<button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px">등록</button>
+						<button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px">뒤로가기</button>
+					</table>
+				</div>
 			</form>
-        </div>
+		</div>
 
-        <div id="contents">
-            <div id="sideBar">
-                <h3>쪽지함</h3>
-                <ul>
-                    <li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
-                    <li class="main"><a href="/ms/recp">받은쪽지함</a></li>
-                    <li class="main"><a href="/ms/send">보낸쪽지함</a></li>
-                    <li class="main"><a href="/ms/all">쪽지보관함</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+		<div id="contents">
+			<div id="sideBar">
+				<h3>쪽지함</h3>
+				<ul>
+					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
+					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+					<li class="main"><a href="/ms/all">쪽지보관함</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

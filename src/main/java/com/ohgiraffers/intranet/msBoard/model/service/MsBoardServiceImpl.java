@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.msBoard.model.dao.MsBoardMapper;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
+import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
 @Service
 public class MsBoardServiceImpl implements MsBoardService {
@@ -92,5 +94,22 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return msDetail;
 
 	}
+	//ajax 용 비동기 1
+	@Override
+	public List<MsMemberListDTO> getMemberList(String dept_name) throws Exception{
+		
+		List<MsMemberListDTO> memberList = msBoardMapper.getMemberList(dept_name);
 
+		return memberList;
+		
+	}
+	//ajax 용 비동기 2
+	@Override
+	public List<DepartmentDTO> getdeptList() throws Exception{
+		
+		List<DepartmentDTO> deptList = msBoardMapper.getdeptList();
+		
+		return deptList;
+	}
+	
 }

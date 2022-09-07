@@ -2,40 +2,43 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ohgiraffers.intranet.msBoard.model.dao.MsBoardMapper">
-	
-	<resultMap id="MsboardResultMap" type="com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO">
+<mapper
+	namespace="com.ohgiraffers.intranet.msBoard.model.dao.MsBoardMapper">
+
+	<resultMap id="MsboardResultMap"
+		type="com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO">
 		<id property="msNo" column="MS_NO" />
 		<result property="msTitle" column="MS_TITLE" />
 		<result property="sendName" column="MS_SEND_NAME" />
 		<result property="recpName" column="MS_RECP_NAME" />
 		<result property="sendDate" column="MS_SEND_DATE" />
 		<result property="recpDate" column="MS_RECP_DATE" />
-		<result property="readYn" column="MS_READ_YN" />		
+		<result property="readYn" column="MS_READ_YN" />
 		<result property="memNum" column="MEM_NUM" />
 		<result property="sendDel" column="MS_SEND_DEL" />
 		<result property="recpDel" column="MS_RECP_DEL" />
 		<result property="recpNum" column="MS_RECP_NUM" />
 		<result property="contents" column="MS_CONTENTS" />
 
-<!-- 		<association property="NAME" resultMap="memberResultMap" /> -->
 	</resultMap>
 
-<!-- 	<resultMap type="MemberDTO" id="memberResultMap"> -->
-<!-- 		<id property="mem_num" column="MS_NO" /> -->
-<!-- 		<result property="mem_id" column="MS_TITLE" /> -->
-<!-- 		<result property="mem_pw" column="MS_SEND_NAME" /> -->
-<!-- 		<result property="mem_name" column="MS_RECP_NAME" /> -->
-<!-- 		<result property="mem_phone" column="MS_SEND_DATE" /> -->
-<!-- 		<result property="mem_joinDate" column="MS_RECP_DATE" /> -->
-<!-- 		<result property="mem_birth" column="MS_READ_YN" /> -->
-<!-- 		<result property="mem_email" column="MEM_EMAIL" /> -->
-<!-- 		<result property="mem_address" column="MEM_ADDRESS" /> -->
-<!-- 		<result property="dept_rank" column="DEPT_RANK" /> -->
-<!-- 		<result property="dept_code" column="DEPT_CODE" /> -->
-<!-- 	</resultMap> -->
+	<resultMap
+		type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO"
+		id="deptResultMap">
+		<id property="dept_code" column="DEPT_CODE" />
+		<result property="dept_name" column="DEPT_NAME" />
+	</resultMap>
 
-	<resultMap type="com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO" id="MsFileResultMap">
+	<resultMap type="MsMemberListDTO" id="memberResultMap">
+		<id property="memNum" column="MEM_NUM" />
+		<result property="name" column="MEM_NAME" />
+		<result property="deptCode" column="DEPT_CODE" />
+		<result property="deptName" column="DEPT_NAME" />
+	</resultMap>
+
+	<resultMap
+		type="com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO"
+		id="MsFileResultMap">
 		<id property="fileNo" column="MSF_NO" />
 		<result property="originName" column="MSF_ORIGINAL_NAME" />
 		<result property="saveName" column="MSF_SAVE_NAME" />
@@ -47,29 +50,12 @@
 	</resultMap>
 
 
-	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+	<select id="selectTotalCount" resultType="_int"
+		parameterType="hashmap">
 		SELECT
-			 COUNT(*)
+		COUNT(*)
 		FROM MS_BOARD A
-	   WHERE A.MS_READ_YN = 'N' 	
-		<where>
-			<if test="searchCondition == 'msTitle'">
-				A.MS_TITLE = #{ searchValue }
-			</if>
-			<if test="searchCondition == 'sendName'">
-				A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
-			</if>
-			<if test="searchCondition == 'recpName'">
-				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
-			</if>
-		</where>
-	</select>
-	
-	<select id="selectsendTotalCount" resultType="_int" parameterType="hashmap">
-		SELECT
-			 COUNT(*)
-		FROM MS_BOARD A
-	   WHERE 	
+		<!-- WHERE A.MS_READ_YN = 'N' -->
 		<where>
 			<if test="searchCondition == 'msTitle'">
 				A.MS_TITLE = #{ searchValue }
@@ -83,92 +69,136 @@
 		</where>
 	</select>
 
+	<!-- <select id="selectsendTotalCount" resultType="_int" parameterType="hashmap"> -->
+	<!-- SELECT -->
+	<!-- COUNT(*) -->
+	<!-- FROM MS_BOARD A -->
+	<!-- WHERE -->
+	<!-- <where> -->
+	<!-- <if test="searchCondition == 'msTitle'"> -->
+	<!-- A.MS_TITLE = #{ searchValue } -->
+	<!-- </if> -->
+	<!-- <if test="searchCondition == 'sendName'"> -->
+	<!-- A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%' -->
+	<!-- </if> -->
+	<!-- <if test="searchCondition == 'recpName'"> -->
+	<!-- A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%' -->
+	<!-- </if> -->
+	<!-- </where> -->
+	<!-- </select> -->
+
+	<!-- <select id="selectAllTotalCount" resultType="_int" parameterType="hashmap"> -->
+	<!-- SELECT -->
+	<!-- COUNT(*) -->
+	<!-- FROM MS_BOARD A -->
+	<!-- WHERE A.MS_READ_YN = 'N' -->
+	<!-- <where> -->
+	<!-- <if test="searchCondition == 'msTitle'"> -->
+	<!-- A.MS_TITLE = #{ searchValue } -->
+	<!-- </if> -->
+	<!-- <if test="searchCondition == 'sendName'"> -->
+	<!-- A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%' -->
+	<!-- </if> -->
+	<!-- <if test="searchCondition == 'recpName'"> -->
+	<!-- A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%' -->
+	<!-- </if> -->
+	<!-- </where> -->
+	<!-- </select> -->
+
 	<select id="selectMsRecpBoard" resultMap="MsboardResultMap">
 		SELECT
-		  A.RNUM
+		A.RNUM
 		, A.MS_NO
 		, A.MS_TITLE
 		, A.MS_SEND_NAME
 		, A.MS_RECP_NAME
-		, A.MS_SEND_DATE
+		,
+		A.MS_SEND_DATE
 		, A.MS_RECP_DATE
 		, A.MS_READ_YN
 		, A.MEM_NUM
 		, A.MS_SEND_DEL
-		, A.MS_RECP_DEL
+		,
+		A.MS_RECP_DEL
 		, A.MS_RECP_NUM
 		, A.MS_CONTENTS
-			 FROM(SELECT  ROWNUM RNUM
-						, B.MS_NO
-						, B.MS_TITLE
-						, B.MS_SEND_NAME
-						, B.MS_RECP_NAME
-						, B.MS_SEND_DATE
-						, B.MS_RECP_DATE
-						, B.MS_READ_YN
-						, B.MEM_NUM
-						, B.MS_SEND_DEL
-						, B.MS_RECP_DEL
-						, B.MS_RECP_NUM
-						, B.MS_CONTENTS
-							FROM(SELECT   C.MS_NO
-										, C.MS_TITLE
-										, C.MS_SEND_NAME
-										, C.MS_RECP_NAME
-										, C.MS_SEND_DATE
-										, C.MS_RECP_DATE
-										, C.MS_READ_YN
-										, C.MEM_NUM 
-										, C.MS_SEND_DEL
-										, C.MS_RECP_DEL
-										, C.MS_RECP_NUM
-										, C.MS_CONTENTS
-								   FROM MS_BOARD C
-								  WHERE C.MS_READ_YN = 'N' 
-								   <where>
-							            <if test="searchCondition == 'msTitle'">
-							                C.MS_TITLE = #{ searchValue }
-							            </if>
-							            <if test="searchCondition == 'sendName'">
-							                C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
-							            </if>
-							            <if test="searchCondition == 'recpName'">
-							                C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
-							            </if>
-								   </where>
-									ORDER BY C.MS_NO DESC )B
+		FROM(SELECT ROWNUM RNUM
+		,
+		B.MS_NO
+		, B.MS_TITLE
+		, B.MS_SEND_NAME
+		, B.MS_RECP_NAME
+		, B.MS_SEND_DATE
+		,
+		B.MS_RECP_DATE
+		, B.MS_READ_YN
+		, B.MEM_NUM
+		, B.MS_SEND_DEL
+		, B.MS_RECP_DEL
+		, B.MS_RECP_NUM
+		, B.MS_CONTENTS
+		FROM(SELECT C.MS_NO
+		, C.MS_TITLE
+		,
+		C.MS_SEND_NAME
+		, C.MS_RECP_NAME
+		, C.MS_SEND_DATE
+		, C.MS_RECP_DATE
+		,
+		C.MS_READ_YN
+		, C.MEM_NUM
+		, C.MS_SEND_DEL
+		, C.MS_RECP_DEL
+		, C.MS_RECP_NUM
+		,
+		C.MS_CONTENTS
+		FROM MS_BOARD C
+		<!-- WHERE C.MS_READ_YN = 'N' -->
+		<where>
+			<if test="searchCondition == 'msTitle'">
+				C.MS_TITLE = #{ searchValue }
+			</if>
+			<if test="searchCondition == 'sendName'">
+				C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+			<if test="searchCondition == 'recpName'">
+				C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+			</if>
+		</where>
+		ORDER BY C.MS_NO DESC )B
 			               <![CDATA[
 			                  WHERE ROWNUM <= #{ endRow }
 			                  ]]>
-					) A
-					WHERE A.RNUM >= #{ startRow }
-				</select>
+		) A
+		WHERE A.RNUM >= #{ startRow }
+	</select>
 
-	
+
 
 	<insert id="MsboardInsert">
 		INSERT
 		INTO MS_BOARD A
 		(
-		  A.MS_NO
+		A.MS_NO
 		, A.MS_TITLE
 		, A.MS_CONTENTS
 		, A.MS_SEND_NAME
 		, A.MS_RECP_NAME
-		, A.MS_SEND_DATE
-		, A.MS_MEM_NUM
-		, A.MS_RECP_NUM
+		,
+		A.MS_SEND_DATE
+		, A.MEM_NUM
+		<!-- , A.MS_RECP_NUM -->
 		)
 		VALUES
 		(
 		SEQ_MS_NO.NEXTVAL
 		, #{ msTitle }
 		, #{ contents }
-		, #{ sendName } 
+		, #{ sendName }
 		, #{ recpName }
 		, SYSDATE
 		, #{ memNum }
-		, #{ recpNum }
+		<!-- , #{ recpNum } -->
 		)
 	</insert>
 
@@ -180,14 +210,16 @@
 		A.MSF_NO
 		, A.MSF_ORIGINAL_NAME
 		, A.MSF_SAVE_NAME
-		, A.MSF_SAVE_PATH
+		,
+		A.MSF_SAVE_PATH
 		, A.MSF_NODATE
 		, A.MSF_NS_NO
 		)
 		VALUES
 		(
 		SEQ_MSF_NO.NEXTVAL
-		, #{ originName }
+		,
+		#{ originName }
 		, #{ saveName }
 		, #{ savaPath }
 		, #{ noDate }
@@ -209,29 +241,53 @@
 		WHERE MS_NO = #{ msNo }
 
 	</delete>
-	
+
 	<select id="selectMsBoardDetail" resultMap="MsboardResultMap">
 		SELECT
-			  A.MS_NO
-			, A.MS_TITLE
-			, A.MS_SEND_NAME
-			, A.MS_RECP_NAME
-			, A.MS_SEND_DATE
-			, A.MS_RECP_DATE
-			, A.MS_READ_YN
-			, A.MEM_NUM
-		 FROM MS_BOARD A
-		WHERE A.MS_NO = #{ msNo }
+		A.MS_NO
+		,
+		A.MS_TITLE
+		, A.MS_SEND_NAME
+		, A.MS_RECP_NAME
+		, A.MS_SEND_DATE
+		,
+		A.MS_RECP_DATE
+		, A.MS_READ_YN
+		, A.MEM_NUM
+		FROM MS_BOARD A
+		WHERE A.MS_NO =
+		#{ msNo }
 	</select>
-	
-	<update id="YNChangeMsBoard" >
-        UPDATE
-              MS_BOARD A
-          SET A.MS_READ_YN = 'Y'
-	        , A.MS_RECP_DATE = SYSDATE
-	    WHERE A.MS_NO = #{ msNo } 
-	      AND A.MS_READ_YN = 'N'
-    <!-- 메세지를 보낼때 상세보기를 클릭할경우 RECP- DATE가 상세보기 버튼을 클릭한 시간으로 DB에 들어간다. -->
-    </update>
+
+	<update id="YNChangeMsBoard">
+		UPDATE
+		MS_BOARD A
+		SET A.MS_READ_YN = 'Y'
+		, A.MS_RECP_DATE = SYSDATE
+		WHERE
+		A.MS_NO = #{ msNo }
+		AND A.MS_READ_YN = 'N'
+		<!-- 메세지를 보낼때 상세보기를 클릭할경우 RECP- DATE가 상세보기 버튼을 클릭한 시간으로 DB에 들어간다. -->
+	</update>
+
+	<select id="getdeptList" resultMap="deptResultMap">
+		SELECT
+				A.DEPT_CODE
+			,	A.DEPT_NAME
+		FROM    DEPARTMENT A
+	</select>
+
+
+	<select id="getMemberList" resultMap="memberResultMap">
+		SELECT
+			  A.MEM_NUM
+			, A.MEM_NAME
+			, A.DEPT_CODE
+			, B.DEPT_NAME
+		FROM  MEMBER A
+		JOIN  DEPARTMENT B ON(A.DEPT_CODE = B.DEPT_CODE)
+		WHERE B.DEPT_NAME = #{ dept_name }
+	</select>
+
 
 </mapper>

@@ -49,11 +49,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-                .mvcMatchers("/notice/**").hasAnyAuthority("NT_ALL","ALL_ALL")
-                .mvcMatchers("/calender/**").hasAnyAuthority("CD_ALL","CD_DEPT","ALL_ALL")
+                .antMatchers("/calender/**").authenticated()
+                .antMatchers("/calender/**").hasRole("CD_ALL")
+                .antMatchers("/calender/**").hasRole("CD_DEPT")
+                .antMatchers("/calender/**").hasRole("ALL_ALL")
                 .mvcMatchers("/emplManage/**").hasAnyAuthority("EM_READ","EM_ALL","ALL_ALL")
+                .mvcMatchers("/notice/**").hasRole("NT_ALL")
+                .mvcMatchers("/notice/**").hasRole("ALL_ALL")
 //                .mvcMatchers("/notice/**","/msBoard/**","/sign/**","/board/**", "/calender/**").hasAnyAuthority("ALL_ALL")
-                .mvcMatchers("/member/**","/common/**").permitAll()
+
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
 

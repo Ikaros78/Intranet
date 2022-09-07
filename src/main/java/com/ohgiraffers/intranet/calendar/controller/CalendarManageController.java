@@ -62,14 +62,14 @@ public class CalendarManageController {
         if(cd_all){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("CD_ALL");
+            auth.setAuCode("ROLE_CD_ALL");
             authList.add(auth);         
         }
         
         if(cd_dept){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("CD_DEPT");
+            auth.setAuCode("ROLE_CD_DEPT");
             authList.add(auth);
         }
 
@@ -89,14 +89,7 @@ public class CalendarManageController {
     }
 
     /* userImpl을 통해 로그인 시 세션에 들고온 해당 계정의 정보를 들고 오는 방법입니다. */
-//    @GetMapping("/button")
-//    public String main(@AuthenticationPrincipal User user){
-//
-//        System.out.println("버튼 눌렀을 때 컨트롤러 들어온다아");
-//        System.out.println("user : " + user);
-//
-//        return "calendar/cd_main";
-//    }
+
 
 
 

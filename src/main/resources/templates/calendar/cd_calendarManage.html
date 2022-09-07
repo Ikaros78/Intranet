@@ -94,11 +94,11 @@
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" ></td>
                                     </th:block>
-                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'CD_ALL' }">
+                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_ALL' }">
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked ></td>
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT"></td>
                                     </th:block>
-                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'CD_DEPT' }">
+                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_DEPT' }">
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" checked></td>
                                     </th:block>

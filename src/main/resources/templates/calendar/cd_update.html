@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>basic</title>
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/calendarbasic.css">
+  <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css' rel='stylesheet' />
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js'></script>
+  <script src='/docs/dist/demo-to-codepen.js'></script>
+  <script src="fullcalendar/lib/locales-all.js"></script>
+  <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
+</head>
+<style>
+  #Update {
+    width: 1000px;
+  }
+
+  #tb {
+    border-collapse: collapse;
+  }
+
+  #tb td {
+    border-collapse: collapse;
+    border-bottom: 0.5px solid black;
+    /* padding: 1px;
+    padding: 2px 0 2px 0; */
+    padding: 1px 1px 1px 1px;
+  }
+
+  .tname {
+    width: 120px;
+    height: 50px;
+    text-align: center;
+    background-color: #ddd;
+  }
+
+  .timeline {
+    width: 350px;
+  }
+
+  .select {
+    width: 70px;
+    height: 34px;
+    padding-left: 5px;
+  }
+
+  .title {
+    width: 556px;
+    height: 30px;
+  }
+
+  .content {
+    width: 100%;
+    height: 30px;
+  }
+
+  .chch {
+    font-size: 16px;
+  }
+
+  .chch input {
+    width: 8px;
+    height: 8px;
+    margin-left: 10px;
+  }
+
+  .chek{
+    width: 8px;
+    height: 8px;
+    margin-left: 5px;
+    font-size: 10px;
+
+  }
+
+  .bton {
+    float: right;
+    border: 0px;
+    padding: 4px;
+    width: 60px;
+    height: 40px;
+    margin-top: 3px;
+  }
+
+  .insert{
+    background-color: #aaa;
+    margin-right: 3px;
+  }
+
+  th{
+    width: 650px;
+  }
+</style>
+
+<body>
+<div id="wrap">
+  <div th:include="common/header.html"></div>
+  <div id="contents">
+    <div id="sideBar">
+      <h3>일정관리</h3>
+      <ul>
+        <li class="main"><a href="#">일정관리</a>
+          <ul class="sub sub1">
+            <li><a href="#">전체 일정</a></li>
+            <li><a href="#">부서 일정</a></li>
+            <li><a href="#">개인 일정</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="Update" style="float: left;">
+      <br><br><br><br><br>
+      <h1 class="nameUpdate">일정 수정</h1>
+      <br>
+      <hr><br>
+      <!-- 일정 테이블 -->
+
+      <form th:action="@{/calendar/insert}" method="post">
+        <input type="hidden" id="memNum" name="memNum"
+               th:value="${#authentication.getPrincipal().getMem_num()}">
+        <!--                <input type="hidden" name="allDay" value="true">-->
+        <!--                <input type="hidden" name="wDate" value="SYSDATE">-->
+        <!--                <input type="hidden" name="color" value="#FF0000">-->
+
+        <table id="tb" style="float: left;">
+          <tr>
+            <td style="border: 0;"></td>
+            <th></th>
+          </tr>
+          <tr style="width: 500px;">
+            <td class="tname">기간</td>
+            <td class="timeline" style="padding-left: 15px;">
+              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>
+              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> <input type="date" name="start"> ~ <input type="date" name="end">
+            </td>
+          </tr>
+          <tr>
+            <td class="tname">일정이름</td>
+            <td style="padding-left: 15px;">
+              <select class="select" name="color">
+                <option name="color" value="">-색상선택-</option>
+                <option name="color" value="#c771e1" style="background-color: #c771e1">빨강</option>
+                <option name="color" value="#6fdcb0" style="background-color: #6fdcb0">노랑</option>
+                <option name="color" value="#c73e7a" style="background-color: #c73e7a">파랑</option>
+                <option name="color" value="#6a8dce" style="background-color: #6a8dce">분홍</option>
+                <!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
+                <!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
+                <!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->
+                <!--                <option name="color" value="#FF00FF" style="color: #FF00FF">●</option>-->
+                <!--                <option value="2">2</option>-->
+                <!--                <option value="3">3</option>-->
+                <!--                <option value="4">4</option>-->
+              </select>
+              <input class="title" type="text" name="title" placeholder="캘린더에 적히는 간단한 제목">
+            </td>
+          </tr>
+          <tr>
+            <td class="tname">내용</td>
+            <td style="padding-left: 15px;">
+              <input class="content" name="content" type="text" placeholder="내용은 캘린더에 따로 노출되지 않습니다.">
+            </td>
+          </tr>
+          <tr>
+            <td class="tname">일정 선택</td>
+            <td class="chch" style="padding-left: 15px;">
+              <input type="radio" id="all" name="type" value="1"><label for="all">전체일정</label>
+              <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
+              <input type="radio" id="solo" name="type" value="3" checked><label for="solo">개인일정</label>
+            </td>
+          </tr>
+          <tr>
+            <td style="border: none;"></td>
+            <td style="border: none;">
+              <button class="bton csb"><a href="/calendar/main">취소</a></button>
+              <button class="bton insert" type="submit">수정</button>
+            </td>
+          </tr>
+        </table>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+</body>
+
+</html>

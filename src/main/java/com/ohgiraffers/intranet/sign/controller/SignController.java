@@ -4,6 +4,7 @@ import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,7 +168,47 @@ public class SignController {
     }
 
     @GetMapping("/registSelect")
-    public ModelAndView signRegistSelect(ModelAndView mv){
+    public ModelAndView signRegistSelect(ModelAndView mv, HttpSession session, HttpServletRequest request){
+
+        int mem_num = (Integer) session.getAttribute("mem_num");
+
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)) {
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchName = request.getParameter("searchName");
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("searchName", searchName);
+
+        int totalCount = signService.selectTotalFormCount(searchMap);
+
+        int limit = 10;
+
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchName", searchName);
+
+        List<SignFormDTO> formList = signService.selectAllForm(searchList);
+
+        List<SignDTO> recentForm = signService.selectRecentForm(mem_num);
+
+        mv.addObject("totalCount", totalCount);
+
+        mv.addObject("formList", formList);
+
+        mv.addObject("selectCriteria", selectCriteria);
+
+        mv.addObject("searchList", searchList);
+
+        mv.addObject("recentForm", recentForm);
 
         mv.setViewName("sign/signRegistSelectForm");
 

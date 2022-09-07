@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.sign.model.service;
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,4 +54,30 @@ public class SignService {
 
         return result;
     }
+
+    /* 최근 기안한 양식명 불러오기용 메소드 */
+    public List<SignDTO> selectRecentForm(int mem_num) {
+
+        List<SignDTO> recentForm = signMapper.selectRecentForm(mem_num);
+        
+        return recentForm;
+    }
+
+    /* 전체 양식 갯수 조회용 메소드 */
+    public int selectTotalFormCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalFormCount(searchMap);
+
+        return result;
+    }
+
+    /* 양식 전체 조회용 메소드 */
+    public List<SignFormDTO> selectAllForm(Map<String, Object> searchList) {
+
+        List<SignFormDTO> formList = signMapper.selectAllForm(searchList);
+
+        return formList;
+    }
+
+
 }

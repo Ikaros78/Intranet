@@ -209,4 +209,54 @@
               AND A.APPROVER_NO = #{ mem_num }
     </update>
 
+    <select id="selectRecentForm" resultMap="generalSignResultMap">
+        SELECT
+            *
+        FROM(SELECT
+                A.SIGN_FORM
+              , B.SF_NAME
+          FROM SI_SIGN A
+          JOIN SF_SIGN_FORM B ON(A.SIGN_FORM = B.SF_CODE)
+         WHERE A.SIGN_WRITER = #{ mem_num }
+        ORDER BY A.SIGN_NO DESC
+        ) <![CDATA[
+                  WHERE ROWNUM <= 5
+        ]]>
+    </select>
+
+    <select id="selectTotalFormCount" parameterType="hashmap" resultType="_int">
+        SELECT
+            COUNT(*)
+        FROM SF_SIGN_FORM A
+        <where>
+            <if test="searchName != null and searchName != ''">
+                A.SF_NAME LIKE '%' || #{ searchName } || '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllForm" parameterType="hashmap" resultMap="signFormResultMap">
+        SELECT A.RNUM
+             , A.SF_CODE
+             , A.SF_NAME
+            FROM (SELECT ROWNUM RNUM
+                  , B.SF_CODE
+                  , B.SF_NAME
+                FROM (SELECT
+                    C.SF_CODE
+                  , C.SF_NAME
+                FROM SF_SIGN_FORM C
+                <where>
+                    <if test="searchName != null and searchName != ''">
+                        C.SF_NAME LIKE '%'|| #{ searchName } || '%'
+                    </if>
+                </where>
+                ORDER BY C.SF_CODE ASC) B
+                <![CDATA[
+                          WHERE ROWNUM <= #{ selectCriteria.endRow }
+                          ]]>
+            ) A
+            WHERE A.RNUM >= #{ selectCriteria.startRow }
+    </select>
+    
 </mapper>

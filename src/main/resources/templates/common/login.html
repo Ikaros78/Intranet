@@ -16,13 +16,13 @@
     <form th:action="@{/common/login}" method="POST">
       <div class="input-box">
         <input
-                id="memId"
+                id="mem_id"
                 name="mem_id"
                 type="text"
                 placeholder="아이디"
                 required
         />
-        <label for="memId">아이디</label>
+        <label for="mem_Id">아이디</label>
       </div>
       <div class="input-box">
         <input
@@ -43,6 +43,6 @@
         <a th:href="@{/member/regist}">회원가입</a>
       </form>
     </div>
-  </body>
-  <script src="./js/member.js"></script>
+</th:block>
+  <script src="/js/member.js"></script>
 </html>

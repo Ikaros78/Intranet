@@ -21,6 +21,9 @@ public class MsBoardServiceImpl implements MsBoardService {
 		this.msBoardMapper = msBoardMapper;
 	}
 
+	
+//	받은 쪽지함 조회용 메소드 
+	
 	@Override
 	public List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria) {
 
@@ -29,12 +32,15 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return msBoardlist;
 	}
 
+	
+	// 보낸 쪽지함 글 갯수 확인용 메소드
 	public int selectTotalCount(Map<String, String> searchMap) {
 
 		int result = msBoardMapper.selectTotalCount(searchMap);
 
 		return result;
 	}
+	
 	
 	@Override
 	public List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria) {
@@ -45,13 +51,24 @@ public class MsBoardServiceImpl implements MsBoardService {
 	}
 	
 	
-
+	// 쪽지함 보내기용 메소드
+	
 	@Override
-	public int MsFileInsert(MsBoardDTO msBoard) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int MsboardInsert(MsBoardDTO msBoardDTO){
+		
+		int result = msBoardMapper.MsboardInsert(msBoardDTO);
+		
+		return result;
 	}
 
+	public int MsFileInsert(MsBoardDTO msBoard) {
+		
+		int result = msBoardMapper.MsFileInsert(msBoard);
+		
+		return result;
+	} 
+	
+	//  보낸 쪽지함 상세 페이지 조회용 메소드
 	@Override
 	public MsBoardDTO selectMsBoardDetail(int msNo) {
 

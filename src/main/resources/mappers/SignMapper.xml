@@ -258,5 +258,5 @@
             ) A
             WHERE A.RNUM >= #{ selectCriteria.startRow }
     </select>
-    
+
 </mapper>

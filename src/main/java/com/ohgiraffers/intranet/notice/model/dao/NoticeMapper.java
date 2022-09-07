@@ -1,6 +1,8 @@
 package com.ohgiraffers.intranet.notice.model.dao;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
+import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +25,28 @@ public interface NoticeMapper {
     int incresementNoticeCount(int no);
 
     NoticeDTO selectNoticeDetail(int no);
+
+    int deleteFile(int no);
+
+    int noticeUpdate(NoticeDTO notice);
+
+    int noticeDelete(int no);
+
+    int newsRegist(NewsDTO news);
+
+    int newsFileRegist(NewsFileDTO newsFile);
+
+    int selectNewsTotalCount(Map<String, String> searchMap);
+
+    List<NewsDTO> selectNewsList(SelectCriteria selectCriteria);
+
+    int incresementNewsCount(int no);
+
+    NewsDTO selectNewsDetail(int no);
+
+    int newsUpdate(NewsDTO news);
+
+    int deleteNewsFile(int no);
+
+    int newsDelete(int no);
 }

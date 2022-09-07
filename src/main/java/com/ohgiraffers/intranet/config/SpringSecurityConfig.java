@@ -49,14 +49,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-                .antMatchers("/calender/**").authenticated()
-                .antMatchers("/calender/**").hasRole("CD_ALL")
-                .antMatchers("/calender/**").hasRole("CD_DEPT")
-                .antMatchers("/calender/**").hasRole("ALL_ALL")
-                .mvcMatchers("/emplManage/**").hasAnyAuthority("EM_READ","EM_ALL","ALL_ALL")
-                .mvcMatchers("/notice/**").hasRole("NT_ALL")
-                .mvcMatchers("/notice/**").hasRole("ALL_ALL")
-//                .mvcMatchers("/notice/**","/msBoard/**","/sign/**","/board/**", "/calender/**").hasAnyAuthority("ALL_ALL")
+               // notice 게시판 접근 권한
+                .mvcMatchers("/notice/**").authenticated() // 개별 권한을 주겠다는 뜻.
+                .antMatchers("/notice/**").hasRole("ALL_ALL")
+                .antMatchers("/notice/**").hasRole("NT_ALL")
+               // calender 게시판 접근 권한
+                .mvcMatchers("/calender/**").authenticated()
+                .mvcMatchers("/calender/**").hasRole("CD_DEPT")
+                .mvcMatchers("/calender/**").hasRole("CD_ALL")
+                .mvcMatchers("/calender/**").hasRole("ALL_ALL")
+               // emplManage 게시판 접근 권한
+                .mvcMatchers("/emplManage/**").hasRole("EM_READ")
+                .mvcMatchers("/emplManage/**").hasRole("EM_ALL")
+                .mvcMatchers("/emplManage/**").hasRole("ALL_ALL")
+               // sign 게시판 접근 권한
+               // board 게시판 접근 권한
+               // authorManage 게시판 접근 권한
 
                 .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
@@ -89,10 +97,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
                     .userDetailsService(userDetailsService()) // 사용자 정보를 받음.
 
-                //403 예외처리 핸들링
+                //예외처리 핸들링
                .and()
                     .exceptionHandling()
-                    .accessDeniedPage("/member/loginFail")
+                    .accessDeniedPage("/common/denied.html");
 ;    }
 
 

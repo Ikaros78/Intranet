@@ -44,13 +44,13 @@ public class AuthenticationService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if(member.getAuthorit() != null){
+        if(member.getAuthorit().get(0).getAuCode() != null){
             List<AuthoritDTO> authorList = member.getAuthorit();
 
             for(int i = 0; i < authorList.size(); i++) {
 
-                List<Au_AuthorizationDTO> au_authorization = authorList.get(i).getAu_authorization();
-                authorities.add(new SimpleGrantedAuthority(au_authorization.toString()));
+                Au_AuthorizationDTO au_authorization = authorList.get(i).getAu_authorization();
+                authorities.add(new SimpleGrantedAuthority(au_authorization.getAu_code()));
             }
         }
 

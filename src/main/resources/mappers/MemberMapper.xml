@@ -146,7 +146,7 @@
             <if test="searchCondition != null and searchCondition != 'all'">
                 A.DEPT_CODE = #{ searchCondition }
             </if>
-        AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_CD_ALL' OR B.AU_CODE = 'ROLE_CD_DEPT')
+        AND (B.AU_CODE IS NULL OR B.AU_CODE = 'CD_ALL' OR B.AU_CODE = 'CD_DEPT')
         </where>
         ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
@@ -164,7 +164,7 @@
         FROM MEMBER A
        WHERE A.MEM_ID = #{mem_id}
     </select>
-    
+
     <delete id="deleteCalendarAuthority">
         DELETE
         FROM AUTHORIT

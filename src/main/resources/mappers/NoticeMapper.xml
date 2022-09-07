@@ -5,7 +5,7 @@
 <mapper namespace="com.ohgiraffers.intranet.notice.model.dao.NoticeMapper">
 
     <!--                          공지사항                                 -->
-    <resultMap id="noticeResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <resultMap id="noticeResultMap" type="NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
         <result property="date" column="NT_DATE"/>
@@ -14,7 +14,7 @@
         <result property="num" column="MEM_NUM"/>
     </resultMap>
 
-    <resultMap id="addFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+    <resultMap id="addFileResultMap" type="NoticeFileDTO">
         <id property="no" column="NTF_NO"/>
         <result property="originName" column="NTF_ORIGIN_NAME"/>
         <result property="saveName" column="NTF_SAVE_NAME"/>
@@ -23,7 +23,7 @@
         <result property="ntNo" column="NT_NO"/>
     </resultMap>
 
-    <resultMap id="noticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <resultMap id="noticeListResultMap" type="NoticeDTO">
         <id property="no" column="NT_NO"/>
         <result property="title" column="NT_TITLE"/>
         <result property="date" column="NT_DATE"/>
@@ -54,11 +54,11 @@
     </resultMap>
 
     <!-- 공지사항 등록 -->
-    <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+    <insert id="noticeRegist" parameterType="NoticeDTO">
         INSERT
-          INTO NT_NOTICE
+        INTO NT_NOTICE
         (
-          NT_NO
+            NT_NO
         , NT_TITLE
         , NT_DATE
         , NT_VIEWS
@@ -66,25 +66,48 @@
         , MEM_NUM
         )
         VALUES
+            (
+                SEQ_NOTICE_NO.NEXTVAL
+            , #{title}
+            , SYSDATE
+            , DEFAULT
+            , #{contents}
+            , #{mem_num}
+            )
+    </insert>
+
+    <!-- 공지사항 파일 등록 -->
+    <insert id="fileRegist" parameterType="NoticeFileDTO">
+        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_NOTICE_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO NTF_NOTICE_FILE
         (
-        SEQ_NOTICE_NO.NEXTVAL
-        , #{title}
-        , SYSDATE
+        NTF_NO
+        , NTF_ORIGIN_NAME
+        , NTF_SAVE_NAME
+        , NTF_SAVE_PATH
+        , NTF_DELETE_YN
+        , NT_NO
+        )
+        VALUES
+        (
+        SEQ_NOTICE_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
         , DEFAULT
-        , #{contents}
-        , #{mem_num}
+        , #{ntNo}
         )
     </insert>
 
     <!-- 공지사항 파일 등록 -->
-    <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
-        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
-            SELECT
-                    SEQ_NOTICE_NO.CURRVAL
-            FROM DUAL
-        </selectKey>
+    <insert id="noticeFileUpdate" parameterType="NoticeFileDTO">
         INSERT
-          INTO NTF_NOTICE_FILE
+        INTO NTF_NOTICE_FILE
         (
           NTF_NO
         , NTF_ORIGIN_NAME
@@ -106,26 +129,26 @@
 
     <select id="selectNoticeList" resultMap="noticeListResultMap">
         SELECT A.RNUM
-             , A.NT_NO
-             , A.NT_TITLE
-             , D.MEM_NAME
-             , A.NT_DATE
-             , E.DEPT_NAME
-             , A.NT_VIEWS
-             , F.NTF_ORIGIN_NAME
-             , A.MEM_NUM
+        , A.NT_NO
+        , A.NT_TITLE
+        , D.MEM_NAME
+        , A.NT_DATE
+        , E.DEPT_NAME
+        , A.NT_VIEWS
+        , F.NTF_ORIGIN_NAME
+        , A.MEM_NUM
         FROM (SELECT ROWNUM RNUM
-             , B.NT_NO
-             , B.NT_TITLE
-             , B.NT_DATE
-             , B.NT_VIEWS
-             , B.MEM_NUM
+        , B.NT_NO
+        , B.NT_TITLE
+        , B.NT_DATE
+        , B.NT_VIEWS
+        , B.MEM_NUM
         FROM (SELECT
-               C.NT_NO
-             , C.NT_TITLE
-             , C.NT_DATE
-             , C.NT_VIEWS
-             , C.MEM_NUM
+        C.NT_NO
+        , C.NT_TITLE
+        , C.NT_DATE
+        , C.NT_VIEWS
+        , C.MEM_NUM
         FROM NT_NOTICE C
         <if test="searchCondition == 'writer'">
             JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
@@ -139,11 +162,11 @@
             </if>
         </where>
         ORDER BY C.NT_NO DESC
-             ) B
-            <![CDATA[
+        ) B
+        <![CDATA[
               WHERE ROWNUM <= #{ endRow }
               ]]>
-             ) A
+        ) A
         LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
         LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
         LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
@@ -154,7 +177,7 @@
     <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
 
-          FROM NT_NOTICE A
+        FROM NT_NOTICE A
         <if test="searchCondition == 'writer'">
             JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
         </if>
@@ -170,18 +193,18 @@
 
     <update id="incresementNoticeCount" parameterType="_int">
         UPDATE
-               NT_NOTICE A
-           SET A.NT_VIEWS = (SELECT B.NT_VIEWS
-                             FROM NT_NOTICE B
-                             WHERE B.NT_NO = #{ no }
-                            ) + 1
+            NT_NOTICE A
+        SET A.NT_VIEWS = (SELECT B.NT_VIEWS
+                          FROM NT_NOTICE B
+                          WHERE B.NT_NO = #{ no }
+                         ) + 1
         WHERE A.NT_NO = #{ no }
     </update>
 
     <!-- 공지사항 상세보기 -->
     <select id="selectNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
         SELECT
-               A.NT_NO
+            A.NT_NO
              , A.NT_TITLE
              , B.MEM_NAME
              , A.NT_DATE
@@ -191,38 +214,38 @@
              , A.MEM_NUM
              , A.NT_CONTENTS
              , D.NTF_SAVE_NAME
-          FROM NT_NOTICE A
-          LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
-          LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
-          LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
-         WHERE A.NT_NO = #{ no }
+        FROM NT_NOTICE A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+                 LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
+        WHERE A.NT_NO = #{ no }
     </select>
 
     <!-- 파일 삭제 -->
     <delete id="deleteFile">
         DELETE
-          FROM NTF_NOTICE_FILE
-         WHERE NT_NO = #{ ntNo }
+        FROM NTF_NOTICE_FILE
+        WHERE NT_NO = #{ ntNo }
     </delete>
 
     <!-- 공지사항 업데이트 -->
     <update id="noticeUpdate">
         UPDATE
-               NT_NOTICE
-           SET NT_TITLE = #{ title }
-             , NT_CONTENTS = #{ contents }
-         WHERE NT_NO = #{ no }
+            NT_NOTICE
+        SET NT_TITLE = #{ title }
+          , NT_CONTENTS = #{ contents }
+        WHERE NT_NO = #{ no }
     </update>
 
     <!-- 공지사항 삭제-->
     <delete id="noticeDelete" parameterType="int">
         DELETE
-          FROM NT_NOTICE
-         WHERE NT_NO = #{ no }
+        FROM NT_NOTICE
+        WHERE NT_NO = #{ no }
     </delete>
 
     <!--                          사내 소식                                 -->
-    <resultMap id="newsResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <resultMap id="newsResultMap" type="NewsDTO">
         <id property="no" column="NW_NO"/>
         <result property="title" column="NW_TITLE"/>
         <result property="date" column="NW_DATE"/>
@@ -231,7 +254,7 @@
         <result property="num" column="MEM_NUM"/>
     </resultMap>
 
-    <resultMap id="addNewsFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+    <resultMap id="addNewsFileResultMap" type="NewsFileDTO">
         <id property="no" column="NEWF_NO"/>
         <result property="originName" column="NEWF_ORIGIN_NAME"/>
         <result property="saveName" column="NEWF_SAVE_NAME"/>
@@ -240,7 +263,7 @@
         <result property="nwNo" column="NW_NO"/>
     </resultMap>
 
-    <resultMap id="newsListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <resultMap id="newsListResultMap" type="NewsDTO">
         <id property="no" column="NW_NO"/>
         <result property="title" column="NW_TITLE"/>
         <result property="date" column="NW_DATE"/>
@@ -252,7 +275,7 @@
     </resultMap>
 
     <!-- 사내소식 등록 -->
-    <insert id="newsRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+    <insert id="newsRegist" parameterType="NewsDTO">
         INSERT
         INTO NW_NEWS
         (
@@ -265,7 +288,7 @@
         )
         VALUES
             (
-              SEQ_NEWS_NO.NEXTVAL
+                SEQ_NEWS_NO.NEXTVAL
             , #{title}
             , SYSDATE
             , DEFAULT
@@ -275,7 +298,7 @@
     </insert>
 
     <!-- 사내소식 파일 등록 -->
-    <insert id="newsFileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+    <insert id="newsFileRegist" parameterType="NewsFileDTO">
         <selectKey keyProperty="nwNo" order="BEFORE" resultType="_int">
             SELECT
             SEQ_NEWS_NO.CURRVAL
@@ -284,7 +307,7 @@
         INSERT
         INTO NEWF_NEWS_FILE
         (
-          NEWF_NO
+        NEWF_NO
         , NEWF_ORIGIN_NAME
         , NEWF_SAVE_NAME
         , NEWF_SAVE_PATH
@@ -293,7 +316,7 @@
         )
         VALUES
         (
-          SEQ_NEWS_FILE_NO.NEXTVAL
+        SEQ_NEWS_FILE_NO.NEXTVAL
         , #{originName}
         , #{saveName}
         , #{savePath}
@@ -408,6 +431,29 @@
         WHERE NW_NO = #{ no }
     </update>
 
+    <!-- 사내소식 파일 다시 업로드 -->
+    <insert id="newsFileUpdate" parameterType="NewsFileDTO">
+        INSERT
+        INTO NEWF_NEWS_FILE
+        (
+        NEWF_NO
+        , NEWF_ORIGIN_NAME
+        , NEWF_SAVE_NAME
+        , NEWF_SAVE_PATH
+        , NEWF_DELETE_YN
+        , NW_NO
+        )
+        VALUES
+        (
+        SEQ_NEWS_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{nwNo}
+        )
+    </insert>
+
     <!-- 사내소식 파일 삭제 -->
     <delete id="deleteNewsFile">
         DELETE
@@ -421,5 +467,137 @@
         FROM NW_NEWS
         WHERE NW_NO = #{ no }
     </delete>
+
+    <!--                          갤러리                                 -->
+    <resultMap id="galleryResultMap" type="GalleryDTO">
+        <id property="no" column="GAL_NO"/>
+        <result property="title" column="GAL_TITLE"/>
+        <result property="date" column="GAL_DATE"/>
+        <result property="views" column="GAL_VIEWS"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+
+        <collection property="galleryFile" resultMap="galleryFileResultMap"/>
+    </resultMap>
+
+    <resultMap id="galleryFileResultMap" type="GalleryFileDTO">
+        <id property="no" column="GF_NO"/>
+        <result property="originName" column="GF_ORIGIN_NAME"/>
+        <result property="saveName" column="GF_SAVE_NAME"/>
+        <result property="savePath" column="GF_SAVE_PATH"/>
+        <result property="deleteYn" column="GF_DELETE_YN"/>
+        <result property="thumbnailPath" column="GF_THUMBNAIL_PATH"/>
+        <result property="galNo" column="GAL_NO"/>
+    </resultMap>
+
+    <!-- 갤러리 내용 insert -->
+    <insert id="galleryRegist">
+        INSERT
+        INTO GALLERY
+        (
+          GAL_NO
+        , GAL_TITLE
+        , GAL_DATE
+        , GAL_VIEWS
+        , GAL_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+        (
+          SEQ_GALLERY_NO.NEXTVAL
+        , #{ title }
+        , SYSDATE
+        , DEFAULT
+        , #{ contents }
+        , #{ mem_num }
+        )
+        <selectKey keyProperty="no" resultType="_int" order="AFTER">
+            SELECT
+            SEQ_GALLERY_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+    </insert>
+
+    <!-- 갤러리 첨부이미지 insert -->
+    <insert id="galleryFileRegist">
+        INSERT
+        INTO GF_GALLERY_FILE
+        (
+          GF_NO
+        , GF_ORIGIN_NAME
+        , GF_SAVE_NAME
+        , GF_SAVE_PATH
+        , GF_DELETE_YN
+        , GF_THUMBNAIL_PATH
+        , GAL_NO
+        )
+        VALUES
+        (
+          SEQ_GALLERY_FILE_NO.NEXTVAL
+        , #{ originName }
+        , #{ saveName }
+        , #{ savePath }
+        , DEFAULT
+        , #{ thumbnailPath }
+        , #{ galNo }
+        )
+    </insert>
+
+    <!-- 갤러리 전체 게시글 수 조회 -->
+    <select id="selectGalleryTotalCount" resultType="_int">
+        SELECT
+               COUNT(*)
+          FROM GALLERY
+        <where>
+            <if test="searchCondition != null">
+                GAL_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 갤러리 리스트 조회 -->
+    <select id="selectGalleryList" resultMap="galleryResultMap">
+        SELECT A.RNUM
+        , A.GAL_NO
+        , A.GAL_TITLE
+        , D.GF_THUMBNAIL_PATH
+        FROM (SELECT ROWNUM RNUM
+        , B.GAL_NO
+        , B.GAL_TITLE
+        FROM (SELECT
+          C.GAL_NO
+        , C.GAL_TITLE
+        FROM GALLERY C
+        <where>
+            <if test="searchCondition != null">
+                C.GAL_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.GAL_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)
+        WHERE A.GAL_NO = 33
+        AND ROWNUM = 1
+        AND A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+<!--    SELECT-->
+<!--    A.GAL_NO-->
+<!--    , A.GAL_TITLE-->
+<!--    , D.GF_THUMBNAIL_PATH-->
+<!--    FROM GALLERY A-->
+<!--    LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)-->
+<!--    WHERE A.GAL_NO = 31-->
+<!--    AND ROWNUM = 1-->
+<!--    ORDER BY 1 ASC-->
+
+
+
 
 </mapper>

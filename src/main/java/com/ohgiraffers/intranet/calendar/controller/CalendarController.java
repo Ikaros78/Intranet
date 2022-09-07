@@ -4,11 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
-import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -111,7 +108,7 @@ public class CalendarController {
 
         /* 작성날짜를 입력. 이 때 작성날짜는 HTML에서 처리할 필요 없다. */
         Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         calendar.setwDate(sdf.format(date));
         int result = calendarService.insertList(calendar);
 
@@ -125,24 +122,27 @@ public class CalendarController {
     public ModelAndView detailMain(HttpServletRequest request, ModelAndView mv) {
 
         /* 원하는 데이터 불러오기 */
-        String no = request.getParameter("no");
-        String id = request.getParameter("id");
-        String title = request.getParameter("title");
+        String id = request.getParameter("id");  // 글번호
         System.out.println("id 확인용 = " + id);
-        System.out.println("no 확인용 = " + no);
-        System.out.println("title 확인용 = " + title);
-
+        
         /* 불러온 값 담아줌 */
         CalendarDTO cdDetail = calendarService.selectCdDetail(id);
 
         System.out.println("아이디 확인용 = " + id);
-        System.out.println("아이디 확인용 = " + id);
 
         mv.addObject("cdDetail", cdDetail);
+        
+        System.out.println("cdDetail 체킹 = " + cdDetail);
         mv.setViewName("calendar/cd_detail");
 
         return mv;
     }
 
+    /* 캘린더 수정 메소드 */
+    @GetMapping("/update")
+    public ModelAndView updateMain(HttpServletRequest request, ModelAndView mv) {
+
+        return mv;
+    }
 
 }

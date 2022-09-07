@@ -13,6 +13,6 @@ public class AuthoritDTO {
 
     private int memNum;
     private String auCode;
-    private List<Au_AuthorizationDTO> au_authorization;
+    private Au_AuthorizationDTO au_authorization;
 
 }

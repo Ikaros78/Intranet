@@ -14,5 +14,13 @@ public interface CalendarMapper {
     /* 전체조회용 메소드 */
     List<CalendarDTO> findAllCal();
 
+    /* 캘린더 메인 화면 */
     List<CalendarDTO> findAllSc();
+
+    /* 캘린더 수정 화면 */
+    int insertList(CalendarDTO calendar);
+
+    /* 캘린더 상세조회 */
+    CalendarDTO selectCdDetail(String id);
+
 }

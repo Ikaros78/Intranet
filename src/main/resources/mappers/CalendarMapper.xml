@@ -67,4 +67,57 @@
           FROM CD_CALENDAR A
     </select>
 
+    <!-- 캘린더 입력 -->
+    <insert id="insertList" parameterType="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
+        INSERT
+        INTO CD_CALENDAR A
+        (
+          A.MEM_NUM
+        , A.CD_NO
+        , A.CD_GROUP
+        , A.CD_TITLE
+        , A.CD_CONTENT
+        , A.CD_START
+        , A.CD_END
+        , A.CD_ALLDAY
+        , A.CD_COLOR
+        , A.CD_TYPE
+        , A.CD_WDATE
+        )
+        VALUES
+        (
+          #{ memNum }
+        , SEQ_CD_NO.NEXTVAL
+        , 0
+        , #{ title }
+        , #{ content }
+        , #{ start }
+        , #{ end }
+        , #{ allDay }
+        , #{ color }
+        , 1
+        , #{ wDate }
+        )
+
+    </insert>
+
+    <!-- 캘린더 상세조회 -->
+    <select id="selectCdDetail" resultMap="cdResultMap">
+        SELECT
+               A.MEM_NUM
+             , A.CD_NO
+             , A.CD_GROUP
+             , A.CD_TITLE
+             , A.CD_CONTENT
+             , A.CD_START
+             , A.CD_END
+             , A.CD_ALLDAY
+             , A.CD_COLOR
+             , A.CD_TYPE
+             , A.CD_WDATE
+        FROM CD_CALENDAR A
+       WHERE A.CD_NO = #{ id }
+    </select>
+
+
 </mapper>

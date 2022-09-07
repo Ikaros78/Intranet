@@ -2,15 +2,12 @@ package com.ohgiraffers.intranet.notice.controller;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.*;
 import com.ohgiraffers.intranet.notice.model.service.NoticeService;
-import org.apache.ibatis.annotations.Select;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -30,6 +27,7 @@ import java.util.*;
 @RequestMapping(value = {"/notice/*"})
 public class NoticeController {
 
+    @Value("src/main/resources")
     private String IMAGE_DIR;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final NoticeService noticeService;
@@ -126,9 +124,7 @@ public class NoticeController {
         if(searchCondition != null && !"".equals(searchCondition)){
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);{
-
-            }
+                    searchCondition, searchValue);
         } else {
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
@@ -199,13 +195,38 @@ public class NoticeController {
             ext = originFileName.substring(originFileName.lastIndexOf("."));
             saveName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-            noticeFile.setOriginName(originFileName);
-            noticeFile.setSaveName(saveName);
-            noticeFile.setSavePath(fileUploadDirectory);
+            int result = noticeService.noticeUpdate(notice);
+
+            if(result > 0){
+
+                if(notice.getFile() != null){
+
+                int result2 = noticeService.noticeFileDelete(notice.getNo());
+
+                if(result2 > 0){
+
+                    noticeFile.setNtNo(notice.getNo());
+                    noticeFile.setOriginName(originFileName);
+                    noticeFile.setSaveName(saveName);
+                    noticeFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.noticeFileUpdate(noticeFile);
+                }
+
+                } else {
+
+                    noticeFile.setNtNo(notice.getNo());
+                    noticeFile.setOriginName(originFileName);
+                    noticeFile.setSaveName(saveName);
+                    noticeFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.noticeFileUpdate(noticeFile);
+                }
+
+            }
 
             log.info("noticeFileDTO값 확인 : " + noticeFile);
             // file insert
-            int fileResult = noticeService.noticeFileInsert(noticeFile);
 
             try {
                 originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
@@ -219,7 +240,7 @@ public class NoticeController {
 
         log.info("notice값 불러오나 확인 " + notice);
 
-        int updateResult = noticeService.noticeUpdate(notice);
+
         rttr.addFlashAttribute("message", "수정이 완료되었습니다");
 
         return "redirect:/notice/list";
@@ -323,9 +344,7 @@ public class NoticeController {
         if(searchCondition != null && !"".equals(searchCondition)){
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);{
-
-            }
+                    searchCondition, searchValue);
         } else {
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
@@ -368,7 +387,7 @@ public class NoticeController {
     }
 
     @PostMapping("/news/update")
-    public String newsUpdate(@ModelAttribute NewsDTO news, RedirectAttributes rttr, @RequestParam(name="originName", required=false) MultipartFile originName) throws FileNotFoundException {
+    public String noticeUpdate(@ModelAttribute NewsDTO news, RedirectAttributes rttr, @RequestParam(name="originName", required=false) MultipartFile originName) throws FileNotFoundException {
 
         NewsFileDTO newsFile = new NewsFileDTO();
 
@@ -392,13 +411,35 @@ public class NoticeController {
             ext = originFileName.substring(originFileName.lastIndexOf("."));
             saveName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-            newsFile.setOriginName(originFileName);
-            newsFile.setSaveName(saveName);
-            newsFile.setSavePath(fileUploadDirectory);
+            int result = noticeService.newsUpdate(news);
 
+            if(result > 0){
+
+                if(news.getFile() != null){
+
+                    int result2 = noticeService.newsFileDelete(news.getNo());
+
+                    if(result2 > 0){
+
+                        newsFile.setNwNo(news.getNo());
+                        newsFile.setOriginName(originFileName);
+                        newsFile.setSaveName(saveName);
+                        newsFile.setSavePath(fileUploadDirectory);
+
+                        noticeService.newsFileUpdate(newsFile);
+                    }
+
+                } else {
+
+                    newsFile.setNwNo(news.getNo());
+                    newsFile.setOriginName(originFileName);
+                    newsFile.setSaveName(saveName);
+                    newsFile.setSavePath(fileUploadDirectory);
+
+                    noticeService.newsFileUpdate(newsFile);
+                }
+            }
             // file insert
-            int fileResult = noticeService.newsFileInsert(newsFile);
-
             try {
                 originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
             } catch (IOException e) {
@@ -409,7 +450,6 @@ public class NoticeController {
 
         }
 
-        int updateResult = noticeService.newsUpdate(news);
         rttr.addFlashAttribute("message", "수정이 완료되었습니다");
 
         return "redirect:/notice/news/list";
@@ -424,4 +464,186 @@ public class NoticeController {
 
         return "redirect:/notice/news/list";
     }
-}
+
+    /* 갤러리 등록 */
+    @GetMapping("/gallery/regist")
+    public String galleryRegistPage(){
+
+        return "notice/gallery/galleryRegist";
+    }
+
+    @PostMapping("gallery/regist")
+    public String galleryRegist(@ModelAttribute GalleryDTO gallery, HttpServletRequest request,
+                                @RequestParam("thumbnailImg1") MultipartFile thumbnailImg1,
+                                @RequestParam("thumbnailImg2") MultipartFile thumbnailImg2,
+                                @RequestParam("thumbnailImg3") MultipartFile thumbnailImg3,
+                                @RequestParam("thumbnailImg4") MultipartFile thumbnailImg4,
+                                @RequestParam("thumbnailImg5") MultipartFile thumbnailImg5,
+                                @RequestParam("thumbnailImg6") MultipartFile thumbnailImg6,
+                                @RequestParam("thumbnailImg7") MultipartFile thumbnailImg7,
+                                @RequestParam("thumbnailImg8") MultipartFile thumbnailImg8,
+                                RedirectAttributes rttr) throws FileNotFoundException {
+
+        String rootLocation = IMAGE_DIR;
+
+        String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
+
+        String fileUploadDirectory = filePath + "/galleryFile";
+        String thumbnailDirectory = filePath + "/thumbnailFile";
+
+        File directory = new File(fileUploadDirectory);
+        File directory2 = new File(thumbnailDirectory);
+
+        if(!directory.exists() || !directory2.exists()){
+
+            directory.mkdirs();
+            directory2.mkdirs();
+        }
+
+        List<Map<String, String>> fileList = new ArrayList<>();
+
+        List<MultipartFile> paramFileList = new ArrayList<>();
+        paramFileList.add(thumbnailImg1);
+        paramFileList.add(thumbnailImg2);
+        paramFileList.add(thumbnailImg3);
+        paramFileList.add(thumbnailImg4);
+        paramFileList.add(thumbnailImg5);
+        paramFileList.add(thumbnailImg6);
+        paramFileList.add(thumbnailImg7);
+        paramFileList.add(thumbnailImg8);
+
+        for(MultipartFile paramFile : paramFileList) {
+
+            if (paramFile.getSize() > 0) {
+                String originFileName = paramFile.getOriginalFilename();
+
+                String ext = originFileName.substring(originFileName.lastIndexOf("."));
+                String savedFileName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+                try {
+                    paramFile.transferTo(new File(fileUploadDirectory + "/" + savedFileName));
+
+                    Map<String, String> fileMap = new HashMap<>();
+                    fileMap.put("originFileName", originFileName);
+                    fileMap.put("savedFileName", savedFileName);
+                    fileMap.put("savePath", fileUploadDirectory);
+
+                    String filedName = paramFile.getName();
+
+                    int width = 400;
+                    int height = 400;
+
+                    Thumbnails.of(fileUploadDirectory + "/" + savedFileName).size(width, height)
+                            .toFile(thumbnailDirectory + "/thumb_" + savedFileName);
+
+                    fileMap.put("thumbnailPath", "/upload/thumbnailFile/thumb_" + savedFileName);
+
+                    fileList.add(fileMap);
+
+                    // galleryDTO에 값 담기
+
+                    gallery.setGalleryFile(new ArrayList<GalleryFileDTO>());
+                    List<GalleryFileDTO> list = gallery.getGalleryFile();
+                    for (int i = 0; i < fileList.size(); i++) {
+                        Map<String, String> file = fileList.get(i);
+
+                        GalleryFileDTO tempFileInfo = new GalleryFileDTO();
+                        tempFileInfo.setOriginName(file.get("originFileName"));
+                        tempFileInfo.setSaveName(file.get("savedFileName"));
+                        tempFileInfo.setSavePath(file.get("savePath"));
+                        tempFileInfo.setThumbnailPath(file.get("thumbnailPath"));
+
+                        list.add(tempFileInfo);
+                    }
+
+                    noticeService.galleryRegist(gallery); //gallery insert
+
+                    rttr.addFlashAttribute("message", "갤러리 등록이 완료되었습니다.");
+
+
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                    //Exception 발생 시 파일 삭제
+                    int cnt = 0;
+                    for (int i = 0; i < fileList.size(); i++) {
+                        Map<String, String> file = fileList.get(i);
+
+                        File deleteFile = new File(fileUploadDirectory + "/" + file.get("savedFileName"));
+                        boolean isDeleted1 = deleteFile.delete();
+
+                        File deleteThumbnail = new File(thumbnailDirectory + "/thumb_" + file.get("savedFileName"));
+                        boolean isDeleted2 = deleteThumbnail.delete();
+
+                        if (isDeleted1 && isDeleted2) {
+                            cnt++;
+                        }
+                    }
+
+                    if (cnt == fileList.size()) {
+                        log.info("업로드 실패한 사진 삭제 완료");
+                        e.printStackTrace();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+        return "redirect:/notice/gallery/list";
+        }
+
+        /* 갤러리 리스트 조회 */
+        @GetMapping("/gallery/list")
+        public ModelAndView gallryList(HttpServletRequest request, ModelAndView mv){
+
+            String currentPage = request.getParameter("currentPage");
+            int pageNo = 1;
+
+            if(currentPage != null && !"".equals(currentPage)){
+                pageNo = Integer.parseInt(currentPage);
+            }
+
+            if(pageNo <= 0){
+                pageNo = 1;
+            }
+
+            String searchCondition = null;
+            String searchValue = request.getParameter("searchValue");
+
+            if(searchValue != null){
+                searchCondition = "title";
+            }
+
+            Map<String, String> searchMap = new HashMap<>();
+            searchMap.put("searchCondition", searchCondition);
+            searchMap.put("searchValue", searchValue);
+
+            int totalCount = noticeService.selectGalleryTotalCount(searchMap);
+
+            int limit = 10;
+            int buttonAmount = 5;
+
+            SelectCriteria selectCriteria = null;
+
+            if(searchCondition != null && !"".equals(searchCondition)){
+
+                selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
+                        searchCondition, searchValue);
+            } else {
+
+                selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+            }
+            log.info("selectCriteria 확인 : " + selectCriteria);
+
+            List<GalleryDTO> galleryList = noticeService.selectGalleryList(selectCriteria);
+
+            mv.addObject("galleryList", galleryList);
+            mv.addObject("selectCriteria", selectCriteria);
+
+            mv.setViewName("notice/gallery/galleryList");
+
+            return mv;
+        }
+
+    }
+

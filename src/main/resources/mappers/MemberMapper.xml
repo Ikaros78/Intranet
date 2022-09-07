@@ -158,11 +158,25 @@
            FROM DEPARTMENT A
     </select>
 
-    <select id="selectMemNumById" resultType="_int">
-        SELECT
-                A.MEM_NUM
-        FROM MEMBER A
-       WHERE A.MEM_ID = #{mem_id}
-    </select>
+    <delete id="deleteCalendarAuthority">
+        DELETE
+        FROM AUTHORIT
+        WHERE MEM_NUM = #{ memNum }
+        AND (AU_CODE = 'ROLE_CD_DEPT' OR AU_CODE= 'ROLE_CD_ALL')
+    </delete>
 
+    <insert id="insertCalendarAuthority" parameterType="AuthoritDTO">
+        INSERT
+          INTO AUTHORIT A
+          (
+            A.MEM_NUM
+          , A.AU_CODE
+          )
+          VALUES
+          (
+           #{ memNum }
+          , #{ auCode }
+          )
+
+    </insert>
 </mapper>

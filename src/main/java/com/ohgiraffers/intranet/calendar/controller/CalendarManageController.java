@@ -6,6 +6,8 @@ import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +87,16 @@ public class CalendarManageController {
 
         return data;
     }
+
+    /* userImpl을 통해 로그인 시 세션에 들고온 해당 계정의 정보를 들고 오는 방법입니다. */
+//    @GetMapping("/button")
+//    public String main(@AuthenticationPrincipal User user){
+//
+//        System.out.println("버튼 눌렀을 때 컨트롤러 들어온다아");
+//        System.out.println("user : " + user);
+//
+//        return "calendar/cd_main";
+//    }
 
 
 

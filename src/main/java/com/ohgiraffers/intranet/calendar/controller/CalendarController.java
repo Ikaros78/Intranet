@@ -133,6 +133,7 @@ public class CalendarController {
         CalendarDTO cdDetail = calendarService.selectCdDetail(id);
 
         System.out.println("아이디 확인용 = " + id);
+        System.out.println("아이디 확인용 = " + id);
 
         mv.addObject("cdDetail", cdDetail);
         mv.setViewName("calendar/cd_detail");

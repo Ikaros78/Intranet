@@ -29,65 +29,41 @@
                             <th colspan="2">최신 기안한 양식</th>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr th:each="recent : ${ recentForm }">
                                 <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
-                                <td class="txtTd"><a href="/sign/registForm">출장 신청서</a></td>
+                                <td class="txtTd" th:text="${ recent.signForm.name }" name="recentName"></td>
+                                <input type="hidden" th:value="${ recent.signFormCode }" name="recentFormCode">
                             </tr>
-                            <tr>
-                                <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
-                                <td class="txtTd">출장 신청서</td>
-                            </tr>
-                            <tr>
-                                <td class="imgTd"><img src="/images/document.png" alt="문서이미지"></td>
-                                <td class="txtTd">출장 신청서</td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>
                 <div class="rightArea">
-                    <p>전체 <span>10</span></p>
-                    <form id="searchForm" th:action="@{/registSelect/list}" method="get">
+                    <p>전체 <span th:text="${ totalCount }"></span></p>
+                    <form id="searchForm" action="/sign/registSelect" method="get">
+                        <input type="hidden" name="currentPage" value="1">
+
                         <select name="" id="">
                             <option value="">양식명</option>
                         </select>
-                        <input type="search">
-                        <button><img src="/images/searchIconOrg.png" alt=""></button>
+                        <input type="search" title="양식명" name="searchName">
+                        <button type="submit"><img src="/images/searchIconOrg.png" alt=""></button>
                     </form>
                     <table class="rightTbl">
                         <thead>
                             <tr>
                                 <th>NO</th>
-                                <th>시스템</th>
                                 <th>서식함</th>
                                 <th>양식명</th>
                                 <th>담당부서</th>
                                 <th>담당자</th>
                             </tr>
                         </thead>
-                        <!-- List 10개 들어가면 옆 테이블이랑 height 딱 맞도록 해놨슴다 -->
+
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>인사</td>
+                            <tr th:each="form : ${ formList }" >
+                                <td th:text="${ form.code }"></td>
                                 <td>공통</td>
-                                <td><a href="#">출장 신청서</a></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>인사</td>
-                                <td>공통</td>
-                                <td>출장 신청서</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>인사</td>
-                                <td>공통</td>
-                                <td>출장 신청서</td>
+                                <td th:text="${ form.name }" name="formName"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -95,43 +71,46 @@
                         <tfoot>
                             <tr>
                                 <td colspan="7" class="hs_table_foot">
-<!--                                    &lt;!&ndash; 맨 앞으로 이동 버튼 &ndash;&gt;-->
-<!--                                    <button-->
-<!--                                            th:onclick="'location.href=\'/sign/registSelect/list?currentPage='+ @{${selectCriteria.startPage}} + '\''"-->
-<!--                                            th:disabled="${selectCriteria.pageNo == 1}"-->
-<!--                                    >-->
-<!--                                        <<-->
-<!--                                    </button>-->
-<!--                                    &lt;!&ndash; 이전 페이지 버튼 &ndash;&gt;-->
-<!--                                    <button-->
-<!--                                            th:onclick="'location.href=\'/sign/registSelect/list?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"-->
-<!--                                            th:disabled="${selectCriteria.pageNo == 1}"-->
-<!--                                    >-->
-<!--                                        <-->
-<!--                                    </button>-->
-<!--                                    &lt;!&ndash; 숫자 버튼 &ndash;&gt;-->
-<!--                                    <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">-->
-<!--                                        <button-->
-<!--                                                th:text="${ page }"-->
-<!--                                                th:onclick="'location.href=\'/sign/registSelect/list?currentPage='+ @{${page}} + '\''"-->
-<!--                                                th:disabled="${ selectCriteria.pageNo eq page }">-->
-<!--                                        </button>-->
-<!--                                    </th:block>-->
+                                <div class="pagingArea" align="center">
+                                    <!-- 페이지 처리 -->
+                                        <!-- 맨 앞으로 이동 버튼 -->
+                                        <button
+                                                th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @{${selectCriteria.startPage}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                                th:disabled="${selectCriteria.pageNo == 1}"
+                                        >
+                                            <<
+                                        </button>
+                                    <!-- 이전 페이지 버튼 -->
+                                    <button
+                                            th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                            th:disabled="${selectCriteria.pageNo == 1}"
+                                    >
+                                        <
+                                    </button>
+                                    <!-- 숫자 버튼 -->
+                                    <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+                                        <button
+                                                th:text="${ page }"
+                                                th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @{${page}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                                th:disabled="${ selectCriteria.pageNo eq page }">
+                                        </button>
+                                    </th:block>
 
-<!--                                    &lt;!&ndash; 다음 페이지 버튼 &ndash;&gt;-->
-<!--                                    <button-->
-<!--                                            th:onclick="'location.href=\'/sign/registSelect/list?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"-->
-<!--                                            th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"-->
-<!--                                    >-->
-<!--                                        >-->
-<!--                                    </button>-->
-<!--                                    &lt;!&ndash; 마지막 페이지로 이동 버튼 &ndash;&gt;-->
-<!--                                    <button-->
-<!--                                            th:onclick="'location.href=\'/sign/registSelect/list?currentPage='+ @{${selectCriteria.maxPage}} + '\''"-->
-<!--                                            th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"-->
-<!--                                    >-->
-<!--                                        >>-->
-<!--                                    </button>-->
+                                    <!-- 다음 페이지 버튼 -->
+                                    <button
+                                            th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @{${selectCriteria.pageNo + 1}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                            th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+                                    >
+                                        >
+                                    </button>
+                                    <!-- 마지막 페이지로 이동 버튼 -->
+                                    <button
+                                            th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @{${selectCriteria.maxPage}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                            th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+                                    >
+                                        >>
+                                    </button>
+                                </div>
                                 </td>
                             </tr>
                         </tfoot>
@@ -139,5 +118,56 @@
                 </div>
             </div>
         </div>
+
+    <script>
+
+        if(document.querySelectorAll('.leftTbl td')){
+            const $tds = document.getElementsByName('recentName');
+
+
+            for(let i = 0; i < $tds.length; i++){
+
+                $tds[i].onmouseenter = function() {
+                    this.parentNode.style.backgroundColor = "lightgray";
+                    this.style.cursor = "pointer";
+                }
+
+                $tds[i].onmouseout = function() {
+                    this.parentNode.style.backgroundColor = "white";
+                }
+
+                $tds[i].onclick = function() {
+
+                    const code = this.parentNode.children[2].value;
+                    console.log(code);
+                    location.href = "/sign/registForm?code=" + code;
+                }
+            }
+
+        }
+
+        if(document.querySelectorAll('.rightTbl td')){
+            const $tdf = document.getElementsByName('formName');
+
+
+            for(let i = 0; i < $tdf.length; i++){
+
+                $tdf[i].onmouseenter = function() {
+                    this.style.cursor = "pointer";
+                }
+
+                $tdf[i].onclick = function() {
+
+                    const formCode = this.parentNode.children[0].innerText;
+                    console.log(formCode);
+                    location.href = "/sign/registForm?code=" + formCode;
+                }
+            }
+
+        }
+
+
+    </script>
+
 </body>
 </html>

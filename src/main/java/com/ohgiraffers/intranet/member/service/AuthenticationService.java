@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class AuthenticationService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // 세션 내 사용자의 권한 정보를 리턴하는 코드
+        // 세션 내 사용자의 권한 정보를 리턴하는 코드 get(0).getAuCode()
         if(member.getAuthorit().get(0).getAuCode() != null){
             List<AuthoritDTO> authorList = member.getAuthorit();
 
@@ -55,7 +56,7 @@ public class AuthenticationService implements UserDetailsService {
             }
         }
 
-        // 세션에 담긴 사용자의 정보를 꺼내 쓸 수 있도록 하는 코드
+        // 세션에 담긴 사용자의 정보
         UserImpl user = new UserImpl(member.getMem_id(),member.getMem_pw(), authorities);
         user.setDetails(member);
 

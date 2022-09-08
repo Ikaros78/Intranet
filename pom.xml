@@ -91,7 +91,12 @@
 			<version>0.4.8</version>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
 
 
 		<dependency>
@@ -104,6 +109,7 @@
 			<artifactId>Intranet</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

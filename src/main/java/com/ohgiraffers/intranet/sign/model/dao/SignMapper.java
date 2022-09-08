@@ -25,4 +25,8 @@ public interface SignMapper {
     List<SignFormDTO> selectAllForm(Map<String, Object> searchList);
 
     SignFormDTO selectFormByCode(String formCode);
+
+    int approveSign(Map<String, Object> approve);
+
+    int refuseSign(Map<String, Object> refuse);
 }

@@ -24,25 +24,26 @@
         <result property="signNo" column="SIGN_NO"/>
         <result property="approverNo" column="APPROVER_NO"/>
         <result property="isApproved" column="IS_APPROVED"/>
+        <result property="isRefused" column="IS_REFUSED"/>
         <result property="approveDate" column="APPROVE_DATE"/>
         <result property="opinion" column="OPINION"/>
         <result property="signType" column="SIGN_TYPE"/>
 
-        <association property="approver" resultMap="memberResultMap"/>
+        <association property="approver" resultMap="approverInfoResultMap"/>
     </resultMap>
 
     <resultMap type="ReceiverDTO" id="receiverResultMap">
         <result property="signNo" column="SIGN_NO"/>
         <result property="receiverNo" column="RECEIVER_NO"/>
 
-        <association property="receiver" resultMap="memberResultMap"/>
+        <association property="receiver" resultMap="receiverInfoResultMap"/>
     </resultMap>
 
     <resultMap type="ReferencerDTO" id="referencerResultMap">
         <result property="signNo" column="SIGN_NO"/>
         <result property="referencerNo" column="REFERENCER_NO"/>
 
-        <association property="referencer" resultMap="memberResultMap"/>
+        <association property="referencer" resultMap="referencerInfoResultMap"/>
     </resultMap>
 
     <resultMap type="SignFileDTO" id="signFileResultMap">
@@ -74,6 +75,48 @@
         <result property="dept_code" column="DEPT_CODE"/>
 
         <association property="department" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap type="ApproverInfoDTO" id="approverInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="approverName" column="APPROVERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap type="ReceiverInfoDTO" id="receiverInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="receiverName" column="RECEIVERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap type="ReferencerInfoDTO" id="referencerInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="referencerName" column="REFERENCERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
     </resultMap>
 
     <resultMap type="DepartmentDTO" id="deptResultMap">
@@ -177,25 +220,31 @@
     <select id="selectSignDetail" resultMap="generalSignResultMap">
         SELECT
                 A.SIGN_NO
+              , A.SIGN_WRITER
               , A.SIGN_TITLE
               , B.MEM_NAME
               , D.DEPT_NAME
               , A.SIGN_CONTENT
               , A.REG_DATE
               , C.SF_NAME
-              , EM.MEM_NAME
-              , FM.MEM_NAME
-              , GM.MEM_NAME
+              , E.APPROVER_NO
+              , E.IS_APPROVED
+              , E.SIGN_TYPE
+              , EM.MEM_NAME APPROVERNAME
+              , F.RECEIVER_NO
+              , FM.MEM_NAME RECEIVERNAME
+              , G.REFERENCER_NO
+              , GM.MEM_NAME REFERENCERNAME
           FROM SI_SIGN A
           JOIN MEMBER B ON (A.SIGN_WRITER = B.MEM_NUM)
           JOIN DEPARTMENT D ON(B.DEPT_CODE = D.DEPT_CODE)
           JOIN SF_SIGN_FORM C ON(A.SIGN_FORM = C.SF_CODE)
           LEFT JOIN APPROVER E ON(A.SIGN_NO = E.SIGN_NO)
-          LEFT JOIN MEMBER EM ON (E.APPROVER_NO = EM.MEM_NUM)
+          LEFT JOIN MEMBER EM ON(E.APPROVER_NO = EM.MEM_NUM)
           LEFT JOIN RECEIVER F ON(A.SIGN_NO = F.SIGN_NO)
-          LEFT JOIN MEMBER FM ON (F.RECEIVER_NO = FM.MEM_NUM)
+          LEFT JOIN MEMBER FM ON(F.RECEIVER_NO = FM.MEM_NUM)
           LEFT JOIN REFERENCER G ON(A.SIGN_NO = G.SIGN_NO)
-          LEFT JOIN MEMBER GM ON (G.REFERENCER_NO = GM.MEM_NUM)
+          LEFT JOIN MEMBER GM ON(G.REFERENCER_NO = GM.MEM_NUM)
          WHERE A.SIGN_NO = #{ signNo }
     </select>
 
@@ -267,5 +316,25 @@
          WHERE A.SF_CODE = #{ formCode }
     </select>
 
+    <update id="approveSign" parameterType="hashmap">
+        UPDATE
+            APPROVER A
+        SET
+            A.IS_APPROVED = 'Y'
+          , A.APPROVE_DATE = SYSDATE
+        WHERE A.SIGN_NO = #{ signNo }
+          AND A.APPROVER_NO = #{ mem_num }
+    </update>
+
+    <update id="refuseSign" parameterType="hashmap">
+        UPDATE
+            APPROVER A
+        SET
+            A.IS_APPROVED = 'Y'
+          , A.APPROVE_DATE = SYSDATE
+          , A.IS_REFUSED = 'Y'
+        WHERE A.SIGN_NO = #{ signNo }
+          AND A.APPROVER_NO = #{ mem_num }
+    </update>
 
 </mapper>

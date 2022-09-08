@@ -31,16 +31,16 @@
     </div>
 
     <div class="details">
-        <form action="/sign/registForm" method="post" enctype="multipart/form-data">
+
         <div class="buttons" align="right">
-            <button name="addApprover">결재선</button>
-            <button name="addReferencer">참조자</button>
-            <button name="regist">결재요청</button>
-            <button name="saveTemp">임시저장</button>
-            <button name="backtoList">취소</button>
+            <button id="addApprover">결재선</button>
+            <button id="addReferencer">참조자</button>
+            <button id="regist" type="submit" form="frm" onclick='btn_click("regist");'>결재요청</button>
+            <button id="saveTemp" type="submit" form="frm" onclick='btn_click("saveTemp");'>임시저장</button>
+            <button id="backtoList">취소</button>
         </div>
 
-
+        <form id="frm" method="post" enctype="multipart/form-data">
         <div id="detail-header">
             <h1 align="center" th:text="${ formMap.selectForm.name }" th:value="${ formMap.selectForm.code }"></h1>
         </div>
@@ -118,6 +118,42 @@
 
         });
     });
+
+    $("#addApprover").click = function(){
+
+        var w = window.open("about:blank","_blank","width=800,heigth=600");
+
+        $.ajax({
+                url: "/sign/addApprover",
+                method: "GET",
+                data:formData,
+                dataType:"html",
+                success: eventApprover,
+                error: function(error) {
+                    console.log(error);
+                }
+        });
+    }
+
+    function eventApprover(data){
+
+        w.location.href = "signpopupmain.html";
+    }
+
+
+    function btn_click(str){
+        if(str=="regist"){
+            frm.action="/sign/registForm";
+        }else if(str=="saveTemp"){
+            frm.action="/sign/saveTemp";
+        }
+    }
+
+    const $backtoList = document.getElementById("backtoList");
+    $backtoList.onclick = function(){
+        location.href = "/sign/registSelect";
+    }
+
 </script>
 
 </body>

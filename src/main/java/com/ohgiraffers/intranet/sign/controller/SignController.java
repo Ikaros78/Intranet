@@ -5,8 +5,7 @@ import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import com.ohgiraffers.intranet.member.service.MemberService;
-import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
-import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
+import com.ohgiraffers.intranet.sign.model.dto.*;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -124,6 +125,14 @@ public class SignController {
         SignDTO signDetail = signService.selectSignDetail(signNo);
 
         log.info("signDetail : " + signDetail);
+
+        List<ApproverDTO> approverList = signDetail.getApprover();
+        List<ReceiverDTO> receiverList = signDetail.getReceiver();
+        List<ReferencerDTO> referencerList = signDetail.getReferencer();
+
+        log.info("approverList : " + approverList);
+        log.info("receiverList : " + receiverList);
+        log.info("referencerList : " + referencerList);
 
         mv.addObject("signDetail" , signDetail);
 
@@ -237,6 +246,55 @@ public class SignController {
         mv.addObject("formMap", formMap);
 
         mv.setViewName("sign/signRegistForm");
+
+        return mv;
+    }
+
+    @PostMapping("/approve")
+    public ModelAndView approveSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
+
+        int signNo = Integer.parseInt(request.getParameter("signNo"));
+
+        int mem_num = ((UserImpl)user).getMem_num();
+
+        log.info("signNo = " + signNo);
+
+        Map<String, Object> approve = new HashMap<>();
+        approve.put("signNo", signNo);
+        approve.put("mem_num", mem_num);
+
+        int result = signService.approveSign(approve);
+
+        mv.setViewName("redirect:/sign/waitingList");
+        rttr.addFlashAttribute("message", "결재 완료하였습니다.");
+
+        return mv;
+    }
+
+    @PostMapping("/refuse")
+    public ModelAndView refuseSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
+
+        int signNo = Integer.parseInt(request.getParameter("signNo"));
+
+        int mem_num = ((UserImpl)user).getMem_num();
+
+        Map<String, Object> refuse = new HashMap<>();
+        refuse.put("signNo", signNo);
+        refuse.put("mem_num", mem_num);
+
+        int result = signService.refuseSign(refuse);
+
+        mv.setViewName("redirect:/sign/waitingList");
+        rttr.addFlashAttribute("message", "반려 완료하였습니다.");
+
+        return mv;
+    }
+
+    @GetMapping(value = "/addApprover", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ModelAndView addApprover(ModelAndView mv){
+
+        mv.setViewName("sign/signpopupmain");
 
         return mv;
     }

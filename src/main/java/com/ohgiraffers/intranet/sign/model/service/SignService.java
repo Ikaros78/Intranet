@@ -86,4 +86,29 @@ public class SignService {
 
         return selectForm;
     }
+
+    /* 결재용 메소드 */
+    public int approveSign(Map<String, Object> approve) throws SignApproveException {
+
+        int result = signMapper.approveSign(approve);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+
+    }
+
+    /* 결재 반려용 메소드 */
+    public int refuseSign(Map<String, Object> refuse) throws SignApproveException {
+
+        int result = signMapper.refuseSign(refuse);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
 }

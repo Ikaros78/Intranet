@@ -60,4 +60,8 @@ public interface NoticeMapper {
     int selectGalleryTotalCount(Map<String, String> searchMap);
 
     List<GalleryDTO> selectGalleryList(SelectCriteria selectCriteria);
+
+    GalleryDTO selectGalleryDetail(int no);
+
+    List<GalleryFileDTO> selectGalleryFileDetail(int no);
 }

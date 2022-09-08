@@ -530,8 +530,8 @@ public class NoticeController {
 
                     String filedName = paramFile.getName();
 
-                    int width = 400;
-                    int height = 400;
+                    int width = 1200;
+                    int height = 900;
 
                     if("thumbnailImg1".equals(filedName)){
                         fileMap.put("fileType", "TITLE");
@@ -593,7 +593,7 @@ public class NoticeController {
             }
         }
 
-//        noticeService.galleryRegist(gallery); //gallery insert
+        noticeService.galleryRegist(gallery); //gallery insert
 
         rttr.addFlashAttribute("message", "갤러리 등록이 완료되었습니다.");
 
@@ -651,6 +651,23 @@ public class NoticeController {
             mv.setViewName("notice/gallery/galleryList");
 
             return mv;
+        }
+
+        /* 갤러리 상세 조회 */
+        @GetMapping("/gallery/detail")
+        public String selectGalleryDetail(HttpServletRequest request, Model model){
+
+            int no = Integer.parseInt(request.getParameter("no"));
+
+            GalleryDTO galleryDetail = noticeService.selectGalleryDetail(no);
+            List<GalleryFileDTO> galleryFileDetail = noticeService.selectGalleryFile(no);
+
+            log.info("galleryDetail값 확인 : " + galleryDetail);
+
+            model.addAttribute("gallery", galleryDetail);
+            model.addAttribute("galleryFileDetail", galleryFileDetail);
+
+            return "notice/gallery/galleryDetail";
         }
 
     }

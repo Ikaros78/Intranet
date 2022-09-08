@@ -186,7 +186,7 @@ public class NoticeService {
 
     /* 갤러리 게시판 등록용 메소드 */
     @Transactional
-    public void galleryRegist(GalleryDTO gallery) throws GalleryRegistException {
+    public void galleryRegist(GalleryDTO gallery)  {
 
         int result = 0;
         // gallery 테이블 insert
@@ -207,9 +207,9 @@ public class NoticeService {
             log.info("확인");
         }
 
-        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
-            throw new GalleryRegistException("갤러리 게시판 등록에 실패하셨습니다.");
-        }
+//        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
+//            throw new GalleryRegistException("갤러리 게시판 등록에 실패하셨습니다.");
+//        }
     }
 
     /* 갤러리 전체 게시글 수 조회 */
@@ -226,5 +226,24 @@ public class NoticeService {
         List<GalleryDTO> galleryList = noticeMapper.selectGalleryList(selectCriteria);
 
         return galleryList;
+    }
+
+    /* 갤러리 상세조회용 메소드(게시글)*/
+    public GalleryDTO selectGalleryDetail(int no) {
+
+        GalleryDTO galleryDetail = null;
+
+        galleryDetail = noticeMapper.selectGalleryDetail(no);
+
+        return galleryDetail;
+
+    }
+
+    /* 갤러리 상세조회용 메소드(파일)*/
+    public List<GalleryFileDTO> selectGalleryFile(int no) {
+
+        List<GalleryFileDTO> galleryFile = noticeMapper.selectGalleryFileDetail(no);
+
+        return galleryFile;
     }
 }

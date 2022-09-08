@@ -9,6 +9,7 @@ import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,7 +36,7 @@ public class BoardController {
         return "freelist/freeboardinsert";
     }
 
-    @PostMapping("/board/insert")
+    @PostMapping("/insert")
     public String freelist(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
 
         freeinsert.getTitle();
@@ -97,6 +98,18 @@ public class BoardController {
         return mv;
     }
 
+    @GetMapping("/detail")
+    public String boardDetailPage(HttpServletRequest request, Model model){
+
+
+        int no = Integer.parseInt(request.getParameter("no"));
+        log.info("no 값 : " + request.getParameter("no"));
+
+        FreeinsertDTO boardDetail = boardService.selectBoardDetail(no);
+        model.addAttribute("notice", boardDetail);
+
+        return "/freelist/boardDetail";
+    }
 
 
 }

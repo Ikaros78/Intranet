@@ -19,4 +19,8 @@ public interface BoardMapper {
     int selectTotalCount(Map<String, String> searchMap);
 
     List<FreeinsertDTO> selectBoardList(SelectCriteria selectCriteria);
+
+    int incresementBoardCount(int no);
+
+    FreeinsertDTO selectBoardDetail(int no);
 }

@@ -36,4 +36,17 @@ public class BoardService {
 
        return boardList;
     }
+
+    public FreeinsertDTO selectBoardDetail(int no) {
+
+        FreeinsertDTO boardDetail = null;
+
+        int result = boardMapper.incresementBoardCount(no); //조회수 증가
+
+        if(result > 0){
+            boardDetail = boardMapper.selectBoardDetail(no);
+        }
+        return boardDetail;
+    }
+
 }

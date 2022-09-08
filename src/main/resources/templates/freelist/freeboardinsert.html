@@ -58,19 +58,27 @@
                 <img src="resourc es/images/circleMark.png" alt="">
                 <span>부적절한 게시글 및 댓글의 경우 신고를 할수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span>
             </div>
-			<form method="post" >
+			<form th:action="@{/board/insert}"method="post" >
+
+				<input
+						type="hidden"
+						id="mem_num"
+						name="mem_num"
+						th:value="${ #authentication.getPrincipal().getMem_num() }">
 			<table>
 			<tr>
 
 				<th>제목</th>
-				<td><input type="text" name="title"</td>
+				<td><input type="text" name="title"></td>
 			</tr>
 
 
 			<tr>
 				<th>등록자</th>
 
-				<td><span>미동석</span>&nbsp;<span>영업팀</span></td>
+				<td><span th:text="${ #authentication.getPrincipal().getMem_name()}">  </span>&nbsp;
+					<span th:text="${ #authentication.getPrincipal().getDepartment().getDept_name()}"></span></td>
+
 
 			</tr>
 			</table>
@@ -81,6 +89,7 @@
 			</form>
 		</div>
 	</div>
+</div>
 	<script>
             $(document).ready(function() {
             //여기 아래 부분

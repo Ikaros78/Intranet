@@ -533,6 +533,13 @@ public class NoticeController {
                     int width = 400;
                     int height = 400;
 
+                    if("thumbnailImg1".equals(filedName)){
+                        fileMap.put("fileType", "TITLE");
+                    } else {
+                        fileMap.put("fileType", "BODY");
+                    }
+
+
                     Thumbnails.of(fileUploadDirectory + "/" + savedFileName).size(width, height)
                             .toFile(thumbnailDirectory + "/thumb_" + savedFileName);
 
@@ -552,14 +559,10 @@ public class NoticeController {
                         tempFileInfo.setSaveName(file.get("savedFileName"));
                         tempFileInfo.setSavePath(file.get("savePath"));
                         tempFileInfo.setThumbnailPath(file.get("thumbnailPath"));
+                        tempFileInfo.setFileType(file.get("fileType"));
 
                         list.add(tempFileInfo);
                     }
-
-                    noticeService.galleryRegist(gallery); //gallery insert
-
-                    rttr.addFlashAttribute("message", "갤러리 등록이 완료되었습니다.");
-
 
                 } catch (IllegalStateException | IOException e) {
                     e.printStackTrace();
@@ -589,6 +592,11 @@ public class NoticeController {
 
             }
         }
+
+//        noticeService.galleryRegist(gallery); //gallery insert
+
+        rttr.addFlashAttribute("message", "갤러리 등록이 완료되었습니다.");
+
         return "redirect:/notice/gallery/list";
         }
 

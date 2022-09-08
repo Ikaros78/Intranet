@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>사내소식:등록</title>
@@ -50,7 +50,7 @@
                         <th>사진첨부</th>
                         <td>
                             <div class="content-img-area1" id="contentImgArea1">
-                                <img id="contentImg1" style="width: 150px; height: 150px">
+                                <img id="contentImg1" style="width: 150px; height: 150px" th:src="${ galleryFileDetail.thumbnailPath[0] }" > <!-- 이거 어떻게 처리해야 할지 고민.. -->
                             </div>
                             <div class="content-img-area2" id="contentImgArea2">
                                 <img id="contentImg2" style="width: 150px; height: 150px">
@@ -93,8 +93,8 @@
                         <input type="file" id="thumbnailImg8" name="thumbnailImg8" onchange="loadImg(this,8)">
                     </div>
                     <div class="btnArea">
-                        <button class="updateBtn"><a href="galleryList.html">수정</a></button>
-                        <button class="cancleBtn"><a href="galleryList.html">취소</a></button>
+                        <button class="updateBtn" th:onclick="|location.href='@{ /notice/gallery/list }'|">수정</button>
+                        <button class="cancleBtn" th:onclick="|location.href='@{ /notice/gallery/list }'|">취소</a></button>
                     </div>
                 </form>
             </div>

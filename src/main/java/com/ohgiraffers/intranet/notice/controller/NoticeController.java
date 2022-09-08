@@ -670,5 +670,22 @@ public class NoticeController {
             return "notice/gallery/galleryDetail";
         }
 
+        /* 갤러리 게시글 수정 */
+        @GetMapping("/gallery/update")
+        public String galleryUpdatePage(HttpServletRequest request, Model model){
+
+            int no = Integer.parseInt(request.getParameter("no"));
+
+            GalleryDTO galleryDetail = noticeService.selectGalleryDetail(no);
+            List<GalleryFileDTO> galleryFileDetail = noticeService.selectGalleryFile(no);
+
+            log.info("galleryDetail값 확인 : " + galleryDetail);
+
+            model.addAttribute("gallery", galleryDetail);
+            model.addAttribute("galleryFileDetail", galleryFileDetail);
+
+            return"notice/gallery/galleryUpdate";
+        }
+
     }
 

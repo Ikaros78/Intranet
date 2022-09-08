@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 권한 관리</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/accessManage/boardManage.css}">
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>직원관리</h3>
+                <ul>
+                    <li class="main"><a href="../emplManage/emplList.html">인사 관리</a>
+                        <ul class="sub sub1">
+                            <li><a href="../emplManage/emplList.html">직원 관리</a></li>
+                            <li><a href="../emplManage/hrList.html">직원 발령 관리</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                        <ul class="sub sub2">
+                            <li><a href="../../calendar/cd_calendarManage.html">일정 권한 관리</a></li>
+                            <li><a href="../accessManage/hrManage.html">인사 권한 관리</a></li>
+                            <li><a href="../accessManage/boardManage.html">게시판 권한 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="container">
+                <h4>게시판 권한 관리</h4><hr>
+                <form action="" class="search">
+                    <label for="">사원번호</label>
+                    <input type="search">
+                    <button><img src="/images/searchIcon.png" alt="검색 이미지"></button>
+                </form>
+                <div class="namebox">주이슬</div>
+                <p>게시판 권한 설정 목록</p>
+                    <form action="" class="save">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>게시판명</th>
+                                    <th>권한 부여</th>
+                                </tr>
+                            </thead>
+                                <tbody>   
+                                <tr>
+                                    <td class="category">공지사항</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="subCategory">공지사항</td>
+                                    <td><input type="checkbox"></td>
+                                </tr>
+                                <tr>
+                                    <td class="subCategory">사내소식</td>
+                                    <td><input type="checkbox"></td>
+                                </tr>
+                                <tr>
+                                    <td class="subCategory">갤러리</td>
+                                    <td><input type="checkbox"></td>
+                                </tr>
+                                <tr>
+                                    <td class="category">업무게시판</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="subCategory">파일게시판</td>
+                                    <td><input type="checkbox"></td>
+                                </tr>
+                                <tr>
+                                    <td class="subCategory">부서별 공지사항</td>
+                                    <td><input type="checkbox"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button>저장</button>
+                    </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

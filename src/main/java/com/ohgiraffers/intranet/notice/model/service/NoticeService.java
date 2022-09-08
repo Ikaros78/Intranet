@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.notice.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.notice.exception.GalleryRegistException;
 import com.ohgiraffers.intranet.notice.model.dao.NoticeMapper;
 import com.ohgiraffers.intranet.notice.model.dto.*;
 import org.slf4j.Logger;
@@ -185,7 +186,7 @@ public class NoticeService {
 
     /* 갤러리 게시판 등록용 메소드 */
     @Transactional
-    public void galleryRegist(GalleryDTO gallery) {
+    public void galleryRegist(GalleryDTO gallery) throws GalleryRegistException {
 
         int result = 0;
         // gallery 테이블 insert
@@ -198,11 +199,16 @@ public class NoticeService {
             galleryFile.get(i).setGalNo(gallery.getNo());
         log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
         }
-
+        
         //galleryFileInsert
         int galleryFileResult = 0;
         for(int i = 0; i < galleryFile.size(); i++){
             galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+            log.info("확인");
+        }
+
+        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
+            throw new GalleryRegistException("갤러리 게시판 등록에 실패하셨습니다.");
         }
     }
 

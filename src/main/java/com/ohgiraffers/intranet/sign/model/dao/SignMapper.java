@@ -34,6 +34,10 @@ public interface SignMapper {
 
     List<SignDTO> selectCompletedList(Map<String, Object> searchList);
 
+    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
+
     int selectTotalRefusedCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectRefusedList(Map<String, Object> searchList);

@@ -128,6 +128,22 @@ public class SignService {
         return completedList;
     }
 
+    /* 자신이 기안하고 완료된 결재 갯수 조회용 메소드 */
+    public int selectTotalMyCompletedCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalMyCompletedCount(searchMap);
+
+        return result;
+    }
+
+    /* 자신이 기안하고 완료된 결재 조회용 메소드 */
+    public List<SignDTO> selectMyCompletedList(Map<String, Object> searchList) {
+
+        List<SignDTO> completedList = signMapper.selectMyCompletedList(searchList);
+
+        return completedList;
+    }
+
     /* 반려문서함 전체 갯수 조회용 메소드 */
     public int selectTotalRefusedCount(Map<String, Object> searchMap) {
 
@@ -144,7 +160,7 @@ public class SignService {
         return refusedList;
     }
 
-    /* 자신이 기안했는데 반려당한 결재 갯수 조회용 메소드 */
+    /* 자신이 기안하고 반려된 결재 갯수 조회용 메소드 */
     public int selectTotalMyRefusedCount(Map<String, Object> searchMap) {
 
         int result = signMapper.selectTotalMyRefusedCount(searchMap);
@@ -152,11 +168,14 @@ public class SignService {
         return result;
     }
 
-    /* 자신이 기안했는데 반려당한 결재 조회용 메소드 */
+    /* 자신이 기안하고 반려된 결재 조회용 메소드 */
     public List<SignDTO> selectMyRefusedList(Map<String, Object> searchList) {
 
         List<SignDTO> myRefusedList = signMapper.selectMyRefusedList(searchList);
 
         return myRefusedList;
     }
+
+
+    
 }

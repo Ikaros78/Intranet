@@ -91,7 +91,7 @@
                 </div>  <!-- search-wrap -->
 
                 <div class="list-wrap">
-                    <table class="table table-borderd">
+                    <table class="table table-borderd refusedList">
                         <thead>
                             <tr>
                                 <th width="100px">문서번호</th>
@@ -168,7 +168,26 @@
             language : "kr",
             todayHighlight : true
         });
-        
+
+        if(document.querySelectorAll('.refusedList td')){
+            const $tds = document.getElementsByName('title');
+            for(let i = 0; i < $tds.length; i++) {
+
+                $tds[i].onmouseenter = function() {
+                    this.parentNode.style.backgroundColor = "lightgray";
+                    this.style.cursor = "pointer";
+                }
+
+                $tds[i].onmouseout = function() {
+                    this.parentNode.style.backgroundColor = "white";
+                }
+
+                $tds[i].onclick = function() {
+                    const no = this.parentNode.children[0].innerText;
+                    location.href = "/sign/refusedDetail?no=" + no;
+                }
+            }
+        }
     </script>
 </body>
 </html>

@@ -126,14 +126,6 @@ public class SignController {
 
         log.info("signDetail : " + signDetail);
 
-        List<ApproverDTO> approverList = signDetail.getApprover();
-        List<ReceiverDTO> receiverList = signDetail.getReceiver();
-        List<ReferencerDTO> referencerList = signDetail.getReferencer();
-
-        log.info("approverList : " + approverList);
-        log.info("receiverList : " + receiverList);
-        log.info("referencerList : " + referencerList);
-
         mv.addObject("signDetail" , signDetail);
 
         mv.setViewName("sign/signWaitingDetail");
@@ -350,7 +342,12 @@ public class SignController {
         searchMap.put("searchEndDate", searchEndDate);
         searchMap.put("searchNum", searchNum);
 
-        int totalCount = signService.selectTotalCompletedCount(searchMap);
+        int totalCompletedCount = signService.selectTotalCompletedCount(searchMap);
+
+        int totalMyCompletedCount = signService.selectTotalMyCompletedCount(searchMap);
+
+        int totalCount = totalCompletedCount + totalMyCompletedCount;
+
 
         log.info("totalCount : " + totalCount);
 
@@ -372,6 +369,10 @@ public class SignController {
 
         List<SignDTO> completedList = signService.selectCompletedList(searchList);
 
+        List<SignDTO> myCompletedList = signService.selectMyCompletedList(searchList);
+
+        completedList.addAll(myCompletedList);
+
         log.info("completedList : " + completedList);
 
         mv.addObject("completedList", completedList);
@@ -379,6 +380,21 @@ public class SignController {
         mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signCompletedList");
+
+        return mv;
+    }
+
+    @GetMapping("/completedDetail")
+    public ModelAndView signCompletedDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signCompletedDetail");
 
         return mv;
     }
@@ -447,6 +463,21 @@ public class SignController {
         mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signRefusedList");
+
+        return mv;
+    }
+
+    @GetMapping("/refusedDetail")
+    public ModelAndView signRefusedDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signRefusedDetail");
 
         return mv;
     }

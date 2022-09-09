@@ -91,11 +91,10 @@
                 </div>  <!-- search-wrap -->
 
                 <div class="list-wrap">
-                    <table class="table table-borderd">
+                    <table class="table table-borderd completedList">
                         <thead>
                             <tr>
-                                <th width="20px"><input type="checkbox"></th>
-                                <th width="80px">문서번호</th>
+                                <th width="100px">문서번호</th>
                                 <th width="600px">문서제목</th>
                                 <th width="200px">양식명</th>
                                 <th width="130px">기안자</th>
@@ -105,7 +104,6 @@
                         </thead>
                         <tbody>
                             <tr th:each="sign : ${ completedList }">
-                                <td><input type="checkbox"></td>
                                 <td th:text="${sign.signNo}"></td>
                                 <td th:text="${sign.signTitle}" name="title"></td>
                                 <td th:text="${sign.signForm.name}"></td>
@@ -158,10 +156,6 @@
                     </div>
                 </div> <!-- list-wrap -->
 
-                <div class="col-2-offset-8" align="right">
-                    <button>일괄합의</button>
-                    <button>일괄결재</button>
-                </div>
             </div>
         </div>
     </div>
@@ -173,7 +167,26 @@
             language : "kr",
             todayHighlight : true
         });
-        
+
+        if(document.querySelectorAll('.completedList td')){
+            const $tds = document.getElementsByName('title');
+            for(let i = 0; i < $tds.length; i++) {
+
+                $tds[i].onmouseenter = function() {
+                    this.parentNode.style.backgroundColor = "lightgray";
+                    this.style.cursor = "pointer";
+                }
+
+                $tds[i].onmouseout = function() {
+                    this.parentNode.style.backgroundColor = "white";
+                }
+
+                $tds[i].onclick = function() {
+                    const no = this.parentNode.children[0].innerText;
+                    location.href = "/sign/completedDetail?no=" + no;
+                }
+            }
+        }
     </script>
 </body>
 </html>

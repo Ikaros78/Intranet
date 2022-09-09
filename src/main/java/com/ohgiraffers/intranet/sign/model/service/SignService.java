@@ -28,9 +28,9 @@ public class SignService {
     }
 
     /* 결재대기함 전체 조회용 메소드 */
-    public List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria) {
+    public List<SignDTO> selectWaitingList(Map<String, Object> searchList) {
 
-        List<SignDTO> waitingList = signMapper.selectWaitingList(selectCriteria);
+        List<SignDTO> waitingList = signMapper.selectWaitingList(searchList);
 
         return waitingList;
     }
@@ -110,5 +110,53 @@ public class SignService {
         }
 
         return result;
+    }
+
+    /* 결재완료함 전체 갯수 조회용 메소드*/
+    public int selectTotalCompletedCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalCompletedCount(searchMap);
+
+        return result;
+    }
+
+    /* 결재완료함 조회용 메소드 */
+    public List<SignDTO> selectCompletedList(Map<String, Object> searchList) {
+
+        List<SignDTO> completedList = signMapper.selectCompletedList(searchList);
+
+        return completedList;
+    }
+
+    /* 반려문서함 전체 갯수 조회용 메소드 */
+    public int selectTotalRefusedCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalRefusedCount(searchMap);
+
+        return result;
+    }
+
+    /* 반려문서함 조회용 메소드 */
+    public List<SignDTO> selectRefusedList(Map<String, Object> searchList) {
+
+        List<SignDTO> refusedList = signMapper.selectRefusedList(searchList);
+
+        return refusedList;
+    }
+
+    /* 자신이 기안했는데 반려당한 결재 갯수 조회용 메소드 */
+    public int selectTotalMyRefusedCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalMyRefusedCount(searchMap);
+
+        return result;
+    }
+
+    /* 자신이 기안했는데 반려당한 결재 조회용 메소드 */
+    public List<SignDTO> selectMyRefusedList(Map<String, Object> searchList) {
+
+        List<SignDTO> myRefusedList = signMapper.selectMyRefusedList(searchList);
+
+        return myRefusedList;
     }
 }

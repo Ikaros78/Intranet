@@ -13,6 +13,7 @@ public class ApproverDTO {
     private int approverNo;
     private String isApproved;
     private String isRefused;
+    private String isLastApprover;
     private java.sql.Date approveDate;
     private String opinion;
     private String signType;

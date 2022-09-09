@@ -12,7 +12,7 @@ public interface SignMapper {
 
     int selectTotalWaitingCount(Map<String, Object> searchMap);
 
-    List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria);
+    List<SignDTO> selectWaitingList(Map<String, Object> searchList);
 
     SignDTO selectSignDetail(String signNo);
 
@@ -29,4 +29,16 @@ public interface SignMapper {
     int approveSign(Map<String, Object> approve);
 
     int refuseSign(Map<String, Object> refuse);
+
+    int selectTotalCompletedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectCompletedList(Map<String, Object> searchList);
+
+    int selectTotalRefusedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectRefusedList(Map<String, Object> searchList);
+
+    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
 }

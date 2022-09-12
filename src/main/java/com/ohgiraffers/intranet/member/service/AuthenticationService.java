@@ -45,7 +45,7 @@ public class AuthenticationService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // 세션 내 사용자의 권한 정보를 리턴하는 코드 get(0).getAuCode()
+        // 세션 내 사용자의 권한 정보를 리턴하는 코드
         if(member.getAuthorit().get(0).getAuCode() != null){
             List<AuthoritDTO> authorList = member.getAuthorit();
 

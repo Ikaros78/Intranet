@@ -38,32 +38,29 @@
         <result property="au_contents" column="AU_CONTENTS"/>
     </resultMap>
 
-<!--    <select id="memberLogin" resultMap="MemberResultMap">-->
-<!--        SELECT-->
-<!--               A.MEM_NUM-->
-<!--             , A.MEM_ID-->
-<!--             , A.MEM_PW-->
-<!--             , A.MEM_NAME-->
-<!--             , A.MEM_PHONE-->
-<!--             , A.MEM_JOINDATE-->
-<!--             , A.MEM_BIRTH-->
-<!--             , A.MEM_EMAIL-->
-<!--             , A.MEM_ADDRESS-->
-<!--             , A.DEPT_RANK-->
-<!--             , A.DEPT_CODE-->
-<!--             , B.DEPT_NAME-->
-<!--             , B.DEPT_CODE-->
-<!--             , C.AU_CODE-->
-<!--             , C.MEM_NUM-->
-<!--             , D.AU_CODE-->
-<!--             , D.AU_NAME-->
-<!--             , D.AU_CONTENTS-->
-<!--          FROM MEMBER A-->
-<!--          LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)-->
-<!--          LEFT JOIN AUTHORIT C on (A.MEM_NUM = C.MEM_NUM)-->
-<!--          LEFT JOIN AU_AUTHORIZATION D ON (C.AU_CODE = D.AU_CODE)-->
-<!--         WHERE A.MEM_ID = #{ mem_id }-->
-<!--    </select>-->
+    <select id="findByMemberId" resultMap="MemberResultMap">
+        SELECT
+               A.MEM_NUM
+             , A.MEM_ID
+             , A.MEM_PW
+             , A.MEM_NAME
+             , A.MEM_PHONE
+             , A.MEM_JOINDATE
+             , A.MEM_BIRTH
+             , A.MEM_EMAIL
+             , A.MEM_ADDRESS
+             , A.DEPT_RANK
+             , A.DEPT_CODE
+             , B.DEPT_NAME
+             , C.AU_CODE
+             , D.AU_NAME
+             , D.AU_CONTENTS
+        FROM MEMBER A
+        LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)
+        LEFT JOIN AUTHORIT C on (A.MEM_NUM = C.MEM_NUM)
+        LEFT JOIN AU_AUTHORIZATION D ON (C.AU_CODE = D.AU_CODE)
+        WHERE A.MEM_ID = #{ mem_id }
+    </select>
 
     <insert id="memberRegistInsert" parameterType="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
                 INSERT /* member.dao.MemberMapper#memberRegistInsert*/
@@ -97,29 +94,6 @@
                 )
     </insert>
 
-    <select id="findByMemberId" resultMap="MemberResultMap">
-        SELECT
-               A.MEM_NUM
-             , A.MEM_ID
-             , A.MEM_PW
-             , A.MEM_NAME
-             , A.MEM_PHONE
-             , A.MEM_JOINDATE
-             , A.MEM_BIRTH
-             , A.MEM_EMAIL
-             , A.MEM_ADDRESS
-             , A.DEPT_RANK
-             , A.DEPT_CODE
-             , B.DEPT_NAME
-             , C.AU_CODE
-             , D.AU_NAME
-             , D.AU_CONTENTS
-        FROM MEMBER A
-        LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)
-        LEFT JOIN AUTHORIT C on (A.MEM_NUM = C.MEM_NUM)
-        LEFT JOIN AU_AUTHORIZATION D ON (C.AU_CODE = D.AU_CODE)
-        WHERE A.MEM_ID = #{ mem_id }
-    </select>
 
     <select id="selectCheckMember" resultType="String">
         SELECT /* member.dao.MemberMapper#selectMember*/
@@ -127,6 +101,20 @@
           FROM MEMBER A
          WHERE A.MEM_ID = #{ mem_id }
     </select>
+
+    <update id="memberUpdate">
+        UPDATE
+               MEMBER A
+           SET A.MEM_PW = #{ mem_pw }
+             , A.MEM_ADDRESS = #{ mem_address }
+             , A.MEM_PHONE = #{ mem_phone }
+             , A.MEM_EMAIL = #{ mem_email }
+             , A.MEM_NAME = #{ mem_name }
+         WHERE A.MEM_ID = #{ mem_id }
+
+    </update>
+
+
 
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
         SELECT

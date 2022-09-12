@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.member.service;
 
 import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
+import com.ohgiraffers.intranet.common.exception.member.MemberUpdateException;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
@@ -35,9 +36,7 @@ public class MemberService {
 
         if(!(result > 0 )){
             throw new MemberRegistException("회원 가입에 실패하였습니다. 다시 시도해주세요.");
-
         }
-
     }
 
     /* 아이디 중복 체크를 확인하는 메소드 */
@@ -46,5 +45,15 @@ public class MemberService {
         String checkResult = memberMapper.selectCheckMember(mem_id);
 
         return checkResult != null? true : false;
+    }
+
+    /* 마이페이지 개인정보 수정 메소드 */
+    public void memberUpdate(MemberDTO member) throws MemberUpdateException {
+
+        int result = memberMapper.memberUpdate(member);
+
+        if(!(result > 0)){
+            throw new MemberUpdateException("회원 정보 수정에 실패하였습니다");
+        }
     }
 }

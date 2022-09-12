@@ -58,7 +58,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 // emplManage 게시판 접근 권한
                 .antMatchers("/calendarManage/**", "/accessManage/**")
                 .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
-                // sign 게시판 접근 권한
                // sign 게시판 접근 권한
                // board 게시판 접근 권한
                // authorManage 게시판 접근 권한

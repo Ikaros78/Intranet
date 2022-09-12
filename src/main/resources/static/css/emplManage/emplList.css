@@ -22,7 +22,7 @@
 
 #contents #container .scroll{margin-top : 171px;height: 600px; overflow: auto;}
 #contents #container table{border-collapse: collapse; width: 1535px; font-size: 18px; }
-#contents #container table thead{background-color: #fff; position:sticky; top: 0; background-color: #ffece6;}
+#contents #container table thead{ position:sticky; top: 0; background-color: #ffece6;}
 #contents #container table thead tr th:first-child{width: 115px;}
 #contents #container table thead tr th:nth-child(2){width: 115px;}
 #contents #container table thead tr th:nth-child(3){width: 125px;}
@@ -37,6 +37,8 @@
 #contents #container table tbody tr:nth-child(odd){background:rgba(238, 238, 238, 0.384);}
 #contents #container table tbody tr:last-child{border-bottom: 1px solid #ddd;}
 #contents #container table td{font-size: 17px;}
+#contents #container table tbody tr:hover{background-color : rgba(255, 236, 230, 0.78);}
+#contents #container table tbody tr td a{cursor: pointer;}
 
 #contents #container .bottom {font-size: 15px; width: 1553px; line-height: 50px; margin-top: 0px; background-color: #eee;}
 #contents #container .bottom img{margin: 16px 0 0 10px;}

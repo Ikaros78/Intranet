@@ -590,6 +590,7 @@
         ORDER BY 1 ASC
     </select>
 
+    <!-- 갤러리 상세조회 -->
     <select id="selectGalleryDetail" parameterType="_int" resultMap="galleryResultMap">
         SELECT
               A.GAL_NO
@@ -605,14 +606,37 @@
         WHERE A.GAL_NO = #{ no }
     </select>
 
+    <!-- 갤러리 파일 조회 -->
     <select id="selectGalleryFileDetail" parameterType="_int" resultMap="galleryFileResultMap">
         SELECT
                GF_THUMBNAIL_PATH
+             , GAL_NO
           FROM GF_GALLERY_FILE
-         WHERE GAL_NO = #{ no }
+         WHERE GAL_NO = #{ galNo }
     </select>
 
+    <!-- 갤러리 수정 -->
+    <update id="galleryUpdate">
+        UPDATE
+            GALLERY
+        SET GAL_TITLE = #{ title }
+          , GAL_CONTENTS = #{ contents }
+        WHERE GAL_NO = #{ no }
+    </update>
 
+    <!-- 갤러리 파일 삭제 -->
+    <delete id="galleryFileDelete">
+        DELETE
+        FROM GF_GALLERY_FILE
+        WHERE GAL_NO = #{ no }
+    </delete>
+
+    <!-- 갤러리 게시글 삭제 -->
+    <delete id="galleryDelete" parameterType="int">
+        DELETE
+        FROM GALLERY
+        WHERE GAL_NO = #{ no }
+    </delete>
 
 
 </mapper>

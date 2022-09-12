@@ -64,4 +64,10 @@ public interface NoticeMapper {
     GalleryDTO selectGalleryDetail(int no);
 
     List<GalleryFileDTO> selectGalleryFileDetail(int no);
+
+    int galleryUpdate(GalleryDTO gallery);
+
+    void galleryFileDelete(int no);
+
+    void galleryDelete(int no);
 }

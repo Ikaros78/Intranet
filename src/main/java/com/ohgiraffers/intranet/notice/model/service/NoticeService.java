@@ -207,8 +207,8 @@ public class NoticeService {
             log.info("확인");
         }
 
-//        if(!(galleryResult > 0 && galleryFileResult == galleryFile.size())){
-//            throw new GalleryRegistException("갤러리 게시판 등록에 실패하셨습니다.");
+//        if(galleryFileResult == 0){
+//            throw new GalleryRegistException("이미지 파일을 첨부해주세요");
 //        }
     }
 
@@ -245,5 +245,43 @@ public class NoticeService {
         List<GalleryFileDTO> galleryFile = noticeMapper.selectGalleryFileDetail(no);
 
         return galleryFile;
+    }
+
+    /* 갤러리 업데이트용 메소드 */
+    @Transactional
+    public void galleryUpdate(GalleryDTO gallery) {
+
+        // gallery 테이블 update
+        int galleryResult = noticeMapper.galleryUpdate(gallery); // 게시글 업데이트
+
+        List<GalleryFileDTO> galleryFile = gallery.getGalleryFile();
+        log.info("galleryFileList확인 : " + galleryFile);
+
+        if(galleryResult > 0){
+            if(gallery.getGalleryFile() != null) {
+                log.info("gallery No값 가져오나 확인 : " + gallery.getNo());
+                noticeMapper.galleryFileDelete(gallery.getNo());
+
+                for (int i = 0; i < galleryFile.size(); i++) {
+                    galleryFile.get(i).setGalNo(gallery.getNo());
+                    log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
+                }
+
+                //galleryFileInsert
+                int galleryFileResult = 0;
+                for (int i = 0; i < galleryFile.size(); i++) {
+                    galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+                    log.info("확인");
+                }
+
+            }
+        }
+
+    }
+
+    public void galleryDelete(GalleryDTO gallery) {
+
+        noticeMapper.galleryFileDelete(gallery.getNo());
+        noticeMapper.galleryDelete(gallery.getNo());
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>갤러리:상세보기</title>
@@ -53,21 +53,13 @@
                     <div class="btnArea">
                         <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list update"
                                 th:onclick="|location.href='@{ /notice/gallery/update(no=${ gallery.no }) }'|">수정</button>
-                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list delete" id="deleteBtn"  onclick="removeCheck()">삭제</button>
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
                         <button class="list" onclick="location.href='/notice/gallery/list'">목록</button>
                     </div>
                 </div>
         </div>
     </div>
         <script>
-            //삭제 confirm
-            function removeCheck() {
-                if(confirm("정말 삭제하시겠습니까?") == true){
-                    alert("삭제되었습니다.");
-                } else {
-                    return false;
-                }
-            }
 
             //이미지 슬라이더
             let pos = 0;
@@ -135,7 +127,30 @@
                 $('#pagination-wrap ul li').removeClass('active');
                 $('#pagination-wrap ul li:eq('+pos+')').addClass('active');
             }
-	
+
+            /*<![CDATA[*/
+
+            // 게시글 삭제
+            function removeCheck() {
+                const no = [[ ${gallery.no} ]];
+                if ( !confirm("게시글을 삭제할까요?") ) {
+                    return false;
+                }
+
+                const formHtml = `
+                    <form id="deleteForm" action="/notice/gallery/delete?no=${no}" method="get">
+                        <input type="hidden" id="no" name="no" value="${no}" />
+                    </form>
+                `;
+                const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+                const form = doc.body.firstChild;
+                document.body.append(form);
+                document.getElementById('deleteForm').submit();
+
+                alert('삭제가 완료되었습니다.')
+            }
+
+            /*]]>*/
         </script>
 </body>
 </html>

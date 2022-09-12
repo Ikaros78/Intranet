@@ -35,7 +35,7 @@
         </div>
         <div id="container">
             <h4>갤러리</h4><hr>
-            <form th:action="@{/notice/gallery/regist}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/notice/gallery/regist}" method="post" enctype="multipart/form-data" name="fileForm" onsubmit="return checkFile()">
                 <input type="hidden" name="currentPage" value="1">
             <table>
                 <input
@@ -53,7 +53,7 @@
                         <span th:text="${ #authentication.getPrincipal().getDepartment().getDept_name() }"></span></td>
                 </tr>
                 <tr class="imgArea">
-                    <th>사진첨부</th>
+                    <th>사진첨부<br>(jpg, gif, png)</th>
                     <td>
                         <div class="content-img-area1" id="contentImgArea1">
                             <img id="contentImg1" style="width: 150px; height: 150px">
@@ -89,14 +89,14 @@
                 </tr>
             </table>
                 <div class="thumbnail-file-area" style="display: none">
-                    <input type="file" id="thumbnailImg1" name="thumbnailImg1" onchange="loadImg(this,1)">
-                    <input type="file" id="thumbnailImg2" name="thumbnailImg2" onchange="loadImg(this,2)">
-                    <input type="file" id="thumbnailImg3" name="thumbnailImg3" onchange="loadImg(this,3)">
-                    <input type="file" id="thumbnailImg4" name="thumbnailImg4" onchange="loadImg(this,4)">
-                    <input type="file" id="thumbnailImg5" name="thumbnailImg5" onchange="loadImg(this,5)">
-                    <input type="file" id="thumbnailImg6" name="thumbnailImg6" onchange="loadImg(this,6)">
-                    <input type="file" id="thumbnailImg7" name="thumbnailImg7" onchange="loadImg(this,7)">
-                    <input type="file" id="thumbnailImg8" name="thumbnailImg8" onchange="loadImg(this,8)">
+                    <input type="file" id="thumbnailImg1" name="thumbnailImg1" onchange="loadImg(this,1)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg2" name="thumbnailImg2" onchange="loadImg(this,2)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg3" name="thumbnailImg3" onchange="loadImg(this,3)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg4" name="thumbnailImg4" onchange="loadImg(this,4)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg5" name="thumbnailImg5" onchange="loadImg(this,5)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg6" name="thumbnailImg6" onchange="loadImg(this,6)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg7" name="thumbnailImg7" onchange="loadImg(this,7)" class="thumbnailImg">
+                    <input type="file" id="thumbnailImg8" name="thumbnailImg8" onchange="loadImg(this,8)" class="thumbnailImg">
                 </div>
                 <button class="registBtn" type="submit">등록하기</button>
             </form>
@@ -197,6 +197,20 @@
             }
             reader.readAsDataURL(value.files[0]);
         }
+    }
+
+    function checkFile(){
+        let fm = document.fileForm;
+        let fnm = fm.thumbnailImg1 || fm.thumbnailImg2;
+        let ext = fnm.value;
+
+        if( ext.substr(ext.length-3) != 'jpg' && ext.substr(ext.length-3) != 'gif' && ext.substr(ext.length-3) != 'png')
+        {
+            alert("이미지(jpg, gif, png) 파일만 업로드 가능합니다.");
+            return false;
+        }
+
+        fm.submit();
     }
 </script>
 </body>

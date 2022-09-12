@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.sign.model.dao;
 
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -45,4 +46,5 @@ public interface SignMapper {
     int selectTotalMyRefusedCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
+
 }

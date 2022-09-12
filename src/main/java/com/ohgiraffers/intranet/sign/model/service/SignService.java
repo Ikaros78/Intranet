@@ -1,6 +1,8 @@
 package com.ohgiraffers.intranet.sign.model.service;
 
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
+import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
@@ -14,9 +16,12 @@ public class SignService {
 
     private SignMapper signMapper;
 
-    public SignService(SignMapper signMapper){
+    private MemberMapper memberMapper;
+
+    public SignService(SignMapper signMapper, MemberMapper memberMapper){
 
         this.signMapper = signMapper;
+        this.memberMapper = memberMapper;
     }
 
     /* 결재대기함 전체 갯수 조회용 메소드 */
@@ -177,5 +182,11 @@ public class SignService {
     }
 
 
-    
+    /* 부서 전체 조회용 메소드 */
+    public List<DepartmentDTO> selectDeptList() {
+
+        List<DepartmentDTO> deptList = memberMapper.selectDeptList();
+
+        return deptList;
+    }
 }

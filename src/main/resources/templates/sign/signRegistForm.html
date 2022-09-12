@@ -119,26 +119,17 @@
         });
     });
 
-    $("#addApprover").click = function(){
+    $("#addApprover").on("click",function(){
 
-        var w = window.open("about:blank","_blank","width=800,heigth=600");
+        let w = window.open("/sign/addApprover","결재자선택","width=1050,height=800,left=(window.screen.width / 2) - 600,top=(window.screen.height / 2) - 400");
 
-        $.ajax({
-                url: "/sign/addApprover",
-                method: "GET",
-                data:formData,
-                dataType:"html",
-                success: eventApprover,
-                error: function(error) {
-                    console.log(error);
-                }
-        });
-    }
+    });
 
-    function eventApprover(data){
+    $("#addReferencer").on("click",function(){
 
-        w.location.href = "signpopupmain.html";
-    }
+        let w = window.open("/sign/addApprover","결재자선택","width=1050,height=800,left=(window.screen.width / 2) - 600,top=(window.screen.height / 2) - 400");
+
+    });
 
 
     function btn_click(str){

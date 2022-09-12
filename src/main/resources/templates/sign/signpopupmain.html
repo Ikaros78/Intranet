@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>결재선</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     #check-btn {display: none;}
     #check-btn:checked ~ .menubars { display: block;}
@@ -13,9 +15,9 @@
     #search-box {float:left; width:350px; height: 500px; border: 2px solid #EAEAEA;}
     #select-move-box {float:left; width : 120px; height: 200px; border: 2px solid #EAEAEA; margin: 200px 20px;}
     #select-move-box tr td{text-align: center;}
-    #select-box {float:left; width: 600px; height: 500px; border: 2px solid #EAEAEA;}
+    #select-box {float:left; width: 500px; height: 500px; border: 2px solid #EAEAEA;}
 
-   
+    #submit-buttons{position: static}
 </style>
 </head>
 <body>
@@ -40,11 +42,8 @@
                             <td>
                                 <input id="check-btn" type="checkbox"/>
                                 <label for="check-btn">회사조직도</label>
-                                    <ul class="menubars">
-                                        <li>관리팀</li>
-                                        <li>인사팀</li>
-                                        <li>영업팀</li>
-                                        <li>기술지원팀</li>
+                                    <ul class="menubars" th:each="department : ${ deptList }">
+                                        <li th:text="${ department.dept_name }"></li>
                                     </ul>
                             </td>
                         </tr>
@@ -61,7 +60,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="radio" name="choice" id="sign"><label for="sign">결재</label>
+                                <input type="hidden" name="signType" value="결재">결재
                             </td>
                         </tr>
                         <tr>
@@ -86,9 +85,17 @@
 
         <div id="submit-buttons" align="right">
             <button>적용</button>
-            <button>닫기</button>
+            <button id="close">닫기</button>
         </div>
     </div>
+
+<script>
+
+    $("#close").on("click",function(){
+        window.close();
+    })
+
+</script>
 
 </body>
 </html>

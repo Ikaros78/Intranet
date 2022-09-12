@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.sign.controller;
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import com.ohgiraffers.intranet.member.service.MemberService;
 import com.ohgiraffers.intranet.sign.model.dto.*;
@@ -285,6 +286,10 @@ public class SignController {
     @GetMapping(value = "/addApprover", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ModelAndView addApprover(ModelAndView mv){
+
+        List<DepartmentDTO> deptList = signService.selectDeptList();
+
+        mv.addObject("deptList", deptList);
 
         mv.setViewName("sign/signpopupmain");
 

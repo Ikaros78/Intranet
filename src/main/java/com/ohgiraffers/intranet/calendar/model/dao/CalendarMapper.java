@@ -12,15 +12,21 @@ public interface CalendarMapper {
 //    List<CalendarDTO> selectAllCalendar();
 
     /* 전체조회용 메소드 */
-    List<CalendarDTO> findAllCal();
+    List<CalendarDTO> findAllCal(String type);
 
     /* 캘린더 메인 화면 */
     List<CalendarDTO> findAllSc();
 
-    /* 캘린더 수정 화면 */
+    /* 캘린더 작성 */
     int insertList(CalendarDTO calendar);
 
     /* 캘린더 상세조회 */
     CalendarDTO selectCdDetail(String id);
+
+    /* 캘린더 수정 */
+    int updateList(CalendarDTO calendar);
+    
+    /* 캘린더 삭제 */
+    int cdDelete(String id);
 
 }

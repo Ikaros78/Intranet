@@ -1,34 +1,26 @@
 package com.ohgiraffers.intranet.calendar.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
-import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
-import org.json.simple.JSONObject;
+import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.spi.CalendarDataProvider;
 
 @Controller
 @RequestMapping("/calendar/*")
 public class CalendarController {
 
-    private final CalendarService calendarService;
+    private final CalendarServiceImpl calendarService;
 
     @Autowired
-    public CalendarController(CalendarService calendarService){
+    public CalendarController(CalendarServiceImpl calendarService){
 
         this.calendarService = calendarService;
     }
@@ -41,12 +33,13 @@ public class CalendarController {
 
     /* 컨트롤러 전체조회용 메소드 */
     @GetMapping("/all")
-    public ModelAndView findScList(ModelAndView mv) {
+    public ModelAndView findScList(ModelAndView mv, @RequestParam String type) {
 
-        List<CalendarDTO> calList = calendarService.findAllSc();
 
-        mv.addObject("calList", calList);
-        mv.setViewName("calendar/all");
+        System.out.println("type 확인 : " + type);
+
+        mv.addObject("type", type);
+        mv.setViewName("/calendar/cd_main");
 
         return mv;
     }
@@ -66,11 +59,11 @@ public class CalendarController {
     /* ajax로 값을 불러오기 위한 죄회용 메소드 */
     @GetMapping(value="findAll", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public List<CalendarDTO> findAllList() {
+    public List<CalendarDTO> findAllList(@RequestParam String type) {
 
 //        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-
-        return calendarService.findAllCal();
+        System.out.println("type2 확인: " + type);
+        return calendarService.findAllCal(type);
 
     }
 
@@ -99,6 +92,7 @@ public class CalendarController {
     }
 
     /* 일정추가 insert 동작하는 메소드 */
+    @Transactional
     @PostMapping("/insert")
     public String insertList(@ModelAttribute CalendarDTO calendar) {
 
@@ -113,7 +107,7 @@ public class CalendarController {
         int result = calendarService.insertList(calendar);
 
         System.out.println("result = " + result);
-        
+
         return "redirect:/calendar/main";
     }
 
@@ -124,25 +118,64 @@ public class CalendarController {
         /* 원하는 데이터 불러오기 */
         String id = request.getParameter("id");  // 글번호
         System.out.println("id 확인용 = " + id);
-        
+
         /* 불러온 값 담아줌 */
         CalendarDTO cdDetail = calendarService.selectCdDetail(id);
 
         System.out.println("아이디 확인용 = " + id);
 
         mv.addObject("cdDetail", cdDetail);
-        
+
         System.out.println("cdDetail 체킹 = " + cdDetail);
         mv.setViewName("calendar/cd_detail");
 
         return mv;
     }
 
-    /* 캘린더 수정 메소드 */
+    /* 캘린더 수정 조회용 메소드 */
     @GetMapping("/update")
     public ModelAndView updateMain(HttpServletRequest request, ModelAndView mv) {
 
+        String id = request.getParameter("id"); // 글번호
+        System.out.println("글번호 = " + id);
+
+        CalendarDTO cdUpdate = calendarService.selectCdDetail(id);
+
+        System.out.println("cdUpdate = " + cdUpdate);
+
+        mv.addObject("cdUpdate", cdUpdate);
+        mv.setViewName("calendar/cd_update");
+
         return mv;
+    }
+
+    /* 캘린더 수정용 메소드 */
+    @Transactional
+    @PostMapping("/update")
+    public String updateList(@ModelAttribute CalendarDTO calendar) {
+
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        calendar.setwDate(sdf.format(date));
+        int result = calendarService.updateList(calendar);
+
+        System.out.println("수정확인 = " + result);
+
+        return "redirect:/calendar/main";
+    }
+
+    /* 캘린더 삭제용 메소드 */
+    @Transactional
+    @GetMapping("/delete")
+    public String deleteCd(HttpServletRequest request) {
+
+        String id = request.getParameter("id");  // 글번호
+
+        calendarService.cdDelete(id);
+        System.out.println("위치와 번호 확인" + id);
+
+        return "redirect:/calendar/main";
+
     }
 
 }

@@ -65,6 +65,14 @@
              , A.CD_TYPE
              , A.CD_WDATE
           FROM CD_CALENDAR A
+         <where>
+            <if test='type == "dept"'>
+                A.CD_TYPE IN (1,2)
+            </if>
+            <if test='type == "solo"'>
+                A.CD_TYPE = 1
+            </if>
+         </where>
     </select>
 
     <!-- 캘린더 입력 -->
@@ -95,7 +103,7 @@
         , #{ end }
         , #{ allDay }
         , #{ color }
-        , 1
+        , #{ type }
         , #{ wDate }
         )
 
@@ -118,6 +126,27 @@
         FROM CD_CALENDAR A
        WHERE A.CD_NO = #{ id }
     </select>
+
+    <!-- 캘린더 수정 -->
+    <update id="updateList">
+        UPDATE
+               CD_CALENDAR A
+           SET
+               A.CD_TITLE = #{ title }
+             , A.CD_CONTENT = #{ content }
+             , A.CD_START = #{ start }
+             , A.CD_END = #{ end }
+             , A.CD_COLOR = #{ color }
+             , A.CD_TYPE = #{ type }
+         WHERE A.CD_NO = #{ id }
+    </update>
+
+    <!-- 캘린더 삭제 -->
+    <delete id="cdDelete">
+        DELETE
+          FROM CD_CALENDAR A
+         WHERE A.CD_NO = #{ id }
+    </delete>
 
 
 </mapper>

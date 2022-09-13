@@ -42,13 +42,13 @@
   }
 
   .select {
-    width: 70px;
+    width: 80px;
     height: 34px;
     padding-left: 5px;
   }
 
   .title {
-    width: 556px;
+    width: 546px;
     height: 30px;
   }
 
@@ -120,7 +120,7 @@
       <form th:action="@{/calendar/insert}" method="post">
         <input type="hidden" id="memNum" name="memNum"
                th:value="${#authentication.getPrincipal().getMem_num()}">
-<!--                <input type="hidden" name="allDay" value="true">-->
+                <input type="hidden" name="allDay" value="true">
 <!--                <input type="hidden" name="wDate" value="SYSDATE">-->
 <!--                <input type="hidden" name="color" value="#FF0000">-->
 
@@ -130,21 +130,23 @@
             <th></th>
           </tr>
           <tr style="width: 500px;">
-            <td class="tname">기간</td>
+            <td class="tname">일정 기간 선택</td>
             <td class="timeline" style="padding-left: 15px;">
-              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>
-              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> <input type="date" name="start"> ~ <input type="date" name="end">
+<!--              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>-->
+<!--              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> -->
+              <input type="date" name="start"> ~ <input type="date" name="end">
             </td>
           </tr>
           <tr>
             <td class="tname">일정이름</td>
             <td style="padding-left: 15px;">
               <select class="select" name="color">
-                <option name="color" value="">-색상선택-</option>
-                <option name="color" value="#c771e1" style="background-color: #c771e1">빨강</option>
-                <option name="color" value="#6fdcb0" style="background-color: #6fdcb0">노랑</option>
-                <option name="color" value="#c73e7a" style="background-color: #c73e7a">파랑</option>
-                <option name="color" value="#6a8dce" style="background-color: #6a8dce">분홍</option>
+                <option name="color" value="">색상선택</option>
+                <option name="color" value="#f5cec7" style="background-color: #ffd4cd; color: white">color1</option>
+                <option name="color" value="#e79796" style="background-color: #ffa5a4; color: white">color2</option>
+                <option name="color" value="#ffc98b" style="background-color: #ffce96; color: white">color3</option>
+                <option name="color" value="#ffb2b4" style="background-color: #ffb9bb; color: white">color4</option>
+                <option name="color" value="#c6c09c" style="background-color: #fff7c3; color: white">color5</option>
 <!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
 <!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
 <!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->

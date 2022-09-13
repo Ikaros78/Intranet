@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
   <meta charset="UTF-8">
@@ -81,7 +81,8 @@
     padding: 4px;
     width: 60px;
     height: 40px;
-    margin-top: 3px;
+    margin: 13px auto auto auto;
+    /*margin-top: 3px;*/
   }
 
   .modify, .delete{
@@ -119,6 +120,8 @@
       <br><br><br><br><br>
       <h1 class="nameUpdate">일정 상세보기</h1>
       <br>
+        <form id="fm" method="post">
+        <input type="hidden" name="id" th:value="${cdDetail.id}">
 <!--      <span style="margin-left: 680px;">-->
 <!--                    생성자 :-->
 <!--                </span>-->
@@ -128,6 +131,8 @@
                 </span>
       <hr><br>
       <!-- 일정 테이블 -->
+            <div>
+
       <table id="tb" style="float: left;">
         <tr>
           <td style="border: 0;"></td>
@@ -165,19 +170,64 @@
         <tr>
           <td style="border: none;"></td>
           <td style="border: none;">
-            <button class="bton csb"><a href="/calendar/cd_main.html">취소</a></button>
-            <button class="bton modify" type="submit"><a href="calendar/cd_modify.html">수정</a></button>
-            <button class="bton delete" type="submit" onclick="javascript:deletebtn()"><a href="/calendar/cd_main.html">삭제</a></button>
-            <script>
-              function deletebtn(){
-                if(!confirm('정말 삭제하시겠습니까?')) {
-                  return true;
-                }
-              }
-            </script>
+
           </td>
         </tr>
       </table>
+            </div>
+        </form>
+        <div style="width: 775px">
+
+            <button class="bton csb" ><a th:href="@{/calendar/main}">취소</a></button>
+            <button class="bton modify" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}">수정</a></button>
+<!--            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/delete(id=${cdDetail.id})}">삭제</a></button>-->
+              <!--            <button class="bton delete" onclick="deletebtn()">삭제</button>-->
+            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }" th:onclick="removeCheck()">삭제</button>
+        </div>
+
+                            <th:block layout:fragment="script">
+                                <script th:inline="javascript">
+                                    // 게시글 삭제
+                                    function removeCheck() {
+                                        const id = [[ ${cdDetail.id} ]];
+                                        if ( !confirm('삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?') ) {
+                                            return false;
+                                        }
+
+                                        const formHtml = `
+                                  <form id="deleteForm" action="/calendar/delete?id=${id}" method="get">
+                                      <input type="hidden" id="id" name="id" value="${id}" />
+                                  </form>
+                              `;
+                                        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+                                        const form = doc.body.firstChild;
+                                        document.body.append(form);
+                                        document.getElementById('deleteForm').submit();
+                                    }
+
+                                </script>
+                            </th:block>
+
+              <!--/*
+
+
+
+               삭제 버튼
+                        <script>
+                            function deletebtn(){
+                                if(!confirm(id + '삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?')) {
+                                    return false;
+                                }
+                            }
+                        </script>
+
+                            <script>
+                                const result = "${calendar.id}}"
+                                if (result === "${calendar.id}}"){
+                                    alert("캘린더 일정 삭제가 완료됐습니다.")
+                                }
+                            </script>
+              */-->
     </div>
 
   </div>

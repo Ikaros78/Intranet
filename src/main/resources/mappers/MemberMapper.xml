@@ -230,5 +230,13 @@
           AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_EM_READ' OR B.AU_CODE = 'ROLE_EM_ALL' OR B.AU_CODE = 'ROLE_HR_READ' OR B.AU_CODE = 'ROLE_HR_ALL')
         ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
-</mapper>
 
+    <select id="selectDeptByNum" resultType="java.lang.String">
+        SELECT
+                A.DEPT_NAME
+          FROM DEPARTMENT A
+          JOIN MEMBER B ON(B.DEPT_CODE = A.DEPT_CODE)
+         WHERE B.MEM_NUM = #{ mem_num }
+    </select>
+
+</mapper>

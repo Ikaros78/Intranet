@@ -34,6 +34,8 @@ public interface MemberMapper {
     int insertAuthority(AuthoritDTO authoritDTO);
 
 
+    /* 부서이름 조회용 메소드 */
+    String selectDeptByNum(int mem_num);
 //    List<MemberDTO> selectBoardAuthority(String searchValue);
 
     /* 게시판 권한 관리용 회원리스트 조회 */

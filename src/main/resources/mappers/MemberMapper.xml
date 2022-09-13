@@ -179,4 +179,56 @@
           )
 
     </insert>
+
+    <!-- 게시판 권한 관리를 위해 회원 조회용 -->
+    <select id="selectMemberListForBoardManage" resultMap="MemberResultMap">
+        SELECT
+        A.MEM_NUM
+        , A.MEM_NAME
+        , A.DEPT_RANK
+        , A.MEM_JOINDATE
+        , A.MEM_PHONE
+        , A.MEM_EMAIL
+        , A.DEPT_CODE
+        , B.AU_CODE
+        , C.DEPT_NAME
+        FROM MEMBER A
+        JOIN DEPARTMENT C ON(A.DEPT_CODE = C.DEPT_CODE)
+        LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        <where>
+            <if test="searchCondition != null and searchCondition != 'all'">
+                A.DEPT_CODE = #{ searchCondition }
+            </if>
+            AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_DB_ALL' OR B.AU_CODE = 'ROLE_NT_ALL')
+        </where>
+        ORDER BY A.MEM_NUM, B.AU_CODE
+    </select>
+
+    <delete id="deleteBoardAuthority">
+        DELETE
+        FROM AUTHORIT
+        WHERE MEM_NUM = #{ memNum }
+          AND (AU_CODE = 'ROLE_DB_ALL' OR AU_CODE= 'ROLE_NT_ALL')
+    </delete>
+
+    <!-- 인사관리를 위해 인사부 직원들 리스트 조회  -->
+    <select id="selectMemberListForEmpManage" resultMap="MemberResultMap">
+        SELECT
+            A.MEM_NUM
+             , A.MEM_NAME
+             , A.DEPT_RANK
+             , A.MEM_JOINDATE
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.DEPT_CODE
+             , B.AU_CODE
+             , C.DEPT_NAME
+        FROM MEMBER A
+                 JOIN DEPARTMENT C ON(A.DEPT_CODE = C.DEPT_CODE)
+                 LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        WHERE A.DEPT_CODE = 'D1'
+          AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_EM_READ' OR B.AU_CODE = 'ROLE_EM_ALL' OR B.AU_CODE = 'ROLE_HR_READ' OR B.AU_CODE = 'ROLE_HR_ALL')
+        ORDER BY A.MEM_NUM, B.AU_CODE
+    </select>
 </mapper>
+

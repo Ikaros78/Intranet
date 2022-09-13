@@ -43,37 +43,30 @@
             </ul>
         </div>
         <div id="container">
-            <h4 style="font-weight: bold;">게시판 권한 관리</h4>
+            <h4 style="font-weight: bold;">인사 권한 관리</h4>
             <hr>
-            <form id="dept" th:action="@{ /boardManage/list }" >
-                <span>부서</span> &nbsp
-                <select name="searchCondition" id="searchCondition">
-                    <option value="all"> 전체 </option>
-                    <th:block th:each="dept : ${ deptList }">
-                        <option th:value="${ dept.dept_code }" th:text="${ dept.dept_name }"></option>
-                    </th:block>
-                </select>&nbsp &nbsp
-                <button type="submit">검색</button>
-            </form>
-
 
             <div id="list">
-                <!--                <form id="list" th:action="@{/calendarManage/updateList}" method="post">-->
                 <div class="scroll">
                     <table id="tableData">
                         <thead>
                         <tr>
-                            <th>사원번호</th>
-                            <th>성명</th>
-                            <th>부서</th>
-                            <th>직책</th>
-                            <th>입사일자</th>
-                            <th>전화번호</th>
-                            <th class="col-2">이메일</th>
-                            <th class="col-2">권한여부(부서게시판)</th>
-                            <th class="col-2">권한여부(공지사항)</th>
-                            <th class="col-1">권한 적용</th>
-
+                            <th rowspan="2">사원번호</th>
+                            <th rowspan="2">성명</th>
+                            <th rowspan="2">부서</th>
+                            <th rowspan="2">직책</th>
+                            <th rowspan="2">입사일자</th>
+                            <th rowspan="2">전화번호</th>
+                            <th rowspan="2" class="col-2">이메일</th>
+                            <th colspan="2" class="col-2">권한여부(인사발령)</th>
+                            <th colspan="2" class="col-2">권한여부(직원정보)</th>
+                            <th rowspan="2" class="col-1">권한 적용</th>
+                        </tr>
+                        <tr>
+                            <td class="col-1">조회</td>
+                            <td class="col-1">관리</td>
+                            <td class="col-1">조회</td>
+                            <td class="col-1">관리</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -110,7 +103,6 @@
                     </table>
                 </div>
             </div>
-            <!--                </form>-->
 
         </div>
     </div>
@@ -120,21 +112,21 @@
         function updateData(e){
 
             let memNum = e.parentElement.parentElement.children[0].innerText;
-            let DB_ALL = e.parentElement.parentElement.children[7].children[0].checked;
-            let NT_ALL = e.parentElement.parentElement.children[8].children[0].checked;
+            let CD_ALL = e.parentElement.parentElement.children[7].children[0].checked;
+            let CD_DEPT = e.parentElement.parentElement.children[8].children[0].checked;
 
 
-            alert(memNum); //번호
-            alert(DB_ALL); // true
-            alert(NT_ALL); // true /false
+            // alert(memNum); //번호
+            // alert(CD_ALL); // true
+            // alert(CD_DEPT); // true /false
 
             $.ajax({
-                url:"/boardManage/updateList",
+                url:"/calendarManage/updateList",
                 method: "POST",
                 data: {
                     memNum : memNum,
-                    db_all : DB_ALL,
-                    nt_all : NT_ALL
+                    cd_all : CD_ALL,
+                    cd_dept : CD_DEPT
                 },
                 success : function(data){
                     console.log(data + "성공했어");

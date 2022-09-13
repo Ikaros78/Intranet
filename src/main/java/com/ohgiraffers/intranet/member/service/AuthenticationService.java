@@ -1,13 +1,22 @@
 package com.ohgiraffers.intranet.member.service;
 
-import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
+import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
+import com.ohgiraffers.intranet.member.model.dto.Au_AuthorizationDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
@@ -26,17 +35,30 @@ public class AuthenticationService implements UserDetailsService {
 
         log.info("[인증 서비스] ================================ ");
         log.info("[인증 서비스] mem_id: " + mem_id);
-        log.info("[인증 서비스] 여기까지 왔니?");
-
 
         MemberDTO member = memberMapper.findByMemberId(mem_id);
-        log.info("[인증 서비스] 여기까지 왔니?");
         log.info("[인증 서비스] member : " + member);
 
         if(member == null){
             throw new UsernameNotFoundException("확인되지 않은 회원입니다.");
         }
 
-        return member;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if(member.getAuthorit().get(0).getAuCode() != null){
+            List<AuthoritDTO> authorList = member.getAuthorit();
+
+            for(int i = 0; i < authorList.size(); i++) {
+
+                Au_AuthorizationDTO au_authorization = authorList.get(i).getAu_authorization();
+                authorities.add(new SimpleGrantedAuthority(au_authorization.getAu_code()));
+            }
+        }
+
+        UserImpl user = new UserImpl(member.getMem_id(),member.getMem_pw(), authorities);
+        user.setDetails(member);
+
+        return user;
+
     }
 }

@@ -7,7 +7,7 @@ public class MsFileDTO {
 	private int fileNo;
 	private String originName;
 	private String saveName;
-	private String savaPath;
+	private String savePath;
 	private Date noDate;
 	private String deleteYn;
 	private int msNo;
@@ -15,13 +15,13 @@ public class MsFileDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MsFileDTO(int fileNo, String originName, String saveName, String savaPath, Date noDate, String deleteYn,
+	public MsFileDTO(int fileNo, String originName, String saveName, String savePath, Date noDate, String deleteYn,
 			int msNo) {
 		super();
 		this.fileNo = fileNo;
 		this.originName = originName;
 		this.saveName = saveName;
-		this.savaPath = savaPath;
+		this.savePath = savePath;
 		this.noDate = noDate;
 		this.deleteYn = deleteYn;
 		this.msNo = msNo;
@@ -44,11 +44,11 @@ public class MsFileDTO {
 	public void setSaveName(String saveName) {
 		this.saveName = saveName;
 	}
-	public String getSavaPath() {
-		return savaPath;
+	public String getSavePath() {
+		return savePath;
 	}
-	public void setSavaPath(String savaPath) {
-		this.savaPath = savaPath;
+	public void setSavePath(String savePath) {
+		this.savePath = savePath;
 	}
 	public Date getNoDate() {
 		return noDate;
@@ -70,10 +70,9 @@ public class MsFileDTO {
 	}
 	@Override
 	public String toString() {
-		return "MsFileDTO [fileNo=" + fileNo + ", originName=" + originName + ", saveName=" + saveName + ", savaPath="
-				+ savaPath + ", noDate=" + noDate + ", deleteYn=" + deleteYn + ", msNo=" + msNo + "]";
+		return "MsFileDTO [fileNo=" + fileNo + ", originName=" + originName + ", saveName=" + saveName + ", savePath="
+				+ savePath + ", noDate=" + noDate + ", deleteYn=" + deleteYn + ", msNo=" + msNo + "]";
 	}
-	
-	
+
 	
 }

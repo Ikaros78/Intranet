@@ -2,10 +2,7 @@ package com.ohgiraffers.intranet.notice.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.notice.model.dao.NoticeMapper;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -73,22 +70,19 @@ public class NoticeService {
     @Transactional
     public int noticeUpdate(NoticeDTO notice) {
 
-        int result = noticeMapper.noticeUpdate(notice);
-
-        // 파일이 존재할 경우 기존 파일 삭제 후 게시글 및 파일 등록
-        if (notice.getFile() != null) {
-            log.info("기존 파일 존재함...");
-            int deleteFileResult = noticeMapper.deleteFile(notice.getFile().getNtNo());
-
-            //삭제 완료되었을 경우
-            if (deleteFileResult > 0) {
-                NoticeFileDTO noticeFile = notice.getFile();
-                noticeFile.setNtNo(notice.getFile().getNtNo());
-                //파일 다시 넣어줌
-                int insertFileResult = noticeMapper.fileRegist(noticeFile);
-            }
-        }
         return noticeMapper.noticeUpdate(notice);
+    }
+
+    /* 공지사항 파일 다시 넣기 메소드 */
+    public void noticeFileUpdate(NoticeFileDTO noticeFile) {
+
+        noticeMapper.noticeFileUpdate(noticeFile);
+    }
+
+    /* 공지사항 파일 삭제용 메소드 */
+    public int noticeFileDelete(int no) {
+
+        return noticeMapper.deleteFile(no);
     }
 
     /* 공지사항 삭제용 메소드 */
@@ -114,6 +108,8 @@ public class NoticeService {
         return noticeMapper.newsFileRegist(newsFile);
     }
 
+
+
     /* 사내소식 전체 게시글 수 조회용 메소드 */
     public int selectNewsTotalCount(Map<String, String> searchMap) {
 
@@ -122,7 +118,7 @@ public class NoticeService {
         return result;
     }
 
-    /* 사내소식 검색 게시글 수 조회용 메소드 */
+    /* 사내소식 검색 게시글 조회용 메소드 */
     public List<NewsDTO> selectNewsList(SelectCriteria selectCriteria) {
 
         List<NewsDTO> newsList = noticeMapper.selectNewsList(selectCriteria);
@@ -171,5 +167,59 @@ public class NoticeService {
 
         int result1 = noticeMapper.deleteNewsFile(news.getNo());
         int result2 = noticeMapper.newsDelete(news.getNo());
+    }
+
+    /* 사내 소식 파일 삭제용 메소드 */
+    @Transactional
+    public int newsFileDelete(int no) {
+
+        return noticeMapper.deleteNewsFile(no);
+    }
+
+    /* 사내 소식 파일 수정용 메소드 */
+    @Transactional
+    public void newsFileUpdate(NewsFileDTO newsFile) {
+
+        noticeMapper.newsFileUpdate(newsFile);
+    }
+
+    /* 갤러리 게시판 등록용 메소드 */
+    @Transactional
+    
+    public void galleryRegist(GalleryDTO gallery) {
+
+        int result = 0;
+        // gallery 테이블 insert
+        int galleryResult = noticeMapper.galleryRegist(gallery);
+
+        List<GalleryFileDTO> galleryFile = gallery.getGalleryFile();
+
+        // 파일에 galleryNo 넣기
+        for(int i = 0; i < galleryFile.size(); i++){
+            galleryFile.get(i).setGalNo(gallery.getNo());
+        log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
+        }
+
+        //galleryFileInsert
+        int galleryFileResult = 0;
+        for(int i = 0; i < galleryFile.size(); i++){
+            galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+        }
+    }
+
+    /* 갤러리 전체 게시글 수 조회 */
+    public int selectGalleryTotalCount(Map<String, String> searchMap) {
+
+        int result = noticeMapper.selectGalleryTotalCount(searchMap);
+
+        return result;
+    }
+
+    /* 갤러리 검색 게시글 조회용 메소드 */
+    public List<GalleryDTO> selectGalleryList(SelectCriteria selectCriteria) {
+
+        List<GalleryDTO> galleryList = noticeMapper.selectGalleryList(selectCriteria);
+
+        return galleryList;
     }
 }

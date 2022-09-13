@@ -14,14 +14,19 @@ public class MsBoardDTO {
 	private String sendDel;
 	private String recpDel;
 	private String recpNum;
+	private String sendNum;
 	private String contents;
 	private int memNum;
+	private int fileNo;
+	private String originName;
+	private String saveName;
 	public MsBoardDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public MsBoardDTO(int msNo, String msTitle, String sendName, String recpName, Date sendDate, Date recpDate,
-			String readYn, String sendDel, String recpDel, String recpNum, String contents, int memNum) {
+			String readYn, String sendDel, String recpDel, String recpNum, String sendNum, String contents, int memNum,
+			int fileNo, String originName, String saveName) {
 		super();
 		this.msNo = msNo;
 		this.msTitle = msTitle;
@@ -33,8 +38,12 @@ public class MsBoardDTO {
 		this.sendDel = sendDel;
 		this.recpDel = recpDel;
 		this.recpNum = recpNum;
+		this.sendNum = sendNum;
 		this.contents = contents;
 		this.memNum = memNum;
+		this.fileNo = fileNo;
+		this.originName = originName;
+		this.saveName = saveName;
 	}
 	public int getMsNo() {
 		return msNo;
@@ -96,6 +105,12 @@ public class MsBoardDTO {
 	public void setRecpNum(String recpNum) {
 		this.recpNum = recpNum;
 	}
+	public String getSendNum() {
+		return sendNum;
+	}
+	public void setSendNum(String sendNum) {
+		this.sendNum = sendNum;
+	}
 	public String getContents() {
 		return contents;
 	}
@@ -108,12 +123,33 @@ public class MsBoardDTO {
 	public void setMemNum(int memNum) {
 		this.memNum = memNum;
 	}
+	public int getFileNo() {
+		return fileNo;
+	}
+	public void setFileNo(int fileNo) {
+		this.fileNo = fileNo;
+	}
+	public String getOriginName() {
+		return originName;
+	}
+	public void setOriginName(String originName) {
+		this.originName = originName;
+	}
+	public String getSaveName() {
+		return saveName;
+	}
+	public void setSaveName(String saveName) {
+		this.saveName = saveName;
+	}
 	@Override
 	public String toString() {
 		return "MsBoardDTO [msNo=" + msNo + ", msTitle=" + msTitle + ", sendName=" + sendName + ", recpName=" + recpName
 				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendDel=" + sendDel
-				+ ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", contents=" + contents + ", memNum=" + memNum
+				+ ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", sendNum=" + sendNum + ", contents=" + contents
+				+ ", memNum=" + memNum + ", fileNo=" + fileNo + ", originName=" + originName + ", saveName=" + saveName
 				+ "]";
 	}
+
+
 
 }

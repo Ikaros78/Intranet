@@ -1,6 +1,5 @@
 package com.ohgiraffers.intranet.msBoard.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
+import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
 @Mapper
@@ -23,9 +22,15 @@ public interface MsBoardMapper {
 
 	int selectSendTotalCount(Map<String, String> searchMap);
 
-	int MsFileInsert(MsBoardDTO msBoard);
+	List<MsBoardDTO> selectMsAllRecpBoard(SelectCriteria selectCriteria);
 
-	MsBoardDTO selectMsBoardDetail(int msNo);
+	int selectAllRecpTotalCount(Map<String, String> searchMap);
+	
+//////////////////////////////////////////	
+	
+	int MsFileInsert(MsFileDTO msFileDTO);
+
+	List<MsBoardDTO> selectMsBoardDetail(int msNo);
 
 	int YNChangeMsBoard(int msNo);
 
@@ -34,4 +39,17 @@ public interface MsBoardMapper {
 	List<MsMemberListDTO> getMemberList(String dept_name) throws Exception;
 	
 	List<DepartmentDTO> getdeptList() throws Exception;
+
+	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
+
+//	int recpYNMsBoard(int msNo);
+//
+//	int recpBoardDelete(int msNo);
+//
+//	int msFileDelete(int msNo);
+//
+//	int sendYNMsBoard(int msNo);
+//
+//	int sendBoardDelete(int msNo);
+	
 }

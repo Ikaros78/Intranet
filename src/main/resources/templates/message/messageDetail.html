@@ -1,61 +1,87 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8">
-    <title>basic</title>
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/basic.css">
-    <link rel="stylesheet" href="/css/board.css">    
+	<meta charset="UTF-8">
+	<title>basic</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
 </head>
-<body>
-    <div id="wrap">
-    <div th:replace="common/header.html"></div>
 
- 		<div id="visual" >
-            <div class="table-area" style="position: absolute; top: 250px;left: 350px;width: 1350px;" >     
-                <table id="">
-                    <tr>
-                        <th width="auto">보낸 사람 : </th>
-                        <th width="400px" align="left">&nbsp;
-<!--                         <span th:text="${ #authentication.getPrincipal().getMem_name() }"> </span> -->
-                        </th>
-                        
-                    </tr>
-                    <tr>
-                        <th width="auto">보낸 시간 : </th>
-                        <th width="400px" align="left">
-                            &nbsp; 22.08.04 11:30:29
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2" style="border: 1px solid black">
-                            <textarea name="content" align="left" rows="10" style="width:100%; border: 0; resize: none;" >
-                            뭐라고 써야할지 몰라서 그냥 적고있습니다. 
-                            이걸 끝내야하는데 하
-                            </textarea>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2" >
-                            <input type="file" style="border: 1px solid black">
-                        </th>
-                    </tr>
-                    <button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px;" >삭제</button>
-                    <button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px;" >뒤로가기</button>
-                </table>
-            </div>
-        </div>
-        <div id="contents">
-            <div id="sideBar">
-                <h3>쪽지함</h3>
-                <ul>
-                    <li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
-                    <li class="main"><a href="/ms/recp">받은쪽지함</a></li>
-                    <li class="main"><a href="/ms/send">보낸쪽지함</a></li>
-                    <li class="main"><a href="/ms/all">쪽지보관함</a></li>
-                </ul>
-            </div>
-        </div>
-        
+<body>
+	<div id="wrap">
+		<div th:replace="common/header.html"></div>
+		<div id="contents">
+			<div id="sideBar"  style="float: left;">
+				<h3>쪽지함</h3>
+				<ul>
+					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
+					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+					<li class="main"><a href="/ms/allrecp">쪽지보관함</a></li>
+				</ul>
+			</div>
+			<h3 style="position: relative; top: 40px; left: 80px">상세보기</h3><br>
+			<div class="table-area" style="position: relative; top: 80px;left: 80px;width: 1350px;">
+			
+				<p class="title"><hr><br><br>
+				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msboardDetail.msTitle }"></span></spen><br><br>
+				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${msboardDetail.sendDate}"></span></spen><br><br><br><hr>
+				<form th:action="@{/ms/msdetail}" method="get">
+				<a th:if="${boardDetail.file.originName != null}" class="fileDown"
+                 th:href="|/upload/msFile/${ ms.file.getSaveName()}|"
+                 th:value="${ ms.file.getOriginName() }" download>
+                <span th:text="${ ms.file.originName }"></span>
+				</form>
+				</p>
+				<br>
+				<table class="asdqwe" style="width: 1100px; height: 400px;">
+					<tr>
+						<th th:utext="${ msboardDetail.contents }" style="vertical-align: top; text-align: left;">
+						</th>
+					</tr>
+				</table>
+					<hr style="width: 1100px; position: relative; left:250px;"><br>
+				<!--	<button class="list delete" id="deleteBtn"  onclick="removeCheck()" style="position: relative; top: 20px; left: 350px; padding: 10px 12px;">삭제</button> -->
+					<button onclick="goBack()" style="position: relative; top: 20px; left: 250px; padding: 10px 12px;">뒤로가기</button>
+				</table>
+			</div>
+		</div>
+		
+		
+		
+<!--		    <th:block layout:fragment="script">-->
+<!--		        <script th:inline="javascript">-->
+<!--		            /*<![CDATA[*/-->
+<!--		-->
+<!--		            // 게시글 삭제-->
+<!--		            function removeCheck() {-->
+<!--		                const no = [[ ${msboardDetail.msNo} ]];-->
+<!--		                if ( !confirm("게시글을 삭제할까요?") ) {-->
+<!--		                    return false;-->
+<!--		                }-->
+<!--		-->
+<!--		                const formHtml = -->
+<!--		                    <form id="deleteForm" action="/msboardDetail/delete?msNo=${msNo}" method="get">-->
+<!--		                        <input type="hidden" id="msNo" name="msNo" value="${msNo}" />-->
+<!--		                    </form>-->
+<!--		                ;-->
+<!--		                const doc = new DOMParser().parseFromString(formHtml, 'text/html');-->
+<!--		                const form = doc.body.firstChild;-->
+<!--		                document.body.append(form);-->
+<!--		                document.getElementById('deleteForm').submit();-->
+<!--		            }-->
+<!--		-->
+<!--		            /*]]>*/-->
+<!--		        </script>-->
+		        <script type="text/javascript">
+					function goBack() {
+						window.history.back();
+					}
+				</script>
+		        
+		    </th:block>
+
+
 </body>
+
 </html>

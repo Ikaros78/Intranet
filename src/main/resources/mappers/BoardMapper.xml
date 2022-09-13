@@ -12,6 +12,8 @@
         <result property="contents" column="FR_CONTENTS"/>
         <result property="mem_num" column="MEM_NUM"/>
 
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="department" resultMap="deptResultMap"/>
     </resultMap>
 
     <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
@@ -136,7 +138,7 @@
                         ,SYSDATE
                         ,DEFAULT
                         ,#{contents}
-                        ,3333
+                        ,#{mem_num}
 
             )
     </insert>

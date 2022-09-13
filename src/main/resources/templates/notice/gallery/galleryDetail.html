@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>갤러리:상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/gallery/galleryDetail.css}">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+            <div id="contents">
+                <div id="sideBar">
+                    <h3>공지사항</h3>
+                    <ul>
+                        <li class="main">
+                            <a th:href="@{/notice/list}">공지사항</a>
+                        </li>
+                        <li class="main">
+                            <a th:href="@{/notice/news/list}">사내소식</a>
+                        </li>
+                        <li class="main">
+                            <a th:href="@{/notice/gallery/list}">갤러리</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="container">
+                    <h4>갤러리</h4><hr>
+                        <p class="title">
+                            <span th:text="${ gallery.title }"></span><br>
+                            <span class="writer" th:text="${ gallery.member.mem_name }"></span> <span></span><span class="writer" th:text="${ gallery.dept.dept_name }"></span><span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                            <span class="date" th:text="${ gallery.date }"></span>
+                        </p>
+                    <div class="body">
+                        <div id="wrapper">
+                            <div id="slider-wrap"> 
+                                <ul id="slider">
+                                    <li th:each="galleryFileDetail : ${ galleryFileDetail }"><img th:src="${ galleryFileDetail.thumbnailPath }" alt="갤러리 사진"></li>
+                                </ul>
+                                <div class="btns" id="next">></div>
+                                <div class="btns" id="previous"><</div>
+                            </div>
+                            <div id="counter"></div>
+                            <div id="pagination-wrap">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="txtArea" th:utext="${ gallery.contents }"></p>
+                    </div>
+                    <div class="btnArea">
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list update"
+                                th:onclick="|location.href='@{ /notice/gallery/update(no=${ gallery.no }) }'|">수정</button>
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
+                        <button class="list" onclick="location.href='/notice/gallery/list'">목록</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+        <script>
+
+            //이미지 슬라이더
+            let pos = 0;
+            let totalSlides = $('#slider-wrap ul li').length;
+            let sliderWidth = $('#slider-wrap').width();
+            // 기본 설정
+            $(document).ready(function(){
+
+                $('#slider-wrap ul#slider').width(sliderWidth*totalSlides);
+                
+                $('#next').click(function(){
+
+                    slideRight();
+                });
+
+                $('#previous').click(function(){
+                    
+                    slideLeft();
+                });
+                
+                let autoSlider = setInterval(slideRight, 3000);
+
+                $.each($('#slider-wrap ul li'), function(){
+
+                    let li = document.createElement('li');
+                    $('#pagination-wrap ul').append(li);
+                });
+
+                countSlides();
+                pagination();
+
+                $('#slider-wrap').hover(
+
+                    function(){ $(this).addClass('active'); clearInterval(autoSlider); 
+                },
+                    
+                    function(){ $(this).removeClass('active'); autoSlider = setInterval(slideRight, 3000);
+                });
+            });
+            //슬라이드 이동 방향
+            function slideLeft(){
+                
+                pos--;
+                if(pos == -1){pos = totalSlides-1;}
+                $('#slider-wrap ul#slider').css('left', -(sliderWidth*pos));
+
+                countSlides();
+                pagination();
+            }
+            function slideRight(){
+                
+                pos++;
+                if(pos == totalSlides){pos = 0;}
+                $('#slider-wrap ul#slider').css('left', -(sliderWidth*pos));
+
+                countSlides();
+                pagination();
+            }
+            //슬라이드 수 카운트
+            function countSlides(){
+                $('#counter').html(pos+1 + ' / ' + totalSlides);
+            }
+            //페이지네이션 액티브
+            function pagination(){
+                $('#pagination-wrap ul li').removeClass('active');
+                $('#pagination-wrap ul li:eq('+pos+')').addClass('active');
+            }
+
+            /*<![CDATA[*/
+
+            // 게시글 삭제
+            function removeCheck() {
+                const no = [[ ${gallery.no} ]];
+                if ( !confirm("게시글을 삭제할까요?") ) {
+                    return false;
+                }
+
+                const formHtml = `
+                    <form id="deleteForm" action="/notice/gallery/delete?no=${no}" method="get">
+                        <input type="hidden" id="no" name="no" value="${no}" />
+                    </form>
+                `;
+                const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+                const form = doc.body.firstChild;
+                document.body.append(form);
+                document.getElementById('deleteForm').submit();
+
+                alert('삭제가 완료되었습니다.')
+            }
+
+            /*]]>*/
+        </script>
+</body>
+</html>

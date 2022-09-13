@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("empService")
 public class EmpServiceImpl implements EmpService {
 
     private EmpMapper empMapper;
 
     @Autowired
-    private EmpServiceImpl(EmpMapper empMapper){
+    public EmpServiceImpl(EmpMapper empMapper){
         this.empMapper = empMapper;
     }
 

@@ -6,6 +6,7 @@ import com.ohgiraffers.intranet.empManage.model.service.EmpService;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class EmpController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public final EmpService empService;
+    @Autowired
     public EmpController(EmpService empService){
 
         this.empService = empService;
@@ -78,6 +80,12 @@ public class EmpController {
         mv.setViewName("empManage/hrList");
 
         return mv;
+    }
+
+    @GetMapping("/hrRegist")
+    public String hrRegistPage(){
+
+        return "empManage/hrRegist";
     }
 
 

@@ -46,11 +46,8 @@
             float: left;
         }
 
-
-
         #tb {
             border-collapse: collapse;
-
 
         }
 
@@ -204,7 +201,7 @@
                         },
 
                         footerToolbar: {
-                            left: 'custom2',
+                            left: '',
                             center: '',
                             right: ''
                         },
@@ -241,14 +238,6 @@
                                     // jsp로 연결해야함 => cd_insert
                                 }
                             }
-                            // custom2: {
-                            //     text: '권한요청',
-                            //     click: function () {
-                            //         alert('권한요청 처리를 신청했습니다.');
-                            //         location.href="/calendar/button";
-                            //
-                            //     }
-                            // }
                         },
                         eventClick: function() {
                             location.href="/calendar/detail";
@@ -294,9 +283,9 @@
             <ul>
                 <li class="main"><a href="#">일정관리</a>
                     <ul class="sub sub1">
-                        <li><a href="#">전체 일정</a></li>
-                        <li><a href="#">부서 일정</a></li>
-                        <li><a href="#">개인 일정</a></li>
+                        <li><a href="javascript:void(0);">전체 일정</a></li>
+                        <li><a href="javascript:void(0);">부서 일정</a></li>
+                        <li><a href="javascript:void(0);">개인 일정</a></li>
                     </ul>
                 </li>
 <!--                <sec:authorize access="hasAnyRole('ROLE_CD_ALL','ROLE_CD_DEPT')">-->
@@ -307,7 +296,7 @@
 <!--                    </li>-->
 <!--                </sec:authorize>-->
 
-                <th:block sec:authorize="hasRole('CD_DEPT')">
+                <th:block sec:authorize="hasAnyRole('CD_DEPT','CD_ALL')">
                     <li class="main"><a href="javascript:void(0);">일정 권한 관리</a>
                         <ul class="sub sub2">
                             <li><a href="javascript:void(0);">권한 요청</a></li>

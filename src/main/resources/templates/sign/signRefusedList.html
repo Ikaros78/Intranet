@@ -33,7 +33,7 @@
 
                 <div class="search-wrap">
                     <div class="form-group">
-                        <form id="searchForm" action="" method="get">
+                        <form id="searchForm" action="/sign/refusedList" method="get">
                             <input type="hidden" name="currentPage" value="1">
 
                             <table>
@@ -44,46 +44,46 @@
                                     <col style="width:33%";>
                                 </colgroup>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row" width="7%">
-                                            <labeL>기안자</labeL>
-                                        </th>
-                                        <td width="33%">
-                                            <input type="text" title="기안자" name="searchWriter">
-                                        </td>
-                                        <th scope="row" width="7%">
-                                            <labeL>양식명</labeL>
-                                        </th>
-                                        <td width="33%">
-                                            <input type="text" title="양식명" name="searchType">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <labeL>제목</labeL>
-                                        </th>
-                                        <td>
-                                            <input type="text" title="제목" name="searchTitle">
-                                        </td>
-                                        <th scope="row">
-                                            <labe>배정일</labe>
-                                        </th>
-                                        <td>
-                                            <input type="text" title="시작일" name="searchStartDate" class="datePicker">
-                                            <span>~</span>
-                                            <input type="text" title="종료일" name="searchEndDate" class="datePicker">     
-                                            <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
-                                            <button type="button" class="btn btn-color7">검색</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label>문서번호</label>
-                                        </th>
-                                        <td>
-                                            <input type="text" title="문서번호" name="searchNum">
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <labeL>기안자</labeL>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="기안자" name="searchWriter">
+                                    </td>
+                                    <th scope="row">
+                                        <labeL>양식명</labeL>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="양식명" name="searchForm">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <labeL>제목</labeL>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="제목" name="searchTitle">
+                                    </td>
+                                    <th scope="row">
+                                        <labe>배정일</labe>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="시작일" name="searchStartDate" class="datePicker">
+                                        <span>~</span>
+                                        <input type="text" title="종료일" name="searchEndDate" class="datePicker">
+                                        <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
+                                        <button type="submit" class="btn btn-color7">검색</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label>문서번호</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="문서번호" name="searchNum">
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </form>
@@ -91,48 +91,72 @@
                 </div>  <!-- search-wrap -->
 
                 <div class="list-wrap">
-                    <table class="table table-borderd">
+                    <table class="table table-borderd refusedList">
                         <thead>
                             <tr>
-                                <th width="20px"><input type="checkbox"></th>
-                                <th width="100px">NO</th>
-                                <th width="150px">서식함</th>
-                                <th width="80px">문서번호</th>
-                                <th width="800px">문서제목</th>
-                                <th width="80px">기안자</th>
-                                <th width="100px">기안부서</th>
+                                <th width="100px">문서번호</th>
+                                <th width="600px">문서제목</th>
+                                <th width="200px">양식명</th>
+                                <th width="130px">기안자</th>
+                                <th width="150px">기안부서</th>
+                                <th width="150px">기안일</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>1</td>
-                                <td>공통</td>
-                                <td>ㅇ</td>
-                                <td>결재요청문</td>
-                                <td>홍길동</td>
-                                <td>영업팀</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>2</td>
-                                <td>공통</td>
-                                <td>ㄴ</td>
-                                <td>결재요청문</td>
-                                <td>홍길동</td>
-                                <td>영업팀</td>
+                            <tr th:each="sign : ${ refusedList }">
+                                <td th:text="${sign.signNo}"></td>
+                                <td th:text="${sign.signTitle}" name="title"></td>
+                                <td th:text="${sign.signForm.name}"></td>
+                                <td th:text="${sign.writer.mem_name}"></td>
+                                <td th:text="${sign.writer.department.dept_name}"></td>
+                                <td th:text="${sign.regDate}"></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <!-- 페이지 처리 -->
+                    <div class="pagingArea" align="center">
+                        <!-- 맨 앞으로 이동 버튼 -->
+                        <button
+                                th:onclick="'location.href=\'/sign/refusedList?currentPage='+ @{${selectCriteria.startPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:disabled="${selectCriteria.pageNo == 1}"
+                        >
+                            <<
+                        </button>
+                        <!-- 이전 페이지 버튼 -->
+                        <button
+                                th:onclick="'location.href=\'/sign/refusedList?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:disabled="${selectCriteria.pageNo == 1}"
+                        >
+                            <
+                        </button>
+                        <!-- 숫자 버튼 -->
+                        <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+                            <button
+                                    th:text="${ page }"
+                                    th:onclick="'location.href=\'/sign/refusedList?currentPage='+ @{${page}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                    th:disabled="${ selectCriteria.pageNo eq page }">
+                            </button>
+                        </th:block>
+
+                        <!-- 다음 페이지 버튼 -->
+                        <button
+                                th:onclick="'location.href=\'/sign/refusedList?currentPage='+ @{${selectCriteria.pageNo + 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+                        >
+                            >
+                        </button>
+                        <!-- 마지막 페이지로 이동 버튼 -->
+                        <button
+                                th:onclick="'location.href=\'/sign/refusedList?currentPage='+ @{${selectCriteria.maxPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
+                        >
+                            >>
+                        </button>
+                    </div>
 
                 </div> <!-- list-wrap -->
 
-                <div class="col-2-offset-8" align="right">
-                    <button>일괄합의</button>
-                    <button>일괄결재</button>
-                </div>
             </div>
         </div>
     </div>
@@ -144,7 +168,26 @@
             language : "kr",
             todayHighlight : true
         });
-        
+
+        if(document.querySelectorAll('.refusedList td')){
+            const $tds = document.getElementsByName('title');
+            for(let i = 0; i < $tds.length; i++) {
+
+                $tds[i].onmouseenter = function() {
+                    this.parentNode.style.backgroundColor = "lightgray";
+                    this.style.cursor = "pointer";
+                }
+
+                $tds[i].onmouseout = function() {
+                    this.parentNode.style.backgroundColor = "white";
+                }
+
+                $tds[i].onclick = function() {
+                    const no = this.parentNode.children[0].innerText;
+                    location.href = "/sign/refusedDetail?no=" + no;
+                }
+            }
+        }
     </script>
 </body>
 </html>

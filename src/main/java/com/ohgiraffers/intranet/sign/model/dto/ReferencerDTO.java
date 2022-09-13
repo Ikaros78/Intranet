@@ -12,6 +12,6 @@ public class ReferencerDTO {
     private int signNo;
     private int referencerNo;
 
-    private MemberDTO referencer;
+    private ReferencerInfoDTO referencer;
 
 }

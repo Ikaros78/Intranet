@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.notice.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.exception.GalleryRegistException;
 import com.ohgiraffers.intranet.notice.model.dao.NoticeMapper;
 import com.ohgiraffers.intranet.notice.model.dto.*;
 import org.slf4j.Logger;
@@ -108,8 +107,6 @@ public class NoticeService {
 
         return noticeMapper.newsFileRegist(newsFile);
     }
-
-
 
     /* 사내소식 전체 게시글 수 조회용 메소드 */
     public int selectNewsTotalCount(Map<String, String> searchMap) {
@@ -273,12 +270,11 @@ public class NoticeService {
                     galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
                     log.info("확인");
                 }
-
             }
         }
-
     }
 
+    @Transactional
     public void galleryDelete(GalleryDTO gallery) {
 
         noticeMapper.galleryFileDelete(gallery.getNo());

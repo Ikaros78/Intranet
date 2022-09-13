@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ohgiraffers.intranet.emplManage.model.dao.EmplMapper">
+<mapper namespace="com.ohgiraffers.intranet.empManage.model.dao.EmpMapper">
 
     <resultMap id="memberResultMap" type="MemberDTO">
         <id property="mem_num" column="MEM_NUM"/>

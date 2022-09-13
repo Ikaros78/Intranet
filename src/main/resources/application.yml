@@ -37,7 +37,7 @@ mybatis:
   mapper-locations: mappers/**/*.xml
   type-aliases-package: com.ohgiraffers.intranet,
                         com.ohgiraffers.intranet.notice.model.dto,
-                        com.ohgiraffers.intranet.emplManage.model.dto,
+                        com.ohgiraffers.intranet.empManage.model.dto,
                         com.ohgiraffers.intranet.member.model.dto
   configuration:
     map-underscore-to-camel-case: true

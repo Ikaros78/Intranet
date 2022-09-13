@@ -33,7 +33,7 @@
 
 #contents #container table tr{height: 38px; text-align: center;}
 #contents #container table tbody tr td{font-size: 15px; font-family: 'nanumGothic';}
-#contents #container table tbody tr td .name:hover{text-decoration: underline;}
+#contents #container table tbody tr .name:hover{text-decoration: underline; cursor: pointer;}
 #contents #container table tbody tr:nth-child(odd){background:rgba(238, 238, 238, 0.384);}
 #contents #container table tbody tr:last-child{border-bottom: 1px solid #ddd;}
 #contents #container table td{font-size: 17px;}

@@ -1,12 +1,13 @@
-package com.ohgiraffers.intranet.emplManage.controller;
+package com.ohgiraffers.intranet.empManage.controller;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.emplManage.model.service.EmplService;
+import com.ohgiraffers.intranet.empManage.model.service.EmpService;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,19 +18,19 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/emplManage/*")
-public class EmplController {
+@RequestMapping("/emp/*")
+public class EmpController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public final EmplService emplService;
-    public EmplController(EmplService emplService){
+    public final EmpService empService;
+    public EmpController(EmpService empService){
 
-        this.emplService = emplService;
+        this.empService = empService;
     }
 
-    @GetMapping("/emplList")
-    public ModelAndView emplManagePage(HttpServletRequest request, ModelAndView mv){
+    @GetMapping("/empList")
+    public ModelAndView empManagePage(HttpServletRequest request, ModelAndView mv){
 
         String currentPage = request.getParameter("currentPage");
         int pageNo = 1;
@@ -45,7 +46,7 @@ public class EmplController {
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
 
-        int totalCount = emplService.selectEmpTotalCount(searchMap);
+        int totalCount = empService.selectEmpTotalCount(searchMap);
 
         int limit = totalCount;
         int buttonAmount = 5;
@@ -61,13 +62,23 @@ public class EmplController {
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
         }
 
-        List<MemberDTO> memberList = emplService.selectEmpList(selectCriteria);
+        List<MemberDTO> memberList = empService.selectEmpList(selectCriteria);
 
         mv.addObject("memberList", memberList);
         mv.addObject("selectCriteria", selectCriteria);
 
-        mv.setViewName("emplManage/emplList");
+        mv.setViewName("empManage/empList");
 
         return mv;
     }
+
+    @GetMapping("/hrList")
+    public ModelAndView hrManagePage(HttpServletRequest request, ModelAndView mv){
+
+        mv.setViewName("empManage/hrList");
+
+        return mv;
+    }
+
+
 }

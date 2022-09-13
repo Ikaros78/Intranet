@@ -47,4 +47,12 @@ public class MemberService {
 
         return checkResult != null? true : false;
     }
+
+    /* 해당 인원의 부서를 가져오는 메소드 */
+    public String selectDeptByNum(int mem_num) {
+
+        String deptName = memberMapper.selectDeptByNum(mem_num);
+
+        return deptName;
+    }
 }

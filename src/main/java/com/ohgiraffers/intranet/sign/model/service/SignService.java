@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.sign.model.service;
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
@@ -189,4 +190,66 @@ public class SignService {
 
         return deptList;
     }
+
+    /* 사원 전체 조회용 메소드 */
+    public List<MemberDTO> selectAllMember() {
+
+        List<MemberDTO> memberList = signMapper.selectAllMember();
+
+        return memberList;
+    }
+
+    /* 결재진행함 전체 갯수 조회용 메소드 */
+    public int selectTotalProgressCount(Map<String, Object> searchMap) {
+
+        int progressResult = signMapper.selectTotalProgressCount(searchMap);
+
+        int myProgressResult = signMapper.selectTotalMyProgressCount(searchMap);
+
+        int result = progressResult + myProgressResult;
+
+        return result;
+    }
+
+    /* 진행중인 결재 조회용 메소드 */
+    public List<SignDTO> selectProgressList(Map<String, Object> searchList) {
+
+        List<SignDTO> progressList = signMapper.selectProgressList(searchList);
+
+        List<SignDTO> myProgressList = signMapper.selectMyProgressList(searchList);
+
+        progressList.addAll(myProgressList);
+
+        return progressList;
+    }
+
+    /* 임시저장함 전체 갯수 조회용 메소드 */
+    public int selectTotalTempCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalTempCount(searchMap);
+
+        return result;
+    }
+
+    /* 임시저장함 전체 조회용 메소드 */
+    public List<SignDTO> selectTempList(Map<String, Object> searchList) {
+
+        List<SignDTO> tempList = signMapper.selectTempList(searchList);
+
+        return tempList;
+    }
+
+    /* 선택된 임시저장 결재 일괄삭제용 메소드 */
+    public int deleteSignChecked(Map<String, Object> signMap) throws SignApproveException {
+
+        int result = signMapper.deleteSignChecked(signMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+
 }

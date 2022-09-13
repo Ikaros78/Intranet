@@ -34,7 +34,6 @@
                     <thead>
                         <tr>
                             <th><button>조직도</button></th>
-                            <th><button>검색</button></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,8 +41,14 @@
                             <td>
                                 <input id="check-btn" type="checkbox"/>
                                 <label for="check-btn">회사조직도</label>
-                                    <ul class="menubars" th:each="department : ${ deptList }">
-                                        <li th:text="${ department.dept_name }"></li>
+                                    <ul class="menubars" th:each="department : ${ deptList }" >
+                                        <ul th:text="${ department.dept_name }" th:value="${ department.dept_code }" class="dept">
+                                            <th:block th:each="member : ${ memberList }" >
+                                                <li>
+                                                <button th:if="${ member.dept_code.equals(${ department.dept_code})}" th:text="${ member.mem_name }"></button>
+                                                </li>
+                                            </th:block>
+                                        </ul>
                                     </ul>
                             </td>
                         </tr>
@@ -67,13 +72,13 @@
                             <td><br></td>
                         </tr>
                         <tr>
-                            <td><button>></button></td>
+                            <td><button id="add">></button></td>
                         </tr>
                         <tr>
-                            <td><button><</button></td>
+                            <td><button id="remove"><</button></td>
                         </tr>
                         <tr>
-                            <td><button>새로고침</button></td>
+                            <td><button id="refresh">새로고침</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -84,7 +89,7 @@
         </div>
 
         <div id="submit-buttons" align="right">
-            <button>적용</button>
+            <button id="apply">적용</button>
             <button id="close">닫기</button>
         </div>
     </div>

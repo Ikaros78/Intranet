@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.sign.model.dao;
 
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -47,4 +48,19 @@ public interface SignMapper {
 
     List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
 
+    List<MemberDTO> selectAllMember();
+
+    int selectTotalProgressCount(Map<String, Object> searchMap);
+
+    int selectTotalMyProgressCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectProgressList(Map<String, Object> searchList);
+
+    List<SignDTO> selectMyProgressList(Map<String, Object> searchList);
+
+    int selectTotalTempCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectTempList(Map<String, Object> searchList);
+
+    int deleteSignChecked(Map<String, Object> signMap);
 }

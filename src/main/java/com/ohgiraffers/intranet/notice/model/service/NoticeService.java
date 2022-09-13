@@ -108,8 +108,6 @@ public class NoticeService {
         return noticeMapper.newsFileRegist(newsFile);
     }
 
-
-
     /* 사내소식 전체 게시글 수 조회용 메소드 */
     public int selectNewsTotalCount(Map<String, String> searchMap) {
 
@@ -185,7 +183,7 @@ public class NoticeService {
 
     /* 갤러리 게시판 등록용 메소드 */
     @Transactional
-    public void galleryRegist(GalleryDTO gallery) {
+    public void galleryRegist(GalleryDTO gallery)  {
 
         int result = 0;
         // gallery 테이블 insert
@@ -198,12 +196,17 @@ public class NoticeService {
             galleryFile.get(i).setGalNo(gallery.getNo());
         log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
         }
-
+        
         //galleryFileInsert
         int galleryFileResult = 0;
         for(int i = 0; i < galleryFile.size(); i++){
             galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+            log.info("확인");
         }
+
+//        if(galleryFileResult == 0){
+//            throw new GalleryRegistException("이미지 파일을 첨부해주세요");
+//        }
     }
 
     /* 갤러리 전체 게시글 수 조회 */
@@ -220,5 +223,61 @@ public class NoticeService {
         List<GalleryDTO> galleryList = noticeMapper.selectGalleryList(selectCriteria);
 
         return galleryList;
+    }
+
+    /* 갤러리 상세조회용 메소드(게시글)*/
+    public GalleryDTO selectGalleryDetail(int no) {
+
+        GalleryDTO galleryDetail = null;
+
+        galleryDetail = noticeMapper.selectGalleryDetail(no);
+
+        return galleryDetail;
+
+    }
+
+    /* 갤러리 상세조회용 메소드(파일)*/
+    public List<GalleryFileDTO> selectGalleryFile(int no) {
+
+        List<GalleryFileDTO> galleryFile = noticeMapper.selectGalleryFileDetail(no);
+
+        return galleryFile;
+    }
+
+    /* 갤러리 업데이트용 메소드 */
+    @Transactional
+    public void galleryUpdate(GalleryDTO gallery) {
+
+        // gallery 테이블 update
+        int galleryResult = noticeMapper.galleryUpdate(gallery); // 게시글 업데이트
+
+        List<GalleryFileDTO> galleryFile = gallery.getGalleryFile();
+        log.info("galleryFileList확인 : " + galleryFile);
+
+        if(galleryResult > 0){
+            if(gallery.getGalleryFile() != null) {
+                log.info("gallery No값 가져오나 확인 : " + gallery.getNo());
+                noticeMapper.galleryFileDelete(gallery.getNo());
+
+                for (int i = 0; i < galleryFile.size(); i++) {
+                    galleryFile.get(i).setGalNo(gallery.getNo());
+                    log.info("갤러리 넘버 값 가져오나 확인 : " + galleryFile.get(i).getGalNo());
+                }
+
+                //galleryFileInsert
+                int galleryFileResult = 0;
+                for (int i = 0; i < galleryFile.size(); i++) {
+                    galleryResult += noticeMapper.galleryFileRegist(galleryFile.get(i));
+                    log.info("확인");
+                }
+            }
+        }
+    }
+
+    @Transactional
+    public void galleryDelete(GalleryDTO gallery) {
+
+        noticeMapper.galleryFileDelete(gallery.getNo());
+        noticeMapper.galleryDelete(gallery.getNo());
     }
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>발령 등록</title>
     <link rel="stylesheet" th:href="@{/css/empManage/hrRegist.css}">
+    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body onresize="parent.resizeTo(900, 600)" onload="parent.resizeTo(900,600)">
     <h1>발령 등록</h1>
@@ -20,13 +21,13 @@
             <th>발령일자</th>
             <td><input type="date" name="pa_date"></td>
         </tr>
-        <tr>
+        <tr class="mem_num">
             <th>사원번호</th>
-            <td><input type="text" name="mem_num"></td>
+            <td><input type="text" name="mem_num" id="mem_num"><button id="send">검색</button></td>
         </tr>
         <tr>
-            <th>성명</th>
-            <td>김올레</td>
+            <th>직원명</th>
+            <td><p id="numResult"></p></td>
             <th>발령직급</th>
             <td><select name="pa_bef_rank">
                 <option>선택</option>
@@ -62,6 +63,23 @@
 
             window.close();
         }
+
+        $("#mem_num").click(function(){
+           const mem_num = $("#mem_num").val();
+
+           $.ajax({
+              url:"/emp/hrRegist",
+              data: {mem_num : mem_num},
+              method:"GET",
+              success: function(data){
+                $("#numResult").text(data);
+                console.log('data : ' + data);
+              },
+               error: function(error){
+                    console.log('error 왜 에러야 근데? : ' + error);
+               }
+           });
+        });
     </script>
 </body>
 </html>

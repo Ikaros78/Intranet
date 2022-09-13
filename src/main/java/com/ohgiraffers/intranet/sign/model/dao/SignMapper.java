@@ -63,4 +63,8 @@ public interface SignMapper {
     List<SignDTO> selectTempList(Map<String, Object> searchList);
 
     int deleteSignChecked(Map<String, Object> signMap);
+
+    int selectTotalRequestCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectRequestList(Map<String, Object> searchList);
 }

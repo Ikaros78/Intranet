@@ -341,7 +341,49 @@ public class SignController {
     }
 
     @GetMapping("/requestList")
-    public ModelAndView signRequestList(ModelAndView mv){
+    public ModelAndView signRequestList(HttpServletRequest request, ModelAndView mv, @AuthenticationPrincipal User user){
+
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)) {
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchForm = request.getParameter("searchForm");
+        String searchTitle = request.getParameter("searchTitle");
+        String searchStartDate = request.getParameter("searchStartDate");
+        String searchEndDate = request.getParameter("searchEndDate");
+        int mem_num = ((UserImpl)user).getMem_num();
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("mem_num", mem_num);
+        searchMap.put("searchForm", searchForm);
+        searchMap.put("searchTitle", searchTitle);
+        searchMap.put("searchStartDate", searchStartDate);
+        searchMap.put("searchEndDate", searchEndDate);
+
+        int totalCount = signService.selectTotalRequestCount(searchMap);
+
+        int limit = 10;
+
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("mem_num", mem_num);
+        searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchForm", searchForm);
+        searchList.put("searchTitle", searchTitle);
+        searchList.put("searchStartDate", searchStartDate);
+        searchList.put("searchEndDate", searchEndDate);
+
+        List<SignDTO> requestList = signService.selectRequestList(searchList);
+
+        mv.addObject("requestList", requestList);
+        mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signRequestList");
 
@@ -372,8 +414,6 @@ public class SignController {
         searchMap.put("searchEndDate", searchEndDate);
 
         int totalCount = signService.selectTotalTempCount(searchMap);
-
-        System.out.println(totalCount);
 
         int limit = 10;
 

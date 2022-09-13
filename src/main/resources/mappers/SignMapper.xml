@@ -995,4 +995,72 @@
              AND SIGN_NO = #{ sign }
     </delete>
 
+    <select id="selectTotalRequestCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectRequestList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.REG_DATE
+        , A.APPROVE_DATE
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.REG_DATE
+        , B.APPROVE_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.REG_DATE
+        , D.APPROVE_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        LEFT JOIN APPROVER D ON(C.SIGN_NO = D.SIGN_NO)
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND C.IS_TEMP = 'N'
+            AND D.IS_LAST_APPROVER = 'Y'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
 </mapper>

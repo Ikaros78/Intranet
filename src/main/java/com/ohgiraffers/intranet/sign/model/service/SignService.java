@@ -252,4 +252,19 @@ public class SignService {
     }
 
 
+    /* 결재요청함 전체 갯수 조회용 메소드 */
+    public int selectTotalRequestCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalRequestCount(searchMap);
+
+        return result;
+    }
+
+    /* 결재요청함 전체 조회용 메소드 */
+    public List<SignDTO> selectRequestList(Map<String, Object> searchList) {
+
+        List<SignDTO> requestList = signMapper.selectRequestList(searchList);
+
+        return requestList;
+    }
 }

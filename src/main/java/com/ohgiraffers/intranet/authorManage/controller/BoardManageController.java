@@ -1,42 +1,49 @@
-package com.ohgiraffers.intranet.calendar.controller;
+package com.ohgiraffers.intranet.authorManage.controller;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
+import com.ohgiraffers.intranet.authorManage.model.service.AuthorService;
+
+import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/calendarManage/*")
-public class CalendarManageController {
+@RequestMapping("/boardManage/*")
+public class BoardManageController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final AuthorService authorService;
     private final CalendarService calendarService;
 
     @Autowired
-    public CalendarManageController(CalendarService calendarService) {
+    public BoardManageController(AuthorService authorService,CalendarService calendarService){
+
+        this.authorService = authorService;
         this.calendarService = calendarService;
     }
 
     @GetMapping("/list")
-    public ModelAndView CalendarManageList(ModelAndView mv ,HttpServletRequest request){
+    public ModelAndView BoardManageList(ModelAndView mv , HttpServletRequest request){
 
         String searchCondition = request.getParameter("searchCondition");
 
-        List<MemberDTO> memberList = calendarService.selectMemberListForCalendarManage(searchCondition);
+        List<MemberDTO> memberList = authorService.selectMemberListForBoardManage(searchCondition);
         List<DepartmentDTO> deptList = calendarService.selectDeptList();
 
         log.info("[CalendarManageController] memberList : " + memberList);
@@ -45,52 +52,49 @@ public class CalendarManageController {
         mv.addObject("memberList", memberList);
         mv.addObject("deptList", deptList);
 
-        mv.setViewName("calendar/cd_calendarManage");
+        mv.setViewName("/emplManage/boardManage");
 
         return mv;
+
     }
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateCalendarAuthority(@RequestParam int memNum, @RequestParam boolean cd_all, @RequestParam boolean cd_dept){
+    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean db_all, @RequestParam boolean nt_all){
 
-        System.out.println("memNum + cd_all + cd_dept = " + memNum + cd_all + cd_dept);
+        System.out.println("memNum + cd_all + cd_dept = " + memNum + db_all + nt_all);
 
-        int result = calendarService.deleteCalendarAuthority(memNum);
+        int result = authorService.deleteBoardAuthority(memNum);
 
         List<AuthoritDTO> authList = new ArrayList<>();
-        if(cd_all){
+        if(db_all){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("ROLE_CD_ALL");
-            authList.add(auth);         
+            auth.setAuCode("ROLE_DB_ALL");
+            authList.add(auth);
         }
-        
-        if(cd_dept){
+
+        if(nt_all){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("ROLE_CD_DEPT");
+            auth.setAuCode("ROLE_NT_ALL");
             authList.add(auth);
         }
 
         System.out.println("authList = " + authList);
 
-        int result2 = calendarService.insertAuthority(authList);
+        int result2 = authorService.insertAuthority(authList);
 
         String data = "";
 
         if( result2 > 0 || result > 0){
-             data = "success";
+            data = "success";
         } else{
-             data = "fail";
+            data = "fail";
         }
 
         return data;
     }
-
-    /* userImpl을 통해 로그인 시 세션에 들고온 해당 계정의 정보를 들고 오는 방법입니다. */
-
-
 
 
 

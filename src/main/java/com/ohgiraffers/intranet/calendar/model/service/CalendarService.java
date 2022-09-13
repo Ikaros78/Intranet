@@ -90,13 +90,13 @@ public class CalendarService {
         return result;
     }
 
-    /* 일정 권한 추가*/
+    /* 일정,게시판 권한 추가*/
     @Transactional
-    public int insertCalendarAuthority(List<AuthoritDTO> authList) {
+    public int insertAuthority(List<AuthoritDTO> authList) {
     int result = 0;
         if(authList.size() > 0){
             for (AuthoritDTO authoritDTO : authList) {
-              result =  memberMapper.insertCalendarAuthority(authoritDTO);
+              result =  memberMapper.insertAuthority(authoritDTO);
             }
         }
         return result;

@@ -390,6 +390,19 @@ public class SignController {
         return mv;
     }
 
+    @GetMapping("/requestDetail")
+    public ModelAndView signRequestDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signRequestDetail");
+
+        return mv;
+    }
+
     @GetMapping("/tempList")
     public ModelAndView signTempList(HttpServletRequest request, ModelAndView mv, @AuthenticationPrincipal User user){
 
@@ -436,6 +449,19 @@ public class SignController {
         mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signTempList");
+
+        return mv;
+    }
+
+    @GetMapping("/tempDetail")
+    public ModelAndView signTempDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signTempDetail");
 
         return mv;
     }

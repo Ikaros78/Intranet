@@ -9,7 +9,7 @@
   <link rel="stylesheet" th:href="@{/css/common/basic.css}">
   <title>Document</title>
 </head>
-<body>
+<th:block>
 <div id="wrap">
   <div th:replace="common/header.html"></div>
   <div id="contents">
@@ -64,7 +64,9 @@
           </tbody>
         </table>
       </form>
-        <button>개인정보 수정</button>
+      <button th:onclick="|location.href='@{/member/mypageUpdate}'|">개인정보 수정</button>
     </div>
-</body>
+  </div>
+</div>
+</th:block>
 </html>

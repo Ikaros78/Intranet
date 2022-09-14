@@ -7,12 +7,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ohgiraffers.intranet.common.exception.member.MemberUpdateException;
 
 import com.ohgiraffers.intranet.common.util.SessionUtil;
-import org.apache.coyote.Request;
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import com.ohgiraffers.intranet.member.service.MemberService;
-
-import lombok.Setter;
+import com.ohgiraffers.intranet.member.service.MemberServiceImpl;
 
 @Controller
 @RequestMapping("/member")
@@ -30,9 +25,9 @@ public class MemberController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final PasswordEncoder passwordEncoder;
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
 
-    public MemberController(PasswordEncoder passwordEncoder, MemberService memberService) {
+    public MemberController(PasswordEncoder passwordEncoder, MemberServiceImpl memberService) {
         this.passwordEncoder = passwordEncoder;
         this.memberService = memberService;
     }
@@ -114,9 +109,13 @@ public class MemberController {
 
         return "/member/mypage";
     }
+    @GetMapping("/mypageUpdate")
+    public String memberUpdatePage(){
+        return "/member/updateUserInfo";
+    }
 
     /* 마이페이지 개인 정보 수정 */
-    @PostMapping("/mypage")
+    @PostMapping("/mypageUpdate")
     public String memberUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rttr) throws MemberUpdateException {
 
         log.info("");
@@ -140,27 +139,15 @@ public class MemberController {
         return "redirect:/";
 
     }
-//    /* 회원 비밀번호를 수정하는 메소드 */
-//    @PostMapping
-//    public String memberUpdatePw(@ModelAttribute MemberDTO member, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rttr) throws MemberUpdatePwdException{
-//
-//        log.info("");
-//        log.info("");
-//        log.info("[MemberController] Starting memberUpdatePwd....");
-//
-//        member.setMem_pw(passwordEncoder.encode(member.getMem_pw()));
-//
-//        log.info("[MemberController] : Update MemberPwdInfo : " + member);
-//
-//        memberService.memberUpdatePwd(member);
-//
-//        SessionUtil.invalidateSession(request, response);
-//
-//        rttr.addFlashAttribute("message", "회원 비밀번호 수정 성공. 로그인해주세요");
-//
-//        return "redirect:/";
-//
-//    }
+
+    /* 마이페이지 비밀번호 확인 팝업창 */
+    @GetMapping("/checkPwd")
+    public String getCheckPwd(){
+
+        return "/member/checkPwd";
+    }
+
+
 
 
 

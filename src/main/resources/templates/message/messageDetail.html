@@ -26,12 +26,11 @@
 				<p class="title"><hr><br><br>
 				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msboardDetail.msTitle }"></span></spen><br><br>
 				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${msboardDetail.sendDate}"></span></spen><br><br><br><hr>
-				<form th:action="@{/ms/msdetail}" method="get">
-				<a th:if="${boardDetail.file.originName != null}" class="fileDown"
-                 th:href="|/upload/msFile/${ ms.file.getSaveName()}|"
-                 th:value="${ ms.file.getOriginName() }" download>
-                <span th:text="${ ms.file.originName }"></span>
-				</form>
+
+				<a th:if="${board.file.originName != null}" class="fileDown"
+		           th:href="|/upload/msFile/${ ms.file.getSaveName()}|"
+              	    th:each="${ ms.file.getOriginName() }" download>
+               <span th:text="${ ms.file.originName }"></span>
 				</p>
 				<br>
 				<table class="asdqwe" style="width: 1100px; height: 400px;">

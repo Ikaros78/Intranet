@@ -21,7 +21,7 @@
                     <a th:href="@{/notice/news/list}">사내소식</a>
                 </li>
                 <li class="main">
-                    <a href="../gallery/galleryList.html">갤러리</a>
+                    <a th:href="@{/notice/gallery/list}">갤러리</a>
                 </li>
             </ul>
         </div>
@@ -46,7 +46,7 @@
                 <button th:if="${#authentication.getPrincipal().getMem_num() eq news.member.mem_num }" class="list update"
                         th:onclick="|location.href='@{ /notice/news/update(no=${ news.no }) }'|">수정</button>
                 <button th:if="${#authentication.getPrincipal().getMem_num() eq news.member.mem_num }" class="list delete" id="deleteBtn"  onclick="removeCheck()">삭제</button>
-                <button class="list"><a th:href="@{/notice/news/list}">목록</a></button>
+                <button class="list" onclick="location.href='/notice/news/list'">목록</button>
             </div>
         </div>
     </div>

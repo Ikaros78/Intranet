@@ -194,7 +194,7 @@ public class MsBoardController {
 
 		return "message/messageSend";
 	}
-
+	
 	@PostMapping("/msinsert")
 	public String MsboardInsert(@RequestParam List<MultipartFile> msfile, @ModelAttribute MsBoardDTO msBoardDTO,
 			HttpServletRequest request, Model model) throws FileNotFoundException {
@@ -275,8 +275,10 @@ public class MsBoardController {
 
 		int msNo = Integer.parseInt(request.getParameter("msNo"));
 
-		List<MsBoardDTO> boardDetail = msBoardService.selectMsBoardDetail(msNo);
-		model.addAttribute("boardDetail",boardDetail);
+		MsBoardDTO boardDetail = msBoardService.selectMsBoardDetail(msNo);
+		
+		model.addAttribute("board",boardDetail);
+		
 		return "message/messageDetail";
 	}
 
@@ -296,7 +298,7 @@ public class MsBoardController {
 	private List<MsMemberListDTO> getMemberList(HttpServletRequest request) throws Exception {
 
 		String dept_name = request.getParameter("data");
-
+		System.out.println("deptName 확인 : " + dept_name);
 		List<MsMemberListDTO> result = msBoardService.getMemberList(dept_name);
 
 		return result;

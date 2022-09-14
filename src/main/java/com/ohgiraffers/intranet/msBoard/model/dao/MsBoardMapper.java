@@ -30,8 +30,6 @@ public interface MsBoardMapper {
 	
 	int MsFileInsert(MsFileDTO msFileDTO);
 
-	List<MsBoardDTO> selectMsBoardDetail(int msNo);
-
 	int YNChangeMsBoard(int msNo);
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
@@ -41,6 +39,8 @@ public interface MsBoardMapper {
 	List<DepartmentDTO> getdeptList() throws Exception;
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
+
+	MsBoardDTO selectMsBoardDetail(int msNo);
 
 //	int recpYNMsBoard(int msNo);
 //

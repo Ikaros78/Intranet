@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.msBoard.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,14 +100,11 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	// 보낸 쪽지함 상세 페이지 조회용 메소드
 	@Override
-	public List<MsBoardDTO> selectMsBoardDetail(int msNo) {
+	public MsBoardDTO selectMsBoardDetail(int msNo) {
 		
+		MsBoardDTO msDetail = msBoardMapper.selectMsBoardDetail(msNo);
+		// 지금 파일 이름이 다르니까 
 		
-		
-		List<MsBoardDTO> msDetail = null;
-
-		msDetail = msBoardMapper.selectMsBoardDetail(msNo);
-
 		System.out.println("msDetail : " + msDetail);
 		
 		if (msDetail.equals(msDetail)) {

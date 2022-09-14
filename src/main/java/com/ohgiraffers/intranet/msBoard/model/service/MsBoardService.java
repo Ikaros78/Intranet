@@ -25,7 +25,7 @@ public interface MsBoardService {
 	
 	int MsFileInsert(MsFileDTO msFileDTO);
 
-	List<MsBoardDTO> selectMsBoardDetail(int msNo);
+	MsBoardDTO selectMsBoardDetail(int msNo);
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
 

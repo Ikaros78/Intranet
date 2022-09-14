@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.empManage.model.dto;
 
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
 import java.sql.Date;
@@ -11,20 +12,24 @@ public class AppointmentDTO {
     private Date date;
     private String contents;
     private String bef_rank;
+    private String bef_dept;
     private int mem_num;
     private MemberDTO member;
+    private DepartmentDTO dept;
 
     public AppointmentDTO() {
     }
 
-    public AppointmentDTO(int no, String category, Date date, String contents, String bef_rank, int mem_num, MemberDTO member) {
+    public AppointmentDTO(int no, String category, Date date, String contents, String bef_rank, String bef_dept, int mem_num, MemberDTO member, DepartmentDTO dept) {
         this.no = no;
         this.category = category;
         this.date = date;
         this.contents = contents;
         this.bef_rank = bef_rank;
+        this.bef_dept = bef_dept;
         this.mem_num = mem_num;
         this.member = member;
+        this.dept = dept;
     }
 
     public int getNo() {
@@ -67,6 +72,14 @@ public class AppointmentDTO {
         this.bef_rank = bef_rank;
     }
 
+    public String getBef_dept() {
+        return bef_dept;
+    }
+
+    public void setBef_dept(String bef_dept) {
+        this.bef_dept = bef_dept;
+    }
+
     public int getMem_num() {
         return mem_num;
     }
@@ -83,6 +96,14 @@ public class AppointmentDTO {
         this.member = member;
     }
 
+    public DepartmentDTO getDept() {
+        return dept;
+    }
+
+    public void setDept(DepartmentDTO dept) {
+        this.dept = dept;
+    }
+
     @Override
     public String toString() {
         return "AppointmentDTO{" +
@@ -91,8 +112,10 @@ public class AppointmentDTO {
                 ", date=" + date +
                 ", contents='" + contents + '\'' +
                 ", bef_rank='" + bef_rank + '\'' +
+                ", bef_dept='" + bef_dept + '\'' +
                 ", mem_num=" + mem_num +
                 ", member=" + member +
+                ", dept=" + dept +
                 '}';
     }
 }

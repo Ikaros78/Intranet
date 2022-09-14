@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.empManage.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.empManage.model.dto.AppointmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface EmpService {
     /* 직원 리스트 조회 */
     List<MemberDTO> selectEmpList(SelectCriteria selectCriteria);
 
-    /* 인사 발령 등록 시 이름 가져오는 메소드 */
+    /* 인사 발령 등록 시 직원 정보 가져오는 메소드 */
     MemberDTO getMemberName(int mem_num);
+
+    /* 인사 발령 테이블 정보 insert 하는 메소드 */
+    int appointmentRegist(AppointmentDTO appointment);
 }

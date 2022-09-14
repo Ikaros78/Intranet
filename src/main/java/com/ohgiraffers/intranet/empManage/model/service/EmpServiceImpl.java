@@ -2,9 +2,11 @@ package com.ohgiraffers.intranet.empManage.model.service;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.empManage.model.dao.EmpMapper;
+import com.ohgiraffers.intranet.empManage.model.dto.AppointmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class EmpServiceImpl implements EmpService {
         this.empMapper = empMapper;
     }
 
+    /* 직원 수 조회용 메소드 */
     @Override
     public int selectEmpTotalCount(Map<String, String> searchMap){
 
@@ -27,6 +30,7 @@ public class EmpServiceImpl implements EmpService {
         return result;
     }
 
+    /* 직원 조회용 메소드 */
     @Override
     public List<MemberDTO> selectEmpList(SelectCriteria selectCriteria) {
 
@@ -42,6 +46,14 @@ public class EmpServiceImpl implements EmpService {
         MemberDTO member = empMapper.getMemberName(mem_num);
 
         return member;
+    }
+
+    /* 인사 발령 테이블 정보 insert 하는 메소드 */
+    @Override
+    @Transactional
+    public int appointmentRegist(AppointmentDTO appointment) {
+
+        return empMapper.appointmentRegist(appointment);
     }
 
 

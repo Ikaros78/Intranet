@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ public class EmpController {
         this.empService = empService;
     }
 
+    /* 직원 리스트 조회*/
     @GetMapping("/empList")
     public ModelAndView empManagePage(HttpServletRequest request, ModelAndView mv){
 
@@ -76,6 +78,7 @@ public class EmpController {
         return mv;
     }
 
+    /* 인사 발령 리스트 조회*/
     @GetMapping("/hrList")
     public ModelAndView hrManagePage(HttpServletRequest request, ModelAndView mv){
 
@@ -84,12 +87,32 @@ public class EmpController {
         return mv;
     }
 
+    /* 인사 발령 등록 페이지 */
     @GetMapping("/hrRegist")
     public String hrRegistPage(){
 
         return "empManage/hrRegist";
     }
 
+    @PostMapping("/hrRegist")
+    public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request, RedirectAttributes rttr){
+
+        String category = request.getParameter("category");
+        log.info("값 받아오는지 확인 : " + request.getParameter("category"));
+        appointment.setCategory(category);
+        log.info("카테고리 값 받아오는지 확인 : " +  appointment.getCategory());
+
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+        String bef_rank = request.getParameter("bef_rank");
+        String bef_dept = request.getParameter("bef_dept");
+        log.info("값 가져오나 확인 : " + mem_num + bef_rank + bef_dept);
+
+        int registResult = empService.appointmentRegist(appointment);
+
+        return "redirect:/emp/hrList";
+    }
+
+    /* 인사 발령 등록 멤버 값 받아오기 ajax | 받아올 값 - 사원번호, 직원명, 발령 전 직급(현재직급), 발령 전 부서(현재부서)) */
     @GetMapping(value = "getMemberName", produces = "application/json; charset-UTF-8")
     @ResponseBody
     public MemberDTO getMemberName(HttpServletRequest request){

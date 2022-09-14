@@ -12,10 +12,10 @@
         <table>
             <tr>
                 <th>발령구분</th>
-                <td><select name="pa_category">
+                <td><select name="category">
                     <option>선택</option>
-                    <option value="promotion">승진</option>
-                    <option value="move">부서이동</option>
+                    <option value="승진">승진</option>
+                    <option value="부서이동">부서이동</option>
                 </select></td>
             </tr>
             <tr>
@@ -28,47 +28,45 @@
                     <input type="text" name="mem_num" id="mem_num">
                     <button type="button" id="send">검색</button>
                 </td>
+                <th>직원명</th>
+                <td id="name" class="greyBox"></td>
             </tr>
             <tr>
-                <th>직원명</th>
-                <td id="name"></td>
+                <th>직급</th>
+                <td id="rank" class="greyBox"></td>
                 <th>발령직급</th>
                 <td>
-                    <select name="pa_bef_rank">
+                    <select name="dept_rank">
                     <option>선택</option>
-                    <option value="dept_rank1">사원</option>
-                    <option value="dept_rank2">대리</option>
-                    <option value="dept_rank3">과장</option>
-                    <option value="dept_rank4">사장</option>
-                    <option value="dept_rank5">회장</option>
+                    <option value="사원">사원</option>
+                    <option value="대리">대리</option>
+                    <option value="과장">과장</option>
+                    <option value="사장">사장</option>
+                    <option value="회장">회장</option>
                     </select>
                 </td>
             </tr>
             <tr>
+                <th>부서</th>
+                <td id="dept_name" class="greyBox"></td>
                 <th>발령부서</th>
-                <td><select name="dept_code">
+                <td><select name="dept_name">
                     <option>선택</option>
-                    <option value="D1">인사부</option>
-                    <option value="D2">기술지원부</option>
-                    <option value="D3">영업1부</option>
-                    <option value="D4">영업2부</option>
-                    <option value="D5">사업부</option>
+                    <option value="인사부">인사부</option>
+                    <option value="기술지원부">기술지원부</option>
+                    <option value="영업1부">영업1부</option>
+                    <option value="영업2부">영업2부</option>
+                    <option value="사업부">사업부</option>
                 </select></td>
             </tr>
             <tr>
                 <th>비고</th>
-                <td class="widthText" colspan="4"><input type="text" name="pa_contents"></td>
+                <td class="widthText" colspan="4"><input type="text" name="contents"></td>
             </tr>
         </table>
-        <button onclick="confirm()">저장</button>
+        <button type="submit">저장</button>
     </form>
     <script>
-
-        function confirm(){
-            alert("등록 완료 되었습니다.");
-
-            window.close();
-        }
 
         let mem_num = $("#mem_num").val();
 
@@ -80,9 +78,11 @@
                dataType: "json",
                success: function(data){
 
-                   console.log('data 나오나여 : ' + data.mem_name)
+                   console.log('data 나오나여 : ' + data)
 
-                   $("#name").append("<p>" + data.mem_name + "</p>");
+                   $("#name").append("<p class='pGrey'>" + data.mem_name + "</p>");
+                   $("#rank").append("<p class='pGrey' name='bef_rank'>" + data.dept_rank + "</p>");
+                   $("#dept_name").append("<p class='pGrey' name='bef_dept'>" + data.department.dept_name + "</p>");
 
                } ,
                 error: function(error){

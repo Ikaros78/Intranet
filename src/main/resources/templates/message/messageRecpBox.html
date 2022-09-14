@@ -3,62 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <title>basic</title>
-<link rel="stylesheet" href="/css/reset.css">
-<link rel="stylesheet" href="/css/basic.css">
-<link rel="stylesheet" href="/css/board.css">
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/msBoard/board.css}">
 </head>
-<script>
-function checkAll() {
-	if($("#cboxAll").is(':checked')) {
-		$("input[name=cbox]").prop("checked", true);
-	} else {
-		$("input[name=cbox]").prop("checked", false);
-	}
-}
-
-</script>
 <body>
 	<div id="wrap">
     <div th:replace="common/header.html"></div>
+			
 
-		<div id="messageheader">
-			<select class="form-select" aria-label="Default select example"
-				style="width: 110px; position: absolute; top: 140px; left: 380px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
-				<option selected>전체쪽지</option>
-				<option value="1">받은쪽지</option>
-				<option value="1">보낸쪽지</option>
-				<option value="1">보관쪽지</option>
-			</select>
-		</div>
-
-		<div id="searchbox">
-			<table>
-				<div class="search"
-					style="position: absolute; width: 300px; left: 500px; top: 140px;" />
-				<input type="text" placeholder="검색어 입력"
-					style="width: 100%; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
-				<img src="/images/pngwing.com.png"
-					style="position: absolute; width: 17px; top: 12px; right: -15px; margin: 0;">
-				</div>
-			</table>
-		</div>
-		<button type="button"
-			style="position: absolute; top: 210px; left: 340px; padding: 6px 8px;">삭제</button>
-
-
-		<div id="visual">
-			<div class="table-area"
-				style="position: absolute; top: 250px; left: 350px; width: 1350px;">
+		<div id="contents">
+			<div id="sideBar" style="float: left;">
+				<h3>쪽지함</h3>
+				<ul>
+					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
+					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+					<li class="main"><a href="/ms/allrecp">쪽지보관함</a></li>
+				</ul>
+			</div>
+			<h3 style="position: relative; top: 40px; left: 80px">받은쪽지함</h3><br>
+<!--/*		<hr style="width: 1000px; position: relative; left:50px; top:50px"><br> */-->
+			<div id="messageheader" style="float:left; position:relative; top:60px; left: 60px">
+				<form th:action="@{/ms/recp}" method="get">
+					<input type="hidden" name="searchbox" value="1">
+					<select name="searchCondition" id="searchCondition" 
+						    style="border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;margin: 10px;">
+						<option value="msTitle">제목</option>
+						<option value="sendName">보낸사람</option>
+					</select>
+					<input type="search" name="searchValue" id="searchValue" 
+							style="width: 300px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
+					<button style="width:70px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">검색</button>
+				</form>
+			</div>
+			<div class="d-flex justify-content-end">
+			<button type="button" onclick="selectedElementsCnt"
+			style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
+			</div>
+			<div class="table-area">
 				<table align="center" id="listArea">
 					<tr>
-						<th><input type="checkbox" id="cboxAll" name="cboxAll" onclick="checkAll();" style="margin: 10px"></th>
-						<th width="100px" style="border: 1px solid black">보낸사람</th>
-						<th width="1000px" style="border: 1px solid black">내용</th>
-						<th width="100px" style="border: 1px solid black">날짜</th>
-						<th width="100px" style="border: 1px solid black">조회수</th>
+						<th>
+						
+                        <label class="checkbox-inline">
+				        <input type="checkbox" id="allCheckBox" onclick="allChecked()">
+				        </label>
+						<th>보낸사람</th>
+						<th>제목</th>
+						<th>날짜</th>
+						<th>글번호</th>
 					</tr>
-					<tr th:each="boardList : ${ boardList }">
-						<td><input type="checkbox" name="cbox" style="margin: 10px"></td>
+					<tr th:each=" boardList : ${ boardList }">
+						<td>
+						<label class="checkbox-inline">
+						<input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${boardList.msNo}" style="margin: 10px">
+						</label></td>
+						
 						<td th:text="${boardList.sendName}"></td>
 						<td th:text="${boardList.msTitle}"></td>
 						<td th:text="${boardList.sendDate}"></td>
@@ -67,55 +68,43 @@ function checkAll() {
 				</table>
 			</div>
 		</div>
+	</div>
 
 		<!-- 페이지 처리 -->
-		<div class="pagingArea" align="center">
+		<div class="page-nation" align="">
 			<!-- 맨 앞으로 이동 버튼 -->
-			<button
-				th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.startPage}} + '\''"
-				th:disabled="${selectCriteria.pageNo == 1}"><<</button>
+			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.startPage}} + '\''"
+					th:disabled="${selectCriteria.pageNo == 1}"><<</button>
 			<!-- 이전 페이지 버튼 -->
-			<button
-				th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
-				th:disabled="${selectCriteria.pageNo == 1}"><</button>
+			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
+					th:disabled="${selectCriteria.pageNo == 1}"><</button>
 			<!-- 숫자 버튼 -->
-			<th:block
-				th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+			<th:block	th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
 				<button th:text="${ page }"
-					th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${page}} + '\''"
-					th:disabled="${ selectCriteria.pageNo eq page }"></button>
+				     	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${page}} + '\''"
+						th:disabled="${ selectCriteria.pageNo eq page }"></button>
 			</th:block>
 
 			<!-- 다음 페이지 버튼 -->
-			<button
-				th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
-				th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
+			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
+				    th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
 				></button>
 			<!-- 마지막 페이지로 이동 버튼 -->
-			<button
-				th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
-				th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
+			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
+				    th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
 				>></button>
-		</div>
-
-		<!-- 사이드 바 링크로 바꿀겁니다 -->
-		<div id="contents">
-			<div id="sideBar">
-				<h3>쪽지함</h3>
-				<ul>
-					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
-					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
-					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
-					<li class="main"><a href="/ms/all">쪽지보관함</a></li>
-				</ul>
 			</div>
-		</div>
-	</div>
 
-	<script>
+
+	<script th:inline="javascript">
 		if (document.querySelectorAll("#listArea td")) {
 			const $tds = document.querySelectorAll("#listArea td");
 			for (let i = 0; i < $tds.length; i++) {
+
+               $tds[i].onmouseenter = function(){
+
+                    this.parentNode.style.cursor = "pointer";
+                }
 
 				$tds[i].onclick = function() {
 					const msNo = this.parentNode.children[4].innerText;
@@ -125,5 +114,89 @@ function checkAll() {
 			}
 		}
 	</script>
+	<script>
+		 function allChecked(target){
+			  const checkbox = document.getElementById('allCheckBox');
+			  const is_checked = checkbox.checked;
+  		      if(is_checked){
+		         
+		            chkAllChecked()
+		        }else{
+		         
+		            chkAllUnChecked()
+		        }
+		    }
+		    
+			function chkClicked(){
+				const allCount = document.querySelectorAll(".chk").length;
+	
+		          //체크된 체크박스 전체개수
+		        const query = 'input[name="chk"]:checked'
+		        const selectedElements = document.querySelectorAll(query)
+		        const selectedElementsCnt = selectedElements.length;
+
+		        //체크박스 전체개수와 체크된 체크박스 전체개수가 같으면 전체 체크박스 체크
+		        if(allCount == selectedElementsCnt){
+		             document.getElementById('allCheckBox').checked = true;
+		        }
+		
+		        //같지않으면 전체 체크박스 해제
+		        else{
+		            document.getElementById('allCheckBox').checked = false;
+		        }
+		    }
+
+		    //체크박스 전체 체크
+		    function chkAllChecked(){
+		        document.querySelectorAll(".chk").forEach(function(v, i) {
+		            v.checked = true;
+		        });
+		    }
+		
+		    //체크박스 전체 체크 해제
+		    function chkAllUnChecked(){
+		        document.querySelectorAll(".chk").forEach(function(v, i) {
+		            v.checked = false;
+		        });
+		    }  
+			function boardDelete(){
+		        //체크박스 체크된 항목
+		        const query = 'input[name="chk"]:checked'
+		        const selectedElements = document.querySelectorAll(query)
+		
+		        //체크박스 체크된 항목의 개수
+		        const selectedElementsCnt = selectedElements.length;
+		
+		        if(selectedElementsCnt == 0){
+		            alert("삭제할 항목을 선택해주세요.");
+		            return false;
+		        }
+		
+		        else{
+		            if (confirm("정말로 삭제하시겠습니까?")) {
+		                //배열생성
+		                const arr = new Array(selectedElementsCnt);
+		
+		                document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+		                    arr[i] = v.value;
+		                });
+		
+		                const form = document.createElement('form');
+		                form.setAttribute('method', 'post');        //Post 메소드 적용
+		                form.setAttribute('action', '/recpDelete');
+		
+		                var input1 = document.createElement('input');
+		                input1.setAttribute("type", "hidden");
+		                input1.setAttribute("name", "msNo");
+		                input1.setAttribute("value", arr);
+		                form.appendChild(input1);
+		                console.log(form);
+		                document.body.appendChild(form);
+		                form.submit();
+		            }
+		        }
+		    }	
+	</script>
+
 </body>
 </html>

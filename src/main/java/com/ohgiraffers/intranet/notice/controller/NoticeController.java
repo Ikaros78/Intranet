@@ -59,7 +59,7 @@ public class NoticeController {
 
         String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
 
-        String fileUploadDirectory = filePath + "/noticeFile";
+        String fileUploadDirectory = filePath +	 "/noticeFile";
 
         File mkdir = new File(fileUploadDirectory);
 

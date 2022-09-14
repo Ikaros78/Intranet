@@ -13,7 +13,7 @@
     #wrap{position: relative}
 
     #container{width: 100%;height: 520px;}
-    #search-box {float:left; width:350px; height: 500px; border: 2px solid #EAEAEA;}
+    #search-box {float:left; width:350px; height: 500px; border: 2px solid #EAEAEA;overflow: auto;}
     #select-move-box {float:left; width : 120px; height: 200px; border: 2px solid #EAEAEA; margin: 200px 15px;}
     #select-move-box tr td{text-align: center;}
     #select-box {float:left; width: 500px; height: 500px; border: 2px solid #EAEAEA;}
@@ -79,6 +79,18 @@
             </div>
             <div id="select-box">
                 <h4>결재선 정보</h4>
+                <form>
+                    <table id="approver">
+                        <thead>
+                            <tr>
+                                <td>결재</td>
+                                <td>결재자</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
 
@@ -117,12 +129,13 @@
 
                         for(let index in data){
 
-                            $li = $("<li>")
-                            $span = $("<span>").text(data[index].mem_name);
+                            $li = $("<li>");
+                            $name = data[index].mem_name;
+                            $rank = data[index].dept_rank;
 
-                            $li.append($span);
+                            $li.append($name + ' ' + $rank);
 
-                            $members[i].append($li);
+                            $members[i].append($li[0]);
                         }
 
                     },
@@ -135,6 +148,12 @@
             }
         }
     }
+
+    $("#apply").on("click",function(){
+
+        $(opener.document).find()
+    })
+
 
     $("#close").on("click",function(){
         window.close();

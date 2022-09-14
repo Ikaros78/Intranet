@@ -359,11 +359,14 @@ public class SignController {
 
     @GetMapping(value = "/addApprover", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public ModelAndView addApprover(ModelAndView mv){
+    public ModelAndView addApprover(ModelAndView mv, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
 
         List<DepartmentDTO> deptList = signService.selectDeptList();
 
         mv.addObject("deptList", deptList);
+        mv.addObject("userInfo", userInfo);
 
         mv.setViewName("sign/signpopupmain");
 

@@ -211,15 +211,6 @@ public class SignServiceImpl implements SignService {
         return deptList;
     }
 
-    /* 사원 전체 조회용 메소드 */
-    @Override
-    public List<MemberDTO> selectAllMember() {
-
-        List<MemberDTO> memberList = signMapper.selectAllMember();
-
-        return memberList;
-    }
-
     /* 결재진행함 전체 갯수 조회용 메소드 */
     @Override
     public int selectTotalProgressCount(Map<String, Object> searchMap) {
@@ -295,4 +286,14 @@ public class SignServiceImpl implements SignService {
 
         return requestList;
     }
+
+    /* 부서코드로 부서인원 조회용 메소드 */
+    @Override
+    public List<MemberDTO> selectMemByDeptCode(String code) {
+
+        List<MemberDTO> memberList = signMapper.selectMemByDeptCode(code);
+
+        return memberList;
+    }
+
 }

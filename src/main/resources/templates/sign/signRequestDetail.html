@@ -30,11 +30,17 @@
 
   <div class="details">
     <div class="buttons" align="right">
-      <button id="resign" type="submit" form="signform" onclick='btn_click("resign");'>재기안</button>
+      <button id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
       <button id="process">진행현황</button>
       <button id="print">인쇄</button>
       <button id="backtoList">목록</button>
     </div>
+
+    <form id="hiddenfrm" method="post" action="/sign/registForm">
+      <input type="hidden" name="formCode" th:value="${signDetail.signForm.code}">
+      <input type="hidden" name="signTitle" th:value="${signDetail.signTitle}">
+      <input type="hidden" name="signContent" th:value="${signDetail.signContent}">
+    </form>
 
     <div id="detail">
       <div id="detail-header">
@@ -60,8 +66,6 @@
       </div>
 
       <div id="table-form">
-        <form id="signform" method="post">
-          <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
           <table class="table detail">
             <caption></caption>
             <colgroup>

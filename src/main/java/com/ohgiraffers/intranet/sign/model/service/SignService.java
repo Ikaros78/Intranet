@@ -30,7 +30,6 @@ public interface SignService {
     int selectTotalMyRefusedCount(Map<String, Object> searchMap);
     List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
     List<DepartmentDTO> selectDeptList();
-    List<MemberDTO> selectAllMember();
     int selectTotalProgressCount(Map<String, Object> searchMap);
     List<SignDTO> selectProgressList(Map<String, Object> searchList);
     int selectTotalTempCount(Map<String, Object> searchMap);
@@ -39,4 +38,5 @@ public interface SignService {
     int selectTotalRequestCount(Map<String, Object> searchMap);
     List<SignDTO> selectRequestList(Map<String, Object> searchList);
 
+    List<MemberDTO> selectMemByDeptCode(String code);
 }

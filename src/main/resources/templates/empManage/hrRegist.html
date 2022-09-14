@@ -8,54 +8,55 @@
 </head>
 <body onresize="parent.resizeTo(900, 600)" onload="parent.resizeTo(900,600)">
     <h1>발령 등록</h1>
-    <table>
-        <tr>
-            <th>발령구분</th>
-            <td><select name="pa_category">
-                <option>선택</option>
-                <option value="promotion">승진</option>
-                <option value="move">부서이동</option>
-            </select></td>
-        </tr>
-        <tr>
-            <th>발령일자</th>
-            <td><input type="date" name="pa_date"></td>
-        </tr>
-        <tr class="mem_num">
-            <th>사원번호</th>
-            <td><input type="text" name="mem_num" id="mem_num"><button id="send">검색</button></td>
-        </tr>
-        <tr>
-            <th>직원명</th>
-            <td><p id="numResult"></p></td>
-            <th>발령직급</th>
-            <td><select name="pa_bef_rank">
-                <option>선택</option>
-                <option value="dept_rank1">사원</option>
-                <option value="dept_rank2">대리</option>
-                <option value="dept_rank3">과장</option>
-                <option value="dept_rank4">사장</option>
-                <option value="dept_rank5">회장</option>
-            </select></td>
-        </tr>
-        <tr>
-            <th>발령부서</th>
-            <td><select name="dept_code">
-                <option>선택</option>
-                <option value="D1">인사부</option>
-                <option value="D2">기술지원부</option>
-                <option value="D3">영업1부</option>
-                <option value="D4">영업2부</option>
-                <option value="D5">사업부</option>
-            </select></td>
-        </tr>
-        <tr>
-            <th>비고</th>
-            <td class="widthText" colspan="4"><input type="text" name="pa_contents"></td>
-        </tr>
-    </table>
-    <button onclick="confirm()">저장</button>
-
+    <form th:action="@{/emp/hrRegist}" method="post" id="hrRegist">
+        <table>
+            <tr>
+                <th>발령구분</th>
+                <td><select name="pa_category">
+                    <option>선택</option>
+                    <option value="promotion">승진</option>
+                    <option value="move">부서이동</option>
+                </select></td>
+            </tr>
+            <tr>
+                <th>발령일자</th>
+                <td><input type="date" name="pa_date"></td>
+            </tr>
+            <tr class="mem_num">
+                <th>사원번호</th>
+                <td><input type="text" name="mem_num" id="mem_num"><button id="send">검색</button></td>
+            </tr>
+            <tr>
+                <th>직원명</th>
+                <td><p id="numResult"></p></td>
+                <th>발령직급</th>
+                <td><select name="pa_bef_rank">
+                    <option>선택</option>
+                    <option value="dept_rank1">사원</option>
+                    <option value="dept_rank2">대리</option>
+                    <option value="dept_rank3">과장</option>
+                    <option value="dept_rank4">사장</option>
+                    <option value="dept_rank5">회장</option>
+                </select></td>
+            </tr>
+            <tr>
+                <th>발령부서</th>
+                <td><select name="dept_code">
+                    <option>선택</option>
+                    <option value="D1">인사부</option>
+                    <option value="D2">기술지원부</option>
+                    <option value="D3">영업1부</option>
+                    <option value="D4">영업2부</option>
+                    <option value="D5">사업부</option>
+                </select></td>
+            </tr>
+            <tr>
+                <th>비고</th>
+                <td class="widthText" colspan="4"><input type="text" name="pa_contents"></td>
+            </tr>
+        </table>
+        <button onclick="confirm()">저장</button>
+    </form>
     <script>
 
         function confirm(){
@@ -64,15 +65,15 @@
             window.close();
         }
 
-        $("#mem_num").click(function(){
+        $("#send").click(function(){
            const mem_num = $("#mem_num").val();
 
            $.ajax({
-              url:"/emp/hrRegist",
+              url:"/emp/memberSelect",
               data: {mem_num : mem_num},
-              method:"GET",
+              method:"POST",
               success: function(data){
-                $("#numResult").text(data);
+                // $("#numResult").text(data);
                 console.log('data : ' + data);
               },
                error: function(error){
@@ -80,6 +81,77 @@
                }
            });
         });
+
+        // $.ajax({
+        //     url: "getdeptList",
+        //     contentType: "application/json;charset=UTF-8",
+        //     dataType: "json",
+        //     //            async:false, //비동기 동기 설정
+        //     success: function (data) {
+        //
+        //         for (let index in data) {
+        //             /* 초기화를 어떻게 하나요? */
+        //             var deptCode = data[index].dept_code;
+        //             var deptName = data[index].dept_name;
+        //
+        //             //                중복되는 부서코드를 제거해야하고
+        //
+        //             $("#selectDept").append("<option id=" + "name(" + index + ")" + " value=" + data[index].dept_name +
+        //                 " data-value=" + data[index].dept_name + ">" + data[index].dept_name + "</option>");
+        //         }
+        //     },
+        //     error: function (error) {
+        //
+        //         console.log('error');
+        //     }
+        // });
+        //
+        // $("#selectDept").on("change", function (e) {
+        //     console.log(e.target.value);
+        //     e.preventDefault();
+        //
+        //     let data = {
+        //         data: e.target.value
+        //     }
+        //
+        //     console.log(data);
+        //
+        //     $.ajax({
+        //         url: "getMemberList",
+        //         type: "GET",
+        //         contentType: "application/json;charset=UTF-8",
+        //         dataType: "json",
+        //         data: data,
+        //         success: function (data) {
+        //
+        //             console.table(data);
+        //
+        //             $(".selectName").html("");
+        //
+        //             let html = "";
+        //             html += "<option value=''>" + ' 이름 ' + "</option>";
+        //
+        //             for (let index in data) {
+        //
+        //                 var no = data[index].memNum;
+        //                 var name = data[index].name;
+        //                 var deptCode = data[index].deptCode;
+        //                 var deptName = data[index].deptName;
+        //
+        //                 html += "<option value=" + no + ">" + name + "</option>";
+        //
+        //             }
+        //
+        //             console.log(html);
+        //
+        //             $("#selectName").append(html);
+        //
+        //         },
+        //         error: function (error) {
+        //             console.log(error);
+        //         }
+        //     });
+        // });
     </script>
 </body>
 </html>

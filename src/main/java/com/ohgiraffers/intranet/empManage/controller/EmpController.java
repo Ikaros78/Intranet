@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.empManage.controller;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.empManage.model.dto.AppointmentDTO;
 import com.ohgiraffers.intranet.empManage.model.service.EmpService;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +92,19 @@ public class EmpController {
 
         return "empManage/hrRegist";
     }
+
+//    @PostMapping("/memberSelect")
+//    public String hrRegist(HttpServletRequest request, HttpServletResponse response, @ModelAttribute AppointmentDTO appointment){
+//
+//        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+//        log.info("mem_num값 가져왔나 확인 : " + mem_num);
+//
+//
+//
+//
+//
+//        return result;
+//    }
 
 
 }

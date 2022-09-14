@@ -13,7 +13,7 @@ public interface BoardMapper {
 
    
 
-    int boardInsert(FreeinsertDTO freeinsert);
+    int freeinsert(FreeinsertDTO freeinsert);
 
 
     int selectTotalCount(Map<String, String> searchMap);

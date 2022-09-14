@@ -39,11 +39,15 @@ public class BoardController {
     @PostMapping("/insert")
     public String freelist(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
 
-        freeinsert.getTitle();
-        freeinsert.getContents();
+        //log.info("free insert : " + freeinsert.getTitle());
+        //log.info("free insert : " +  freeinsert.getContents());
+        //log.info("free insert : " +  freeinsert.getMem_num());
         log.info("free insert : " + freeinsert);
 
         int registResult = boardService.freeinsert(freeinsert);
+
+        log.info("registResult : " + registResult);
+
         return "";
 
     }

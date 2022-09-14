@@ -5,6 +5,7 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,10 @@ public class BoardService {
         this.boardMapper = boardMapper;
     }
 
+    @Transactional
     public int freeinsert(FreeinsertDTO freeinsert) {
 
-        return boardMapper.boardInsert(freeinsert);
+        return boardMapper.freeinsert(freeinsert);
     }
 
     public int selectTotalCount(Map<String, String> searchMap) {

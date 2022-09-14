@@ -124,7 +124,6 @@
 
         <insert id="freeinsert" parameterType="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
         INSERT
-
         INTO FR_FREE A(
             A.FR_NO
            ,A.FR_TITLE
@@ -139,7 +138,6 @@
                         ,DEFAULT
                         ,#{contents}
                         ,#{mem_num}
-
             )
     </insert>
 

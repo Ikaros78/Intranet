@@ -12,4 +12,6 @@ public interface EmpMapper {
     int selectEmpTotalCount(Map<String, String> searchMap);
 
     List<MemberDTO> selectEmpList(SelectCriteria selectCriteria);
+
+    MemberDTO getMemberName(int mem_num);
 }

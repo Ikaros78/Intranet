@@ -106,4 +106,12 @@
             ORDER BY 1 ASC
     </select>
 
+    <select id="getMemberName" resultMap="memberResultMap" parameterType="_int">
+        SELECT
+               MEM_NAME
+             , MEM_NUM
+          FROM MEMBER
+         WHERE MEM_NUM = #{ mem_num }
+    </select>
+
 </mapper>

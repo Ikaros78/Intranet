@@ -35,5 +35,14 @@ public class EmpServiceImpl implements EmpService {
         return memberList;
     }
 
+    /* 인사 발령 등록 시 이름 가져오는 메소드 */
+    @Override
+    public MemberDTO getMemberName(int mem_num) {
+
+        MemberDTO member = empMapper.getMemberName(mem_num);
+
+        return member;
+    }
+
 
 }

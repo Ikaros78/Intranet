@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,18 +90,19 @@ public class EmpController {
         return "empManage/hrRegist";
     }
 
-//    @PostMapping("/memberSelect")
-//    public String hrRegist(HttpServletRequest request, HttpServletResponse response, @ModelAttribute AppointmentDTO appointment){
-//
-//        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
-//        log.info("mem_num값 가져왔나 확인 : " + mem_num);
-//
-//
-//
-//
-//
-//        return result;
-//    }
+    @GetMapping(value = "getMemberName", produces = "application/json; charset-UTF-8")
+    @ResponseBody
+    public MemberDTO getMemberName(HttpServletRequest request){
+
+        log.info("확인용 : " + request.getParameter("mem_num"));
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+
+        MemberDTO result = empService.getMemberName(mem_num);
+
+        log.info("확인용2 : " + String.valueOf(result));
+
+        return result;
+    }
 
 
 }

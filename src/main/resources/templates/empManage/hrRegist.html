@@ -24,20 +24,25 @@
             </tr>
             <tr class="mem_num">
                 <th>사원번호</th>
-                <td><input type="text" name="mem_num" id="mem_num"><button id="send">검색</button></td>
+                <td id="selectNum">
+                    <input type="text" name="mem_num" id="mem_num">
+                    <button type="button" id="send">검색</button>
+                </td>
             </tr>
             <tr>
                 <th>직원명</th>
-                <td><p id="numResult"></p></td>
+                <td id="name"></td>
                 <th>발령직급</th>
-                <td><select name="pa_bef_rank">
+                <td>
+                    <select name="pa_bef_rank">
                     <option>선택</option>
                     <option value="dept_rank1">사원</option>
                     <option value="dept_rank2">대리</option>
                     <option value="dept_rank3">과장</option>
                     <option value="dept_rank4">사장</option>
                     <option value="dept_rank5">회장</option>
-                </select></td>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <th>발령부서</th>
@@ -65,93 +70,27 @@
             window.close();
         }
 
-        $("#send").click(function(){
-           const mem_num = $("#mem_num").val();
+        let mem_num = $("#mem_num").val();
 
-           $.ajax({
-              url:"/emp/memberSelect",
-              data: {mem_num : mem_num},
-              method:"POST",
-              success: function(data){
-                // $("#numResult").text(data);
-                console.log('data : ' + data);
-              },
-               error: function(error){
-                    console.log('error 왜 에러야 근데? : ' + error);
-               }
-           });
+        $("#send").click(function(){
+            $.ajax({
+               url: "getMemberName?mem_num=" + $("#mem_num").val(),
+               type: "GET",
+               contentType: "application/json;charset=UTF-8",
+               dataType: "json",
+               success: function(data){
+
+                   console.log('data 나오나여 : ' + data.mem_name)
+
+                   $("#name").append("<p>" + data.mem_name + "</p>");
+
+               } ,
+                error: function(error){
+                   console.log('에러 발생했어여ㅠ.. ' + error);
+                }
+            });
         });
 
-        // $.ajax({
-        //     url: "getdeptList",
-        //     contentType: "application/json;charset=UTF-8",
-        //     dataType: "json",
-        //     //            async:false, //비동기 동기 설정
-        //     success: function (data) {
-        //
-        //         for (let index in data) {
-        //             /* 초기화를 어떻게 하나요? */
-        //             var deptCode = data[index].dept_code;
-        //             var deptName = data[index].dept_name;
-        //
-        //             //                중복되는 부서코드를 제거해야하고
-        //
-        //             $("#selectDept").append("<option id=" + "name(" + index + ")" + " value=" + data[index].dept_name +
-        //                 " data-value=" + data[index].dept_name + ">" + data[index].dept_name + "</option>");
-        //         }
-        //     },
-        //     error: function (error) {
-        //
-        //         console.log('error');
-        //     }
-        // });
-        //
-        // $("#selectDept").on("change", function (e) {
-        //     console.log(e.target.value);
-        //     e.preventDefault();
-        //
-        //     let data = {
-        //         data: e.target.value
-        //     }
-        //
-        //     console.log(data);
-        //
-        //     $.ajax({
-        //         url: "getMemberList",
-        //         type: "GET",
-        //         contentType: "application/json;charset=UTF-8",
-        //         dataType: "json",
-        //         data: data,
-        //         success: function (data) {
-        //
-        //             console.table(data);
-        //
-        //             $(".selectName").html("");
-        //
-        //             let html = "";
-        //             html += "<option value=''>" + ' 이름 ' + "</option>";
-        //
-        //             for (let index in data) {
-        //
-        //                 var no = data[index].memNum;
-        //                 var name = data[index].name;
-        //                 var deptCode = data[index].deptCode;
-        //                 var deptName = data[index].deptName;
-        //
-        //                 html += "<option value=" + no + ">" + name + "</option>";
-        //
-        //             }
-        //
-        //             console.log(html);
-        //
-        //             $("#selectName").append(html);
-        //
-        //         },
-        //         error: function (error) {
-        //             console.log(error);
-        //         }
-        //     });
-        // });
     </script>
 </body>
 </html>

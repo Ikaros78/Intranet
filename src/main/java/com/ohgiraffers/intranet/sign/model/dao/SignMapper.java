@@ -48,8 +48,6 @@ public interface SignMapper {
 
     List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
 
-    List<MemberDTO> selectAllMember();
-
     int selectTotalProgressCount(Map<String, Object> searchMap);
 
     int selectTotalMyProgressCount(Map<String, Object> searchMap);
@@ -67,4 +65,6 @@ public interface SignMapper {
     int selectTotalRequestCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectRequestList(Map<String, Object> searchList);
+
+    List<MemberDTO> selectMemByDeptCode(String code);
 }

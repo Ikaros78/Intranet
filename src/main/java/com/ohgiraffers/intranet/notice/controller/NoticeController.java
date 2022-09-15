@@ -107,7 +107,7 @@ public class NoticeController {
         int pageNo = 1;
 
         if(currentPage != null && !"".equals(currentPage)){
-            pageNo = Integer.parseInt(currentPage);
+                pageNo = Integer.parseInt(currentPage);
         }
 
         String searchCondition = request.getParameter("searchCondition");

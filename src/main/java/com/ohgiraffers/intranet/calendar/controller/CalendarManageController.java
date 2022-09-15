@@ -2,7 +2,7 @@ package com.ohgiraffers.intranet.calendar.controller;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,7 @@ public class CalendarManageController {
         List<MemberDTO> memberList = calendarService.selectMemberListForCalendarManage(searchCondition);
         List<DepartmentDTO> deptList = calendarService.selectDeptList();
 
+
         log.info("[CalendarManageController] memberList : " + memberList);
         log.info("[CalendarManageController] deptList : " + deptList);
 
@@ -63,9 +64,9 @@ public class CalendarManageController {
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
             auth.setAuCode("ROLE_CD_ALL");
-            authList.add(auth);         
+            authList.add(auth);
         }
-        
+
         if(cd_dept){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);

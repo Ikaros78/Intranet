@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.msBoard.model.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 public class MsBoardDTO {
 
@@ -13,15 +14,18 @@ public class MsBoardDTO {
 	private String readYn;
 	private String sendDel;
 	private String recpDel;
-	private String recpMun;
+	private String recpNum;
+	private String sendNum;
 	private String contents;
 	private int memNum;
+	private List<MsFileDTO> msFile;
 	public MsBoardDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public MsBoardDTO(int msNo, String msTitle, String sendName, String recpName, Date sendDate, Date recpDate,
-			String readYn, String sendDel, String recpDel, String recpMun, String contents, int memNum) {
+			String readYn, String sendDel, String recpDel, String recpNum, String sendNum, String contents, int memNum,
+			List<MsFileDTO> msFile) {
 		super();
 		this.msNo = msNo;
 		this.msTitle = msTitle;
@@ -32,9 +36,11 @@ public class MsBoardDTO {
 		this.readYn = readYn;
 		this.sendDel = sendDel;
 		this.recpDel = recpDel;
-		this.recpMun = recpMun;
+		this.recpNum = recpNum;
+		this.sendNum = sendNum;
 		this.contents = contents;
 		this.memNum = memNum;
+		this.msFile = msFile;
 	}
 	public int getMsNo() {
 		return msNo;
@@ -90,11 +96,17 @@ public class MsBoardDTO {
 	public void setRecpDel(String recpDel) {
 		this.recpDel = recpDel;
 	}
-	public String getRecpMun() {
-		return recpMun;
+	public String getRecpNum() {
+		return recpNum;
 	}
-	public void setRecpMun(String recpMun) {
-		this.recpMun = recpMun;
+	public void setRecpNum(String recpNum) {
+		this.recpNum = recpNum;
+	}
+	public String getSendNum() {
+		return sendNum;
+	}
+	public void setSendNum(String sendNum) {
+		this.sendNum = sendNum;
 	}
 	public String getContents() {
 		return contents;
@@ -108,13 +120,19 @@ public class MsBoardDTO {
 	public void setMemNum(int memNum) {
 		this.memNum = memNum;
 	}
+	public List<MsFileDTO> getMsFile() {
+		return msFile;
+	}
+	public void setMsFile(List<MsFileDTO> msFile) {
+		this.msFile = msFile;
+	}
 	@Override
 	public String toString() {
 		return "MsBoardDTO [msNo=" + msNo + ", msTitle=" + msTitle + ", sendName=" + sendName + ", recpName=" + recpName
 				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendDel=" + sendDel
-				+ ", recpDel=" + recpDel + ", recpMun=" + recpMun + ", contents=" + contents + ", memNum=" + memNum
-				+ "]";
+				+ ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", sendNum=" + sendNum + ", contents=" + contents
+				+ ", memNum=" + memNum + ", msFile=" + msFile + "]";
 	}
-
-
+	
+	
 }

@@ -56,7 +56,7 @@ public class NoticeController {
 
         String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
 
-        String fileUploadDirectory = filePath + "/noticeFile";
+        String fileUploadDirectory = filePath +	 "/noticeFile";
 
         File mkdir = new File(fileUploadDirectory);
 
@@ -665,6 +665,9 @@ public class NoticeController {
             int no = Integer.parseInt(request.getParameter("no"));
 
             GalleryDTO galleryDetail = noticeService.selectGalleryDetail(no);
+ 
+            
+            
             List<GalleryFileDTO> galleryFileDetail = noticeService.selectGalleryFile(no);
 
             log.info("galleryDetail값 확인 : " + galleryDetail);

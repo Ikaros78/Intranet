@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.notice.model.dao.NoticeMapper">
+
+    <!--                          공지사항                                 -->
+    <resultMap id="noticeResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        <id property="no" column="NT_NO"/>
+        <result property="title" column="NT_TITLE"/>
+        <result property="date" column="NT_DATE"/>
+        <result property="views" column="NT_VIEWS"/>
+        <result property="contents" column="NT_CONTENTS"/>
+        <result property="num" column="MEM_NUM"/>
+    </resultMap>
+
+    <resultMap id="addFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+        <id property="no" column="NTF_NO"/>
+        <result property="originName" column="NTF_ORIGIN_NAME"/>
+        <result property="saveName" column="NTF_SAVE_NAME"/>
+        <result property="savePath" column="NTF_SAVE_PATH"/>
+        <result property="deleteYn" column="DELETE_YN"/>
+        <result property="ntNo" column="NT_NO"/>
+    </resultMap>
+
+    <resultMap id="noticeListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        <id property="no" column="NT_NO"/>
+        <result property="title" column="NT_TITLE"/>
+        <result property="date" column="NT_DATE"/>
+        <result property="views" column="NT_VIEWS"/>
+        <result property="contents" column="NT_CONTENTS"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="file" resultMap="addFileResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
+    <!-- 공지사항 등록 -->
+    <insert id="noticeRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeDTO">
+        INSERT
+          INTO NT_NOTICE
+        (
+          NT_NO
+        , NT_TITLE
+        , NT_DATE
+        , NT_VIEWS
+        , NT_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+        (
+        SEQ_NOTICE_NO.NEXTVAL
+        , #{title}
+        , SYSDATE
+        , DEFAULT
+        , #{contents}
+        , #{mem_num}
+        )
+    </insert>
+
+    <!-- 공지사항 파일 등록 -->
+    <insert id="fileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO">
+        <selectKey keyProperty="ntNo" order="BEFORE" resultType="_int">
+            SELECT
+                    SEQ_NOTICE_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+          INTO NTF_NOTICE_FILE
+        (
+          NTF_NO
+        , NTF_ORIGIN_NAME
+        , NTF_SAVE_NAME
+        , NTF_SAVE_PATH
+        , NTF_DELETE_YN
+        , NT_NO
+        )
+        VALUES
+        (
+          SEQ_NOTICE_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{ntNo}
+        )
+    </insert>
+
+    <select id="selectNoticeList" resultMap="noticeListResultMap">
+        SELECT A.RNUM
+             , A.NT_NO
+             , A.NT_TITLE
+             , D.MEM_NAME
+             , A.NT_DATE
+             , E.DEPT_NAME
+             , A.NT_VIEWS
+             , F.NTF_ORIGIN_NAME
+             , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+             , B.NT_NO
+             , B.NT_TITLE
+             , B.NT_DATE
+             , B.NT_VIEWS
+             , B.MEM_NUM
+        FROM (SELECT
+               C.NT_NO
+             , C.NT_TITLE
+             , C.NT_DATE
+             , C.NT_VIEWS
+             , C.MEM_NUM
+        FROM NT_NOTICE C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.NT_NO DESC
+             ) B
+            <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+             ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        LEFT JOIN NTF_NOTICE_FILE F ON(A.NT_NO = F.NT_NO)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+
+          FROM NT_NOTICE A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.NT_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <update id="incresementNoticeCount" parameterType="_int">
+        UPDATE
+               NT_NOTICE A
+           SET A.NT_VIEWS = (SELECT B.NT_VIEWS
+                             FROM NT_NOTICE B
+                             WHERE B.NT_NO = #{ no }
+                            ) + 1
+        WHERE A.NT_NO = #{ no }
+    </update>
+
+    <!-- 공지사항 상세보기 -->
+    <select id="selectNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
+        SELECT
+               A.NT_NO
+             , A.NT_TITLE
+             , B.MEM_NAME
+             , A.NT_DATE
+             , C.DEPT_NAME
+             , A.NT_VIEWS
+             , D.NTF_ORIGIN_NAME
+             , A.MEM_NUM
+             , A.NT_CONTENTS
+             , D.NTF_SAVE_NAME
+          FROM NT_NOTICE A
+          LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+          LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+          LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)
+         WHERE A.NT_NO = #{ no }
+    </select>
+
+    <!-- 파일 삭제 -->
+    <delete id="deleteFile">
+        DELETE
+          FROM NTF_NOTICE_FILE
+         WHERE NT_NO = #{ ntNo }
+    </delete>
+
+    <!-- 공지사항 업데이트 -->
+    <update id="noticeUpdate">
+        UPDATE
+               NT_NOTICE
+           SET NT_TITLE = #{ title }
+             , NT_CONTENTS = #{ contents }
+         WHERE NT_NO = #{ no }
+    </update>
+
+    <!-- 공지사항 삭제-->
+    <delete id="noticeDelete" parameterType="int">
+        DELETE
+          FROM NT_NOTICE
+         WHERE NT_NO = #{ no }
+    </delete>
+
+    <!--                          사내 소식                                 -->
+    <resultMap id="newsResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        <id property="no" column="NW_NO"/>
+        <result property="title" column="NW_TITLE"/>
+        <result property="date" column="NW_DATE"/>
+        <result property="views" column="NW_VIEWS"/>
+        <result property="contents" column="NW_CONTENTS"/>
+        <result property="num" column="MEM_NUM"/>
+    </resultMap>
+
+    <resultMap id="addNewsFileResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+        <id property="no" column="NEWF_NO"/>
+        <result property="originName" column="NEWF_ORIGIN_NAME"/>
+        <result property="saveName" column="NEWF_SAVE_NAME"/>
+        <result property="savePath" column="NEWF_SAVE_PATH"/>
+        <result property="deleteYn" column="DELETE_YN"/>
+        <result property="nwNo" column="NW_NO"/>
+    </resultMap>
+
+    <resultMap id="newsListResultMap" type="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        <id property="no" column="NW_NO"/>
+        <result property="title" column="NW_TITLE"/>
+        <result property="date" column="NW_DATE"/>
+        <result property="views" column="NW_VIEWS"/>
+        <result property="contents" column="NW_CONTENTS"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="file" resultMap="addNewsFileResultMap"/>
+        <association property="dept" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <!-- 사내소식 등록 -->
+    <insert id="newsRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsDTO">
+        INSERT
+        INTO NW_NEWS
+        (
+          NW_NO
+        , NW_TITLE
+        , NW_DATE
+        , NW_VIEWS
+        , NW_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+            (
+              SEQ_NEWS_NO.NEXTVAL
+            , #{title}
+            , SYSDATE
+            , DEFAULT
+            , #{contents}
+            , #{mem_num}
+            )
+    </insert>
+
+    <!-- 사내소식 파일 등록 -->
+    <insert id="newsFileRegist" parameterType="com.ohgiraffers.intranet.notice.model.dto.NewsFileDTO">
+        <selectKey keyProperty="nwNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_NEWS_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO NEWF_NEWS_FILE
+        (
+          NEWF_NO
+        , NEWF_ORIGIN_NAME
+        , NEWF_SAVE_NAME
+        , NEWF_SAVE_PATH
+        , NEWF_DELETE_YN
+        , NW_NO
+        )
+        VALUES
+        (
+          SEQ_NEWS_FILE_NO.NEXTVAL
+        , #{originName}
+        , #{saveName}
+        , #{savePath}
+        , DEFAULT
+        , #{nwNo}
+        )
+    </insert>
+
+    <!-- 사내소식 전체 게시글 수 조회 -->
+    <select id="selectNewsTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+
+        FROM NW_NEWS A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.NW_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 사내소식 리스트 조회 -->
+    <select id="selectNewsList" resultMap="newsListResultMap">
+        SELECT A.RNUM
+        , A.NW_NO
+        , A.NW_TITLE
+        , D.MEM_NAME
+        , A.NW_DATE
+        , E.DEPT_NAME
+        , A.NW_VIEWS
+        , F.NEWF_ORIGIN_NAME
+        , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+        , B.NW_NO
+        , B.NW_TITLE
+        , B.NW_DATE
+        , B.NW_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+        C.NW_NO
+        , C.NW_TITLE
+        , C.NW_DATE
+        , C.NW_VIEWS
+        , C.MEM_NUM
+        FROM NW_NEWS C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NW_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.NW_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        LEFT JOIN NEWF_NEWS_FILE F ON(A.NW_NO = F.NW_NO)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <!-- 사내소식 조회수 증가 쿼리문 -->
+    <update id="incresementNewsCount" parameterType="_int">
+        UPDATE
+            NW_NEWS A
+        SET A.NW_VIEWS = (SELECT B.NW_VIEWS
+                          FROM NW_NEWS B
+                          WHERE B.NW_NO = #{ no }
+                         ) + 1
+        WHERE A.NW_NO = #{ no }
+    </update>
+
+    <!-- 사내소식 상세보기 -->
+    <select id="selectNewsDetail" parameterType="_int" resultMap="newsListResultMap">
+        SELECT
+            A.NW_NO
+             , A.NW_TITLE
+             , B.MEM_NAME
+             , A.NW_DATE
+             , C.DEPT_NAME
+             , A.NW_VIEWS
+             , D.NEWF_ORIGIN_NAME
+             , A.MEM_NUM
+             , A.NW_CONTENTS
+             , D.NEWF_SAVE_NAME
+        FROM NW_NEWS A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+                 LEFT JOIN NEWF_NEWS_FILE D ON(A.NW_NO = D.NW_NO)
+        WHERE A.NW_NO = #{ no }
+    </select>
+
+    <!-- 사내소식 업데이트 -->
+    <update id="newsUpdate">
+        UPDATE
+            NW_NEWS
+        SET NW_TITLE = #{ title }
+          , NW_CONTENTS = #{ contents }
+        WHERE NW_NO = #{ no }
+    </update>
+
+    <!-- 사내소식 파일 삭제 -->
+    <delete id="deleteNewsFile">
+        DELETE
+        FROM NEWF_NEWS_FILE
+        WHERE NW_NO = #{ nwNo }
+    </delete>
+
+    <!-- 사내소식 삭제 -->
+    <delete id="newsDelete" parameterType="int">
+        DELETE
+        FROM NW_NEWS
+        WHERE NW_NO = #{ no }
+    </delete>
+
+</mapper>

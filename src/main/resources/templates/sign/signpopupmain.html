@@ -129,13 +129,16 @@
 
                         for(let index in data){
 
-                            $li = $("<li>");
                             $name = data[index].mem_name;
                             $rank = data[index].dept_rank;
 
-                            $li.append($name + ' ' + $rank);
+                            $checkbox = $("<input type='checkbox'>").val(data[index].mem_name);
+                            $br = $("<br>");
 
-                            $members[i].append($li[0]);
+
+                            $members[i].append($checkbox[0]);
+                            $members[i].append($name + ' ' + $rank);
+                            $members[i].append($br[0]);
                         }
 
                     },

@@ -11,7 +11,7 @@
 <!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>-->
 <!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
 <!--    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
-    <script src="https://code.jquery.com.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com./jquery-3.6.0.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -20,17 +20,18 @@
             <div id="sideBar">
                 <h3>직원관리</h3>
                 <ul>
-                    <li class="main"><a th:href="@{/emp/emplList}">인사 관리</a>
+                    <li class="main"><a th:href="@{/emp/empList}">인사 관리</a>
                         <ul class="sub sub1">
-                            <li><a th:href="@{/emp/emplList}">직원 관리</a></li>
+                            <li><a th:href="@{/emp/empList}">직원 관리</a></li>
                             <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
                         <ul class="sub sub2">
+                            <li><a href="">전체 권한 관리</a></li>
                             <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
-                            <li><a href="../accessManage/hrManage.html">인사 권한 관리</a></li>
-                            <li><a href="../accessManage/boardManage.html">게시판 권한 관리</a></li>
+                            <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                            <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -42,8 +43,8 @@
                     <label>발령구분</label>
                     <select name="searchCondition" id="searchCondition">
                         <option>전체</option>
-                        <option value="승진">승진</option>
-                        <option value="부서이동">부서이동</option>
+                        <option value="promotion">승진</option>
+                        <option value="move">부서이동</option>
                     </select>
                     <label for="searchValue">사원명</label>
                     <input type="search" class="inputSearch" name="searchValue" id="searchValue">
@@ -66,24 +67,27 @@
                                     <th>발령일자</th>
                                     <th>사원번호</th>
                                     <th>성명</th>
-                                    <th>발령내용</th>
+                                    <th>발령직급</th>
+                                    <th>발령부서</th>
                                     <th>비고</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-tr_value>
-                                    <td ><input type="checkbox" name="chkList"></td>
-                                    <td>1</td>
-                                    <td>승진</td>
-                                    <td>22/08/13</td>
-                                    <td>123456</td>
-                                    <td>주이슬</td>
-                                    <td><span>사원</span>&nbsp;→&nbsp;<span>부장</span></td>
-                                    <td></td>
+                                <tr th:each="appoint : ${ appointList }">
+<!--                                    <td><input type="checkbox" name="chkList"></td>-->
+                                    <td id="inputAppend"></td>
+                                    <td th:text="${ appoint.no }"></td>
+                                    <td th:text="${ appoint.category }"></td>
+                                    <td th:text="${ appoint.date }"></td>
+                                    <td th:text="${ appoint.mem_num }"></td>
+                                    <td th:text="${ appoint.member.mem_name }"></td>
+                                    <td><span th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
+                                    <td><span th:text="${ appoint.bef_dept }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
+                                    <td th:text="${ appoint.contents }"></td>
                                 </tr>
                             </tbody>
                         </table>
-<!--                <div th:replace="empManage/paging"></div>-->
+                <div th:replace="empManage/paging"></div>
             </div>
         </div>
     </div>
@@ -102,22 +106,27 @@
                 const popup = window.open('/emp/hrRegist', '발령등록', `width=${width}, height=${height}, left=${left}, top=${tops}`);
             }
 
-            // 발령 취소 테이블 행 삭제
-            (function($){
-
-                $(document).ready(function(){
-                    $("#del").click(function(){
-                        if($("input").is(":checked") == true){
-                            let i = $("input:checked").parents("tr");
-                            let e = i.next("tr");
-                            i.remove();
-                            e.remove();
-                        } else {
-                            alert("삭제할 항목을 선택해주세요!")
-                        }
-                    });
-                });
+            // 체크 박스 가장 상위만 체크 가능하도록
+            $("#del").click(function(){
+            $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList'/>");
             });
+            // <input type="checkbox" name="chkList">
+            // 발령 취소 테이블 행 삭제
+            // (function($){
+            //
+            //     $(document).ready(function(){
+            //         $("#del").click(function(){
+            //             if($("input").is(":checked") == true){
+            //                 let i = $("input:checked").parents("tr");
+            //                 let e = i.next("tr");
+            //                 i.remove();
+            //                 e.remove();
+            //             } else {
+            //                 alert("삭제할 항목을 선택해주세요!")
+            //             }
+            //         });
+            //     });
+            // });
 
             // $(function() {
             //

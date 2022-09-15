@@ -94,7 +94,7 @@ public class EmpController {
 
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchvalue", searchValue);
+        searchMap.put("searchValue", searchValue);
         log.info("검색조건 확인 : " + searchMap);
 
         int totalCount = empService.selectHrListTotalCount(searchMap);
@@ -111,9 +111,9 @@ public class EmpController {
         }
         log.info("selectCriteria 확인 : " + selectCriteria);
 
-//        List<AppointmentDTO> appointList = empService.selectHrList(selectCriteria);
+        List<AppointmentDTO> appointList = empService.selectHrList(selectCriteria);
 
-//        mv.addObject("appointList", appointList);
+        mv.addObject("appointList", appointList);
         mv.addObject("selectCriteria", selectCriteria);
 
         mv.setViewName("empManage/hrList");

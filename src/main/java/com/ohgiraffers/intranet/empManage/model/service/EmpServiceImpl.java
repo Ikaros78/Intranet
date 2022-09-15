@@ -72,5 +72,14 @@ public class EmpServiceImpl implements EmpService {
         return result;
     }
 
+    /* 인사 발령 리스트 조회 */
+    @Override
+    public List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria) {
+
+        List<AppointmentDTO> appointmentList = empMapper.selectHrList(selectCriteria);
+
+        return appointmentList;
+    }
+
 
 }

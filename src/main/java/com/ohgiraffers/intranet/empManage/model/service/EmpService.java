@@ -26,4 +26,7 @@ public interface EmpService {
 
     /* 인사 발령 수 조회 */
     int selectHrListTotalCount(Map<String, String> searchMap);
+
+    /* 인사 발령 리스트 조회 */
+    List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
 }

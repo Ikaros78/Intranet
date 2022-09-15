@@ -37,7 +37,8 @@
                         <div id="wrapper">
                             <div id="slider-wrap"> 
                                 <ul id="slider">
-                                    <li th:each="galleryFileDetail : ${ galleryFileDetail }"><img th:src="${ galleryFileDetail.thumbnailPath }" alt="갤러리 사진"></li>
+                                    <li th:each="galleryFileDetail : ${ galleryFileDetail }">
+                                    <img th:src="${ galleryFileDetail.thumbnailPath }" alt="갤러리 사진"></li>
                                 </ul>
                                 <div class="btns" id="next">></div>
                                 <div class="btns" id="previous"><</div>

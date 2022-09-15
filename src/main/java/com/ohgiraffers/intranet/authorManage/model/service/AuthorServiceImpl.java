@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AuthorServiceImpl implements AuthorService{
@@ -26,9 +25,9 @@ public class AuthorServiceImpl implements AuthorService{
 
     /* 게시판 권한 관리를 위해 회원 조회용 */
     @Override
-    public List<MemberDTO> selectMemberListForBoardManage(String searchCondition) {
+    public List<MemberDTO>  selectMemberListForCalendarAndBoardManage(String searchCondition) {
 
-        List<MemberDTO> memberList = memberMapper.selectMemberListForBoardManage(searchCondition);
+        List<MemberDTO> memberList = memberMapper.selectMemberListForCalendarAndBoardManage(searchCondition);
 
         return memberList;
     }
@@ -58,16 +57,18 @@ public class AuthorServiceImpl implements AuthorService{
 
     }
 
-    /*인사관리를 위해 인사부 직원들 리스트 조회 */
+    /*인사,접근 권한 관리를 위해 인사부 직원들 리스트 조회 */
     @Override
-    public List<MemberDTO> selectMemberListForEmpManage() {
+    public List<MemberDTO> selectMemberListForEmpAndAllManage() {
 
-        List<MemberDTO> memberList = memberMapper.selectMemberListForEmpManage();
+        List<MemberDTO> memberList = memberMapper.selectMemberListForEmpAndAllManage();
 
         return memberList;
     }
 
 
+    /* 인사 권한 일단 삭제 */
+    @Transactional
     @Override
     public int deleteEmpAuthority(int memNum) {
 
@@ -75,4 +76,16 @@ public class AuthorServiceImpl implements AuthorService{
 
         return result;
     }
+
+    /* 접근 권한 일단 삭제 */
+    @Transactional
+    @Override
+    public int deleteAllAuthority(int memNum) {
+
+        int result = memberMapper.deleteAllAuthority(memNum);
+
+        return result;
+    }
+
+
 }

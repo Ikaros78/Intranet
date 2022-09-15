@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
@@ -35,7 +36,7 @@
                 </li>
                 <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
                     <ul class="sub sub2">
-                        <li><a href="">전체 권한 관리</a></li>
+                        <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                         <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
                         <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
                         <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
@@ -62,7 +63,7 @@
                             <th colspan="2" >권한여부(인사발령)</th>
                             <th colspan="2" >권한여부(직원정보)</th>
                             <th rowspan="2" >권한여부<br>(회원가입)</th>
-                            <th rowspan="2" >권한 적용</th>
+                            <th rowspan="2" sec:authorize="hasRole('HR_EM_AUTH')" >권한 적용</th>
                         </tr>
                         <tr>
                             <td >조회</td>
@@ -126,7 +127,7 @@
 <!--                            <td><input type="checkbox" class="check" name="auCode" value="HR_READ"></td>-->
 <!--                            <td><input type="checkbox" class="check" name="auCode" value="NM" ></td>-->
 
-                            <td>
+                            <td sec:authorize="hasRole('HR_EM_AUTH')">
                                 <button type="button" class="btn" onclick="updateData(this)">적용</button>
                             </td>
                         </tr>

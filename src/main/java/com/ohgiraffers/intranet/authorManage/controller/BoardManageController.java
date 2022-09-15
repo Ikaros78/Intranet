@@ -1,8 +1,10 @@
 package com.ohgiraffers.intranet.authorManage.controller;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorService;
 
+import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
@@ -23,11 +25,11 @@ import java.util.List;
 public class BoardManageController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private final AuthorService authorService;
+    private final AuthorServiceImpl authorService;
     private final CalendarServiceImpl calendarService;
 
     @Autowired
-    public BoardManageController(AuthorService authorService, CalendarServiceImpl calendarService){
+    public BoardManageController(AuthorServiceImpl authorService, CalendarServiceImpl calendarService){
 
         this.authorService = authorService;
         this.calendarService = calendarService;
@@ -38,14 +40,36 @@ public class BoardManageController {
 
         String searchCondition = request.getParameter("searchCondition");
 
-        List<MemberDTO> memberList = authorService.selectMemberListForBoardManage(searchCondition);
+        List<MemberDTO> memberList = authorService.selectMemberListForCalendarAndBoardManage(searchCondition);
         List<DepartmentDTO> deptList = calendarService.selectDeptList();
 
-        log.info("[CalendarManageController] memberList : " + memberList);
-        log.info("[CalendarManageController] deptList : " + deptList);
+        List<AuthoritTypeDTO> authoritTypeList = new ArrayList<>();
+
+        for(int i = 0 ; i < memberList.size(); i ++){
+
+            AuthoritTypeDTO authoritTypeDTO = new AuthoritTypeDTO();
+
+            for(int j = 0 ; j < memberList.get(i).getAuthorit().size(); j ++){
+
+                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_NT_ALL")){
+
+                    authoritTypeDTO.setNt_all("NT_ALL");
+                }
+                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_DB_ALL")){
+
+                    authoritTypeDTO.setDb_all("DB_ALL");
+                }
+            }
+            authoritTypeList.add(authoritTypeDTO);
+        }
+
+        log.info("[BoardManageController] memberList : " + memberList);
+        log.info("[BoardManageController] deptList : " + deptList);
+        log.info("[BoardManageController] authoritTypeList : " + authoritTypeList);
 
         mv.addObject("memberList", memberList);
         mv.addObject("deptList", deptList);
+        mv.addObject("authoritTypeList",authoritTypeList);
 
         mv.setViewName("/empManage/boardManage");
 

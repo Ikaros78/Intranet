@@ -95,9 +95,9 @@ public class CalendarServiceImpl implements CalendarService{
     /* 내꺼 =====================================================================================================================================*/
     @Override
     /* 일정권한관리를 위해 memberList를 불러오기 위한 메소드*/
-    public List<MemberDTO> selectMemberListForCalendarManage(String searchCondition) {
+    public List<MemberDTO> selectMemberListForCalendarAndBoardManage(String searchCondition) {
 
-        List<MemberDTO> memberList = memberMapper.selectMemberListForCalendarManage(searchCondition);
+        List<MemberDTO> memberList = memberMapper.selectMemberListForCalendarAndBoardManage(searchCondition);
 
         return  memberList;
 
@@ -134,6 +134,8 @@ public class CalendarServiceImpl implements CalendarService{
         }
         return result;
     }
+
+
 
 
 

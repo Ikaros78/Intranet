@@ -177,6 +177,7 @@
                         let even = {};
 
                         for(let idx in data){
+
                             even = {
 
                                 "id": data[idx].id,
@@ -224,6 +225,7 @@
                             selectable: true, // 달력 일자 드래그 설정가능
                             nowIndicator: true, // 현재 시간 마크
                             dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+                            displayEventTime:false,
                             eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
                                 console.log(obj);
                             },
@@ -233,10 +235,11 @@
                             eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
                                 console.log(obj);
                             },
-                            select: function () { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
-                                $(document).ready(function () {
+                            select: function (arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
+                                $(document).ready(function (arg) {
                                     $("#modalPop").modal('show');
                                 });
+
                             },
 
                             customButtons: {
@@ -248,12 +251,12 @@
                                         // jsp로 연결해야함 => cd_insert
                                     }
                                 },
-                                custom2: {
-                                    text: '권한요청',
-                                    click: function () {
-                                        alert('권한요청 처리를 신청했습니다.');
-                                    }
-                                }
+                                // custom2: {
+                                //     text: '권한요청',
+                                //     click: function () {
+                                //         alert('권한요청 처리를 신청했습니다.');
+                                //     }
+                                // }
                             },
 
                             eventClick: function() {
@@ -303,11 +306,11 @@
 </div>
 
 <!-- The Modal -->
-<form th:action="@{/calendar/insert}" method="post">
 <div class="modal" id="modalPop">
     <div class="modal-dialog modal modal-dialog-centered">
         <div class="modal-content">
 
+<form th:action="@{/calendar/insert}" method="post">
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">당일일정 추가</h4>
@@ -359,13 +362,13 @@
             <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
                 <button class="bton mbtn" type="submit">추가</button>
-                <button class="bton">취소</button>
+                <button class="bton" style="padding: 0px;"><a href="/calendar/all?type=all" style="display: block;width: 60px; line-height: 40px;">취소</a></button>
             </div>
+</form>
 
         </div>
     </div>
 </div>
-</form>
 <script> //종철님 제가 다 ~~ 고쳐놨습니다 한번 확인해보시죠  // <- 외않되요?
 
 </script>

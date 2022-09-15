@@ -25,6 +25,7 @@
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
+    <!-- 직원 수 조회 -->
     <select id="selectEmpTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
           FROM MEMBER A
@@ -47,6 +48,7 @@
         </where>
     </select>
 
+    <!-- 직원 리스트 조회 -->
     <select id="selectEmpList" resultMap="memberResultMap">
         SELECT
                A.RNUM
@@ -105,5 +107,43 @@
             WHERE A.RNUM >= #{ startRow }
             ORDER BY 1 ASC
     </select>
+
+    <!-- 인사 발령 등록 멤버 값 받아오기 ajax | 받아올 값 - 사원번호, 직원명, 발령 전 직급(현재직급), 발령 전 부서(현재부서)) -->
+    <select id="getMemberName" resultMap="memberResultMap" parameterType="_int">
+        SELECT
+               A.MEM_NAME
+             , A.MEM_NUM
+             , A.DEPT_RANK
+             , A.DEPT_CODE
+             , B.DEPT_NAME
+          FROM MEMBER A
+          LEFT JOIN DEPARTMENT B ON(A.DEPT_CODE = B.DEPT_CODE)
+         WHERE MEM_NUM = #{ mem_num }
+    </select>
+
+    <!-- 인사 발령 테이블 정보 insert용 쿼리문 -->
+    <insert id="appointmentRegist">
+        INSERT
+          INTO PA_PERSONNER_APPOINTMENT
+        (
+          PA_NO
+        , PA_CATEGORY
+        , PA_DATE
+        , PA_CONTENTS
+        , PA_BEF_RANK
+        , PA_BEF_DEPT
+        , MEM_NUM
+        )
+        VALUES
+        (
+          1
+        , #{ category }
+        , #{ date }
+        , #{ contents }
+        , #{ bef_rank }
+        , #{ bef_dept }
+        , #{ mem_num }
+        )
+    </insert>
 
 </mapper>

@@ -14,3 +14,7 @@ table tr td input[type="text"]{width: 140px;height: 28px;}
 table tr .widthText input[type="text"]{width: 700px;}
 
 button{width: 80px; height: 40px; background:#000; color:#fff; cursor: pointer; margin: 20px 0 0 400px;}
+.mem_num{position: relative;}
+#send{width:70px; height: 31px; background: #fff; border: 1px solid #666; color:#000; position : absolute; top: -14px; left:-90px; border-radius: 3px;}
+.mem_num #name{width: 300px;}
+.greyBox .pGrey{width: 145px; background-color: rgb(235, 235, 235); line-height: 32px; text-align: center; font-size: 14px; border-radius: 2px; cursor: default;}

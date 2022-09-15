@@ -94,7 +94,7 @@
 				// 					중복되는 부서코드를 제거해야하고
 
 				$("#selectDept").append("<option id=" + "name(" + index + ")" + " value=" + data[index].dept_name +
-					" data-value=" + data[index].dept_name + ">" + data[index].dept_name + "</option>"); // 값 뿌려주는거랑 (부서)선택 값 넘기는거 같이 하는거
+					" data-value=" + data[index].dept_name + ">" + data[index].dept_name + "</option>");
 			}
 		},
 		error: function (error) {
@@ -103,7 +103,7 @@
 		}
 	});
 
-	$("#selectDept").on("change", function (e) { //클릭했을 때
+	$("#selectDept").on("change", function (e) {
 		console.log(e.target.value);
 		e.preventDefault();
 
@@ -123,7 +123,7 @@
 
 				console.table(data);
 
-				$(".selectName").html(""); // 138번째 줄 쓸라고 html 초기화 한거임
+				$(".selectName").html("");
 
 				let html = "";
 				html += "<option value=''>" + ' 이름 ' + "</option>";

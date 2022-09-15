@@ -35,12 +35,12 @@
 					<input type="search" name="searchValue" id="searchValue" 
 							style="width: 300px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
 					<button style="width:70px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">검색</button>
-				</form>
 			</div>
 			<div class="d-flex justify-content-end">
-			<button type="button" onclick="selectedElementsCnt"
+			<button onclick="boardDelete()" id="selectedElementsCnt" name="selectedElementsCnt" class="btn btn-danger" a href='javascript:boardDelete();'
 			style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
 			</div>
+			</form>
 			<div class="table-area">
 				<table align="center" id="listArea">
 					<tr>
@@ -59,11 +59,10 @@
 						<label class="checkbox-inline">
 						<input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${boardList.msNo}" style="margin: 10px">
 						</label></td>
-						
-						<td th:text="${boardList.sendName}"></td>
-						<td th:text="${boardList.msTitle}"></td>
-						<td th:text="${boardList.sendDate}"></td>
-						<td th:text="${boardList.msNo}"></td>
+						<td name="click" id="click" th:text="${boardList.sendName}"></td>
+						<td name="click" id="click" th:text="${boardList.msTitle}"></td>
+						<td name="click" id="click" th:text="${boardList.sendDate}"></td>
+						<td name="click" id="click" th:text="${boardList.msNo}"></td>
 					</tr>
 				</table>
 			</div>
@@ -97,8 +96,8 @@
 
 
 	<script th:inline="javascript">
-		if (document.querySelectorAll("#listArea td")) {
-			const $tds = document.querySelectorAll("#listArea td");
+		if (document.querySelectorAll("#listArea #click")) {
+			const $tds = document.querySelectorAll("#listArea #click");
 			for (let i = 0; i < $tds.length; i++) {
 
                $tds[i].onmouseenter = function(){
@@ -181,19 +180,24 @@
 		                    arr[i] = v.value;
 		                });
 		
-		                const form = document.createElement('form');
-		                form.setAttribute('method', 'post');        //Post 메소드 적용
-		                form.setAttribute('action', '/recpDelete');
-		
-		                var input1 = document.createElement('input');
-		                input1.setAttribute("type", "hidden");
-		                input1.setAttribute("name", "msNo");
-		                input1.setAttribute("value", arr);
-		                form.appendChild(input1);
-		                console.log(form);
-		                document.body.appendChild(form);
-		                form.submit();
-		            }
+							$.ajax({
+							   type : 'POST',
+								url : '/ms/recpDelete',
+							   data : { msNo : arr[i] },
+						   dataType : 'json',
+							   
+							   success:function(data){
+								
+								location.reload();
+							},
+							
+							   error:function(error){
+								
+								console.log('error');
+							}
+								
+							})		
+		              }
 		        }
 		    }	
 	</script>

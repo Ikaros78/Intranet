@@ -46,4 +46,6 @@ public interface MemberMapper {
 
 
     List<MemberDTO> selectMemberListForEmpManage();
+
+    int deleteEmpAuthority(int memNum);
 }

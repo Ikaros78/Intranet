@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
   <meta charset="UTF-8">
@@ -42,13 +43,13 @@
   }
 
   .select {
-    width: 70px;
+    width: 80px;
     height: 34px;
     padding-left: 5px;
   }
 
   .title {
-    width: 556px;
+    width: 546px;
     height: 30px;
   }
 
@@ -101,11 +102,11 @@
     <div id="sideBar">
       <h3>일정관리</h3>
       <ul>
-        <li class="main"><a href="#">일정관리</a>
+        <li class="main"><a href="javascript:void(0)">일정관리</a>
           <ul class="sub sub1">
-            <li><a href="#">전체 일정</a></li>
-            <li><a href="#">부서 일정</a></li>
-            <li><a href="#">개인 일정</a></li>
+            <li><a href="/calendar/all?type=all">전체 일정</a></li>
+            <li><a href="/calendar/all?type=dept">부서 일정</a></li>
+            <li><a href="/calendar/all?type=solo">개인 일정</a></li>
           </ul>
         </li>
       </ul>
@@ -120,9 +121,11 @@
       <form th:action="@{/calendar/insert}" method="post">
         <input type="hidden" id="memNum" name="memNum"
                th:value="${#authentication.getPrincipal().getMem_num()}">
-<!--                <input type="hidden" name="allDay" value="true">-->
-<!--                <input type="hidden" name="wDate" value="SYSDATE">-->
-<!--                <input type="hidden" name="color" value="#FF0000">-->
+        <input type="hidden" name="allDay" value="true">
+        <input type="hidden" id="deptCode" name="deptCode"
+               th:value="${#authentication.getPrincipal().getDept_code()}">
+        <!--                <input type="hidden" name="wDate" value="SYSDATE">-->
+        <!--                <input type="hidden" name="color" value="#FF0000">-->
 
         <table id="tb" style="float: left;">
           <tr>
@@ -130,28 +133,30 @@
             <th></th>
           </tr>
           <tr style="width: 500px;">
-            <td class="tname">기간</td>
+            <td class="tname">일정 기간 선택</td>
             <td class="timeline" style="padding-left: 15px;">
-              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>
-              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> <input type="date" name="start"> ~ <input type="date" name="end">
+              <!--              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>-->
+              <!--              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> -->
+              <input type="date" name="start"> ~ <input type="date" name="end">
             </td>
           </tr>
           <tr>
             <td class="tname">일정이름</td>
             <td style="padding-left: 15px;">
               <select class="select" name="color">
-                <option name="color" value="">-색상선택-</option>
-                <option name="color" value="#c771e1" style="background-color: #c771e1">빨강</option>
-                <option name="color" value="#6fdcb0" style="background-color: #6fdcb0">노랑</option>
-                <option name="color" value="#c73e7a" style="background-color: #c73e7a">파랑</option>
-                <option name="color" value="#6a8dce" style="background-color: #6a8dce">분홍</option>
-<!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
-<!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
-<!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->
-<!--                <option name="color" value="#FF00FF" style="color: #FF00FF">●</option>-->
-<!--                <option value="2">2</option>-->
-<!--                <option value="3">3</option>-->
-<!--                <option value="4">4</option>-->
+                <option name="color" value="">색상선택</option>
+                <option name="color" value="#f5cec7" style="background-color: #ffd4cd; color: white">color1</option>
+                <option name="color" value="#e79796" style="background-color: #ffa5a4; color: white">color2</option>
+                <option name="color" value="#ffc98b" style="background-color: #ffce96; color: white">color3</option>
+                <option name="color" value="#ffb2b4" style="background-color: #ffb9bb; color: white">color4</option>
+                <option name="color" value="#c6c09c" style="background-color: #fff7c3; color: white">color5</option>
+                <!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
+                <!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
+                <!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->
+                <!--                <option name="color" value="#FF00FF" style="color: #FF00FF">●</option>-->
+                <!--                <option value="2">2</option>-->
+                <!--                <option value="3">3</option>-->
+                <!--                <option value="4">4</option>-->
               </select>
               <input class="title" type="text" name="title" placeholder="캘린더에 적히는 간단한 제목">
             </td>
@@ -165,15 +170,19 @@
           <tr>
             <td class="tname">일정 선택</td>
             <td class="chch" style="padding-left: 15px;">
-              <input type="radio" id="all" name="type" value="1"><label for="all">전체일정</label>
-              <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
-              <input type="radio" id="solo" name="type" value="3" checked><label for="solo">개인일정</label>
+              <th:block sec:authorize="hasRole('CD_ALL')">
+                <input type="radio" id="all" name="type" value="3"><label for="all">전체일정</label>
+              </th:block>
+              <th:block sec:authorize="hasRole('CD_DEPT')">
+                <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
+              </th:block>
+              <input type="radio" id="solo" name="type" value="1" checked><label for="solo">개인일정</label>
             </td>
           </tr>
           <tr>
             <td style="border: none;"></td>
             <td style="border: none;">
-              <button class="bton csb"><a href="/calendar/main">취소</a></button>
+              <button class="bton csb"><a href="/calendar/all?type=all">취소</a></button>
               <button class="bton insert" type="submit">생성</button>
             </td>
           </tr>

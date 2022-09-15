@@ -42,14 +42,13 @@ public interface MsBoardMapper {
 
 	MsBoardDTO selectMsBoardDetail(int msNo);
 
+	List<MsFileDTO> selectMsBoardFileDetail(int msNo);
+
 //	int recpYNMsBoard(int msNo);
 //
 //	int recpBoardDelete(int msNo);
 //
 //	int msFileDelete(int msNo);
-//
-//	int sendYNMsBoard(int msNo);
-//
-//	int sendBoardDelete(int msNo);
-	
+
+
 }

@@ -24,61 +24,37 @@
 			<div class="table-area" style="position: relative; top: 80px;left: 80px;width: 1350px;">
 			
 				<p class="title"><hr><br><br>
-				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msboardDetail.msTitle }"></span></spen><br><br>
-				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${msboardDetail.sendDate}"></span></spen><br><br><br><hr>
-
-				<a th:if="${board.file.originName != null}" class="fileDown"
-		           th:href="|/upload/msFile/${ ms.file.getSaveName()}|"
-              	    th:each="${ ms.file.getOriginName() }" download>
-               <span th:text="${ ms.file.originName }"></span>
-				</p>
+				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msBoard.msTitle }"></span></spen><br><br>
+				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${ msBoard.sendDate}"></span></spen><br><br><br><hr>
+		     	<a th:if="${ msBoard.originName != null }"
+		     	   class="fileDown" th:each=" msBoard : ${ msBoard.msFile }" 
+	        	   th:href="|/upload/msFile/ ${ msBoard.saveName }|"
+				   th:value="${ msBoard.originName }" download>
+				<span>다운로드(<span th:text="${ msBoard.originName }"></span>)</span></a></p>
 				<br>
 				<table class="asdqwe" style="width: 1100px; height: 400px;">
 					<tr>
-						<th th:utext="${ msboardDetail.contents }" style="vertical-align: top; text-align: left;">
+						<th th:utext="${ msBoard.contents }" style="vertical-align: top; text-align: left;">
 						</th>
 					</tr>
 				</table>
 					<hr style="width: 1100px; position: relative; left:250px;"><br>
-				<!--	<button class="list delete" id="deleteBtn"  onclick="removeCheck()" style="position: relative; top: 20px; left: 350px; padding: 10px 12px;">삭제</button> -->
+				<!--/*	<button class="list delete" id="deleteBtn"  onclick="removeCheck()" style="position: relative; top: 20px; left: 350px; padding: 10px 12px;">삭제</button> */-->
 					<button onclick="goBack()" style="position: relative; top: 20px; left: 250px; padding: 10px 12px;">뒤로가기</button>
 				</table>
 			</div>
 		</div>
 		
+
+
+        <script type="text/javascript">
+			function goBack() {
+				window.history.back();
+			}
+		</script>
+        
+	       
 		
-		
-<!--		    <th:block layout:fragment="script">-->
-<!--		        <script th:inline="javascript">-->
-<!--		            /*<![CDATA[*/-->
-<!--		-->
-<!--		            // 게시글 삭제-->
-<!--		            function removeCheck() {-->
-<!--		                const no = [[ ${msboardDetail.msNo} ]];-->
-<!--		                if ( !confirm("게시글을 삭제할까요?") ) {-->
-<!--		                    return false;-->
-<!--		                }-->
-<!--		-->
-<!--		                const formHtml = -->
-<!--		                    <form id="deleteForm" action="/msboardDetail/delete?msNo=${msNo}" method="get">-->
-<!--		                        <input type="hidden" id="msNo" name="msNo" value="${msNo}" />-->
-<!--		                    </form>-->
-<!--		                ;-->
-<!--		                const doc = new DOMParser().parseFromString(formHtml, 'text/html');-->
-<!--		                const form = doc.body.firstChild;-->
-<!--		                document.body.append(form);-->
-<!--		                document.getElementById('deleteForm').submit();-->
-<!--		            }-->
-<!--		-->
-<!--		            /*]]>*/-->
-<!--		        </script>-->
-		        <script type="text/javascript">
-					function goBack() {
-						window.history.back();
-					}
-				</script>
-		        
-		    </th:block>
 
 
 </body>

@@ -34,7 +34,9 @@
                             <span class="writer" th:text="${ notice.dept.dept_name }"></span>
                             <span>&nbsp;&nbsp;</span><span class="date" th:text="${ notice.date }"></span><br>
                             <a th:if="${notice.file.originName != null}" class="fileDown"
+                               
                                 th:href="|/upload/noticeFile/${ notice.file.getSaveName()}|"
+         
                                 th:value="${ notice.file.getOriginName() }" download>
                                 <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
                                 <span>첨부파일다운로드(<span th:text="${ notice.file.originName }"></span>)</span>

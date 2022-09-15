@@ -35,17 +35,21 @@ public interface MsBoardService {
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
 
+//	void recpYNMsBoard(List<MsBoardDTO> msBoard);
+//
+//	void recpBoardDelete(List<MsBoardDTO> msBoard);
+
 //	void recpBoardDelete(MsBoardDTO msBoard);
 //
 //	void sendBoardDelete(MsBoardDTO msBoard);
-//
+////
 //	int sendBoardDelete(int msNo);
 //
 //	int recpBoardDelete(int msNo);
+//	
+//	int recpYNMsBoard(int msNo);
 //
-//	void recpYNMsBoard(MsBoardDTO msBoard);
-//
-//	void sendYNMsBoard(MsBoardDTO msBoard);
+//	int sendYNMsBoard(int msBoard);
 
 
 	

@@ -3,25 +3,19 @@ package com.ohgiraffers.intranet.authorManage.controller;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorService;
 
-import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
-import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
+import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Member;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/boardManage/*")
@@ -29,10 +23,10 @@ public class BoardManageController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final AuthorService authorService;
-    private final CalendarService calendarService;
+    private final CalendarServiceImpl calendarService;
 
     @Autowired
-    public BoardManageController(AuthorService authorService,CalendarService calendarService){
+    public BoardManageController(AuthorService authorService, CalendarServiceImpl calendarService){
 
         this.authorService = authorService;
         this.calendarService = calendarService;
@@ -52,7 +46,7 @@ public class BoardManageController {
         mv.addObject("memberList", memberList);
         mv.addObject("deptList", deptList);
 
-        mv.setViewName("/emplManage/boardManage");
+        mv.setViewName("/empManage/boardManage");
 
         return mv;
 

@@ -16,6 +16,7 @@
         <result property="color" column="CD_COLOR"/>
         <result property="type" column="CD_TYPE"/>
         <result property="wDate" column="CD_WDATE"/>
+        <result property="deptCode" column="DEPT_CODE"/>
     </resultMap>
 
     <resultMap id="fkResultMap" type="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
@@ -26,17 +27,17 @@
         <result property="type" column="CD_TYPE"/>
     </resultMap>
 
-<!--    &lt;!&ndash; DB 전체 조회용 &ndash;&gt;-->
-<!--    <select id="selectAllCalendar" resultMap="cdResultMap">-->
-<!--        SELECT-->
-<!--               *-->
-<!--          FROM CD_CALENDAR A-->
-<!--    </select>-->
+    <!--    &lt;!&ndash; DB 전체 조회용 &ndash;&gt;-->
+    <!--    <select id="selectAllCalendar" resultMap="cdResultMap">-->
+    <!--        SELECT-->
+    <!--               *-->
+    <!--          FROM CD_CALENDAR A-->
+    <!--    </select>-->
 
 
     <select id="findAllSc" resultMap="cdResultMap">
         SELECT
-               A.MEM_NUM
+            A.MEM_NUM
              , A.CD_NO
              , A.CD_GROUP
              , A.CD_TITLE
@@ -47,31 +48,47 @@
              , A.CD_COLOR
              , A.CD_TYPE
              , A.CD_WDATE
-          FROM CD_CALENDAR A
+             , A.DEPT_CODE
+        FROM CD_CALENDAR A
     </select>
 
     <!-- 필수값만 들어오는 ajax 전체조회 -->
     <select id="findAllCal" resultMap="cdResultMap">
         SELECT
-               A.MEM_NUM
-             , A.CD_NO
-             , A.CD_GROUP
-             , A.CD_TITLE
-             , A.CD_CONTENT
-             , A.CD_START
-             , A.CD_END
-             , A.CD_ALLDAY
-             , A.CD_COLOR
-             , A.CD_TYPE
-             , A.CD_WDATE
-          FROM CD_CALENDAR A
+        A.MEM_NUM
+        , A.CD_NO
+        , A.CD_GROUP
+        , A.CD_TITLE
+        , A.CD_CONTENT
+        , A.CD_START
+        , A.CD_END
+        , A.CD_ALLDAY
+        , A.CD_COLOR
+        , A.CD_TYPE
+        , A.CD_WDATE
+        , A.DEPT_CODE
+        FROM CD_CALENDAR A
+        <where>
+            <if test='type == "all"'>
+                A.CD_TYPE= 3 OR (A.CD_TYPE = 2 AND A.DEPT_CODE = #{ deptCode }) OR (A.CD_TYPE = 1 AND A.MEM_NUM = #{ memNum })
+            </if>
+            <if test='type == "dept"'>
+                A.DEPT_CODE = #{ deptCode }
+                AND A.MEM_NUM = #{ memNum }
+                AND A.CD_TYPE IN (1,2)
+            </if>
+            <if test='type == "solo"'>
+                A.MEM_NUM = #{ memNum }
+                AND A.CD_TYPE = 1
+            </if>
+        </where>
     </select>
 
     <!-- 캘린더 입력 -->
     <insert id="insertList" parameterType="com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO">
         INSERT
         INTO CD_CALENDAR A
-        (
+            (
           A.MEM_NUM
         , A.CD_NO
         , A.CD_GROUP
@@ -83,28 +100,30 @@
         , A.CD_COLOR
         , A.CD_TYPE
         , A.CD_WDATE
+        , A.DEPT_CODE
         )
         VALUES
-        (
-          #{ memNum }
-        , SEQ_CD_NO.NEXTVAL
-        , 0
-        , #{ title }
-        , #{ content }
-        , #{ start }
-        , #{ end }
-        , #{ allDay }
-        , #{ color }
-        , 1
-        , #{ wDate }
-        )
+            (
+            #{ memNum }
+                , SEQ_CD_NO.NEXTVAL
+                , 0
+                , #{ title }
+                , #{ content }
+                , #{ start }
+                , #{ end }
+                , #{ allDay }
+                , #{ color }
+                , #{ type }
+                , #{ wDate }
+                , #{ deptCode }
+            )
 
     </insert>
 
     <!-- 캘린더 상세조회 -->
     <select id="selectCdDetail" resultMap="cdResultMap">
         SELECT
-               A.MEM_NUM
+            A.MEM_NUM
              , A.CD_NO
              , A.CD_GROUP
              , A.CD_TITLE
@@ -115,9 +134,31 @@
              , A.CD_COLOR
              , A.CD_TYPE
              , A.CD_WDATE
+             , A.DEPT_CODE
         FROM CD_CALENDAR A
-       WHERE A.CD_NO = #{ id }
+        WHERE A.CD_NO = #{ id }
     </select>
+
+    <!-- 캘린더 수정 -->
+    <update id="updateList">
+        UPDATE
+            CD_CALENDAR A
+        SET
+            A.CD_TITLE = #{ title }
+          , A.CD_CONTENT = #{ content }
+          , A.CD_START = #{ start }
+          , A.CD_END = #{ end }
+          , A.CD_COLOR = #{ color }
+          , A.CD_TYPE = #{ type }
+        WHERE A.CD_NO = #{ id }
+    </update>
+
+    <!-- 캘린더 삭제 -->
+    <delete id="cdDelete">
+        DELETE
+        FROM CD_CALENDAR A
+        WHERE A.CD_NO = #{ id }
+    </delete>
 
 
 </mapper>

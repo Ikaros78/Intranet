@@ -1,87 +1,158 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>게시판 권한 관리</title>
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
-    <link rel="stylesheet" th:href="@{/css/accessManage/boardManage.css}">
-</head>
-<body>
-    <div id="wrap">
-        <div th:replace="common/header.html"></div>
-        <div id="contents">
-            <div id="sideBar">
-                <h3>직원관리</h3>
-                <ul>
-                    <li class="main"><a href="/emplList.html">인사 관리</a>
-                        <ul class="sub sub1">
-                            <li><a href="/emplList.html">직원 관리</a></li>
-                            <li><a href="/hrList.html">직원 발령 관리</a></li>
-                        </ul>
-                    </li>
-                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
-                        <ul class="sub sub2">
-                            <li><a href="../../calendar/cd_calendarManage.html">일정 권한 관리</a></li>
-                            <li><a href="../accessManage/hrManage.html">인사 권한 관리</a></li>
-                            <li><a href="../accessManage/boardManage.html">게시판 권한 관리</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div id="container">
-                <h4>게시판 권한 관리</h4><hr>
-                <form action="" class="search">
-                    <label for="">사원번호</label>
-                    <input type="search">
-                    <button><img src="/images/searchIcon.png" alt="검색 이미지"></button>
-                </form>
-                <div class="namebox">주이슬</div>
-                <p>게시판 권한 설정 목록</p>
-                    <form action="" class="save">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>게시판명</th>
-                                    <th>권한 부여</th>
-                                </tr>
-                            </thead>
-                                <tbody>   
-                                <tr>
-                                    <td class="category">공지사항</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="subCategory">공지사항</td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td class="subCategory">사내소식</td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td class="subCategory">갤러리</td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td class="category">업무게시판</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="subCategory">파일게시판</td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td class="subCategory">부서별 공지사항</td>
-                                    <td><input type="checkbox"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button>저장</button>
-                    </form>
+    <link rel="stylesheet" th:href="@{/css/calendar/calendarManage.css}">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        ul {
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+<div id="wrap">
+    <div th:replace="/common/header.html"></div>
+    <div id="contents">
+        <div id="sideBar">
+            <h3>직원관리</h3>
+            <ul>
+                <li class="main"><a href="../manage/emplManage/emplList.html">인사 관리</a>
+                    <ul class="sub sub1">
+                        <li><a href="../manage/emplManage/emplList.html">직원 관리</a></li>
+                        <li><a href="../manage/emplManage/hrList.html">직원 발령 관리</a></li>
+                    </ul>
+                </li>
+                <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
+                    <ul class="sub sub2">
+                        <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
+                        <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                        <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="container">
+            <h4 style="font-weight: bold;">게시판 권한 관리</h4>
+            <hr>
+            <form id="dept" th:action="@{ /boardManage/list }" >
+                <span>부서</span> &nbsp
+                <select name="searchCondition" id="searchCondition">
+                    <option value="all"> 전체 </option>
+                    <th:block th:each="dept : ${ deptList }">
+                        <option th:value="${ dept.dept_code }" th:text="${ dept.dept_name }"></option>
+                    </th:block>
+                </select>&nbsp &nbsp
+                <button type="submit">검색</button>
+            </form>
+
+
+            <div id="list">
+                <!--                <form id="list" th:action="@{/calendarManage/updateList}" method="post">-->
+                <div class="scroll">
+                    <table id="tableData">
+                        <thead>
+                        <tr>
+                            <th>사원번호</th>
+                            <th>성명</th>
+                            <th>부서</th>
+                            <th>직책</th>
+                            <th>입사일자</th>
+                            <th>전화번호</th>
+                            <th class="col-2">이메일</th>
+                            <th class="col-2">권한여부(부서게시판)</th>
+                            <th class="col-2">권한여부(공지사항)</th>
+                            <th class="col-1">권한 적용</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="member : ${ memberList }">
+                            <td id="mem_num" name="mem_num" th:text="${ member.mem_num }">1</td>
+                            <td th:text="${ member.mem_name }">홍길동</td>
+                            <td id="dept_name" name="dept_name" th:text="${ member.department.dept_name }">부서1</td>
+                            <td th:text="${ member.dept_rank }">사내이사</td>
+                            <td th:text="${ member.mem_joinDate }">22-08-23</td>
+                            <td th:text="${ member.mem_phone }">010-1234-5678</td>
+                            <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
+
+                            <th:block th:if="${ #lists.size(member.authorit) == 2 }">
+                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked></td>
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
+                            </th:block>
+                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" ></td>
+                            </th:block>
+                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_DB_ALL' }">
+                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked ></td>
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL"></td>
+                            </th:block>
+                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_NT_ALL' }">
+                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
+                            </th:block>
+                            <td>
+                                <button type="button" class="btn" onclick="updateData(this)">적용</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <!--                </form>-->
+
         </div>
     </div>
+
+    <script th:inline="javascript">
+
+        function updateData(e){
+
+            let memNum = e.parentElement.parentElement.children[0].innerText;
+            let DB_ALL = e.parentElement.parentElement.children[7].children[0].checked;
+            let NT_ALL = e.parentElement.parentElement.children[8].children[0].checked;
+
+
+            alert(memNum); //번호
+            alert(DB_ALL); // true
+            alert(NT_ALL); // true /false
+
+            $.ajax({
+                url:"/boardManage/updateList",
+                method: "POST",
+                data: {
+                    memNum : memNum,
+                    db_all : DB_ALL,
+                    nt_all : NT_ALL
+                },
+                success : function(data){
+                    console.log(data + "성공했어");
+                    if(data === "success"){
+                        alert("일정권한 적용이 성공적으로 완료되었습니다!");
+                    }else {
+                        alert("적용에 실패하였습니다.");
+                    }
+                },
+                error: function(data){
+                    console.log(data + "실패했어");
+
+                }
+            })
+
+        }
+    </script>
+
 </body>
+
 </html>

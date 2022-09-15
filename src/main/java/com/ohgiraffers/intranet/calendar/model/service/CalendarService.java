@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.calendar.model.service;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
@@ -28,9 +29,9 @@ public interface CalendarService {
 
     List<DepartmentDTO> selectDeptList();
 
-    int deleteCalendarAuthority(int memNum);
+    int deleteCalendarAuthority(int memNum) throws AuthorityUpdateException;
 
-    int insertAuthority(List<AuthoritDTO> authList);
+     int insertAuthority(List<AuthoritDTO> authList) throws AuthorityUpdateException;
 
 
 

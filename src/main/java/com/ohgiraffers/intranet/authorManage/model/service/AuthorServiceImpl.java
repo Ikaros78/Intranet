@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.authorManage.model.service;
 
 import com.ohgiraffers.intranet.authorManage.model.dao.AuthorMapper;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,8 @@ public class AuthorServiceImpl implements AuthorService{
                 result =  memberMapper.insertAuthority(authoritDTO);
             }
         }
+        
+
         return result;
 
     }
@@ -70,9 +73,10 @@ public class AuthorServiceImpl implements AuthorService{
     /* 인사 권한 일단 삭제 */
     @Transactional
     @Override
-    public int deleteEmpAuthority(int memNum) {
+    public int deleteEmpAuthority(int memNum)  {
 
         int result = memberMapper.deleteEmpAuthority(memNum);
+
 
         return result;
     }

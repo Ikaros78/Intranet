@@ -4,6 +4,7 @@ import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class AllManageController {
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateAllAuthority(@RequestParam int memNum, @RequestParam boolean nt_db_auth, @RequestParam boolean hr_em_auth,@RequestParam boolean cd_auth){
+    public String updateAllAuthority(@RequestParam int memNum, @RequestParam boolean nt_db_auth, @RequestParam boolean hr_em_auth,@RequestParam boolean cd_auth) {
 
         System.out.println("memNum = " + memNum + ", nt_db_auth = " + nt_db_auth + ", hr_em_auth = " + hr_em_auth + ", cd_auth = " + cd_auth);
 

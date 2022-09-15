@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.calendar.model.service;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.dao.CalendarMapper;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
@@ -119,19 +120,23 @@ public class CalendarServiceImpl implements CalendarService{
 
         int result = memberMapper.deleteCalendarAuthority(memNum);
 
+
+
         return result;
     }
 
     /* 일정,게시판 ,인사 권한 추가*/
     @Override
     @Transactional
-    public int insertAuthority(List<AuthoritDTO> authList) {
+    public int insertAuthority(List<AuthoritDTO> authList){
     int result = 0;
         if(authList.size() > 0){
             for (AuthoritDTO authoritDTO : authList) {
               result =  memberMapper.insertAuthority(authoritDTO);
             }
         }
+
+
         return result;
     }
 

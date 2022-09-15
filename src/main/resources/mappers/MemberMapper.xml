@@ -275,6 +275,7 @@
         FROM AUTHORIT
         WHERE MEM_NUM = #{ memNum }
           AND (AU_CODE = 'ROLE_NT_DB_AUTH' OR AU_CODE= 'ROLE_HR_EM_AUTH' OR AU_CODE = 'ROLE_CD_AUTH')
+
     </delete>
 
 </mapper>

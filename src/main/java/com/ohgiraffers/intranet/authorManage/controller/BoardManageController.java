@@ -6,6 +6,7 @@ import com.ohgiraffers.intranet.authorManage.model.service.AuthorService;
 
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class BoardManageController {
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean db_all, @RequestParam boolean nt_all){
+    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean db_all, @RequestParam boolean nt_all) {
 
         System.out.println("memNum + cd_all + cd_dept = " + memNum + db_all + nt_all);
 

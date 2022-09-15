@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.calendar.controller;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class CalendarManageController {
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateCalendarAuthority(@RequestParam int memNum, @RequestParam boolean cd_all, @RequestParam boolean cd_dept){
+    public String updateCalendarAuthority(@RequestParam int memNum, @RequestParam boolean cd_all, @RequestParam boolean cd_dept) {
 
         System.out.println("memNum + cd_all + cd_dept = " + memNum + cd_all + cd_dept);
 
@@ -92,6 +93,9 @@ public class CalendarManageController {
         System.out.println("authList = " + authList);
 
         int result2 = calendarService.insertAuthority(authList);
+
+        System.out.println("result2 = " + result2);
+        System.out.println("result = " + result);
 
         String data = "";
 

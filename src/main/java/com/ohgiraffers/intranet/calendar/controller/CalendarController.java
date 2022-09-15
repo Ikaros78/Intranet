@@ -59,7 +59,7 @@ public class CalendarController {
 //
 //        return find;
 //    }
-    
+
     /* ajax로 값을 불러오기 위한 죄회용 메소드 */
     @GetMapping(value="findAll", produces = "application/json; charset=UTF-8")
     @ResponseBody
@@ -111,7 +111,7 @@ public class CalendarController {
 
         System.out.println("호출확인용");
         System.out.println("calendar = " + calendar);
-      //  calendar.getMemNum();
+        //  calendar.getMemNum();
 
         /* 작성날짜를 입력. 이 때 작성날짜는 HTML에서 처리할 필요 없다. */
         Date date = new Date(System.currentTimeMillis());

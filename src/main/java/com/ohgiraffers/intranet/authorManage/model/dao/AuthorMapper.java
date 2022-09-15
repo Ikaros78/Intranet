@@ -10,11 +10,5 @@ import java.util.List;
 public interface AuthorMapper {
 //    List<MemberDTO> selectAuthority(String searchValue);
 
-//    int deleteBoardAuthority(int memNum);
-
-    List<AuthoritDTO> selectEmAuthority();
-
-    List<AuthoritDTO> selectHrAuthority();
-
-    List<AuthoritDTO> selectNmAuthority();
+    int deleteBoardAuthority(int memNum);
 }

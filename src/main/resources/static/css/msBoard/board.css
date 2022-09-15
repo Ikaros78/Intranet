@@ -1,5 +1,5 @@
 
-
+	
     html{
 		height:100%;
 	}
@@ -19,41 +19,64 @@
 		height: 100%;
 		margin: auto;
 	}
-	.table{
+	.table-area{
+		position: relative;
+		top: 80px; 
+		left: 50px;
+		float: left;
         border-collapse: collapse;
-		width: 1000px;
+		width: 1550px;
 		margin-top:30px;
-		border-top: 1px solid gray;    
 		text-align: center;
 	}
-	.thead td {
-		background: gray;
+	.table-area th {
+		font-weight : normal;
+		border-collapse: collapse;
+		border-bottom: 1px soild grey;
 	}
     
-	td{
+	.table-area td{
         vertical-align: middle;
         margin: auto;
         text-align: center;
         font-size: 12px;
 		height: 50px;
-		border-bottom:1px solid #74B243;
+		border-bottom:1px solid gray;
 	}
-	tr td:nth-child(1){
+	.table-area tr td:nth-child(1){
 		width: 100px;
 	}
-    tr td:nth-child(2){
-		width: 400px;
+    .table-area tr td:nth-child(2){
+		width: 200px;
 	}
-    tr td:nth-child(3){
-		width: 50px;
+    .table-area tr td:nth-child(3){
+		width: 700px;
 	}
-    tr td:nth-child(4){
+    .table-area tr td:nth-child(4){
+		width: 200px;
+	}
+	
+	
+    .table-area tr th:nth-child(5){
+		display: none;
 		width: 100px;
 	}
-    tr td:nth-child(5){
-		width: 50px;
+    .table-area tr td:nth-child(5){
+		width: 100px;
+		display: none;
 	}
+	
+	
+	
+	
 	/* ********페이징******** */
+	
+	.page-nation {
+		 position : relative;
+		 top : 700px;
+		 right : 1000px;
+	}
+	
 	.page-nation li{
 		list-style: none;
 	} 
@@ -67,9 +90,10 @@
 		justify-content: center;
 		align-items: center;
 		margin-top:20px;
+		
 	}
     /* 번호누르기*/
-    .page-nation a { 
+    .page-nation button { 
 		display:block;
 		margin:0 3px;
 		float:left;
@@ -84,8 +108,8 @@
 		text-decoration:none;
 		font-weight:bold;
 	}
-	.page-nation a:hover{
-		background-color:#74B243;
+	.page-nation button:hover{
+		background-color:gray;
 		color:white;
 	}
 

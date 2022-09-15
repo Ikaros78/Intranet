@@ -17,12 +17,13 @@ public class CalendarDTO {
     private String color;
     private String type;
     private String wDate;
+    private String deptCode;
 
     public CalendarDTO() {
 
     }
 
-    public CalendarDTO(int memNum, int id, String groupId, String title, String content, String start, String end, String allDay, String color, String type, String wDate) {
+    public CalendarDTO(int memNum, int id, String groupId, String title, String content, String start, String end, String allDay, String color, String type, String wDate, String deptCode) {
         this.memNum = memNum;
         this.id = id;
         this.groupId = groupId;
@@ -34,6 +35,7 @@ public class CalendarDTO {
         this.color = color;
         this.type = type;
         this.wDate = wDate;
+        this.deptCode = deptCode;
     }
 
     public int getMemNum() {
@@ -124,6 +126,14 @@ public class CalendarDTO {
         this.wDate = wDate;
     }
 
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
+    }
+
     @Override
     public String toString() {
         return "CalendarDTO{" +
@@ -138,6 +148,7 @@ public class CalendarDTO {
                 ", color='" + color + '\'' +
                 ", type='" + type + '\'' +
                 ", wDate='" + wDate + '\'' +
+                ", deptCode='" + deptCode + '\'' +
                 '}';
     }
 }

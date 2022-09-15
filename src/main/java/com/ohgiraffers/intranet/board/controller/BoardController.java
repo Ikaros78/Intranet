@@ -105,11 +105,11 @@ public class BoardController {
     public String boardDetailPage(HttpServletRequest request, Model model){
 
 
-        int no = Integer.parseInt(request.getParameter("no"));
-        log.info("no 값 : " + request.getParameter("no"));
+        String no =request.getParameter("no");
+        log.info("no 값 : " + no);
 
         FreeinsertDTO boardDetail = boardService.selectBoardDetail(no);
-        model.addAttribute("notice", boardDetail);
+        model.addAttribute("board", boardDetail);
 
         return "/freelist/boardDetail";
     }

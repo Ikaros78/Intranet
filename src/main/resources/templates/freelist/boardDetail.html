@@ -1,84 +1,198 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>자유게시판 상세조회</title>
-
-    <link rel="stylesheet" type="text/css" href="/resources/css/free/freeDetil/freeDetil.css">
+    <title>자유게시판:상세조회</title>
+    <link rel="stylesheet" href="../../resources/css/reset.css">
+    <link rel="stylesheet" href="../../resources/css/common/basic.css">
+    <link rel="stylesheet" href="../../resources/css/bordDetail.css">
 </head>
 <body>
-<hh1>자유게시판</hh1>
-<div class="frr_notice">
-    <notice>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</notice><notice>마음에 드는 게시글은 추천 버튼을 통해 추천할 수 있습니다.</notice>
-</div>
-<input id="b_writer" type="hidden" value="작성자이름">
-<hh2 id="b_title">제목이들어갈자리</hh2><section id="b_area" class="frr_viewer"></section>
-<div class="frr_bmenu">
-    <block class="frr_agree">1</block>
-</div>
-<section class="frr_reply">
-    <div class="frr_replylist">
-        <input class="frr_reply_input" placeholder="댓글을 입력하세요." type="text"><input class="frr_reply_btn" type="button" value="✎">
+<div id="wrap" style="margin-top: -20px;">
+    <div id="header">
+        <h1 class="logo"><a href=""><img src="../../resources/images/logo.png" alt="로고 이미지"></a></h1>
+        <ul class="lnb">
+            <li><a href="">마이페이지</a></li>
+            <li><a href="">로그아웃</a></li>
+        </ul>
+        <ul class="gnb">
+            <li><a href="../notice/noticeList.html">공지사항</a></li>
+            <li><a href="../../board/free/freeList.html">게시판</a></li>
+            <li><a href="../../calendar/cd_main.html">일정관리</a></li>
+            <li><a href="../../sign/testsignmain.html">전자결재</a></li>
+            <li><a href="../../message/messageRecpBox.html">쪽지함</a></li>
+            <li><a href="../../manage/emplManage/emplList.html">직원관리</a></li>
+        </ul>
     </div>
-    <div class="frr_replylist">
-        <div>
-            <span>테스트</span><span>영업팀</span><span>2022.08.13 15:46</span><input class="frr_replylist_btn" type="button" value="✎"><input class="frr_replylist_btn" type="button" value="✖">
+    <div id="contents">
+        <div id="sideBar">
+            <h3>게시판</h3>
+            <ul>
+                <li class="main"><a href="../free/freeList.html">자유 게시판</a>
+                    <ul class="sub sub1">
+                        <li><a th:href="@{/board/list}">자유 게시판</a></li>
+                        <li><a href="#">익명 게시판</a></li>
+                    </ul>
+                </li>
+                <li class="main"><a href="#">업무 게시판</a>
+                    <ul class="sub sub2">
+                        <li><a href="#">부서별 공지사항</a></li>
+                        <li><a href="#">파일 게시판</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="admin">
+                <a href="../blacklist/blacklist management.html">게시판관리(관리자)</a>
+            </div>
         </div>
-        <div>
-            <p>
-                댓글 테스트 입니다
+        <div id="container">
+            <h4>자유게시판</h4><hr>
+            <div>
+                <img src="resources/images/circleMark.png" alt="">
+                <span>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span></div>
+            <p class="title">
+                <span>자유게시판!</span><br>
+                <span class="writer">김올레</span> <span></span><span class="writer">인사팀</span><span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                <span class="date">22-08-24</span><br>
+                <button class="suggest">추천</button>
             </p>
+
+            <div class="body">
+                <p>스</p>
+                <p>크</p>
+                <p>롤</p>
+                <p>크</p>
+                <p>기</p>
+                <p>확</p>
+            </div>
+            <div>
+                <input type="text">
+                <button class="bot">댓글</button>
+                <table>
+
+
+
+
+                </table>
+
+            </div>
+            <div class="btnArea">
+                <button class="list singo">신고</button>
+                <button class="list update">수정</button>
+                <button class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
+                <button class="list">목록</button>
+            </div>
         </div>
     </div>
-    <div class="frr_replylist">
-        <div>
-            <span>테스트</span><span>영업팀</span><span>2022.08.13 15:46</span><input class="frr_replylist_btn" type="button" value="⚑">
-        </div>
-        <div>
-            <p>
-                댓글 테스트 입니다
-            </p>
-        </div>
-    </div>
-</section>
-<div class="overlay">
-    <div id="selconf" style="margin: 100px 25%;">
-        <div class="conf_title">
-            게시글 신고
-        </div>
-        <div class="conf_description">
-            여러분의 관심과 신고가 건전하고 올바른 문화를 만듭니다.<br>
-            신고일 경우 신고자가 제재받을 수 있습니다.
-        </div>
-        <div class="conf_boardinf">
-            <p title="">
-                게시글이름
-            </p>
-            <p writer="">
-                작성자
-            </p>
-        </div>
-        <div class="conf_radio">
-            <div>
-                <input type="radio" name="conf_sel" value="1"><span>영리목적의 광고</span>
-            </div>
-            <div>
-                <input type="radio" name="conf_sel" value="1"><span>음란성/선정성 게시글</span>
-            </div>
-            <div>
-                <input type="radio" name="conf_sel" value="1"><span>도배 게시글/댓글</span>
-            </div>
-            <div>
-                <input type="radio" name="conf_sel" value="1"><span>개인정보 노출/사생활 침해</span>
-            </div>
-            <div>
-                <input type="radio" name="conf_sel" value="1"><span>기타</span>
-            </div>
-        </div>
-        <div class="conf_buttonlist">
-            <input type="button" value="신고하기" id="conf_do"><input type="button" value="취소" id="conf_exit">
-        </div>
-    </div>
-</div>
+    <script>
+        function removeCheck() {
+            if(confirm("정말 삭제하시겠습니까?") == true){
+                alert("삭제되었습니다.");
+            } else {
+                return false;
+            }
+        }
+    </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

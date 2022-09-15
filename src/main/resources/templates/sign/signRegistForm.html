@@ -40,6 +40,10 @@
             <button id="backtoList">취소</button>
         </div>
 
+        <form id="approverFrm" method="post">
+
+        </form>
+
         <form id="frm" method="post" enctype="multipart/form-data">
         <div id="detail-header">
             <h1 align="center" th:text="${ formMap.selectForm.name }" th:value="${ formMap.selectForm.code }"></h1>
@@ -75,7 +79,7 @@
                 </tr>
                 <tr>
                     <th>기안자</th>
-                    <td th:text="${ formMap.userInfo.mem_num }">;
+                    <td th:text="${ formMap.userInfo.mem_name }">;
                     <th>기안부서</th>
                     <td th:text="${ formMap.deptName }">
                 </tr>
@@ -119,15 +123,19 @@
         });
     });
 
+    let windowX = window.screen.width / 2 - 525;
+    let windowY = window.screen.height / 2 - 400;
+
+
     $("#addApprover").on("click",function(){
 
-        let w = window.open("/sign/addApprover","결재자선택","width=1050,height=800,left=(window.screen.width / 2) - 600,top=(window.screen.height / 2) - 400");
+        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
 
     });
 
     $("#addReferencer").on("click",function(){
 
-        let w = window.open("/sign/addApprover","결재자선택","width=1050,height=800,left=(window.screen.width / 2) - 600,top=(window.screen.height / 2) - 400");
+        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
 
     });
 

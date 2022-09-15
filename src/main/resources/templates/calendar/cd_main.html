@@ -4,11 +4,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>basic</title>
+    <title>일정관리</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/calendarbasic.css">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/calendarbasic.css}">
     <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js'></script>
@@ -18,12 +18,6 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .fc-toolbar-chunk #fc-dom-1 {
             /* 년, 월 크기 */
@@ -46,8 +40,15 @@
             float: left;
         }
 
+        .select {
+            width: 90px;
+            height: 28px;
+            padding-left: 5px;
+        }
+
         #tb {
             border-collapse: collapse;
+
 
         }
 
@@ -153,122 +154,128 @@
     <script src='/docs/dist/demo-to-codepen.js'></script>
 
     <script>
+            $(function(){
 
+               let type = '[[${type}]]';
 
-
-
-            $.ajax({
-
-                url: "/calendar/findAll",
-                // type get
-                // data findAllCal 쿼리문에서 가져온 값 ==> 이 때 쿼리문의 value값이 fullcalender에서 요구하는 값과 같아야함
-                success:function(data) {
-
-                    console.table(data);
-                    let eventList = [];
-                    let even = {};
-                    for(let idx in data){
-                        even = {
-
-                            "id": data[idx].id,
-                            "title": data[idx].title,
-                            "start": data[idx].start,
-                            "end": data[idx].end,  // 종료날짜 20일로지정하면 19일로 출력 됨
-                            "color": data[idx].color,
-                            "url": "/calendar/detail?id=" + data[idx].id,
-                            // "url": "detail?id=".data[idx].id,  // 에러
-
-
-                        };
-                        eventList.push(even);
-                    }
-                    let calendarEl = $("#calendar")[0];
-                    let calendar = new FullCalendar.Calendar(calendarEl, {
-
-                        locale: "ko",
-                        buttonText: {
-                            today: '오늘',
-                            month: '월',
-                            week: '주',
-                            day: '일',
-                            list: '일정목록',
-                        },
-                        headerToolbar: {
-                            left: 'prev,next,custom1,today',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-
-                        },
-
-                        footerToolbar: {
-                            left: '',
-                            center: '',
-                            right: ''
-                        },
-
-                        defaultAllDay: true, // allDay 기본 값 true 지정
-                        forceEventDuration: false, // 지정된 종료값 생략
-                        navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
-                        editable: true, // 수정 가능?
-                        selectable: true, // 달력 일자 드래그 설정가능
-                        nowIndicator: true, // 현재 시간 마크
-                        dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
-                        eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
-                            console.log(obj);
-                        },
-                        eventChange: function (obj) { // 이벤트가 수정되면 발생하는 이벤트
-                            console.log(obj);
-                        },
-                        eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
-                            console.log(obj);
-                        },
-                        select: function () { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
-                            $(document).ready(function () {
-                                $("#modalPop").modal('show');
-                            });
-                        },
-
-
-                        customButtons: {
-                            custom1: {
-                                text: '일정추가',
-                                click: function () {
-                                    location.href="/calendar/insert";
-                                    // location.href="cd_insert.html"; // <-- 이게 되네;
-                                    // jsp로 연결해야함 => cd_insert
-                                }
-                            }
-                        },
-                        eventClick: function() {
-                            location.href="/calendar/detail";
-                            // location.href="/calendar/detail?id=";
-                            // $(location.href="/calendar/detail?id=").append(id)
-
-                        },
-
-                        events: eventList
-
-                    });
-
-
-
-
-                    calendar.render();
-
-
-                },
-                error: function(error) {
-
-                    console.log(error);
-                }
-
+               allCalenddar(type);
             });
 
+            function allCalenddar(type){
 
 
+                $.ajax({
+
+                    url: "/calendar/findAll",
+                    data : { type : type},
+                    // type get
+                    // data findAllCal 쿼리문에서 가져온 값 ==> 이 때 쿼리문의 value값이 fullcalender에서 요구하는 값과 같아야함
+                    success:function(data) {
+
+                        console.table(data);
+                        let eventList = [];
+                        let even = {};
+
+                        for(let idx in data){
+                            even = {
+
+                                "id": data[idx].id,
+                                "title": data[idx].title,
+                                "start": data[idx].start,
+                                "end": data[idx].end,  // 종료날짜 20일로지정하면 19일로 출력 됨
+                                "color": data[idx].color,
+                                "url": "/calendar/detail?id=" + data[idx].id,
+                                // "url": "detail?id=".data[idx].id,  // 에러
 
 
+                            };
 
+                            eventList.push(even);
+
+                        }
+                        let calendarEl = $("#calendar")[0];
+                        let calendar = new FullCalendar.Calendar(calendarEl, {
+
+                            locale: "ko",
+                            buttonText: {
+                                today: '오늘',
+                                month: '월',
+                                week: '주',
+                                day: '일',
+                                list: '일정목록',
+                            },
+                            headerToolbar: {
+                                left: 'prev,next,custom1,today',
+                                center: 'title',
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+
+                            },
+
+                            footerToolbar: {
+                                left: 'custom2',
+                                center: '',
+                                right: ''
+                            },
+
+                            defaultAllDay: true, // allDay 기본 값 true 지정
+                            forceEventDuration: false, // 지정된 종료값 생략
+                            navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+                            editable: true, // 수정 가능?
+                            selectable: true, // 달력 일자 드래그 설정가능
+                            nowIndicator: true, // 현재 시간 마크
+                            dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+                            eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
+                                console.log(obj);
+                            },
+                            eventChange: function (obj) { // 이벤트가 수정되면 발생하는 이벤트
+                                console.log(obj);
+                            },
+                            eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
+                                console.log(obj);
+                            },
+                            select: function () { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
+                                $(document).ready(function () {
+                                    $("#modalPop").modal('show');
+                                });
+                            },
+
+                            customButtons: {
+                                custom1: {
+                                    text: '일정추가',
+                                    click: function () {
+                                        location.href="/calendar/insert";
+                                        // location.href="cd_insert.html"; // <-- 이게 되네;
+                                        // jsp로 연결해야함 => cd_insert
+                                    }
+                                },
+                                custom2: {
+                                    text: '권한요청',
+                                    click: function () {
+                                        alert('권한요청 처리를 신청했습니다.');
+                                    }
+                                }
+                            },
+
+                            eventClick: function() {
+
+                                // location.href="/calendar/detail?id=";
+                                // $(location.href="/calendar/detail?id=").append(id)
+
+                            },
+
+                            events: eventList
+
+                        });
+
+                        calendar.render();
+                    },
+                    error: function(error) {
+
+                        console.log(error);
+                    }
+
+                });
+            }
 
     </script>
 
@@ -276,34 +283,18 @@
 
 <body>
 <div id="wrap">
-    <div th:include="common/header.html"></div>
+    <div th:replace="common/header.html"></div>
     <div id="contents">
         <div id="sideBar">
             <h3>일정관리</h3>
             <ul>
-                <li class="main"><a href="#">일정관리</a>
+                <li class="main"><a href="javascript:void(0)">일정관리</a>
                     <ul class="sub sub1">
-                        <li><a href="javascript:void(0);">전체 일정</a></li>
-                        <li><a href="javascript:void(0);">부서 일정</a></li>
-                        <li><a href="javascript:void(0);">개인 일정</a></li>
+                        <li><a href="/calendar/all?type=all">전체 일정</a></li>
+                        <li><a href="/calendar/all?type=dept">부서 일정</a></li>
+                        <li><a href="/calendar/all?type=solo">개인 일정</a></li>
                     </ul>
                 </li>
-<!--                <sec:authorize access="hasAnyRole('ROLE_CD_ALL','ROLE_CD_DEPT')">-->
-<!--                    <li class="main"><a>일정 권한 관리</a>-->
-<!--                        <ul class="sub sub2">-->
-<!--                            <li><a href="#">권한 요청</a></li>-->
-<!--                        </ul>-->
-<!--                    </li>-->
-<!--                </sec:authorize>-->
-
-                <th:block sec:authorize="hasAnyRole('CD_DEPT','CD_ALL')">
-                    <li class="main"><a href="javascript:void(0);">일정 권한 관리</a>
-                        <ul class="sub sub2">
-                            <li><a href="javascript:void(0);">권한 요청</a></li>
-                        </ul>
-                    </li>
-                </th:block>
-
             </ul>
         </div>
 
@@ -312,28 +303,55 @@
 </div>
 
 <!-- The Modal -->
+<form th:action="@{/calendar/insert}" method="post">
 <div class="modal" id="modalPop">
     <div class="modal-dialog modal modal-dialog-centered">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">일정추가</h4>
+                <h4 class="modal-title">당일일정 추가</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <input type="hidden" id="memNum" name="memNum" th:value="${#authentication.getPrincipal().getMem_num()}">
+                <input type="hidden" id="deptCode" name="deptCode" th:value="${#authentication.getPrincipal().getDept_code()}">
+                <input type="hidden" name="content">
+                <input type="hidden" name="end">
+                <input type="hidden" name="allDay" value="true">
+
             </div>
 
             <!-- Modal body -->
             <div class="modal-body">
                 일정 이름
-                <input class="mTitle" type="text">
-                <br>일정 시작일
-                <input class="mdate startB" type="date">
+                <input class="mTitle" type="text" name="title" placeholder="캘린더에 적히는 간단한 제목">
+                <br>일정 색선택
+                <select class="select" name="color" style="width: 90px; height:28px; padding-left: 5px;">
+                    <option name="color" value="">기본색상</option>
+                    <option name="color" value="#f5cec7" style="background-color: #ffd4cd; color: white">color1</option>
+                    <option name="color" value="#e79796" style="background-color: #ffa5a4; color: white">color2</option>
+                    <option name="color" value="#ffc98b" style="background-color: #ffce96; color: white">color3</option>
+                    <option name="color" value="#ffb2b4" style="background-color: #ffb9bb; color: white">color4</option>
+                    <option name="color" value="#c6c09c" style="background-color: #fff7c3; color: white">color5</option>
+                </select>
+                <br><br>일정 시작일
+                <input class="mdate startB" type="date" name="start">
                 <br>
-                ~
+<!--                ~-->
+<!--                <br>-->
+<!--                일정 종료일-->
+<!--                <input class="mdate endB" type="date"><br>-->
+<!--                <input type="checkbox" id="mchek1" class="mchek" name="mchek"><label for="mchek1" class="mcktext">당일일정</label>-->
                 <br>
-                일정 종료일
-                <input class="mdate endB" type="date"><br>
-                <input type="checkbox" id="mchek1" class="mchek" name="mchek"><label for="mchek1" class="mcktext">당일일정</label>
+                일정 선택
+                <br>
+                <th:block sec:authorize="hasRole('CD_ALL')">
+                <input type="radio" id="all" name="type" value="3"><label for="all">전체일정</label>
+                </th:block>
+                <th:block sec:authorize="hasRole('CD_DEPT')">
+                <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
+                </th:block>
+                <input type="radio" id="solo" name="type" value="1" checked><label for="solo">개인일정</label>
+
 
             </div>
 
@@ -347,6 +365,7 @@
         </div>
     </div>
 </div>
+</form>
 <script> //종철님 제가 다 ~~ 고쳐놨습니다 한번 확인해보시죠  // <- 외않되요?
 
 </script>

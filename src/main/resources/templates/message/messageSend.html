@@ -1,69 +1,155 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>basic</title>
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/basic.css">
-    <link rel="stylesheet" href="/css/board.css">    
+	<meta charset="UTF-8">
+	<title>basic</title>
+	<link rel="stylesheet" th:href="@{/css/common/reset.css}">
+	<link rel="stylesheet" th:href="@{/css/common/basic.css}">
+	<link rel="stylesheet" th:href="@{/css/msBoard/sendBoard.css}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+>
+
 <body>
-    <div id="wrap">
-    <div th:replace="common/header.html"></div>
+	<div id="wrap">
+		<div th:replace="common/header.html"></div>
+		<div id="contents">
+			<div id="sideBar" style="float:left;">
+				<h3>쪽지함</h3>
+				<ul>
+					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
+					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+					<li class="main"><a href="/ms/allrecp">쪽지보관함</a></li>
+				</ul>
+			</div>
+			<h3 style="position: relative; top: 40px; left: 80px">쪽지 보내기</h3><br><br>
+			<hr style="width: 1000px; position: relative; left:50px; top:50px"><br>
+			
+			
+			
+			<div class="table-area" style="float:left; position: relative; top:50px; left:30px;margin: 20px; width: 1350px; font-size:16px">
+				<form th:action="@{/ms/msinsert}" method="post" enctype="multipart/form-data">
+						<table align="center" id="msInsert" style="border-spacing: 10px;">
+							<input type="hidden" id="mem_num" name="sendNum"
+								th:value="${ #authentication.getPrincipal().getMem_num()}">
+							<input type="hidden" id="mem_num" name="memNum"
+								th:value="${ #authentication.getPrincipal().getMem_num()}">
+							<input type="hidden" id="sendName" name="sendName"
+								th:value="${ #authentication.getPrincipal().getMem_name()}">
+							<tr class="title">
+								<th width="auto">제목</th>
+								<th width="935px" style="border: 1px solid gray; margin-bottom: 20px;">
+									<input type="text" name="msTitle" size="20" style="width: 100%; border: 1px;">
+								</th>
+							</tr>
+							<tr class="recpName">
+								<th width="auto">받는사람</th>
+								<th width="400px">
+									<select class="selectDept" name="" id="selectDept" style="width: 200px; text-align: center; position:relative; right: 265px">
+										<option value="" data-value=""> 부서명 </option>
+									</select>
+									<select class="selectName" name="recpNum" id="selectName" style="width: 200px; text-align: center; position:relative; right: 265px">
+										<option value="" data-value=""> 이름 </option>
+									</select>
+								</th>
+							</tr>
+							<tr>
+								<th width="auto">내용</th>
+								<th colspan="2" style="border: 1px solid gray">
+									<textarea name="contents" rows="10" style="width: 100%; border: 0; resize: none; height: 400px;"></textarea>
+								</th>
+							</tr>
+							<tr>
+								<th colspan="2"><input type="file" name="msfile" multiple="multiple" style="position: relative; right:300px; top:20px"><br>
+								</th>
+							</tr>
+						</table>
+							<button type="submit" style="position: relative; top:20px ;left:965px; padding: 10px 12px">등록</button>
+							<button onclick="back" style="position: relative; top: 20px;left: 815px; padding: 10px 12px">뒤로가기</button>
+					</form>
+				</div>
+			</div>
+		</div>
 
-
-
-     <div id="visual" >
-       <form th:action="@{/ms/msinsert}" method="post" enctype="multipart/form-data">
-            <div class="table-area" style="position: absolute; top: 250px;left: 350px;width: 1350px;" >     
-                <table align="center" id="">
-                
-                
-                 <input type="text" id="mem_num" name="memNum"
-                        th:value="${ #authentication.getPrincipal().getMem_num()}">
-                 <input type="text" id="sendName" name="sendName"
-                        th:value="${ #authentication.getPrincipal().getMem_name()}">
-                 
-                    <tr>
-                        <th width="auto">제목</th>
-                        <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="msTitle" size="20" style="width:100%; border: 1px;">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th width="auto">받는사람</th>
-                        <th width="400px" style="border: 1px solid black">
-                            <input type="text" name="recpName" size="20" style="width:100%; border: 1px;">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2" style="border: 1px solid black">
-                            <textarea name="contents" rows="10" style="width:100%; border: 0; resize: none;"></textarea>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-							<input type="file" name="msfile" multiple><br>
-                        </th>
-                    </tr>
-                    <button type="submit" style="position: absolute; top: 250px; left: 420px; padding: 6px 8px" >등록</button>
-                    <button onclick="back" style="position: absolute; top: 250px; left: 340px; padding: 6px 8px" >뒤로가기</button>
-                </table>
-         	   </div>
-			</form>
-        </div>
-
-        <div id="contents">
-            <div id="sideBar">
-                <h3>쪽지함</h3>
-                <ul>
-                    <li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
-                    <li class="main"><a href="/ms/recp">받은쪽지함</a></li>
-                    <li class="main"><a href="/ms/send">보낸쪽지함</a></li>
-                    <li class="main"><a href="/ms/all">쪽지보관함</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+	</div>
+	</div>
 </body>
+<script>
+
+
+	$.ajax({
+		url: "getdeptList",
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		//				async:false, //비동기 동기 설정
+		success: function (data) {
+
+			for (let index in data) {
+				/* 초기화를 어떻게 하나요? */
+				var deptCode = data[index].dept_code;
+				var deptName = data[index].dept_name;
+
+				// 					중복되는 부서코드를 제거해야하고
+
+				$("#selectDept").append("<option id=" + "name(" + index + ")" + " value=" + data[index].dept_name +
+					" data-value=" + data[index].dept_name + ">" + data[index].dept_name + "</option>");
+			}
+		},
+		error: function (error) {
+
+			console.log('error');
+		}
+	});
+
+	$("#selectDept").on("change", function (e) {
+		console.log(e.target.value);
+		e.preventDefault();
+
+		let data = {
+			data: e.target.value
+		}
+
+		console.log(data);
+
+		$.ajax({
+			url: "getMemberList",
+			type: "GET",
+			contentType: "application/json;charset=UTF-8",
+			dataType: "json",
+			data: data,
+			success: function (data) {
+
+				console.table(data);
+
+				$(".selectName").html("");
+
+				let html = "";
+				html += "<option value=''>" + ' 이름 ' + "</option>";
+
+				for (let index in data) {
+
+					var no = data[index].memNum;
+					var name = data[index].name;
+					var deptCode = data[index].deptCode;
+					var deptName = data[index].deptName;
+
+					html += "<option value=" + no + ">" + name + "</option>";
+
+				}
+
+				console.log(html);
+
+				$("#selectName").append(html);
+
+			},
+			error: function (error) {
+				console.log(error);
+			}
+		});
+	});
+
+</script>
+
 </html>

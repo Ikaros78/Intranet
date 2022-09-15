@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.calendar.controller;
 
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;

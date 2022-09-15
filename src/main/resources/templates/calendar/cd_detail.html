@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>basic</title>
+  <title>일정관리 상세보기</title>
   <link rel="stylesheet" th:href="@{/css/reset.css}">
   <link rel="stylesheet" th:href="@{/css/calendarbasic.css}">
   <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
@@ -107,11 +107,11 @@
     <div id="sideBar">
       <h3>일정관리</h3>
       <ul>
-        <li class="main"><a href="#">일정관리</a>
-          <ul class="sub sub1">
-            <li><a href="#">전체 일정</a></li>
-            <li><a href="#">부서 일정</a></li>
-            <li><a href="#">개인 일정</a></li>
+          <li class="main"><a href="javascript:void(0)">일정관리</a>
+              <ul class="sub sub1">
+                  <li><a href="/calendar/all?type=all">전체 일정</a></li>
+                  <li><a href="/calendar/all?type=dept">부서 일정</a></li>
+                  <li><a href="/calendar/all?type=solo">개인 일정</a></li>
           </ul>
         </li>
       </ul>
@@ -163,7 +163,11 @@
         </tr>
         <tr>
           <td class="tname">선택된 일정</td>
-          <td class="chch" style="padding-left: 15px;" th:text="${cdDetail.type}">
+
+          <td class="chch" style="padding-left: 15px;" th:switch="${cdDetail.type}">
+              <span th:case="3">전체일정</span>
+              <span th:case="2">부서일정</span>
+              <span th:case="1">개인일정</span>
 <!--            개인일정-->
           </td>
         </tr>
@@ -178,7 +182,8 @@
         </form>
         <div style="width: 775px">
 
-            <button class="bton csb" ><a th:href="@{/calendar/main}">취소</a></button>
+
+            <button class="bton csb" ><a href="/calendar/all?type=all">취소</a></button>
             <button class="bton modify" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}">수정</a></button>
 <!--            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/delete(id=${cdDetail.id})}">삭제</a></button>-->
               <!--            <button class="bton delete" onclick="deletebtn()">삭제</button>-->

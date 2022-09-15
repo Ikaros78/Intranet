@@ -4,6 +4,7 @@ import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CalendarMapper {
@@ -12,7 +13,7 @@ public interface CalendarMapper {
 //    List<CalendarDTO> selectAllCalendar();
 
     /* 전체조회용 메소드 */
-    List<CalendarDTO> findAllCal(String type);
+    List<CalendarDTO> findAllCal(Map<String, String> maps);
 
     /* 캘린더 메인 화면 */
     List<CalendarDTO> findAllSc();

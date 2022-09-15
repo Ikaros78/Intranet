@@ -2,7 +2,9 @@ package com.ohgiraffers.intranet.calendar.controller;
 
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
+import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/calendar/*")
@@ -59,11 +63,21 @@ public class CalendarController {
     /* ajax로 값을 불러오기 위한 죄회용 메소드 */
     @GetMapping(value="findAll", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public List<CalendarDTO> findAllList(@RequestParam String type) {
+    public List<CalendarDTO> findAllList(@RequestParam String type, @AuthenticationPrincipal UserImpl userImpl) {
 
 //        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         System.out.println("type2 확인: " + type);
-        return calendarService.findAllCal(type);
+        System.out.println("userImpl = " + userImpl.getDept_code());
+        System.out.println("userImpl2 = " + userImpl.getMem_num());
+
+
+        Map<String, String> maps = new HashMap<>();
+
+        maps.put("type", type);
+        maps.put("deptCode", userImpl.getDept_code());
+        maps.put("memNum", userImpl.getMem_num()+"");
+
+        return calendarService.findAllCal(maps);
 
     }
 
@@ -92,7 +106,6 @@ public class CalendarController {
     }
 
     /* 일정추가 insert 동작하는 메소드 */
-    @Transactional
     @PostMapping("/insert")
     public String insertList(@ModelAttribute CalendarDTO calendar) {
 
@@ -108,7 +121,7 @@ public class CalendarController {
 
         System.out.println("result = " + result);
 
-        return "redirect:/calendar/main";
+        return "redirect:/calendar/all?type=all";
     }
 
     /* 캘린더 상세조회 메소드 */
@@ -150,7 +163,6 @@ public class CalendarController {
     }
 
     /* 캘린더 수정용 메소드 */
-    @Transactional
     @PostMapping("/update")
     public String updateList(@ModelAttribute CalendarDTO calendar) {
 
@@ -161,11 +173,10 @@ public class CalendarController {
 
         System.out.println("수정확인 = " + result);
 
-        return "redirect:/calendar/main";
+        return "redirect:/calendar/all?type=all";
     }
 
     /* 캘린더 삭제용 메소드 */
-    @Transactional
     @GetMapping("/delete")
     public String deleteCd(HttpServletRequest request) {
 
@@ -174,7 +185,7 @@ public class CalendarController {
         calendarService.cdDelete(id);
         System.out.println("위치와 번호 확인" + id);
 
-        return "redirect:/calendar/main";
+        return "redirect:/calendar/all?type=all";
 
     }
 

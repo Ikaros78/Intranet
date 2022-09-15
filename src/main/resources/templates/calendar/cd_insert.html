@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
   <meta charset="UTF-8">
-  <title>basic</title>
+  <title>일정관리 작성</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/calendarbasic.css">
   <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
@@ -101,11 +102,11 @@
     <div id="sideBar">
       <h3>일정관리</h3>
       <ul>
-        <li class="main"><a href="#">일정관리</a>
+        <li class="main"><a href="javascript:void(0)">일정관리</a>
           <ul class="sub sub1">
-            <li><a href="#">전체 일정</a></li>
-            <li><a href="#">부서 일정</a></li>
-            <li><a href="#">개인 일정</a></li>
+            <li><a href="/calendar/all?type=all">전체 일정</a></li>
+            <li><a href="/calendar/all?type=dept">부서 일정</a></li>
+            <li><a href="/calendar/all?type=solo">개인 일정</a></li>
           </ul>
         </li>
       </ul>
@@ -121,6 +122,8 @@
         <input type="hidden" id="memNum" name="memNum"
                th:value="${#authentication.getPrincipal().getMem_num()}">
                 <input type="hidden" name="allDay" value="true">
+        <input type="hidden" id="deptCode" name="deptCode"
+               th:value="${#authentication.getPrincipal().getDept_code()}">
 <!--                <input type="hidden" name="wDate" value="SYSDATE">-->
 <!--                <input type="hidden" name="color" value="#FF0000">-->
 
@@ -167,15 +170,19 @@
           <tr>
             <td class="tname">일정 선택</td>
             <td class="chch" style="padding-left: 15px;">
-              <input type="radio" id="all" name="type" value="1"><label for="all">전체일정</label>
-              <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
-              <input type="radio" id="solo" name="type" value="3" checked><label for="solo">개인일정</label>
+              <th:block sec:authorize="hasRole('CD_ALL')">
+                <input type="radio" id="all" name="type" value="3"><label for="all">전체일정</label>
+              </th:block>
+              <th:block sec:authorize="hasRole('CD_DEPT')">
+                <input type="radio" id="dept" name="type" value="2"><label for="dept">부서일정</label>
+              </th:block>
+              <input type="radio" id="solo" name="type" value="1" checked><label for="solo">개인일정</label>
             </td>
           </tr>
           <tr>
             <td style="border: none;"></td>
             <td style="border: none;">
-              <button class="bton csb"><a href="/calendar/main">취소</a></button>
+              <button class="bton csb"><a href="/calendar/all?type=all">취소</a></button>
               <button class="bton insert" type="submit">생성</button>
             </td>
           </tr>

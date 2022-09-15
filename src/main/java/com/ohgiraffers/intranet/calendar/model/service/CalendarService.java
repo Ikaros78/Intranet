@@ -1,14 +1,16 @@
 package com.ohgiraffers.intranet.calendar.model.service;
 
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CalendarService {
 
-    List<CalendarDTO> findAllCal(String type);
+    List<CalendarDTO> findAllCal(Map<String, String> maps);
 
     List<CalendarDTO> findAllSc();
 
@@ -23,4 +25,9 @@ public interface CalendarService {
     List<MemberDTO> selectMemberListForCalendarManage(String searchCondition);
 
     List<DepartmentDTO> selectDeptList();
+
+    /* 헌주님 */
+    int deleteCalendarAuthority(int memNum);
+
+    int insertAuthority(List<AuthoritDTO> authList);
 }

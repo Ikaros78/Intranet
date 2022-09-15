@@ -37,13 +37,11 @@
                             <td>
                                 <input id="check-btn" type="checkbox"/>
                                 <label for="check-btn">회사조직도</label>
-                                        <ul class="menubars" th:each="department : ${ deptList }">
-                                            <li th:text="${ department.dept_name }" class="deptLi"></li>
-                                            <input type="hidden" th:value="${ department.dept_code }" class="dept">
-                                            <ul class="members">
-
-                                            </ul>
-                                        </ul>
+                                    <ul class="menubars" th:each="department : ${ deptList }">
+                                        <li th:text="${ department.dept_name }" class="deptLi"></li>
+                                        <input type="hidden" th:value="${ department.dept_code }" class="dept">
+                                        <ul class="members"></ul>
+                                    </ul>
                             </td>
                         </tr>
                     </tbody>
@@ -86,10 +84,7 @@
                                 <td>결재자</td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-
-                            </tr>
+                        <tbody id="approverBody">
                         </tbody>
                     </table>
                 </form>
@@ -134,7 +129,7 @@
                             $name = data[index].mem_name;
                             $rank = data[index].dept_rank;
 
-                            $checkbox = $("<input type='checkbox'>").val(data[index].mem_name);
+                            $checkbox = $("<input type='checkbox' name='checkMem'>").val(data[index].mem_num);
                             $br = $("<br>");
 
 
@@ -155,6 +150,65 @@
     }
 
     $("#add").on("click",function(){
+
+        let $checkArr = [];
+        $("input[name='checkMem']:checked").each(function(){
+            const num = $(this).val();
+            $checkArr.push(num);
+        })
+
+        console.table($checkArr);
+
+        let data = "checkArr=" + $checkArr;
+
+        $.ajax({
+            url:"addToRight",
+            type: "GET",
+            data: data,
+            success: function(data){
+
+                console.table(data);
+
+                $body = $("#approverBody");
+
+                for(let index in data){
+
+                    $tr = $("<tr>");
+                    $td = $("<td>");
+                    $name = data[index].mem_name;
+                    $rank = data[index].dept_rank;
+
+                    $checkbox = $("<input type='checkbox' name='addedMem'>").val(data[index].mem_num);
+
+                    $td.append($checkbox[0]);
+                    $td.append($name + ' ' + $rank);
+
+                    $tr.append($td);
+
+                    $body.append($tr[0]);
+
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+
+    })
+
+    $("#remove").on("click",function() {
+
+        let $removeArr = [];
+        $("input[name='addedMem']:checked").each(function () {
+            const num = $(this).val();
+
+        })
+
+    })
+
+    $("#refresh").on("click",function() {
+
+        $("#approverBody").empty();
 
     })
 

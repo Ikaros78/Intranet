@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.ohgiraffers.intranet.board.model.dao.BoardMapper" >
+
+    <resultMap id="boardResultMap" type="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
+        <id property="no" column="FR_NO"/>
+        <result property="title" column="FR_TITLE"/>
+        <result property="date" column="FR_DATE"/>
+        <result property="views" column="FR_VIEWS"/>
+        <result property="contents" column="FR_CONTENTS"/>
+        <result property="mem_num" column="MEM_NUM"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="department" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+
+        <association property="department" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
+
+
+
+    <select id="selectBoardList" resultMap="boardResultMap">
+        SELECT A.RNUM
+        , A.FR_NO
+        , A.MEM_NUM
+        , A.FR_TITLE
+        , D.MEM_NAME
+        , A.FR_DATE
+        , E.DEPT_NAME
+        , A.FR_VIEWS
+
+        FROM (SELECT ROWNUM RNUM
+        , B.FR_NO
+        , B.FR_TITLE
+        , B.FR_DATE
+        , B.FR_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+          C.FR_NO
+        , C.FR_TITLE
+        , C.FR_DATE
+        , C.FR_VIEWS
+        , C.MEM_NUM
+        FROM FR_FREE C
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'title'">
+                C.FR_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+        ORDER BY C.FR_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM FR_FREE A
+        <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.FR_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+<!--    <select id="selectDetail" parameterType="_int" resultMap="noticeListResultMap">-->
+<!--        SELECT-->
+<!--            A.NT_NO-->
+<!--             , A.NT_TITLE-->
+<!--             , B.MEM_NAME-->
+<!--             , A.NT_DATE-->
+<!--             , C.DEPT_NAME-->
+<!--             , A.NT_VIEWS-->
+<!--             , D.NTF_ORIGIN_NAME-->
+<!--             , A.MEM_NUM-->
+<!--             , A.NT_CONTENTS-->
+<!--             , D.NTF_SAVE_NAME-->
+<!--        FROM NT_NOTICE A-->
+<!--                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)-->
+<!--                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)-->
+<!--                 LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)-->
+<!--        WHERE A.NT_NO = #{ no }-->
+<!--    </select>-->
+
+
+        <insert id="freeinsert" parameterType="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
+        INSERT
+        INTO FR_FREE A(
+            A.FR_NO
+           ,A.FR_TITLE
+           ,A.FR_DATE
+           ,A.FR_VIEWS
+           ,A.FR_CONTENTS
+           ,A.MEM_NUM
+           ) VALUES(
+                    SEQ_FR_NO.NEXTVAL
+                        ,#{title}
+                        ,SYSDATE
+                        ,DEFAULT
+                        ,#{contents}
+                        ,#{mem_num}
+            )
+    </insert>
+
+
+</mapper>

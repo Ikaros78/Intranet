@@ -1,0 +1,254 @@
+notice:before {
+    content: "!";
+    background: gray;
+    color: white;
+    font-weight: 900;
+    padding: 0em 0.1em 0.2em 0.1em;
+    width: 1.2em;
+    height: 1.1em;
+    display: inline-block;
+    text-align: center;
+    border-radius: 2em;
+    margin-right: 4px;
+}
+
+notice {
+    display: block;
+    margin: 10px 0px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+hh1 {
+    display: block;
+    border-bottom: 1px solid black;
+    font-size: 20px;
+    font-weight: 900;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.frr_notice {
+    background: #f5f5f5;
+    padding: 5px 10px;
+    margin: 20px 0px;
+}
+
+section.frr_viewer {
+    min-height: 300px;
+    background: transparent;
+    border: 1px solid #d9d9d9;
+    margin-bottom: 10px;
+}
+
+block.frr_agree {
+    border: 1px solid #ff5e00;
+    padding: 4px 11px;
+    border-radius: 15px;
+    font-size: 11px;
+    color: white;
+    background: linear-gradient(0deg, #f75305, #ff9900);
+}
+
+block.frr_agree:before {
+    content: "추천";
+    font-weight: 900;
+    margin-right: 8px;
+}
+
+input.frr_reply {}
+
+section.frr_reply {
+    background: #f5f5f5;
+    padding: 10px;
+    margin-top: 11px;
+}
+
+input.frr_reply_input {
+    vertical-align: middle;
+    font-size: 14px;
+    padding: 10px;
+    width: calc(100% - 50px);
+    margin-right: 10px;
+    border: 1px solid #d9d9d9;
+}
+
+input.frr_reply_btn {
+    vertical-align: middle;
+    background: orange;
+    font-size: 25px;
+    border: 0px;
+    padding: 0px 6px 5px 7px;
+    color: white;
+    cursor: pointer;
+    border-radius: 15px 0px 15px 0px;
+}
+
+input.frr_reply_input:hover {}
+
+input.frr_reply_btn:hover {
+    background: #f58700;
+}
+
+.frr_replylist {
+    padding: 10px;
+    border-bottom: 1px solid #d1d1d1;
+}
+
+input.frr_replylist_btn {
+    vertical-align: middle;
+    border: 0px;
+    padding: 0px 4px 5px 4px;
+    color: #8b8b8b;
+    cursor: pointer;
+    background: transparent;
+}
+
+.frr_replylist span {
+    border-right: 1px solid #d9d9d9;
+    padding: 1px 8px;
+    font-size: 12px;
+}
+
+.frr_replylist span:last-child {
+    border-right: 0px;
+}
+
+input.frr_replylist_btn:hover {
+    color: black;
+}
+
+.frr_replylist div:last-child {
+    margin-top: 10px;
+}
+
+.frr_replylist p {
+    margin-left: 14px;
+    font-size: 13px;
+    color: #626262;
+}
+
+.frr_replylist:last-child {
+    border-bottom: 0px;
+}
+
+hh2 {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+hh2:before {
+    content: "\203B";
+    font-weight: 900;
+    margin-right: 7px;
+    color: lightgray;
+}
+
+.overlay {
+    background: rgba(0,0,0,0.6);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    display: none;
+}
+
+.conf_title {
+    background: #ffc760;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #3c3c3c;
+}
+
+.conf_description {
+    background: #dddddd;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 26px;
+    color: #3c3c3c;
+}
+
+.conf_buttonlist {
+    background: #dddddd;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 26px;
+    text-align: center;
+    color: #3c3c3c;
+}
+
+.conf_boardinf {
+    background: #dddddd;
+    padding: 10px 20px;
+    font-size: 17px;
+    line-height: 26px;
+    color: #3c3c3c;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+p {
+    margin: 12px 0px;
+}
+
+p[title]:before {
+    content: "*게시글:";
+    margin-right: 10px;
+    font-weight: 900;
+}
+
+p[writer]:before {
+    content: "*작성자:";
+    margin-right: 10px;
+    font-weight: 900;
+}
+
+.conf_radio {
+    background: #dddddd;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 26px;
+    color: #3c3c3c;
+}
+
+.conf_radio input[type=radio] {
+    border: 0px;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 7px;
+}
+
+.conf_radio span {
+    font-size: 17px;
+    vertical-align: text-bottom;
+    font-weight: 900;
+}
+
+.conf_radio div {
+    margin: 10px 0px;
+}
+
+.conf_buttonlist input[type=button] {
+    margin: 7px;
+    padding: 6px;
+    width: 80px;
+    font-weight: 900;
+    font-size: 13px;
+    border: 1px solid #b5b5b5;
+    cursor: pointer;
+    border-radius: 6px;
+    background: linear-gradient(0deg, #d9d7d7, white);
+}
+
+input#conf_do {
+    color: #ff3b00;
+}
+
+.conf_buttonlist input[type=button]:hover {
+    background: linear-gradient(0deg, #cbcbcb, white);
+}

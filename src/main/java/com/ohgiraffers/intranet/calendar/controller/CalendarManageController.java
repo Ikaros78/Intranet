@@ -1,15 +1,11 @@
 package com.ohgiraffers.intranet.calendar.controller;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.calendar.model.service.CalendarService;
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,10 +20,10 @@ import org.slf4j.LoggerFactory;
 public class CalendarManageController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private final CalendarService calendarService;
+    private final CalendarServiceImpl calendarService;
 
     @Autowired
-    public CalendarManageController(CalendarService calendarService) {
+    public CalendarManageController(CalendarServiceImpl calendarService) {
         this.calendarService = calendarService;
     }
 
@@ -75,7 +71,7 @@ public class CalendarManageController {
 
         System.out.println("authList = " + authList);
 
-        int result2 = calendarService.insertCalendarAuthority(authList);
+        int result2 = calendarService.insertAuthority(authList);
 
         String data = "";
 

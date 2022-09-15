@@ -128,6 +128,7 @@
          WHERE A.MEM_ID = #{ mem_id }
     </select>
 
+    <!-- 일정권한 관리를 위해 사원 리스트 조회  -->
     <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
         SELECT
                A.MEM_NUM
@@ -146,11 +147,12 @@
             <if test="searchCondition != null and searchCondition != 'all'">
                 A.DEPT_CODE = #{ searchCondition }
             </if>
-        AND (B.AU_CODE IS NULL OR B.AU_CODE = 'CD_ALL' OR B.AU_CODE = 'CD_DEPT')
+        AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_CD_ALL' OR B.AU_CODE = 'ROLE_CD_DEPT')
         </where>
         ORDER BY A.MEM_NUM, B.AU_CODE
     </select>
 
+    <!-- 부서별 검색을 위해 부서 조회 -->
     <select id="selectDeptList" resultMap="departmentResultMap">
         SELECT
                 A.DEPT_CODE
@@ -158,6 +160,7 @@
            FROM DEPARTMENT A
     </select>
 
+    <!-- 일정 권한 삭제 -->
     <delete id="deleteCalendarAuthority">
         DELETE
         FROM AUTHORIT
@@ -165,7 +168,8 @@
         AND (AU_CODE = 'ROLE_CD_DEPT' OR AU_CODE= 'ROLE_CD_ALL')
     </delete>
 
-    <insert id="insertCalendarAuthority" parameterType="AuthoritDTO">
+    <!-- 모든 권한 부여 -->
+    <insert id="insertAuthority" parameterType="AuthoritDTO">
         INSERT
           INTO AUTHORIT A
           (
@@ -179,4 +183,73 @@
           )
 
     </insert>
+
+    <!-- 게시판 권한 관리를 위해 회원 조회용 -->
+    <select id="selectMemberListForBoardManage" resultMap="MemberResultMap">
+        SELECT
+        A.MEM_NUM
+        , A.MEM_NAME
+        , A.DEPT_RANK
+        , A.MEM_JOINDATE
+        , A.MEM_PHONE
+        , A.MEM_EMAIL
+        , A.DEPT_CODE
+        , B.AU_CODE
+        , C.DEPT_NAME
+        FROM MEMBER A
+        JOIN DEPARTMENT C ON(A.DEPT_CODE = C.DEPT_CODE)
+        LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        <where>
+            <if test="searchCondition != null and searchCondition != 'all'">
+                A.DEPT_CODE = #{ searchCondition }
+            </if>
+            AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_DB_ALL' OR B.AU_CODE = 'ROLE_NT_ALL')
+        </where>
+        ORDER BY A.MEM_NUM, B.AU_CODE
+    </select>
+
+    <!-- 게시판 관리 권한 삭제 -->
+    <delete id="deleteBoardAuthority">
+        DELETE
+        FROM AUTHORIT
+        WHERE MEM_NUM = #{ memNum }
+          AND (AU_CODE = 'ROLE_DB_ALL' OR AU_CODE= 'ROLE_NT_ALL')
+    </delete>
+
+    <!-- 인사관리를 위해 인사부 직원들 리스트 조회  -->
+    <select id="selectMemberListForEmpManage" resultMap="MemberResultMap">
+        SELECT
+            A.MEM_NUM
+             , A.MEM_NAME
+             , A.DEPT_RANK
+             , A.MEM_JOINDATE
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.DEPT_CODE
+             , B.AU_CODE
+             , C.DEPT_NAME
+        FROM MEMBER A
+                 JOIN DEPARTMENT C ON(A.DEPT_CODE = C.DEPT_CODE)
+                 LEFT JOIN AUTHORIT B ON(A.MEM_NUM = B.MEM_NUM)
+        WHERE A.DEPT_CODE = 'D1'
+          AND (B.AU_CODE IS NULL OR B.AU_CODE = 'ROLE_EM_READ' OR B.AU_CODE = 'ROLE_EM_ALL' OR B.AU_CODE = 'ROLE_HR_READ' OR B.AU_CODE = 'ROLE_HR_ALL' OR B.AU_CODE = 'ROLE_NM')
+        ORDER BY A.MEM_NUM
+    </select>
+
+    <select id="selectDeptByNum" resultType="java.lang.String">
+        SELECT
+                A.DEPT_NAME
+          FROM DEPARTMENT A
+          JOIN MEMBER B ON(B.DEPT_CODE = A.DEPT_CODE)
+         WHERE B.MEM_NUM = #{ mem_num }
+    </select>
+
+    <!-- 인사 권한 관리 일단 삭제 -->
+    <delete id="deleteEmpAuthority">
+            DELETE
+            FROM AUTHORIT
+            WHERE MEM_NUM = #{ memNum }
+            AND (AU_CODE = 'ROLE_EM_ALL' OR AU_CODE= 'ROLE_EM_READ' OR AU_CODE = 'ROLE_HR_ALL' OR AU_CODE = 'ROLE_HR_READ' OR AU_CODE = 'ROLE_NM')
+    </delete>
+
 </mapper>

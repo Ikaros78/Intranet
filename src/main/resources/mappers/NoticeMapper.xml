@@ -474,6 +474,7 @@
         <result property="title" column="GAL_TITLE"/>
         <result property="date" column="GAL_DATE"/>
         <result property="views" column="GAL_VIEWS"/>
+        <result property="contents" column="GAL_CONTENTS"/>
 
         <association property="member" resultMap="memberResultMap"/>
         <association property="dept" resultMap="deptResultMap"/>
@@ -489,6 +490,7 @@
         <result property="deleteYn" column="GF_DELETE_YN"/>
         <result property="thumbnailPath" column="GF_THUMBNAIL_PATH"/>
         <result property="galNo" column="GAL_NO"/>
+        <result property="fileType" column="GF_FILE_TYPE"/>
     </resultMap>
 
     <!-- 갤러리 내용 insert -->
@@ -531,6 +533,7 @@
         , GF_DELETE_YN
         , GF_THUMBNAIL_PATH
         , GAL_NO
+        , GF_FILE_TYPE
         )
         VALUES
         (
@@ -541,6 +544,7 @@
         , DEFAULT
         , #{ thumbnailPath }
         , #{ galNo }
+        , #{ fileType }
         )
     </insert>
 
@@ -581,23 +585,58 @@
               ]]>
         ) A
         LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)
-        WHERE A.GAL_NO = 33
-        AND ROWNUM = 1
-        AND A.RNUM >= #{ startRow }
+        WHERE A.RNUM >= #{ startRow }
+        AND D.GF_FILE_TYPE = 'TITLE'
         ORDER BY 1 ASC
     </select>
 
-<!--    SELECT-->
-<!--    A.GAL_NO-->
-<!--    , A.GAL_TITLE-->
-<!--    , D.GF_THUMBNAIL_PATH-->
-<!--    FROM GALLERY A-->
-<!--    LEFT JOIN GF_GALLERY_FILE D ON(A.GAL_NO = D.GAL_NO)-->
-<!--    WHERE A.GAL_NO = 31-->
-<!--    AND ROWNUM = 1-->
-<!--    ORDER BY 1 ASC-->
+    <!-- 갤러리 상세조회 -->
+    <select id="selectGalleryDetail" parameterType="_int" resultMap="galleryResultMap">
+        SELECT
+              A.GAL_NO
+            , A.GAL_TITLE
+            , A.GAL_DATE
+            , A.GAL_CONTENTS
+            , A.MEM_NUM
+            , B.MEM_NAME
+            , C.DEPT_NAME
+         FROM GALLERY A
+         LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+         LEFT JOIN DEPARTMENT C ON(B.DEPT_CODE = C.DEPT_CODE)
+        WHERE A.GAL_NO = #{ no }
+    </select>
 
+    <!-- 갤러리 파일 조회 -->
+    <select id="selectGalleryFileDetail" parameterType="_int" resultMap="galleryFileResultMap">
+        SELECT
+               GF_THUMBNAIL_PATH
+             , GAL_NO
+          FROM GF_GALLERY_FILE
+         WHERE GAL_NO = #{ galNo }
+    </select>
 
+    <!-- 갤러리 수정 -->
+    <update id="galleryUpdate">
+        UPDATE
+            GALLERY
+        SET GAL_TITLE = #{ title }
+          , GAL_CONTENTS = #{ contents }
+        WHERE GAL_NO = #{ no }
+    </update>
+
+    <!-- 갤러리 파일 삭제 -->
+    <delete id="galleryFileDelete">
+        DELETE
+        FROM GF_GALLERY_FILE
+        WHERE GAL_NO = #{ no }
+    </delete>
+
+    <!-- 갤러리 게시글 삭제 -->
+    <delete id="galleryDelete" parameterType="int">
+        DELETE
+        FROM GALLERY
+        WHERE GAL_NO = #{ no }
+    </delete>
 
 
 </mapper>

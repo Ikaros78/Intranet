@@ -1,0 +1,118 @@
+
+	
+    html{
+		height:100%;
+	}
+	body{
+		margin: 0px;
+		height:100%;
+	}
+	.main{
+		height: 100%;
+		width: 100%;
+	}
+	.d-none{
+		display: none;
+	}
+	.board{
+		width: 1000px;
+		height: 100%;
+		margin: auto;
+	}
+	.table-area{
+		position: relative;
+		top: 80px; 
+		left: 50px;
+		float: left;
+        border-collapse: collapse;
+		width: 1550px;
+		margin-top:30px;
+		text-align: center;
+	}
+	.table-area th {
+		font-weight : normal;
+		border-collapse: collapse;
+		border-bottom: 1px soild grey;
+	}
+    
+	.table-area td{
+        vertical-align: middle;
+        margin: auto;
+        text-align: center;
+        font-size: 12px;
+		height: 50px;
+		border-bottom:1px solid gray;
+	}
+	.table-area tr td:nth-child(1){
+		width: 100px;
+	}
+    .table-area tr td:nth-child(2){
+		width: 200px;
+	}
+    .table-area tr td:nth-child(3){
+		width: 700px;
+	}
+    .table-area tr td:nth-child(4){
+		width: 200px;
+	}
+	
+	
+    .table-area tr th:nth-child(5){
+		display: none;
+		width: 100px;
+	}
+    .table-area tr td:nth-child(5){
+		width: 100px;
+		display: none;
+	}
+	
+	
+	
+	
+	/* ********페이징******** */
+	
+	.page-nation {
+		 position : relative;
+		 top : 700px;
+		 right : 1000px;
+	}
+	
+	.page-nation li{
+		list-style: none;
+	} 
+	.page-wrap {
+		text-align:center;
+		font-size:0;
+	 }
+   /* 번호누르기 간격*/
+	.page-nation  {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top:20px;
+		
+	}
+    /* 번호누르기*/
+    .page-nation button { 
+		display:block;
+		margin:0 3px;
+		float:left;
+		border:1px solid #e6e6e6;
+		width:28px;
+		height:28px;
+		line-height:28px;
+		text-align:center;
+		background-color:#fff;
+		font-size:13px;
+		color:black;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	.page-nation button:hover{
+		background-color:gray;
+		color:white;
+	}
+
+ 
+    
+

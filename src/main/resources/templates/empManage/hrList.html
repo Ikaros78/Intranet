@@ -107,9 +107,15 @@
             }
 
             // 체크 박스 가장 상위만 체크 가능하도록
-            $("#del").click(function(){
-            $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList'/>");
-            });
+                $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+
+                // $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+
+
+
+
             // <input type="checkbox" name="chkList">
             // 발령 취소 테이블 행 삭제
             // (function($){

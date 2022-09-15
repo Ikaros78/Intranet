@@ -9,6 +9,7 @@
 <body onresize="parent.resizeTo(900, 600)" onload="parent.resizeTo(900,600)">
     <h1>발령 등록</h1>
     <form th:action="@{/emp/hrRegist}" method="post" id="hrRegist">
+        <input type="hidden" name="${}">
         <table>
             <tr>
                 <th>발령구분</th>
@@ -20,7 +21,7 @@
             </tr>
             <tr>
                 <th>발령일자</th>
-                <td><input type="date" name="pa_date"></td>
+                <td><input type="date" name="date"></td>
             </tr>
             <tr class="mem_num">
                 <th>사원번호</th>
@@ -64,7 +65,9 @@
                 <td class="widthText" colspan="4"><input type="text" name="contents"></td>
             </tr>
         </table>
-        <button type="submit">저장</button>
+            <input type="hidden" name="bef_rank" id="bef_rank">
+            <input type="hidden" name="bef_dept" id="bef_dept">
+        <button type="submit" onclick="">저장</button>
     </form>
     <script>
 
@@ -81,9 +84,10 @@
                    console.log('data 나오나여 : ' + data)
 
                    $("#name").append("<p class='pGrey'>" + data.mem_name + "</p>");
-                   $("#rank").append("<p class='pGrey' name='bef_rank'>" + data.dept_rank + "</p>");
-                   $("#dept_name").append("<p class='pGrey' name='bef_dept'>" + data.department.dept_name + "</p>");
-
+                   $("#rank").append("<p class='pGrey'>" + data.dept_rank + "</p>");
+                   $("#dept_name").append("<p class='pGrey'>" + data.department.dept_name + "</p>");
+                   $("#bef_rank").val(data.dept_rank);
+                   $("#bef_dept").val(data.department.dept_name);
                } ,
                 error: function(error){
                    console.log('에러 발생했어여ㅠ.. ' + error);

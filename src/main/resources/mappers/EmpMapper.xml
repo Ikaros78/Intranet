@@ -138,19 +138,12 @@
         (
           1
         , #{ category }
-        , SYSDATE
+        , #{ date }
         , #{ contents }
         , #{ bef_rank }
         , #{ bef_dept }
         , #{ mem_num }
         )
-        <selectKey keyColumn="DEPT_CODE,DEPT_NAME" keyProperty="bef_rank,bef_dept" resultType="map" order="AFTER">
-            SELECT
-              DEPT_CODE
-            , DEPT_NAME
-            FROM DEPARTMENT
-            WHERE MEM_NUM = #{ mem_num }
-        </selectKey>
     </insert>
 
 </mapper>

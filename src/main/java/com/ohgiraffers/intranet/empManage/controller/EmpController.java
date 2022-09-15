@@ -97,15 +97,10 @@ public class EmpController {
     @PostMapping("/hrRegist")
     public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request, RedirectAttributes rttr){
 
-        String category = request.getParameter("category");
-        log.info("값 받아오는지 확인 : " + request.getParameter("category"));
-        appointment.setCategory(category);
-        log.info("카테고리 값 받아오는지 확인 : " +  appointment.getCategory());
-
-        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
         String bef_rank = request.getParameter("bef_rank");
         String bef_dept = request.getParameter("bef_dept");
-        log.info("값 가져오나 확인 : " + mem_num + bef_rank + bef_dept);
+        log.info("bef_rank 값 확인 : " + bef_rank);
+        log.info("bef_dept 값 확인 : " + bef_dept);
 
         int registResult = empService.appointmentRegist(appointment);
 

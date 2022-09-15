@@ -20,4 +20,10 @@ public interface EmpService {
 
     /* 인사 발령 테이블 정보 insert 하는 메소드 */
     int appointmentRegist(AppointmentDTO appointment);
+
+    /* 멤버 테이블에 인사 발령 정보로 update 하는 메소드 */
+    int appointmentUpdate(MemberDTO member);
+
+    /* 인사 발령 수 조회 */
+    int selectHrListTotalCount(Map<String, String> searchMap);
 }

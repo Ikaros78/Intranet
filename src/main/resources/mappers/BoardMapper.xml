@@ -132,7 +132,7 @@
            ,A.FR_CONTENTS
            ,A.MEM_NUM
            ) VALUES(
-                    SEQ_FR_NO.NEXTVAL
+                    'FR' || SEQ_FR_NO.NEXTVAL
                         ,#{title}
                         ,SYSDATE
                         ,DEFAULT

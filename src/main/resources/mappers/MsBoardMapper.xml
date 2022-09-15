@@ -19,24 +19,9 @@
 		<result property="recpNum" column="MS_RECP_NUM" />
 		<result property="contents" column="MS_CONTENTS" />
 		<result property="sendNum" column="MS_SEND_NUM" />
-	</resultMap>
-	
-	<resultMap id="MsboardDetailMap" type="com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO">
-		<id property="msNo" column="MS_NO" />
-		<result property="msTitle" column="MS_TITLE" />
-		<result property="sendName" column="MS_SEND_NAME" />
-		<result property="recpName" column="MS_RECP_NAME" />
-		<result property="sendDate" column="MS_SEND_DATE" />
-		<result property="recpDate" column="MS_RECP_DATE" />
-		<result property="readYn" column="MS_READ_YN" />
-		<result property="memNum" column="MEM_NUM" />
-		<result property="sendDel" column="MS_SEND_DEL" />
-		<result property="recpDel" column="MS_RECP_DEL" />
-		<result property="recpNum" column="MS_RECP_NUM" />
-		<result property="contents" column="MS_CONTENTS" />
-		<result property="sendNum" column="MS_SEND_NUM" />
 		<collection property="msFile" resultMap="MsFileResultMap"/>
 	</resultMap>
+	
 
 
 	<resultMap type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO" id="deptResultMap">
@@ -60,7 +45,7 @@
 		<result property="savePath" column="MSF_SAVE_PATH" />
 		<result property="noDate" column="MSF_NODATE" />
 		<result property="deleteYn" column="MSF_DELETE_YN" />
-		<result property="msNo" column="MS_NO" />
+		<result property="refmsNo" column="MS_NO" />
 
 	</resultMap>
 

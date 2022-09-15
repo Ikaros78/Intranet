@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -194,7 +195,7 @@ public class MsBoardController {
 
 		return "message/messageSend";
 	}
-	
+	@Transactional
 	@PostMapping("/msinsert")
 	public String MsboardInsert(@RequestParam List<MultipartFile> msfile, @ModelAttribute MsBoardDTO msBoardDTO,
 			HttpServletRequest request, Model model) throws FileNotFoundException {
@@ -273,11 +274,11 @@ public class MsBoardController {
 	@GetMapping("/msdetail")
 	public String selectMsBoardDetail(HttpServletRequest request, Model model) {
 
-		int msNo = Integer.parseInt(request.getParameter("msNo"));
-
+		int msNo = Integer.parseInt(request.getParameter("msNo"));		
+		
 		MsBoardDTO boardDetail = msBoardService.selectMsBoardDetail(msNo);
 		
-		model.addAttribute("board",boardDetail);
+		model.addAttribute("msBoard",boardDetail);
 		
 		return "message/messageDetail";
 	}
@@ -315,18 +316,19 @@ public class MsBoardController {
 		return result;
 	}
 
-	
 //	
+//	@Transactional
 //    @GetMapping("/recpDelete")
-//    public String recpBoardDelete(@ModelAttribute MsBoardDTO msBoard, HttpServletRequest request){
+//    public String recpBoardDelete(@ModelAttribute List<MsBoardDTO> msBoard, HttpServletRequest request){
 //
 //        int msNo = Integer.parseInt(request.getParameter("msNo"));
 //
+//        System.out.println("msBoard + + " + msBoard);
 //        //요기다가 update 문 작성해서 삭제여부 변경해준 다음에 
 //        msBoardService.recpYNMsBoard(msBoard); // 값
 //        
 //        // 받은사람 삭제 여부 및 보낸사람 삭제여부가 둘다 Y 이면 삭제를 진행하고  
-//        msBoardService.recpBoardDelete(msNo);
+//        msBoardService.recpBoardDelete(msBoard);
 //
 //        return "redirect:/ms/recp";
 //    }
@@ -338,10 +340,10 @@ public class MsBoardController {
 //    	
 //    	msBoardService.sendYNMsBoard(msBoard);
 //    	
-//    	msBoardService.sendBoardDelete(msBoard);
+//    	msBoardService.sendBoardDelete(msNo);
 //    	
 //    	return "redirect:/ms/send";
 //    }
-//	
+	
 	
 }

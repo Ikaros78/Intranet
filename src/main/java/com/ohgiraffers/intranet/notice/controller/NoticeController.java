@@ -665,6 +665,9 @@ public class NoticeController {
             int no = Integer.parseInt(request.getParameter("no"));
 
             GalleryDTO galleryDetail = noticeService.selectGalleryDetail(no);
+ 
+            
+            
             List<GalleryFileDTO> galleryFileDetail = noticeService.selectGalleryFile(no);
 
             log.info("galleryDetail값 확인 : " + galleryDetail);

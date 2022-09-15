@@ -82,7 +82,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	// 쪽지함 보내기용 메소드
 
-	@Override
+
 	public int MsboardInsert(MsBoardDTO msBoardDTO) {
 
 		int result = msBoardMapper.MsboardInsert(msBoardDTO);
@@ -90,7 +90,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return result;
 	}
 
-	@Override
+
 	public int MsFileInsert(MsFileDTO msFileDTO) {
 
 		int result = msBoardMapper.MsFileInsert(msFileDTO);
@@ -144,10 +144,9 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		return deptList;
 	}
-//
-//	// 삭제용 메소드
-//	@Transactional
-//	@Override
+
+	// 삭제용 메소드
+
 //	public int recpBoardDelete(int msNo) {
 //
 //		msBoardMapper.recpYNMsBoard(msNo);
@@ -163,8 +162,6 @@ public class MsBoardServiceImpl implements MsBoardService {
 //		return result;
 //	}
 //	
-//	
-//	@Transactional
 //	public int sendBoardDelete(int msNo) {
 //
 //		msBoardMapper.sendYNMsBoard(msNo);
@@ -178,6 +175,8 @@ public class MsBoardServiceImpl implements MsBoardService {
 //
 //		return result;
 //	}
+	
+	
 //	//update recp 
 //	@Transactional
 //	public void recpYNMsBoard(MsBoardDTO msBoard) {

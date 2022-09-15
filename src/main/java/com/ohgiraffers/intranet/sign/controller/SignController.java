@@ -1,5 +1,8 @@
 package com.ohgiraffers.intranet.sign.controller;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
@@ -283,6 +286,35 @@ public class SignController {
         return mv;
     }
 
+    @PostMapping("/registForm")
+    public ModelAndView resignRegistForm(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        int mem_num = userInfo.getMem_num();
+
+        String formCode = request.getParameter("formCode");
+        String title = request.getParameter("signTitle");
+        String content = request.getParameter("signContent");
+
+        SignFormDTO selectForm = signService.selectFormByCode(formCode);
+
+        String deptName = memberService.selectDeptByNum(mem_num);
+
+        Map<String , Object> formMap = new HashMap<>();
+        formMap.put("userInfo", userInfo);
+        formMap.put("selectForm", selectForm);
+        formMap.put("deptName", deptName);
+        formMap.put("title", title);
+        formMap.put("content", content);
+
+        mv.addObject("formMap", formMap);
+
+        mv.setViewName("sign/resignRegistForm");
+
+        return mv;
+    }
+
     @PostMapping("/approve")
     @Transactional
     public ModelAndView approveSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
@@ -327,17 +359,38 @@ public class SignController {
 
     @GetMapping(value = "/addApprover", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public ModelAndView addApprover(ModelAndView mv){
+    public ModelAndView addApprover(ModelAndView mv, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
 
         List<DepartmentDTO> deptList = signService.selectDeptList();
-        List<MemberDTO> memberList = signService.selectAllMember();
 
         mv.addObject("deptList", deptList);
-        mv.addObject("memberList", memberList);
+        mv.addObject("userInfo", userInfo);
 
         mv.setViewName("sign/signpopupmain");
 
         return mv;
+    }
+
+    @GetMapping(value = "selectMemByDeptCode", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public String selectMemByDeptCode(HttpServletRequest request){
+
+        String code = request.getParameter("code");
+
+        log.info("code = " + code);
+
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+
+        List<MemberDTO> memberList = signService.selectMemByDeptCode(code);
+
+        return gson.toJson(memberList);
     }
 
     @GetMapping("/requestList")

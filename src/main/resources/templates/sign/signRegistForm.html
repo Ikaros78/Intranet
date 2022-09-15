@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
     <link rel="stylesheet" type="text/css" href="/css/basic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
-    <link rel="stylesheet" type="text/css" href="/css/sign/signdetail.css">
+    <link rel="stylesheet" type="text/css" href="/css/sign/signForm.css">
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -34,6 +34,7 @@
 
         <div class="buttons" align="right">
             <button id="addApprover">결재선</button>
+            <button id="addReceiver">수신처</button>
             <button id="addReferencer">참조자</button>
             <button id="regist" type="submit" form="frm" onclick='btn_click("regist");'>결재요청</button>
             <button id="saveTemp" type="submit" form="frm" onclick='btn_click("saveTemp");'>임시저장</button>
@@ -51,12 +52,12 @@
 
         <div id="approve-list" align="right">
             <table>
-                <tr>
+                <tr id="approverHead">
                     <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
                     <th style="border : 1px solid";>기안</th>
                 </tr>
-                <tr>
-                    <td style="border : 1px solid" th:text="${ formMap.userInfo.mem_name }"></td>
+                <tr id="approverBody">
+                    <td th:text="${ formMap.userInfo.mem_name }"></td>
                 </tr>
             </table>
         </div>
@@ -128,6 +129,15 @@
 
 
     $("#addApprover").on("click",function(){
+
+        $(".approveType").detach();
+        $(".approver").detach();
+
+        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
+
+    });
+
+    $("#addReferencer").on("click",function(){
 
         let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
 

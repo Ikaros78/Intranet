@@ -77,7 +77,6 @@
             </div>
             <div id="select-box">
                 <h4>결재선 정보</h4>
-                <form>
                     <table id="approver">
                         <thead>
                             <tr>
@@ -87,7 +86,6 @@
                         <tbody id="approverBody">
                         </tbody>
                     </table>
-                </form>
             </div>
         </div>
 
@@ -151,18 +149,18 @@
 
     $("#add").on("click",function(){
 
-        let $checkArr = [];
+        let $selectedMem = [];
         $("input[name='checkMem']:checked").each(function(){
             const num = $(this).val();
-            $checkArr.push(num);
+            $selectedMem.push(num);
         })
 
-        console.table($checkArr);
+        console.table($selectedMem);
 
-        let data = "checkArr=" + $checkArr;
+        let data = "selectedMem=" + $selectedMem;
 
         $.ajax({
-            url:"addToRight",
+            url:"selectMemByNum",
             type: "GET",
             data: data,
             success: function(data){
@@ -174,14 +172,16 @@
                 for(let index in data){
 
                     $tr = $("<tr>");
-                    $td = $("<td>");
+                    $td = $("<td class='tdMem'>");
                     $name = data[index].mem_name;
                     $rank = data[index].dept_rank;
 
                     $checkbox = $("<input type='checkbox' name='addedMem'>").val(data[index].mem_num);
+                    $hidden = $("<input type='hidden' name='approverMem'>").val(data[index].mem_num);
 
                     $td.append($checkbox[0]);
                     $td.append($name + ' ' + $rank);
+                    $td.append($hidden[0]);
 
                     $tr.append($td);
 
@@ -198,10 +198,10 @@
 
     $("#remove").on("click",function() {
 
-        let $removeArr = [];
         $("input[name='addedMem']:checked").each(function () {
             const num = $(this).val();
 
+            $($(this).parent()).detach();
         })
 
     })
@@ -214,7 +214,40 @@
 
     $("#apply").on("click",function(){
 
-        $(opener.document).find()
+        let $selectedMem = [];
+        $("input[name='addedMem']").each(function(){
+            const num = $(this).val();
+            $selectedMem.push(num);
+            })
+
+        let data = "selectedMem=" + $selectedMem;
+
+        $.ajax({
+            url:"selectMemByNum",
+            type: "GET",
+            data: data,
+            success: function(data){
+
+                for(let index in data) {
+
+                    $td = $("<td name='approver' class='approver'>").val(data[index].mem_num);
+                    $name = data[index].mem_name;
+
+                    $td.append($name);
+
+                    $(opener.document).find('#approverHead').append('<th style="border : 1px solid" class="approveType">결재</th>')
+
+                    $(opener.document).find('#approverBody').append($td[0]);
+                }
+
+                window.self.close();
+
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+
     })
 
 

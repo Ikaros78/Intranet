@@ -394,9 +394,9 @@ public class SignController {
         return gson.toJson(memberList);
     }
 
-    @GetMapping(value = "addToRight", produces = "application/json; charset=UTF-8")
+    @GetMapping(value = "selectMemByNum", produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String addToRight(HttpServletRequest request){
+    public String selectMemByNum(HttpServletRequest request){
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -405,7 +405,7 @@ public class SignController {
                 .disableHtmlEscaping()
                 .create();
 
-        String nums = request.getParameter("checkArr");
+        String nums = request.getParameter("selectedMem");
 
         log.info("num =" + nums);
 

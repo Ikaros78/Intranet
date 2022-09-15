@@ -61,7 +61,6 @@
             if ( !confirm("게시글을 삭제할까요?") ) {
                 return false;
             }
-
             const formHtml = `
                     <form id="deleteForm" action="/notice/news/delete?no=${no}" method="get">
                         <input type="hidden" id="no" name="no" value="${no}" />

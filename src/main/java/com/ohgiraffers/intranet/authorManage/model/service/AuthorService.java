@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.authorManage.model.service;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
 import java.util.List;

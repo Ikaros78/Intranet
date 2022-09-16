@@ -1,5 +1,7 @@
 package com.ohgiraffers.intranet.sign.model.dao;
 
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,7 +14,7 @@ public interface SignMapper {
 
     int selectTotalWaitingCount(Map<String, Object> searchMap);
 
-    List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria);
+    List<SignDTO> selectWaitingList(Map<String, Object> searchList);
 
     SignDTO selectSignDetail(String signNo);
 
@@ -23,4 +25,46 @@ public interface SignMapper {
     int selectTotalFormCount(Map<String, Object> searchMap);
 
     List<SignFormDTO> selectAllForm(Map<String, Object> searchList);
+
+    SignFormDTO selectFormByCode(String formCode);
+
+    int approveSign(Map<String, Object> approve);
+
+    int refuseSign(Map<String, Object> refuse);
+
+    int selectTotalCompletedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectCompletedList(Map<String, Object> searchList);
+
+    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
+
+    int selectTotalRefusedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectRefusedList(Map<String, Object> searchList);
+
+    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
+
+    int selectTotalProgressCount(Map<String, Object> searchMap);
+
+    int selectTotalMyProgressCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectProgressList(Map<String, Object> searchList);
+
+    List<SignDTO> selectMyProgressList(Map<String, Object> searchList);
+
+    int selectTotalTempCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectTempList(Map<String, Object> searchList);
+
+    int deleteSignChecked(Map<String, Object> signMap);
+
+    int selectTotalRequestCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectRequestList(Map<String, Object> searchList);
+
+    List<MemberDTO> selectMemByDeptCode(String code);
 }

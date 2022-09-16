@@ -31,16 +31,22 @@
     </div>
 
     <div class="details">
+
         <div class="buttons" align="right">
-            <button name="addApprover">결재선</button>
-            <button name="addReferencer">참조자</button>
-            <button name="regist">결재요청</button>
-            <button name="saveTemp">임시저장</button>
-            <button name="backtoList">취소</button>
+            <button id="addApprover">결재선</button>
+            <button id="addReferencer">참조자</button>
+            <button id="regist" type="submit" form="frm" onclick='btn_click("regist");'>결재요청</button>
+            <button id="saveTemp" type="submit" form="frm" onclick='btn_click("saveTemp");'>임시저장</button>
+            <button id="backtoList">취소</button>
         </div>
 
+        <form id="approverFrm" method="post">
+
+        </form>
+
+        <form id="frm" method="post" enctype="multipart/form-data">
         <div id="detail-header">
-            <h1 align="center">협조문</h1>
+            <h1 align="center" th:text="${ formMap.selectForm.name }" th:value="${ formMap.selectForm.code }"></h1>
         </div>
 
         <div id="approve-list" align="right">
@@ -50,7 +56,7 @@
                     <th style="border : 1px solid";>기안</th>
                 </tr>
                 <tr>
-                    <td style="border : 1px solid">김올레</td>
+                    <td style="border : 1px solid" th:text="${ formMap.userInfo.mem_name }"></td>
                 </tr>
             </table>
         </div>
@@ -67,15 +73,15 @@
                 <tbody>
                 <tr>
                     <th>문서번호</th>
-                    <!--<td th:text="${signDetail.signNo}"></td>-->
+                    <td>자동채번</td>
                     <th>기안일자</th>
-                    <!--<td th:text="${signDetail.regDate}"></td>-->
+                    <td th:text="${ #calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
                 </tr>
                 <tr>
                     <th>기안자</th>
-                    <!--<td th:text="${signDetail.writer.mem_name}"></td>-->
+                    <td th:text="${ formMap.userInfo.mem_name }">;
                     <th>기안부서</th>
-                    <!--<td th:text="${signDetail.writer.dept.dept_name}"></td>-->
+                    <td th:text="${ formMap.deptName }">
                 </tr>
                 <tr>
                     <th>참조자</th>
@@ -87,18 +93,18 @@
                 </tr>
                 <tr>
                     <th>문서제목</th>
-                    <!--<td th:text="${signDetail.signTitle}"></td>-->
+                    <td><input type="text" name="signTitle"></td>
                 </tr>
                 <tr>
                     <td colspan="4"><textarea id="summernote" name="content" placeholder="내용"></textarea></td>
                 </tr>
                 <tr>
-                    <td>파일이 여기로</td>
+                    <td><input type="file" id="file1" name="file1"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
-
+        </form>
 
     </div>
 </div>
@@ -116,6 +122,37 @@
 
         });
     });
+
+    let windowX = window.screen.width / 2 - 525;
+    let windowY = window.screen.height / 2 - 400;
+
+
+    $("#addApprover").on("click",function(){
+
+        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
+
+    });
+
+    $("#addReferencer").on("click",function(){
+
+        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
+
+    });
+
+
+    function btn_click(str){
+        if(str=="regist"){
+            frm.action="/sign/registForm";
+        }else if(str=="saveTemp"){
+            frm.action="/sign/saveTemp";
+        }
+    }
+
+    const $backtoList = document.getElementById("backtoList");
+    $backtoList.onclick = function(){
+        location.href = "/sign/registSelect";
+    }
+
 </script>
 
 </body>

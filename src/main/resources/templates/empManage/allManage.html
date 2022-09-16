@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <title>접근 권한 관리</title>
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/calendar/calendarManage.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        ul {
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+<div id="wrap">
+    <div th:replace="/common/header.html"></div>
+    <div id="contents">
+        <div id="sideBar">
+            <h3>직원관리</h3>
+            <ul>
+                <li class="main"><a href="../manage/emplManage/emplList.html">인사 관리</a>
+                    <ul class="sub sub1">
+                        <li><a href="../manage/emplManage/emplList.html">직원 관리</a></li>
+                        <li><a href="../manage/emplManage/hrList.html">직원 발령 관리</a></li>
+                    </ul>
+                </li>
+                <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
+                    <ul class="sub sub2">
+                        <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
+                        <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
+                        <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                        <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="container">
+            <h4 style="font-weight: bold;">전체 권한 관리</h4>
+            <hr>
+
+            <div id="list">
+                <!--                <form id="list" th:action="@{/calendarManage/updateList}" method="post">-->
+                <div class="scroll">
+                    <table id="tableData">
+                        <thead>
+                        <tr>
+                            <th>사원번호</th>
+                            <th>성명</th>
+                            <th>부서</th>
+                            <th>직책</th>
+                            <th>입사일자</th>
+                            <th>전화번호</th>
+                            <th>이메일</th>
+                            <th>권한여부(게시판권한)</th>
+                            <th>권한여부(인사권한)</th>
+                            <th>권한여부(일정권한)</th>
+                            <th>권한 적용</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="member, stat : ${ memberList }">
+                            <td id="mem_num" name="mem_num" th:text="${ member.mem_num }">1</td>
+                            <td th:text="${ member.mem_name }">홍길동</td>
+                            <td id="dept_name" name="dept_name" th:text="${ member.department.dept_name }">부서1</td>
+                            <td th:text="${ member.dept_rank }">사내이사</td>
+                            <td th:text="${ member.mem_joinDate }">22-08-23</td>
+                            <td th:text="${ member.mem_phone }">010-1234-5678</td>
+                            <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
+
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_db_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_DB_AUTH" checked></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_db_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_DB_AUTH" ></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getHr_em_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="HR_EM_AUTH" checked></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getHr_em_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="HR_EM_AUTH" ></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getCd_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="CD_AUTH" checked></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getCd_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="CD_AUTH" ></td>
+                            </th:block>
+
+                            <td>
+                                <button type="button" class="btn" onclick="updateData(this)">적용</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--                </form>-->
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        function updateData(e){
+
+            let memNum = e.parentElement.parentElement.children[0].innerText;
+            let NT_DB_AUTH = e.parentElement.parentElement.children[7].children[0].checked;
+            let HR_EM_AUTH = e.parentElement.parentElement.children[8].children[0].checked;
+            let CD_AUTH = e.parentElement.parentElement.children[9].children[0].checked;
+
+
+            // alert(memNum); //번호
+            // alert(NT_DB_AUTH); //
+            // alert(HR_EM_AUTH); // true
+            // alert(CD_AUTH); // true /false
+
+            $.ajax({
+                url:"/allManage/updateList",
+                method: "POST",
+                data: {
+                    memNum : memNum,
+                    nt_db_auth : NT_DB_AUTH,
+                    hr_em_auth : HR_EM_AUTH,
+                    cd_auth : CD_AUTH
+                },
+                success : function(data){
+                    console.log(data + "성공했어");
+                    if(data === "success"){
+                        alert("일정권한 적용이 성공적으로 완료되었습니다!");
+                    }else {
+                        alert("적용에 실패하였습니다.");
+                    }
+                },
+                error: function(data){
+                    console.log(data + "실패했어");
+
+                }
+            })
+
+        }
+    </script>
+
+</body>
+
+</html>

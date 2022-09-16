@@ -12,6 +12,6 @@ public class ReceiverDTO {
     private int signNo;
     private int receiverNo;
 
-    private MemberDTO receiver;
+    private ReceiverInfoDTO receiver;
 
 }

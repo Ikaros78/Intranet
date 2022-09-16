@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.empManage.model.dao.EmpMapper">
+
+    <resultMap id="memberResultMap" type="MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+
+        <association property="department" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
+    <!-- 직원 수 조회 -->
+    <select id="selectEmpTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+          FROM MEMBER A
+        <if test="searchCondition == 'dept_name'">
+            JOIN DEPARTMENT B ON(A.DEPT_CODE = B.DEPT_CODE)
+        </if>
+        <where>
+            <if test="searchCondition == 'mem_name'">
+                A.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'mem_num'">
+                A.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'dept_name'">
+                B.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'dept_rank'">
+                A.DEPT_RANK LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 직원 리스트 조회 -->
+    <select id="selectEmpList" resultMap="memberResultMap">
+        SELECT
+               A.RNUM
+             , A.MEM_NUM
+             , A.MEM_NAME
+             , A.DEPT_RANK
+             , D.DEPT_NAME
+             , A.MEM_JOINDATE
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.MEM_ADDRESS
+             , A.DEPT_CODE
+        FROM (SELECT ROWNUM RNUM
+                   , B.MEM_NUM
+                   , B.MEM_NAME
+                   , B.DEPT_RANK
+                   , B.MEM_JOINDATE
+                   , B.MEM_PHONE
+                   , B.MEM_EMAIL
+                   , B.MEM_ADDRESS
+                   , B.DEPT_CODE
+                FROM (SELECT
+                             C.MEM_NUM
+                           , C.MEM_NAME
+                           , C.DEPT_RANK
+                           , C.MEM_JOINDATE
+                           , C.MEM_PHONE
+                           , C.MEM_EMAIL
+                           , C.MEM_ADDRESS
+                           , C.DEPT_CODE
+                        FROM MEMBER C
+                        <if test="searchCondition == 'dept_name'">
+                            JOIN DEPARTMENT D ON(C.DEPT_CODE = D.DEPT_CODE)
+                        </if>
+                        <where>
+                            <if test="searchCondition == 'mem_name'">
+                                C.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+                            </if>
+                            <if test="searchCondition == 'mem_num'">
+                                C.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+                            </if>
+                            <if test="searchCondition == 'dept_name'">
+                                D.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
+                            </if>
+                            <if test="searchCondition == 'dept_rank'">
+                                C.DEPT_RANK LIKE '%' || #{ searchValue } || '%'
+                            </if>
+                        </where>
+                        ORDER BY C.MEM_NUM ASC
+                     )B
+                    <![CDATA[
+                        WHERE ROWNUM <= #{ endRow }
+                    ]]>
+             )A
+             LEFT JOIN DEPARTMENT D ON(A.DEPT_CODE = D.DEPT_CODE)
+            WHERE A.RNUM >= #{ startRow }
+            ORDER BY 1 ASC
+    </select>
+
+    <!-- 인사 발령 등록 멤버 값 받아오기 ajax | 받아올 값 - 사원번호, 직원명, 발령 전 직급(현재직급), 발령 전 부서(현재부서)) -->
+    <select id="getMemberName" resultMap="memberResultMap" parameterType="_int">
+        SELECT
+               A.MEM_NAME
+             , A.MEM_NUM
+             , A.DEPT_RANK
+             , A.DEPT_CODE
+             , B.DEPT_NAME
+          FROM MEMBER A
+          LEFT JOIN DEPARTMENT B ON(A.DEPT_CODE = B.DEPT_CODE)
+         WHERE MEM_NUM = #{ mem_num }
+    </select>
+
+    <!-- 인사 발령 테이블 정보 insert용 쿼리문 -->
+    <insert id="appointmentRegist">
+        INSERT
+          INTO PA_PERSONNER_APPOINTMENT
+        (
+          PA_NO
+        , PA_CATEGORY
+        , PA_DATE
+        , PA_CONTENTS
+        , PA_BEF_RANK
+        , PA_BEF_DEPT
+        , MEM_NUM
+        )
+        VALUES
+        (
+          1
+        , #{ category }
+        , #{ date }
+        , #{ contents }
+        , #{ bef_rank }
+        , #{ bef_dept }
+        , #{ mem_num }
+        )
+    </insert>
+
+</mapper>

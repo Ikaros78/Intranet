@@ -1,83 +1,42 @@
 package com.ohgiraffers.intranet.sign.model.service;
 
 import com.ohgiraffers.intranet.common.exception.sign.SignApproveException;
-import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
+import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class SignService {
+public interface SignService {
 
-    private SignMapper signMapper;
+    int selectTotalWaitingCount(Map<String, Object> searchMap);
+    List<SignDTO> selectWaitingList(Map<String, Object> searchList);
+    SignDTO selectSignDetail(String signNo);
+    int updateSignChecked(Map<String, Object> signMap) throws SignApproveException;
+    List<SignDTO> selectRecentForm(int mem_num);
+    int selectTotalFormCount(Map<String, Object> searchMap);
+    List<SignFormDTO> selectAllForm(Map<String, Object> searchList);
+    SignFormDTO selectFormByCode(String formCode);
+    int approveSign(Map<String, Object> approve) throws SignApproveException;
+    int refuseSign(Map<String, Object> refuse) throws SignApproveException;
+    int selectTotalCompletedCount(Map<String, Object> searchMap);
+    List<SignDTO> selectCompletedList(Map<String, Object> searchList);
+    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
+    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
+    int selectTotalRefusedCount(Map<String, Object> searchMap);
+    List<SignDTO> selectRefusedList(Map<String, Object> searchList);
+    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
+    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
+    List<DepartmentDTO> selectDeptList();
+    int selectTotalProgressCount(Map<String, Object> searchMap);
+    List<SignDTO> selectProgressList(Map<String, Object> searchList);
+    int selectTotalTempCount(Map<String, Object> searchMap);
+    List<SignDTO> selectTempList(Map<String, Object> searchList);
+    int deleteSignChecked(Map<String, Object> signMap) throws SignApproveException;
+    int selectTotalRequestCount(Map<String, Object> searchMap);
+    List<SignDTO> selectRequestList(Map<String, Object> searchList);
 
-    public SignService(SignMapper signMapper){
-
-        this.signMapper = signMapper;
-    }
-
-    /* 결재대기함 전체 갯수 조회용 메소드 */
-    public int selectTotalWaitingCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalWaitingCount(searchMap);
-
-        return result;
-    }
-
-    /* 결재대기함 전체 조회용 메소드 */
-    public List<SignDTO> selectWaitingList(Map<String, Object> selectCriteria) {
-
-        List<SignDTO> waitingList = signMapper.selectWaitingList(selectCriteria);
-
-        return waitingList;
-    }
-
-    /* 전자결재 상세조회용 메소드 */
-    public SignDTO selectSignDetail(String signNo) {
-
-        SignDTO signResult = signMapper.selectSignDetail(signNo);
-
-        return signResult;
-    }
-
-    /* 전자결재 일괄결재용 메소드 */
-    public int updateSignChecked(Map<String, Object> signMap) throws SignApproveException {
-
-        int result = signMapper.updateSignChecked(signMap);
-
-        if(!(result > 0)){
-            throw new SignApproveException("결재에 실패하였습니다. 다시 시도해주세요.");
-        }
-
-        return result;
-    }
-
-    /* 최근 기안한 양식명 불러오기용 메소드 */
-    public List<SignDTO> selectRecentForm(int mem_num) {
-
-        List<SignDTO> recentForm = signMapper.selectRecentForm(mem_num);
-        
-        return recentForm;
-    }
-
-    /* 전체 양식 갯수 조회용 메소드 */
-    public int selectTotalFormCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalFormCount(searchMap);
-
-        return result;
-    }
-
-    /* 양식 전체 조회용 메소드 */
-    public List<SignFormDTO> selectAllForm(Map<String, Object> searchList) {
-
-        List<SignFormDTO> formList = signMapper.selectAllForm(searchList);
-
-        return formList;
-    }
-
-
+    List<MemberDTO> selectMemByDeptCode(String code);
 }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>인사발령조회</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/common/paging.css}">
+    <link rel="stylesheet" th:href="@{/css/empManage/hrList.css}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="https://code.jquery.com.com/jquery-3.6.0.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>직원관리</h3>
+                <ul>
+                    <li class="main"><a th:href="@{/emp/emplList}">인사 관리</a>
+                        <ul class="sub sub1">
+                            <li><a th:href="@{/emp/emplList}">직원 관리</a></li>
+                            <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
+                            <li><a href="../accessManage/hrManage.html">인사 권한 관리</a></li>
+                            <li><a href="../accessManage/boardManage.html">게시판 권한 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="container">
+                <h4>인사 발령 조회</h4><hr>
+                <form action="" class="search">
+                    <label for="">발령구분</label>
+                    <select name="" id="">
+                        <option value="전체">전체</option>
+                        <option value="승진">승진</option>
+                        <option value="부서이동">부서이동</option>
+                    </select>
+                    <label for="">발령일자</label>
+                    <input type="text" name="pa_date" class="pa_date" value=""/>
+                    <button>검색</button>
+                </form>
+                <div class="btnArea">
+                    <button onclick="openPop()">발령등록</button>
+                    <button type="button" id="del">발령취소</button>
+                </div>
+                        <table id="hrTable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>No</th>
+                                    <th>발령구분</th>
+                                    <th>발령일자</th>
+                                    <th>사원번호</th>
+                                    <th>성명</th>
+                                    <th>발령내용</th>
+                                    <th>비고</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-tr_value>
+                                    <td ><input type="checkbox" name="chkList"></td>
+                                    <td>1</td>
+                                    <td>승진</td>
+                                    <td>22/08/13</td>
+                                    <td>123456</td>
+                                    <td>주이슬</td>
+                                    <td><span>사원</span>&nbsp;→&nbsp;<span>부장</span></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+            </div>
+<!--            <div th:replace="/empManage/paging"></div>-->
+        </div>
+    </div>
+        <script>
+            // 윈도우 오픈
+            function openPop(){
+
+                const width = 900;
+                const height = 600;
+
+                let left = (document.body.offsetWidth / 2) - (width / 2);
+                let tops = (document.body.offsetHeight / 2) - (height / 2);
+
+                left += window.screenLeft;
+
+                const popup = window.open('/emp/hrRegist', '발령등록', `width=${width}, height=${height}, left=${left}, top=${tops}`);
+            }
+
+            // 발령 취소 테이블 행 삭제
+            (function($){
+
+                $(document).ready(function(){
+                    $("#del").click(function(){
+                        if($("input").is(":checked") == true){
+                            let i = $("input:checked").parents("tr");
+                            let e = i.next("tr");
+                            i.remove();
+                            e.remove();
+                        } else {
+                            alert("삭제할 항목을 선택해주세요!")
+                        }
+                    });
+                });
+            });
+
+            $(function() {
+
+                $('input[name="pa_date"]').daterangepicker({
+                    autoUpdateInput: false,
+                    locale: {
+                        cancelLabel: 'Clear'
+                    }
+                });
+
+                $('input[name="pa_date"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                });
+
+                $('input[name="pa_date"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                });
+
+            });
+        </script>
+</body>
+</html>

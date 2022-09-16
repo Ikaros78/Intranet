@@ -91,12 +91,7 @@
 			<version>0.4.8</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-			<version>0.4.8</version>
-		</dependency>
+
 
 
 		<dependency>
@@ -104,14 +99,8 @@
 			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 			<version>1.16</version>
 		</dependency>
-		<dependency>
-			<groupId>com.ohgiraffers</groupId>
-			<artifactId>Intranet</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

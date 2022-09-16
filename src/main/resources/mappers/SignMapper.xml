@@ -24,25 +24,27 @@
         <result property="signNo" column="SIGN_NO"/>
         <result property="approverNo" column="APPROVER_NO"/>
         <result property="isApproved" column="IS_APPROVED"/>
+        <result property="isRefused" column="IS_REFUSED"/>
+        <result property="isLastApprover" column="IS_LAST_APPROVER"/>
         <result property="approveDate" column="APPROVE_DATE"/>
         <result property="opinion" column="OPINION"/>
         <result property="signType" column="SIGN_TYPE"/>
 
-        <association property="approver" resultMap="memberResultMap"/>
+        <association property="approver" resultMap="approverInfoResultMap"/>
     </resultMap>
 
     <resultMap type="ReceiverDTO" id="receiverResultMap">
         <result property="signNo" column="SIGN_NO"/>
         <result property="receiverNo" column="RECEIVER_NO"/>
 
-        <association property="receiver" resultMap="memberResultMap"/>
+        <association property="receiver" resultMap="receiverInfoResultMap"/>
     </resultMap>
 
     <resultMap type="ReferencerDTO" id="referencerResultMap">
         <result property="signNo" column="SIGN_NO"/>
         <result property="referencerNo" column="REFERENCER_NO"/>
 
-        <association property="referencer" resultMap="memberResultMap"/>
+        <association property="referencer" resultMap="referencerInfoResultMap"/>
     </resultMap>
 
     <resultMap type="SignFileDTO" id="signFileResultMap">
@@ -74,6 +76,48 @@
         <result property="dept_code" column="DEPT_CODE"/>
 
         <association property="department" resultMap="deptResultMap"/>
+    </resultMap>
+
+    <resultMap type="ApproverInfoDTO" id="approverInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="approverName" column="APPROVERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap type="ReceiverInfoDTO" id="receiverInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="receiverName" column="RECEIVERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap type="ReferencerInfoDTO" id="referencerInfoResultMap">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="referencerName" column="REFERENCERNAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
     </resultMap>
 
     <resultMap type="DepartmentDTO" id="deptResultMap">
@@ -177,25 +221,32 @@
     <select id="selectSignDetail" resultMap="generalSignResultMap">
         SELECT
                 A.SIGN_NO
+              , A.SIGN_WRITER
               , A.SIGN_TITLE
               , B.MEM_NAME
               , D.DEPT_NAME
               , A.SIGN_CONTENT
               , A.REG_DATE
+              , C.SF_CODE
               , C.SF_NAME
-              , EM.MEM_NAME
-              , FM.MEM_NAME
-              , GM.MEM_NAME
+              , E.APPROVER_NO
+              , E.IS_APPROVED
+              , E.SIGN_TYPE
+              , EM.MEM_NAME APPROVERNAME
+              , F.RECEIVER_NO
+              , FM.MEM_NAME RECEIVERNAME
+              , G.REFERENCER_NO
+              , GM.MEM_NAME REFERENCERNAME
           FROM SI_SIGN A
           JOIN MEMBER B ON (A.SIGN_WRITER = B.MEM_NUM)
           JOIN DEPARTMENT D ON(B.DEPT_CODE = D.DEPT_CODE)
           JOIN SF_SIGN_FORM C ON(A.SIGN_FORM = C.SF_CODE)
           LEFT JOIN APPROVER E ON(A.SIGN_NO = E.SIGN_NO)
-          LEFT JOIN MEMBER EM ON (E.APPROVER_NO = EM.MEM_NUM)
+          LEFT JOIN MEMBER EM ON(E.APPROVER_NO = EM.MEM_NUM)
           LEFT JOIN RECEIVER F ON(A.SIGN_NO = F.SIGN_NO)
-          LEFT JOIN MEMBER FM ON (F.RECEIVER_NO = FM.MEM_NUM)
+          LEFT JOIN MEMBER FM ON(F.RECEIVER_NO = FM.MEM_NUM)
           LEFT JOIN REFERENCER G ON(A.SIGN_NO = G.SIGN_NO)
-          LEFT JOIN MEMBER GM ON (G.REFERENCER_NO = GM.MEM_NUM)
+          LEFT JOIN MEMBER GM ON(G.REFERENCER_NO = GM.MEM_NUM)
          WHERE A.SIGN_NO = #{ signNo }
     </select>
 
@@ -259,4 +310,757 @@
             WHERE A.RNUM >= #{ selectCriteria.startRow }
     </select>
 
+    <select id="selectFormByCode" resultMap="signFormResultMap">
+        SELECT
+            A.SF_CODE
+          , A.SF_NAME
+          FROM SF_SIGN_FORM A
+         WHERE A.SF_CODE = #{ formCode }
+    </select>
+
+    <update id="approveSign" parameterType="hashmap">
+        UPDATE
+            APPROVER A
+        SET
+            A.IS_APPROVED = 'Y'
+          , A.APPROVE_DATE = SYSDATE
+        WHERE A.SIGN_NO = #{ signNo }
+          AND A.APPROVER_NO = #{ mem_num }
+    </update>
+
+    <update id="refuseSign" parameterType="hashmap">
+        UPDATE
+            APPROVER A
+        SET
+            A.IS_APPROVED = 'Y'
+          , A.APPROVE_DATE = SYSDATE
+          , A.IS_REFUSED = 'Y'
+        WHERE A.SIGN_NO = #{ signNo }
+          AND A.APPROVER_NO = #{ mem_num }
+    </update>
+
+    <select id="selectTotalCompletedCount" parameterType="hashmap" resultType="_int">
+        SELECT
+            COUNT(*)
+          FROM SI_SIGN A
+          JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND B.APPROVER_NO = #{ mem_num }
+            AND B.IS_APPROVED = 'Y'
+            AND B.IS_REFUSED = 'N'
+            AND B.IS_LAST_APPROVER = 'Y'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectCompletedList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND F.APPROVER_NO = #{ mem_num }
+            AND F.IS_APPROVED = 'Y'
+            AND F.IS_REFUSED = 'N'
+            AND F.IS_LAST_APPROVER = 'Y'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalMyCompletedCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND B.IS_APPROVED = 'Y'
+            AND B.IS_REFUSED = 'N'
+            AND B.IS_LAST_APPROVER = 'Y'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectMyCompletedList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND F.IS_APPROVED = 'Y'
+            AND F.IS_REFUSED = 'N'
+            AND F.IS_LAST_APPROVER = 'Y'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalRefusedCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND B.APPROVER_NO = #{ mem_num }
+            AND B.IS_APPROVED = 'Y'
+            AND B.IS_REFUSED = 'Y'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectRefusedList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND F.APPROVER_NO = #{ mem_num }
+            AND F.IS_APPROVED = 'Y'
+            AND F.IS_REFUSED = 'Y'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalMyRefusedCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND B.IS_APPROVED = 'Y'
+            AND B.IS_REFUSED = 'Y'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectMyRefusedList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND F.IS_APPROVED = 'Y'
+            AND F.IS_REFUSED = 'Y'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalProgressCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND B.APPROVER_NO = #{ mem_num }
+            AND B.IS_APPROVED = 'Y'
+            AND B.IS_REFUSED = 'N'
+            AND B.IS_LAST_APPROVER = 'N'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectTotalMyProgressCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN APPROVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND B.IS_APPROVED = 'N'
+            AND B.IS_LAST_APPROVER = 'Y'
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectProgressList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND F.APPROVER_NO = #{ mem_num }
+            AND F.IS_APPROVED = 'Y'
+            AND F.IS_REFUSED = 'N'
+            AND F.IS_LAST_APPROVER = 'N'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectMyProgressList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN APPROVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND F.IS_APPROVED = 'N'
+            AND F.IS_LAST_APPROVER = 'Y'
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalTempCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND A.IS_TEMP = 'Y'
+        </where>
+    </select>
+
+    <select id="selectTempList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND C.IS_TEMP = 'Y'
+
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <delete id="deleteSignChecked" parameterType="hashmap">
+        DELETE
+            FROM SI_SIGN
+           WHERE SIGN_WRITER = #{ mem_num }
+             AND IS_TEMP = 'Y'
+             AND SIGN_NO = #{ sign }
+    </delete>
+
+    <select id="selectTotalRequestCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND A.SIGN_WRITER = #{ mem_num }
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectRequestList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.REG_DATE
+        , A.APPROVE_DATE
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.REG_DATE
+        , B.APPROVE_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.REG_DATE
+        , D.APPROVE_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        LEFT JOIN APPROVER D ON(C.SIGN_NO = D.SIGN_NO)
+        <where>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            AND C.SIGN_WRITER = #{ mem_num }
+            AND C.IS_TEMP = 'N'
+            AND D.IS_LAST_APPROVER = 'Y'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectMemByDeptCode" resultMap="memberResultMap" parameterType="String">
+        SELECT
+            A.MEM_NAME
+          , A.DEPT_RANK
+          , A.MEM_NUM
+          FROM MEMBER A
+         WHERE A.DEPT_CODE = #{ code }
+    </select>
 </mapper>

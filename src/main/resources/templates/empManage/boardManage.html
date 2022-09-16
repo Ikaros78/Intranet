@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
@@ -35,7 +36,7 @@
                 </li>
                 <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
                     <ul class="sub sub2">
-                        <li><a href="">전체 권한 관리</a></li>
+                        <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                         <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
                         <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
                         <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
@@ -73,12 +74,12 @@
                             <th class="col-2">이메일</th>
                             <th class="col-2">권한여부(부서게시판)</th>
                             <th class="col-2">권한여부(공지사항)</th>
-                            <th class="col-1">권한 적용</th>
+                            <th class="col-1" sec:authorize="hasRole('NT_DB_AUTH')">권한 적용</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="member : ${ memberList }">
+                        <tr th:each="member ,stat: ${ memberList }">
                             <td id="mem_num" name="mem_num" th:text="${ member.mem_num }">1</td>
                             <td th:text="${ member.mem_name }">홍길동</td>
                             <td id="dept_name" name="dept_name" th:text="${ member.department.dept_name }">부서1</td>
@@ -87,23 +88,35 @@
                             <td th:text="${ member.mem_phone }">010-1234-5678</td>
                             <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
 
-                            <th:block th:if="${ #lists.size(member.authorit) == 2 }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
-                            </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getDb_all() == null }">
                                 <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" ></td>
                             </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_DB_ALL' }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked ></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getDb_all() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_all() == null }">
                                 <td><input type="checkbox" class="check" name="auCode" value="NT_ALL"></td>
                             </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_NT_ALL' }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_all() != null }">
                                 <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
                             </th:block>
-                            <td>
+<!--                            <th:block th:if="${ #lists.size(member.authorit) == 2 }">-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked></td>-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>-->
+<!--                            </th:block>-->
+<!--                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" ></td>-->
+<!--                            </th:block>-->
+<!--                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_DB_ALL' }">-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked ></td>-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL"></td>-->
+<!--                            </th:block>-->
+<!--                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_NT_ALL' }">-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>-->
+<!--                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>-->
+<!--                            </th:block>-->
+                            <td sec:authorize="hasRole('NT_DB_AUTH')">
                                 <button type="button" class="btn" onclick="updateData(this)">적용</button>
                             </td>
                         </tr>
@@ -125,9 +138,9 @@
             let NT_ALL = e.parentElement.parentElement.children[8].children[0].checked;
 
 
-            alert(memNum); //번호
-            alert(DB_ALL); // true
-            alert(NT_ALL); // true /false
+            // alert(memNum); //번호
+            // alert(DB_ALL); // true
+            // alert(NT_ALL); // true /false
 
             $.ajax({
                 url:"/boardManage/updateList",

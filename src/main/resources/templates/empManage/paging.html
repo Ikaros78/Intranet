@@ -18,7 +18,7 @@
   </button>
   <!-- 이전 페이지 버튼 -->
   <button class="hs_board_lshift shiftbtn"
-          th:onclick="'location.href=\'/emp/hrList/list?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
+          th:onclick="'location.href=\'/emp/hrList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
           th:disabled="${selectCriteria.pageNo == 1}"
   >
     <
@@ -27,21 +27,21 @@
   <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
     <button class="hs_board_left shiftbtn hs_board_numbering"
             th:text="${ page }"
-            th:onclick="'location.href=\'/emp/hrList/list?currentPage='+ @{${page}} + '\''"
+            th:onclick="'location.href=\'/emp/hrList?currentPage='+ @{${page}} + '\''"
             th:disabled="${ selectCriteria.pageNo eq page }">
     </button>
   </th:block>
 
   <!-- 다음 페이지 버튼 -->
   <button class="hs_board_right shiftbtn"
-          th:onclick="'location.href=\'/emp/hrList/list?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
+          th:onclick="'location.href=\'/emp/hrList?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
           th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
   >
     >
   </button>
   <!-- 마지막 페이지로 이동 버튼 -->
   <button class="hs_board_right shiftbtn"
-          th:onclick="'location.href=\'/emp/hrList/list?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
+          th:onclick="'location.href=\'/emp/hrList?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
           th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
   >
     >>

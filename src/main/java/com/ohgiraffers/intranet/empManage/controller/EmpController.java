@@ -82,6 +82,40 @@ public class EmpController {
     @GetMapping("/hrList")
     public ModelAndView hrManagePage(HttpServletRequest request, ModelAndView mv){
 
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)){
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchCondition = request.getParameter("searchCondition");
+        String searchValue = request.getParameter("searchValue");
+
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+        log.info("검색조건 확인 : " + searchMap);
+
+        int totalCount = empService.selectHrListTotalCount(searchMap);
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = null;
+
+        if(searchCondition != null && !"".equals(searchCondition)){
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
+        } else {
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+        }
+        log.info("selectCriteria 확인 : " + selectCriteria);
+
+        List<AppointmentDTO> appointList = empService.selectHrList(selectCriteria);
+
+        mv.addObject("appointList", appointList);
+        mv.addObject("selectCriteria", selectCriteria);
+
         mv.setViewName("empManage/hrList");
 
         return mv;
@@ -95,14 +129,37 @@ public class EmpController {
     }
 
     @PostMapping("/hrRegist")
-    public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request, RedirectAttributes rttr){
+    public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request){
 
         String bef_rank = request.getParameter("bef_rank");
         String bef_dept = request.getParameter("bef_dept");
         log.info("bef_rank 값 확인 : " + bef_rank);
         log.info("bef_dept 값 확인 : " + bef_dept);
 
-        int registResult = empService.appointmentRegist(appointment);
+        String dept_rank = request.getParameter("dept_rank");
+        String dept_code = request.getParameter("dept_code");
+        log.info("dept_rank값이랑 dept_code값 확인 : " + dept_rank + " " + dept_code);
+
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+        log.info("mem_num값 확인 : " + mem_num);
+
+        int registResult = empService.appointmentRegist(appointment); // 인사 발령 테이블에 값 등록 먼저 하기
+        if(registResult > 0){
+
+            MemberDTO member = new MemberDTO();
+            member.setDept_code(dept_code);
+            member.setDept_rank(dept_rank);
+            member.setMem_num(mem_num);
+
+            int updateResult = empService.appointmentUpdate(member); // 멤버 테이블에 변경된 값 넣기
+
+            if(updateResult > 0){
+                log.info("인사 발령 관련 정보 등록 성공");
+            }
+        } else {
+            
+            log.info("인사 발령 관련 정보 등록 실패");
+        }
 
         return "redirect:/emp/hrList";
     }

@@ -56,5 +56,30 @@ public class EmpServiceImpl implements EmpService {
         return empMapper.appointmentRegist(appointment);
     }
 
+    /* 멤버 테이블에 인사 발령 정보로 update 하는 메소드 */
+    @Override
+    @Transactional
+    public int appointmentUpdate(MemberDTO member) {
+
+        return empMapper.appointmentUpdate(member);
+    }
+
+    /* 인사 발령 수 조회 */
+    @Override
+    public int selectHrListTotalCount(Map<String, String> searchMap) {
+        int result = empMapper.selectHrListTotalCount(searchMap);
+
+        return result;
+    }
+
+    /* 인사 발령 리스트 조회 */
+    @Override
+    public List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria) {
+
+        List<AppointmentDTO> appointmentList = empMapper.selectHrList(selectCriteria);
+
+        return appointmentList;
+    }
+
 
 }

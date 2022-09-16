@@ -12,7 +12,7 @@
 #contents #container .search label{margin-left: 15px;}
 #contents #container .search select{width: 130px; height: 32px; font-size: 17px; text-align: center;}
 #contents #container .search .pa_date {width:240px; line-height: 28px; font-size: 17px; text-align: center;}
-#contents #container .search button{width: 80px; height: 34px;border: none; cursor: pointer; background-color: #000; color: #fff; position: absolute; top: 35px; left: 580px;}
+#contents #container .search button{width: 80px; height: 34px;border: none; cursor: pointer; background-color: #000; color: #fff; position: absolute; top: 35px; left: 450px;}
 
 #contents #container .btnArea{position: absolute; top: 200px; right: 0;}
 #contents #container .btnArea button {width: 80px; height: 34px;border: none; cursor: pointer; background-color: #fff; color: #000; border: 1px solid #000;}
@@ -25,6 +25,15 @@ th, td{border: 1px solid #ddd; border-left: none;}
 th:last-child, td:last-child{border-right: none;}
 
 #contents #container table tr th:first-child{width: 50px;}
+th:nth-child(2){width : 95px;}
+th:nth-child(3){width: 135px;}
+th:nth-child(4){width: 125px;}
+th:nth-child(5){width: 125px;}
+th:nth-child(6){width: 135px;}
+th:nth-child(7){width: 205px;}
+th:nth-child(8){width: 205px;}
 
 #contents #container table tr{height: 38px;}
 #contents #container table tbody tr td{font-size: 15px; font-family: 'nanumGothic';}
+
+.inputSearch{width:140px; height: 32px; font-size: 17px;}

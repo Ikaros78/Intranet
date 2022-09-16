@@ -5,7 +5,6 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,7 @@ public class BoardController {
         //log.info("free insert : " + freeinsert.getTitle());
         //log.info("free insert : " +  freeinsert.getContents());
         //log.info("free insert : " +  freeinsert.getMem_num());
-        log.info("free insert : " + freeinsert);
+        log.info("freeinsert : " + freeinsert);
 
         int registResult = boardService.freeinsert(freeinsert);
 
@@ -106,11 +105,11 @@ public class BoardController {
     public String boardDetailPage(HttpServletRequest request, Model model){
 
 
-        int no = Integer.parseInt(request.getParameter("no"));
-        log.info("no 값 : " + request.getParameter("no"));
+        String no =request.getParameter("no");
+        log.info("no 값 : " + no);
 
         FreeinsertDTO boardDetail = boardService.selectBoardDetail(no);
-        model.addAttribute("notice", boardDetail);
+        model.addAttribute("board", boardDetail);
 
         return "/freelist/boardDetail";
     }

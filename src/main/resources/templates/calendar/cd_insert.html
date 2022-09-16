@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>basic</title>
+  <title>일정관리 작성</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/calendarbasic.css">
   <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
@@ -84,6 +84,9 @@
     height: 40px;
     margin-top: 3px;
   }
+  .csb{
+    padding: 0px;
+  }
 
   .insert{
     background-color: #aaa;
@@ -121,11 +124,11 @@
       <form th:action="@{/calendar/insert}" method="post">
         <input type="hidden" id="memNum" name="memNum"
                th:value="${#authentication.getPrincipal().getMem_num()}">
-        <input type="hidden" name="allDay" value="true">
+                <input type="hidden" name="allDay" value="true">
         <input type="hidden" id="deptCode" name="deptCode"
                th:value="${#authentication.getPrincipal().getDept_code()}">
-        <!--                <input type="hidden" name="wDate" value="SYSDATE">-->
-        <!--                <input type="hidden" name="color" value="#FF0000">-->
+<!--                <input type="hidden" name="wDate" value="SYSDATE">-->
+<!--                <input type="hidden" name="color" value="#FF0000">-->
 
         <table id="tb" style="float: left;">
           <tr>
@@ -135,8 +138,8 @@
           <tr style="width: 500px;">
             <td class="tname">일정 기간 선택</td>
             <td class="timeline" style="padding-left: 15px;">
-              <!--              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>-->
-              <!--              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> -->
+<!--              <input type="radio" id="chek1" class="chek" name="allDay" value="true" checked><label for="chek1">당일일정</label>-->
+<!--              <input type="radio" id="chek2" class="chek" name="allDay" value="false"><label for="chek2">기간일정</label> -->
               <input type="date" name="start"> ~ <input type="date" name="end">
             </td>
           </tr>
@@ -150,13 +153,13 @@
                 <option name="color" value="#ffc98b" style="background-color: #ffce96; color: white">color3</option>
                 <option name="color" value="#ffb2b4" style="background-color: #ffb9bb; color: white">color4</option>
                 <option name="color" value="#c6c09c" style="background-color: #fff7c3; color: white">color5</option>
-                <!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
-                <!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
-                <!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->
-                <!--                <option name="color" value="#FF00FF" style="color: #FF00FF">●</option>-->
-                <!--                <option value="2">2</option>-->
-                <!--                <option value="3">3</option>-->
-                <!--                <option value="4">4</option>-->
+<!--                <option name="color" value="#FF0000" style="color: #FF0000">●</option>-->
+<!--                <option name="color" value="#FFFF00" style="color: #FFFF00">●</option>-->
+<!--                <option name="color" value="#0000FF" style="color: #0000FF">●</option>-->
+<!--                <option name="color" value="#FF00FF" style="color: #FF00FF">●</option>-->
+<!--                <option value="2">2</option>-->
+<!--                <option value="3">3</option>-->
+<!--                <option value="4">4</option>-->
               </select>
               <input class="title" type="text" name="title" placeholder="캘린더에 적히는 간단한 제목">
             </td>
@@ -182,7 +185,7 @@
           <tr>
             <td style="border: none;"></td>
             <td style="border: none;">
-              <button class="bton csb"><a href="/calendar/all?type=all">취소</a></button>
+              <button class="bton csb" ><a href="/calendar/all?type=all" style="display: block;width: 60px; line-height: 40px;">취소</a></button>
               <button class="bton insert" type="submit">생성</button>
             </td>
           </tr>

@@ -38,8 +38,8 @@ public class BoardService {
 
        return boardList;
     }
-
-    public FreeinsertDTO selectBoardDetail(int no) {
+    @Transactional
+    public FreeinsertDTO selectBoardDetail(String no) {
 
         FreeinsertDTO boardDetail = null;
 

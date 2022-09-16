@@ -1072,4 +1072,139 @@
         FROM MEMBER A
         WHERE A.MEM_NUM = #{ num }
     </select>
+
+    <insert id="registSign" parameterType="hashmap">
+        INSERT
+            INTO SI_SIGN A
+            (
+                 A.SIGN_NO
+               , A.SIGN_WRITER
+               , A.SIGN_FORM
+               , A.SIGN_CONTENT
+               , A.REG_DATE
+               , A.IS_TEMP
+               , A.SIGN_TITLE
+            )
+            VALUES
+            (
+                SEQ_SIGN_NO.NEXTVAL
+              , #{ writer }
+              , #{ formCode }
+              , #{ content }
+              , SYSDATE
+              , 'N'
+              , #{ title }
+            )
+    </insert>
+
+    <insert id="registApprover" parameterType="hashmap">
+        <selectKey keyProperty="signNo" order="BEFORE" resultType="_int">
+            SELECT
+                SEQ_SIGN_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO APPROVER A
+            (
+                 A.SIGN_NO
+               , A.APPROVER_NO
+               , A.SIGN_TYPE
+               , A.IS_LAST_APPROVER
+            )
+        VALUES
+            (
+                #{ signNo }
+                , #{ approver }
+                , '결재'
+                , 'N'
+            )
+    </insert>
+
+    <insert id="registLastApprover" parameterType="hashmap">
+        <selectKey keyProperty="signNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_SIGN_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO APPROVER A
+            (
+                 A.SIGN_NO
+               , A.APPROVER_NO
+               , A.SIGN_TYPE
+               , A.IS_LAST_APPROVER
+            )
+        VALUES
+            (
+                #{ signNo }
+                , #{ approver }
+                , '결재'
+                , 'Y'
+            )
+    </insert>
+
+    <insert id="registReceiver" parameterType="hashmap">
+        <selectKey keyProperty="signNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_SIGN_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO RECEIVER A
+            (
+                 A.SIGN_NO
+               , A.RECEIVER_NO
+            )
+        VALUES
+            (
+                #{ signNo }
+                , #{ receiver }
+            )
+    </insert>
+
+    <insert id="registReferencer" parameterType="hashmap">
+        <selectKey keyProperty="signNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_SIGN_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO REFERENCER A
+            (
+                 A.SIGN_NO
+               , A.REFERENCER_NO
+            )
+        VALUES
+            (
+                #{ signNo }
+                , #{ referencer }
+            )
+    </insert>
+
+    <insert id="registSignFile" parameterType="SignFileDTO">
+        <selectKey keyProperty="signNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_SIGN_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO SF_SIGN_FILE A
+        (
+          A.SF_FILE_NO
+        , A.SF_ORIGIN_NAME
+        , A.SF_SAVE_NAME
+        , A.SF_SAVE_PATH
+        , A.SF_DELETE_YN
+        , A.SIGN_NO
+        )
+        VALUES
+        (
+          SEQ_SIGN_FILE_NO.NEXTVAL
+        , #{ originName }
+        , #{ saveName }
+        , #{ savePath }
+        , 'N'
+        , #{ signNo }
+        )
+    </insert>
 </mapper>

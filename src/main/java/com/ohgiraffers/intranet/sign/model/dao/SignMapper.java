@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.sign.model.dao;
 
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFileDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -68,4 +69,16 @@ public interface SignMapper {
     List<MemberDTO> selectMemByDeptCode(String code);
 
     MemberDTO selectMemByNum(Map<String, Object> numMap);
+
+    int registSign(Map<String, String> insertMap);
+
+    int registApprover(Map<String, String> approver);
+
+    int registLastApprover(Map<String, String> approver);
+
+    int registReceiver(Map<String, String> receiver);
+
+    int registReferencer(Map<String, String> referencer);
+
+    int registSignFile(SignFileDTO signFile);
 }

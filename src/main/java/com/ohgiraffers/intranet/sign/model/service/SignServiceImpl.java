@@ -6,6 +6,7 @@ import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFileDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class SignServiceImpl implements SignService {
     public List<SignDTO> selectRecentForm(int mem_num) {
 
         List<SignDTO> recentForm = signMapper.selectRecentForm(mem_num);
-        
+
         return recentForm;
     }
 
@@ -304,5 +305,83 @@ public class SignServiceImpl implements SignService {
 
         return member;
     }
+
+    /* 결재 등록용 메소드 */
+    @Override
+    public int registSign(Map<String, String> insertMap) throws SignApproveException {
+
+        int result = signMapper.registSign(insertMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 결재선 등록용 메소드 */
+    @Override
+    public int registApprover(Map<String, String> approver) throws SignApproveException {
+
+        int result = signMapper.registApprover(approver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재자 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+    /* 결재선 최종결재자 등록용 메소드 */
+    @Override
+    public int registFianlApprover(Map<String, String> approver) throws SignApproveException {
+
+        int result = signMapper.registLastApprover(approver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재자 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 수신처 등록용 메소드 */
+    @Override
+    public int registReceiver(Map<String, String> receiver) throws SignApproveException {
+
+        int result = signMapper.registReceiver(receiver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("수신처 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 참조자 등록용 메소드 */
+    @Override
+    public int registReferencer(Map<String, String> referencer) throws SignApproveException {
+
+        int result = signMapper.registReferencer(referencer);
+
+        if(!(result > 0)){
+            throw new SignApproveException("수신처 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 첨부파일 등록용 메소드 */
+    @Override
+    public int signFileInsert(SignFileDTO signFile) throws SignApproveException {
+
+        int result = signMapper.registSignFile(signFile);
+
+        if(!(result > 0)){
+            throw new SignApproveException("첨부파일 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
 
 }

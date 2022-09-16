@@ -109,17 +109,17 @@
 										, C.MS_RECP_NUM
 										, C.MS_CONTENTS
 										, C.MS_SEND_NUM
-<!-- 										, D.MEM_NUM -->
+
 									FROM  MS_BOARD C
-<!-- 									<if test="searchCondition == 'writer'"> -->
-<!-- 									    JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM) -->
-<!-- 									</if> -->
+									<if test="searchCondition == 'writer'">
+									    JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+									</if>
 									<where>
 										<if test="searchCondition == 'msTitle'">
-							                 C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
+							                AND C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
 										</if>
 										<if test="searchCondition == 'sendName'">
-											 C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+											AND C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 										</if>
 											AND   C.MS_READ_YN = 'N'
 											AND   C.MEM_NUM = C.MS_RECP_NUM
@@ -425,7 +425,6 @@
        FROM MEMBER B
       WHERE A.MS_RECP_NUM = B.MEM_NUM)
 	</update>
-	
 	
 	
 	<!-- 진짜 삭제 버튼 지우기  -->

@@ -91,11 +91,13 @@ public class CalendarServiceImpl implements CalendarService{
 
     }
 
-    /* 일정권한관리를 위해 memberList를 불러오기 위한 메소드*/
-    @Override
-    public List<MemberDTO> selectMemberListForCalendarManage(String searchCondition) {
 
-        List<MemberDTO> memberList = memberMapper.selectMemberListForCalendarManage(searchCondition);
+    /* 내꺼 =====================================================================================================================================*/
+    @Override
+    /* 일정권한관리를 위해 memberList를 불러오기 위한 메소드*/
+    public List<MemberDTO> selectMemberListForCalendarAndBoardManage(String searchCondition) {
+
+        List<MemberDTO> memberList = memberMapper.selectMemberListForCalendarAndBoardManage(searchCondition);
 
         return  memberList;
 
@@ -110,28 +112,43 @@ public class CalendarServiceImpl implements CalendarService{
         return deptList;
     }
 
+    /* 해당 사원의 일정관련 권한 삭제해주기 */
     @Override
     @Transactional
     public int deleteCalendarAuthority(int memNum) {
 
         int result = memberMapper.deleteCalendarAuthority(memNum);
 
-        return result;
 
+
+        return result;
     }
 
+    /* 일정,게시판 ,인사 권한 추가*/
     @Override
     @Transactional
-    public int insertAuthority(List<AuthoritDTO> authList) {
-
-        int result = 0;
+    public int insertAuthority(List<AuthoritDTO> authList){
+    int result = 0;
         if(authList.size() > 0){
             for (AuthoritDTO authoritDTO : authList) {
-                result =  memberMapper.insertAuthority(authoritDTO);
+              result =  memberMapper.insertAuthority(authoritDTO);
             }
         }
+
+
         return result;
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

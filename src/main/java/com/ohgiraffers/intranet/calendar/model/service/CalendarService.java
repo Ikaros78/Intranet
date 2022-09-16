@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.calendar.model.service;
 
+
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
@@ -22,12 +23,15 @@ public interface CalendarService {
 
     void cdDelete(String id);
 
-    List<MemberDTO> selectMemberListForCalendarManage(String searchCondition);
+    /*내꺼===========================================================================================*/
+    List<MemberDTO> selectMemberListForCalendarAndBoardManage(String searchCondition);
 
     List<DepartmentDTO> selectDeptList();
 
-    /* 헌주님 */
     int deleteCalendarAuthority(int memNum);
 
-    int insertAuthority(List<AuthoritDTO> authList);
+     int insertAuthority(List<AuthoritDTO> authList);
+
+
+
 }

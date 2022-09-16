@@ -25,6 +25,20 @@
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
+    <resultMap id="appointmentResultMap" type="AppointmentDTO">
+        <id property="no" column="PA_NO"/>
+        <result property="category" column="PA_CATEGORY"/>
+        <result property="date" column="PA_DATE"/>
+        <result property="contents" column="PA_CONTENTS"/>
+        <result property="bef_rank" column="PA_BEF_RANK"/>
+        <result property="bef_dept" column="PA_BEF_DEPT"/>
+        <result property="mem_num" column="MEM_NUM"/>
+
+        <association property="dept" resultMap="deptResultMap"/>
+        <association property="member" resultMap="memberResultMap"/>
+     </resultMap>
+
+    <!-- 직원 수 조회 -->
     <select id="selectEmpTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
           FROM MEMBER A
@@ -47,6 +61,7 @@
         </where>
     </select>
 
+    <!-- 직원 리스트 조회 -->
     <select id="selectEmpList" resultMap="memberResultMap">
         SELECT
                A.RNUM
@@ -105,5 +120,122 @@
             WHERE A.RNUM >= #{ startRow }
             ORDER BY 1 ASC
     </select>
+
+    <!-- 인사 발령 등록 멤버 값 받아오기 ajax | 받아올 값 - 사원번호, 직원명, 발령 전 직급(현재직급), 발령 전 부서(현재부서)) -->
+    <select id="getMemberName" resultMap="memberResultMap" parameterType="_int">
+        SELECT
+               A.MEM_NAME
+             , A.MEM_NUM
+             , A.DEPT_RANK
+             , A.DEPT_CODE
+             , B.DEPT_NAME
+          FROM MEMBER A
+          LEFT JOIN DEPARTMENT B ON(A.DEPT_CODE = B.DEPT_CODE)
+         WHERE MEM_NUM = #{ mem_num }
+    </select>
+
+    <!-- 인사 발령 테이블 정보 insert용 쿼리문 -->
+    <insert id="appointmentRegist">
+        INSERT
+          INTO PA_PERSONNER_APPOINTMENT
+        (
+          PA_NO
+        , PA_CATEGORY
+        , PA_DATE
+        , PA_CONTENTS
+        , PA_BEF_RANK
+        , PA_BEF_DEPT
+        , MEM_NUM
+        )
+        VALUES
+        (
+          SEQ_APPOINTMENT.NEXTVAL
+        , #{ category }
+        , #{ date }
+        , #{ contents }
+        , #{ bef_rank }
+        , #{ bef_dept }
+        , #{ mem_num }
+        )
+    </insert>
+
+    <!-- 멤버 테이블에 인사 발령 정보로 update 하는 메소드 -->
+    <update id="appointmentUpdate">
+        UPDATE MEMBER
+           SET DEPT_RANK = #{ dept_rank }
+             , DEPT_CODE = #{ dept_code }
+         WHERE MEM_NUM = #{ mem_num }
+    </update>
+
+    <!-- 인사 발령 수 조회 -->
+    <select id="selectHrListTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+          FROM PA_PERSONNER_APPOINTMENT
+        <where>
+            <if test="searchCondition == 'promotion'">
+                PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'move'">
+                PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+            </if>
+<!--            <if test="searchCondition == '전체'">-->
+<!--                #{ searchValue } || '%'-->
+<!--            </if>-->
+        </where>
+    </select>
+
+    <!-- 인사 발령 리스트 조회 -->
+    <select id="selectHrList" resultMap="appointmentResultMap">
+        SELECT A.RNUM
+             , A.PA_NO
+             , A.PA_CATEGORY
+             , A.PA_DATE
+             , A.MEM_NUM
+             , A.PA_BEF_RANK
+             , A.PA_BEF_DEPT
+             , A.PA_CONTENTS
+             , D.MEM_NAME
+             , D.DEPT_RANK
+             , E.DEPT_NAME
+        FROM ( SELECT ROWNUM RNUM
+                    , B.PA_NO
+                    , B.PA_CATEGORY
+                    , B.PA_DATE
+                    , B.MEM_NUM
+                    , B.PA_BEF_RANK
+                    , B.PA_BEF_DEPT
+                    , B.PA_CONTENTS
+               FROM (SELECT
+                               C.PA_NO
+                             , C.PA_CATEGORY
+                             , C.PA_DATE
+                             , C.MEM_NUM
+                             , C.PA_BEF_RANK
+                             , C.PA_BEF_DEPT
+                             , C.PA_CONTENTS
+                     FROM PA_PERSONNER_APPOINTMENT C
+                     <where>
+                         <if test="searchCondition == 'promotion'">
+                             C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+                         </if>
+                         <if test="searchCondition == 'move'">
+                             C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+                         </if>
+<!--                         <if test="searchCondition == '전체'">-->
+<!--                             #{ searchValue } || '%'-->
+<!--                         </if>-->
+                     </where>
+                     ORDER BY C.PA_NO DESC
+                     ) B
+                     <![CDATA[
+                        WHERE ROWNUM <= #{ endRow }
+                     ]]>
+             ) A
+             LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+             LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+            WHERE A.RNUM >= #{ startRow }
+            ORDER BY 1 ASC
+    </select>
+
 
 </mapper>

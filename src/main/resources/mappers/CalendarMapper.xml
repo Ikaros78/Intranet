@@ -61,7 +61,7 @@
              , A.CD_TITLE
              , A.CD_CONTENT
              , A.CD_START
-             , A.CD_END
+             , TO_CHAR(TO_DATE(A.CD_END,'yyyy-MM-dd') + 1,'yyyy-MM-dd') CD_END
              , A.CD_ALLDAY
              , A.CD_COLOR
              , A.CD_TYPE

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,8 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 import com.ohgiraffers.intranet.msBoard.model.service.MsBoardService;
+import com.ohgiraffers.intranet.notice.model.dto.GalleryFileDTO;
+import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 
 @Controller
 @RequestMapping(value = { "/ms/*" })
@@ -212,7 +215,7 @@ public class MsBoardController {
 		msBoardService.MsboardInsert(msBoardDTO);
 
 		msBoardService.recpNameUpdate(msBoardDTO);
-		
+
 		// 저장 경로 설정
 		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
 		String fileUploadDirectory = filePath + "/msFile";
@@ -311,18 +314,18 @@ public class MsBoardController {
 		return result;
 	}
 
-	@GetMapping(value = "getMemberListSecond", produces = "application/json; charset-UTF-8")
-	@ResponseBody
-	public List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
-
-		String name = request.getParameter("data");
-		
-		System.out.println("namenamename"+ name);
-
-		List<MsMemberListDTO> result = msBoardService.getMemberListSecond(name);
-
-		return result;
-	}
+//	@GetMapping(value = "getMemberListSecond", produces = "application/json; charset-UTF-8")
+//	@ResponseBody
+//	public List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
+//
+//		String name = request.getParameter("data");
+//		
+//		System.out.println("namenamename"+ name);
+//
+//		List<MsMemberListDTO> result = msBoardService.getMemberListSecond(name);
+//
+//		return result;
+//	}
 
 	
 //	@ResponseBody
@@ -393,19 +396,5 @@ public class MsBoardController {
 //        msBoardService.recpBoardDelete(msBoard);
 
 //        return "a";
-//    }
-//    
-//    @GetMapping("/sendDelete")
-//    public String sendBoardDelete(@ModelAttribute MsBoardDTO msBoard, HttpServletRequest request){
-//    	
-//    	int msNo = Integer.parseInt(request.getParameter("msNo"));
-//    	
-//    	msBoardService.sendYNMsBoard(msBoard);
-//    	
-//    	msBoardService.sendBoardDelete(msNo);
-//    	
-//    	return "redirect:/ms/send";
-//    }
-	
-	
+
 }

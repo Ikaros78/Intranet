@@ -9,7 +9,6 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
-
 public interface MsBoardService {
 
 	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
@@ -37,6 +36,8 @@ public interface MsBoardService {
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
 
 	void recpNameUpdate(MsBoardDTO msBoardDTO);
+
+
 
 //	void recpYNMsBoard(List<MsBoardDTO> msBoard);
 //

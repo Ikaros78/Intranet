@@ -1,10 +1,12 @@
 package com.ohgiraffers.intranet.msBoard.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
@@ -82,6 +84,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	// 쪽지함 보내기용 메소드
 
+
 	
 	
 
@@ -152,7 +155,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return memberList;
 
 	}
-
+}
 	// 삭제용 메소드
 
 //	public int recpBoardDelete(int msNo) {
@@ -225,5 +228,3 @@ public class MsBoardServiceImpl implements MsBoardService {
 //		
 //	}
 
-
-}

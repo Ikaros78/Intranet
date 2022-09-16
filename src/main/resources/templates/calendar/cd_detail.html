@@ -183,8 +183,8 @@
         <div style="width: 775px">
 
 
-            <button class="bton csb" ><a href="/calendar/all?type=all">취소</a></button>
-            <button class="bton modify" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}">수정</a></button>
+            <button class="bton csb" onclick="goBack()">취소</button>
+            <button class="bton modify" style="padding: 0px" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}" style="display: block;width: 60px; line-height: 40px;">수정</a></button>
 <!--            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/delete(id=${cdDetail.id})}">삭제</a></button>-->
               <!--            <button class="bton delete" onclick="deletebtn()">삭제</button>-->
             <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }" th:onclick="removeCheck()">삭제</button>
@@ -212,6 +212,12 @@
 
                                 </script>
                             </th:block>
+
+        <script type="text/javascript">
+            function goBack() {
+                window.history.back();
+            }
+        </script>
 
               <!--/*
 

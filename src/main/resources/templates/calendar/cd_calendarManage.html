@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
@@ -35,7 +36,7 @@
                     </li>
                     <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
                         <ul class="sub sub2">
-                            <li><a href="">전체 권한 관리</a></li>
+                            <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                             <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
                             <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
                             <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
@@ -73,12 +74,12 @@
                                     <th class="col-2">이메일</th>
                                     <th class="col-2">권한여부(전체)</th>
                                     <th class="col-2">권한여부(부서)</th>
-                                    <th class="col-1">권한 적용</th>
+                                    <th class="col-1" sec:authorize="hasRole('CD_AUTH')">권한 적용</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="member : ${ memberList }">
+                                <tr th:each="member ,stat: ${ memberList }">
                                     <td id="mem_num" name="mem_num" th:text="${ member.mem_num }">1</td>
                                     <td th:text="${ member.mem_name }">홍길동</td>
                                     <td id="dept_name" name="dept_name" th:text="${ member.department.dept_name }">부서1</td>
@@ -87,23 +88,35 @@
                                     <td th:text="${ member.mem_phone }">010-1234-5678</td>
                                     <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
 
-                                    <th:block th:if="${ #lists.size(member.authorit) == 2 }">
-                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked></td>
-                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" checked></td>
-                                    </th:block>
-                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">
+                                    <th:block th:if="${ authoritTypeList.get(stat.index).getCd_all() == null }">
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>
-                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" ></td>
                                     </th:block>
-                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_ALL' }">
-                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked ></td>
+                                    <th:block th:if="${ authoritTypeList.get(stat.index).getCd_all() != null }">
+                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked></td>
+                                    </th:block>
+                                    <th:block th:if="${ authoritTypeList.get(stat.index).getCd_dept() == null }">
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT"></td>
                                     </th:block>
-                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_DEPT' }">
-                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>
+                                    <th:block th:if="${ authoritTypeList.get(stat.index).getCd_dept() != null }">
                                         <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" checked></td>
                                     </th:block>
-                                    <td>
+<!--                                    <th:block th:if="${ #lists.size(member.authorit) == 2 }">-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked></td>-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" checked></td>-->
+<!--                                    </th:block>-->
+<!--                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" ></td>-->
+<!--                                    </th:block>-->
+<!--                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_ALL' }">-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL" checked ></td>-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT"></td>-->
+<!--                                    </th:block>-->
+<!--                                    <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_CD_DEPT' }">-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_ALL"></td>-->
+<!--                                        <td><input type="checkbox" class="check" name="auCode" value="CD_DEPT" checked></td>-->
+<!--                                    </th:block>-->
+                                    <td sec:authorize="hasRole('CD_AUTH')">
                                         <button type="button" class="btn" onclick="updateData(this)">적용</button>
                                     </td>
                                 </tr>
@@ -140,9 +153,9 @@
                     success : function(data){
                         console.log(data + "성공했어");
                         if(data === "success"){
-                             alert("일정권한 적용이 성공적으로 완료되었습니다!");
+                             alert("일정권한 적용이 성공적으로 완료되었습니다! \n변경된 권한은 재로그인시 적용됩니다." );
                         }else {
-                            alert("적용에 실패하였습니다.");
+                            alert("변경된 권한이 없습니다.");
                         }
                     },
                     error: function(data){

@@ -24,13 +24,14 @@ public interface CalendarService {
     void cdDelete(String id);
 
     /*내꺼===========================================================================================*/
-    List<MemberDTO> selectMemberListForCalendarManage(String searchCondition);
+    List<MemberDTO> selectMemberListForCalendarAndBoardManage(String searchCondition);
 
     List<DepartmentDTO> selectDeptList();
 
     int deleteCalendarAuthority(int memNum);
 
-    int insertAuthority(List<AuthoritDTO> authList);
+     int insertAuthority(List<AuthoritDTO> authList);
+
 
 
 }

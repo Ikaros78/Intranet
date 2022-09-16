@@ -8,14 +8,16 @@ import java.util.List;
 public interface AuthorService {
 
 
-
-    List<MemberDTO> selectMemberListForBoardManage(String searchCondition);
-
     int deleteBoardAuthority(int memNum);
 
     int insertAuthority(List<AuthoritDTO> authList);
 
-    List<MemberDTO> selectMemberListForEmpManage();
+    List<MemberDTO> selectMemberListForCalendarAndBoardManage(String searchCondition);
+
+    /*인사,접근 권한 관리를 위해 인사부 직원들 리스트 조회 */
+    List<MemberDTO> selectMemberListForEmpAndAllManage();
 
     int deleteEmpAuthority(int memNum);
+
+    int deleteAllAuthority(int memNum);
 }

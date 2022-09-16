@@ -32,7 +32,7 @@ public class EmpManageController {
     @GetMapping("/list")
     public ModelAndView EmpManageController(ModelAndView mv){
 
-        List<MemberDTO> memberList = authorService.selectMemberListForEmpManage();
+        List<MemberDTO> memberList = authorService.selectMemberListForEmpAndAllManage();
 
         log.info("[EmpManageController] memberList : " + memberList);
         List<AuthoritTypeDTO> authoritTypeList = new ArrayList<>();
@@ -74,11 +74,9 @@ public class EmpManageController {
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean em_all, @RequestParam boolean em_read,@RequestParam boolean hr_all,@RequestParam boolean hr_read,@RequestParam boolean nm){
-
+    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean em_all, @RequestParam boolean em_read,@RequestParam boolean hr_all,@RequestParam boolean hr_read,@RequestParam boolean nm) {
 
         System.out.println("memNum , em_all, em_read, hr_all, hr_read, nm = " + memNum + em_all + em_read + hr_all + hr_read + nm);
-
 
         int result = authorService.deleteEmpAuthority(memNum);
 

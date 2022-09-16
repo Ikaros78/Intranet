@@ -58,4 +58,11 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberUpdateException("회원 정보 수정에 실패하였습니다");
         }
     }
+
+    public String selectDeptByNum(int mem_num) {
+
+        String deptName = memberMapper.selectDeptByNum(mem_num);
+
+        return deptName;
+    }
 }

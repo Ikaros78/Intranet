@@ -114,9 +114,6 @@
          WHERE A.MEM_NUM = #{ mem_num }
     </update>
 
-
-
-    <select id="selectMemberListForCalendarManage" resultMap="MemberResultMap">
     <!-- 일정권한 , 게시판 권한 관리를 위해 사원 리스트 조회  -->
     <select id="selectMemberListForCalendarAndBoardManage" resultMap="MemberResultMap">
         SELECT

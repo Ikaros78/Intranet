@@ -12,11 +12,6 @@ public interface MemberService {
 
     public void memberUpdate(MemberDTO member) throws MemberUpdateException;
 
-//    /* 해당 인원의 부서를 가져오는 메소드 */
-//    public String selectDeptByNum(int mem_num) {
-//
-//        String deptName = memberMapper.selectDeptByNum(mem_num);
-//
-//        return deptName;
-//    }
+    /* 해당 인원의 부서를 가져오는 메소드 */
+    String selectDeptByNum(int mem_num);
 }

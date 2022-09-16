@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>자유게시판:상세조회</title>
-    <link rel="stylesheet" href="../../resources/css/reset.css">
-    <link rel="stylesheet" href="../../resources/css/common/basic.css">
-    <link rel="stylesheet" href="../../resources/css/bordDetail.css">
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/freelist/freeDetail.css}">
 </head>
 <body>
 <div id="wrap" style="margin-top: -20px;">
@@ -52,8 +52,10 @@
                 <span>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span></div>
             <p class="title">
                 <span>자유게시판!</span><br>
-                <span class="writer">김올레</span> <span></span><span class="writer">인사팀</span><span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                <span class="date">22-08-24</span><br>
+                <span th:text="${ board.title }"></span><br>
+                <span class="writer" th:text="${ board.dept.dept_name }"></span>
+                <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                <span> </span><span class="date" th:text="${ board.date }"></span><br>
                 <button class="suggest">추천</button>
             </p>
 

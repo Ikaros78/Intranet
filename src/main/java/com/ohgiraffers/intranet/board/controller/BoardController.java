@@ -41,7 +41,7 @@ public class BoardController {
         //log.info("free insert : " + freeinsert.getTitle());
         //log.info("free insert : " +  freeinsert.getContents());
         //log.info("free insert : " +  freeinsert.getMem_num());
-        log.info("free insert : " + freeinsert);
+        log.info("freeinsert : " + freeinsert);
 
         int registResult = boardService.freeinsert(freeinsert);
 

@@ -102,9 +102,9 @@
         </where>
     </select>
 
-    <select id="selectDetail" parameterType="_int" resultMap="boardResultMap">
+    <select id="selectBoardDetail" parameterType="String" resultMap="boardResultMap">
         SELECT
-            A.NT_NO
+            A.FR_NO
              , A.FR_TITLE
              , B.MEM_NAME
              , A.FR_DATE
@@ -112,7 +112,7 @@
              , A.FR_VIEWS
              , A.MEM_NUM
              , A.FR_CONTENTS
-        FROM NT_NOTICE A
+        FROM FR_FREE A
                  LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
                  LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
         WHERE A.FR_NO = #{ no }

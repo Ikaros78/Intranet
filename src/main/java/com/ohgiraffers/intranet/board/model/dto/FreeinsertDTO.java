@@ -3,11 +3,11 @@ package com.ohgiraffers.intranet.board.model.dto;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 
-import java.util.Date;
+import java.sql.Date;
 
-public class FreeinsertDTO  {
+public class FreeinsertDTO {
 
-    private int no;
+    private String no;
 
     private String title;
 
@@ -21,12 +21,13 @@ public class FreeinsertDTO  {
 
     private MemberDTO member;
 
-    private  DepartmentDTO department;
+    private DepartmentDTO department;
 
 
-    public FreeinsertDTO(){}
+    public FreeinsertDTO() {
+    }
 
-    public FreeinsertDTO(int no, String title, Date date, int views, String contents, int mem_num, MemberDTO member, DepartmentDTO department) {
+    public FreeinsertDTO(String no, String title, Date date, int views, String contents, int mem_num, MemberDTO member, DepartmentDTO department) {
         this.no = no;
         this.title = title;
         this.date = date;
@@ -35,74 +36,66 @@ public class FreeinsertDTO  {
         this.mem_num = mem_num;
         this.member = member;
         this.department = department;
-
-
     }
 
-
-    public int getNo() {
+    public String getNo() {
         return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public int getViews() {
-        return views;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public int getMem_num() {
-        return mem_num;
-    }
-
-    public MemberDTO getMember() {
-        return member;
-    }
-
-    public DepartmentDTO getDepartment() {
-        return department;
-
-
-
-
-    }
-
-
-    public void setNo(int no) {
-        this.no = no;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
+    public int getViews() {
+        return views;
+    }
+
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public String getContents() {
+        return contents;
     }
 
     public void setContents(String contents) {
         this.contents = contents;
     }
 
+    public int getMem_num() {
+        return mem_num;
+    }
+
     public void setMem_num(int mem_num) {
         this.mem_num = mem_num;
     }
 
+    public MemberDTO getMember() {
+        return member;
+    }
+
     public void setMember(MemberDTO member) {
         this.member = member;
+    }
+
+    public DepartmentDTO getDepartment() {
+        return department;
     }
 
     public void setDepartment(DepartmentDTO department) {
@@ -112,7 +105,7 @@ public class FreeinsertDTO  {
     @Override
     public String toString() {
         return "FreeinsertDTO{" +
-                "no=" + no +
+                "no='" + no + '\'' +
                 ", title='" + title + '\'' +
                 ", date=" + date +
                 ", views=" + views +

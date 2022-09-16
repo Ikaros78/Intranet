@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/update.css}" />
+</head>
+<script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+<th:block>
+    <header>
+        <h1>Update Form</h1>
+    </header>
+    <div class="update-wrap">
+        <form action="" method="post">
+            <div class="input-box">
+                <input th:value="${ #authentication.getPrincipal().getMem_num() }"
+                        id="memDepartNum"
+                        name="mem_num"
+                        type="hidden"
+                        placeholder="사원번호"
+                        readonly
+                />
+            </div>
+            <div class="input-box">
+                <input th:value="${ #authentication.getPrincipal().getMem_id() }"
+                        id="mem_id"
+                        name="mem_id"
+                        type="text"
+                        placeholder="아이디"
+                        required
+                />
+                <label for="mem_id">아이디</label>
+                <button id="checkDup" style="width: 350px; height:30px; font-size: 0.9rem;">
+                    아이디 중복 체크</button>
+            </div>
+            <div class="input-box">
+                <input
+                        id="memPw"
+                        name="mem_pw"
+                        type="password"
+                        placeholder="비밀번호"
+                        required
+                />
+                <label for="memPw">비밀번호</label>
+            </div>
+            <div class="input-box">
+                <input
+                        id="memPwChk"
+                        name="mem_pwChk"
+                        type="password"
+                        placeholder="비밀번호 확인"
+                        required
+                />
+                <label for="memPwChk">비밀번호 확인</label>
+                <button onclick="return checkPw()" style="width: 350px; height:30px; font-size: 0.9rem;">비밀번호 확인</button>
+            </div>
+            <div class="input-box">
+                <input th:value="${ #authentication.getPrincipal().getMem_name() }"
+                        id="memName"
+                        name="mem_name"
+                        type="text"
+                        placeholder="이름"
+                        required
+                />
+                <label for="memName">이름</label>
+            </div>
+            <div class="input-box">
+                <input th:value="${ #authentication.getPrincipal().getMem_phone() }"
+                        id="memPhone"
+                        name="mem_phone"
+                        type="text"
+                        placeholder="전화번호"
+                        oninput="autoHypen(this)"
+                        maxlength="13"
+                        required
+                />
+                <label for="memPhone">전화번호</label>
+            </div>
+
+            <div class="input-box">
+                <input th:value="${ #authentication.getPrincipal().getMem_email() }"
+                        id="memEmail"
+                        name="mem_email"
+                        type="text"
+                        placeholder="개인 이메일"
+                        required
+                />
+                <label for="memPw">개인 이메일</label>
+            </div>
+            <div class="input-box">
+                <input style="cursor: pointer" th:value="${ #authentication.getPrincipal().getMem_joinDate() }"
+                        id="memJoinDate"
+                        name="mem_joinDate"
+                        type="date"
+                        placeholder="입사일자"
+                        required
+                />
+                <label for="memJoinDate">입사일자</label>
+            </div>
+            <div class="input-box">
+                <input style="cursor: pointer" th:value="${ #authentication.getPrincipal().getMem_birth() } "
+                        id="memBirth"
+                        name="mem_birth"
+                        type="date"
+                        placeholder="생년월일"
+                        required
+                />
+                <label for="memBirth">생년월일</label>
+            </div>
+            <div class="input-box">
+                <input
+                        type="text"
+                        id="sample6_postcode"
+                        name="sample6_postcode"
+                        placeholder="우편번호"
+                        required
+                />
+                <label for="sample6_postcode">우편번호</label>
+                <button
+                        class="postcode"
+                        onclick="sample6_execDaumPostcode()"
+                        value="우편번호 찾기"
+                >
+                    우편번호 찾기
+                </button>
+            </div>
+            <div class="input-box">
+                <input type="text" id="memAddre" name="mem_address" placeholder="주소" />
+                <label for="memAddre">주소</label>
+            </div>
+            <div class="input-box">
+                <input
+                        type="text"
+                        id="sample6_detailAddress"
+                        name="mem_address2"
+                        placeholder="상세주소"
+                        required
+                />
+                <label for="sample6_detailAddress">상세주소</label>
+            </div>
+            <div class="input-box">
+                <input type="hidden" id="sample6_extraAddress" placeholder="참고항목" />
+<!--                <label for="sample6_extraAddress">참고항목</label>-->
+            </div>
+            <button class="btnbtn" th:onclick="|location.href='@{/member/mypageUpdate}'|">수정하기</button>
+        </form>
+
+        <button th:onclick="|location.href='@{/member/mypage}'|"
+                class="logIn" id="logIn">뒤로가기</button>
+
+    </div>
+</th:block>
+<script type="text/javascript" th:src="@{/js/member.js}"></script>
+<script>
+    //    	새 비밀번호, 비밀번호 확인 일치여부 확인용 코드
+    function checkPw(){
+
+        let memPw = document.getElementById('memPw').value;
+        let memPwChk = document.getElementById('memPwChk').value;
+
+        if(memPw != memPwChk){
+            alert("비밀번호 불일치");
+            return false;
+
+        } else {
+            alert("비밀번호가 일치합니다");
+            return true;
+        }
+    }
+</script>
+</th:block>
+</body>
+</html>

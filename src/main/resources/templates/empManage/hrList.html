@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>인사발령조회</title>
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
-    <link rel="stylesheet" th:href="@{/css/common/paging.css}">
+<!--    <link rel="stylesheet" th:href="@{/css/common/paging.css}">-->
     <link rel="stylesheet" th:href="@{/css/empManage/hrList.css}">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="https://code.jquery.com.com/jquery-3.6.0.js"></script>
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>-->
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>-->
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
+<!--    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
+    <script src="https://code.jquery.com./jquery-3.6.0.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -20,32 +20,38 @@
             <div id="sideBar">
                 <h3>직원관리</h3>
                 <ul>
-                    <li class="main"><a th:href="@{/emp/emplList}">인사 관리</a>
+                    <li class="main"><a th:href="@{/emp/empList}">인사 관리</a>
                         <ul class="sub sub1">
-                            <li><a th:href="@{/emp/emplList}">직원 관리</a></li>
+                            <li><a th:href="@{/emp/empList}">직원 관리</a></li>
                             <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
                         <ul class="sub sub2">
+                            <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                             <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
-                            <li><a href="../accessManage/hrManage.html">인사 권한 관리</a></li>
-                            <li><a href="../accessManage/boardManage.html">게시판 권한 관리</a></li>
+                            <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                            <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
             <div id="container">
                 <h4>인사 발령 조회</h4><hr>
-                <form action="" class="search">
-                    <label for="">발령구분</label>
-                    <select name="" id="">
-                        <option value="전체">전체</option>
-                        <option value="승진">승진</option>
-                        <option value="부서이동">부서이동</option>
+                <form th:action="@{/emp/hrList}" method="get" class="search">
+                    <input type="hidden" name="currentPage" value="1">
+                    <label>발령구분</label>
+                    <select name="searchCondition" id="searchCondition">
+                        <option>전체</option>
+                        <option value="promotion">승진</option>
+                        <option value="move">부서이동</option>
                     </select>
-                    <label for="">발령일자</label>
-                    <input type="text" name="pa_date" class="pa_date" value=""/>
+                    <label for="searchValue">사원명</label>
+                    <input type="search" class="inputSearch" name="searchValue" id="searchValue">
+<!--                    <label for="">발령일자</label>-->
+<!--                    <input type="text" name="date" class="pa_date" value="" id="pa_date"/>-->
+<!--                    <input type="hidden" id="startDate" name="startDate">-->
+<!--                    <input type="hidden" id="endDate" name="endDate">-->
                     <button>검색</button>
                 </form>
                 <div class="btnArea">
@@ -61,25 +67,28 @@
                                     <th>발령일자</th>
                                     <th>사원번호</th>
                                     <th>성명</th>
-                                    <th>발령내용</th>
+                                    <th>발령직급</th>
+                                    <th>발령부서</th>
                                     <th>비고</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-tr_value>
-                                    <td ><input type="checkbox" name="chkList"></td>
-                                    <td>1</td>
-                                    <td>승진</td>
-                                    <td>22/08/13</td>
-                                    <td>123456</td>
-                                    <td>주이슬</td>
-                                    <td><span>사원</span>&nbsp;→&nbsp;<span>부장</span></td>
-                                    <td></td>
+                                <tr th:each="appoint : ${ appointList }">
+<!--                                    <td><input type="checkbox" name="chkList"></td>-->
+                                    <td id="inputAppend"></td>
+                                    <td th:text="${ appoint.no }"></td>
+                                    <td th:text="${ appoint.category }"></td>
+                                    <td th:text="${ appoint.date }"></td>
+                                    <td th:text="${ appoint.mem_num }"></td>
+                                    <td th:text="${ appoint.member.mem_name }"></td>
+                                    <td><span th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
+                                    <td><span th:text="${ appoint.bef_dept }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
+                                    <td th:text="${ appoint.contents }"></td>
                                 </tr>
                             </tbody>
                         </table>
+                <div th:replace="empManage/paging"></div>
             </div>
-<!--            <div th:replace="/empManage/paging"></div>-->
         </div>
     </div>
         <script>
@@ -97,41 +106,69 @@
                 const popup = window.open('/emp/hrRegist', '발령등록', `width=${width}, height=${height}, left=${left}, top=${tops}`);
             }
 
+            // 체크 박스 가장 상위만 체크 가능하도록
+                $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+
+                // $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+
+
+
+
+            // <input type="checkbox" name="chkList">
             // 발령 취소 테이블 행 삭제
-            (function($){
+            // (function($){
+            //
+            //     $(document).ready(function(){
+            //         $("#del").click(function(){
+            //             if($("input").is(":checked") == true){
+            //                 let i = $("input:checked").parents("tr");
+            //                 let e = i.next("tr");
+            //                 i.remove();
+            //                 e.remove();
+            //             } else {
+            //                 alert("삭제할 항목을 선택해주세요!")
+            //             }
+            //         });
+            //     });
+            // });
 
-                $(document).ready(function(){
-                    $("#del").click(function(){
-                        if($("input").is(":checked") == true){
-                            let i = $("input:checked").parents("tr");
-                            let e = i.next("tr");
-                            i.remove();
-                            e.remove();
-                        } else {
-                            alert("삭제할 항목을 선택해주세요!")
-                        }
-                    });
-                });
-            });
-
-            $(function() {
-
-                $('input[name="pa_date"]').daterangepicker({
-                    autoUpdateInput: false,
-                    locale: {
-                        cancelLabel: 'Clear'
-                    }
-                });
-
-                $('input[name="pa_date"]').on('apply.daterangepicker', function(ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-                });
-
-                $('input[name="pa_date"]').on('cancel.daterangepicker', function(ev, picker) {
-                    $(this).val('');
-                });
-
-            });
+            // $(function() {
+            //
+            //     let start = moment();
+            //     let end = moment();
+            //
+            //     function cb(start, end){
+            //         ('#pa_date #startDate').val(start.format('YYYY-MM-DD'));
+            //         ('#pa_date #endDate').val(end.format('YYYY-MM-DD'));
+            //     }
+            //
+            //     $('input[name="pa_date"]').daterangepicker({
+            //         autoUpdateInput: false,
+            //         locale: {
+            //             "separator": " ~ ",      // 시작일시와 종료일시 구분자
+            //             "format": 'YYYY-MM-DD',    //일시 노출 포맷
+            //             "applyLabel": "확인",     // 확인 버튼 텍스트
+            //             "cancelLabel": "취소",     // 취소 버튼 텍스트
+            //             "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
+            //             "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+            //         },
+            //         startDate : start,
+            //         endDate : end
+            //     }, cb);
+            //
+            //     cb(start, end);
+            //     //
+            //     // $('input[name="pa_date"]').on('apply.daterangepicker', function(ev, picker) {
+            //     //     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            //     // });
+            //     //
+            //     // $('input[name="pa_date"]').on('cancel.daterangepicker', function(ev, picker) {
+            //     //     $(this).val('');
+            //     // });
+            //
+            // });
         </script>
 </body>
 </html>

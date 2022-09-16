@@ -50,15 +50,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() //요청에 대한 권한 체크
                 .antMatchers("/", "/member/**", "/common/**").permitAll()
                 // notice 게시판 접근 권한
-                .antMatchers("/notice/news/list/**", "/notice/gallery/**")
-                .hasAnyAuthority("ROLE_NT_ALL", "ROLE_ALL_ALL")
+//                .antMatchers("/notice/news/list/**", "/notice/gallery/**")
+//                .hasAnyAuthority("ROLE_NT_ALL", "ROLE_ALL_ALL")
                 // calendar 게시판 접근 권한
-                .antMatchers("/calendar/main/**")
-                .hasAnyAuthority("ROLE_CD_DEPT", "ROLE_CD_ALL", "ROLE_ALL_ALL")
+//                .antMatchers("/calendar/main/**")
+//                .hasAnyAuthority("ROLE_CD_DEPT", "ROLE_CD_ALL", "ROLE_ALL_ALL")
                 // emplManage 게시판 접근 권한
-                .antMatchers("/calendarManage/**", "/accessManage/**")
-                .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
-                .anyRequest().authenticated()
+//                .antMatchers("/calendarManage/**", "/accessManage/**")
+//                .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
+//                .anyRequest().authenticated()
                // sign 게시판 접근 권한
                // board 게시판 접근 권한
                // authorManage 게시판 접근 권한

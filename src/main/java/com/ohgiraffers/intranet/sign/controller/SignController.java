@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/sign")
+@RequestMapping("/sign/*")
 public class SignController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());

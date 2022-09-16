@@ -11,9 +11,8 @@ import java.util.Map;
 @Mapper
 public interface MemberMapper {
 
+    /* 회원가입 */
     int memberRegistInsert(MemberDTO member);
-
-//    int updateMember(MemberDTO member); //회원 정보 수정 추후 업데이트 예정 09-01
 
     /* 시큐리티 세션에서 Id를 확인 */
     MemberDTO findByMemberId(String mem_id);
@@ -34,10 +33,12 @@ public interface MemberMapper {
     int insertAuthority(AuthoritDTO authoritDTO);
 
 
+    /* 마이페이지 개인정보 수정 */
+    int memberUpdate(MemberDTO member);
     /* 부서이름 조회용 메소드 */
     String selectDeptByNum(int mem_num);
 //    List<MemberDTO> selectBoardAuthority(String searchValue);
-    
+
     /* 게시판 권한 관리용 권한 삭제 */
     int deleteBoardAuthority(int memNum);
 

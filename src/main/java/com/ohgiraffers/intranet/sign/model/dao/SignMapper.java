@@ -1,6 +1,5 @@
 package com.ohgiraffers.intranet.sign.model.dao;
 
-import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
@@ -67,4 +66,6 @@ public interface SignMapper {
     List<SignDTO> selectRequestList(Map<String, Object> searchList);
 
     List<MemberDTO> selectMemByDeptCode(String code);
+
+    MemberDTO selectMemByNum(Map<String, Object> numMap);
 }

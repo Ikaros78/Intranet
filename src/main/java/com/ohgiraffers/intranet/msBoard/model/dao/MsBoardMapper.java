@@ -28,14 +28,17 @@ public interface MsBoardMapper {
 	
 //////////////////////////////////////////	
 	
-	int MsFileInsert(MsFileDTO msFileDTO);
-
-	int YNChangeMsBoard(int msNo);
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
 
-	List<MsMemberListDTO> getMemberList(String dept_name) throws Exception;
-	
+	int MsFileInsert(MsFileDTO msFileDTO);
+
+
+	int YNChangeMsBoard(int msNo);
+
+
+	List<MsMemberListDTO> getMemberListt(String data);
+
 	List<DepartmentDTO> getdeptList() throws Exception;
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
@@ -44,11 +47,7 @@ public interface MsBoardMapper {
 
 	List<MsFileDTO> selectMsBoardFileDetail(int msNo);
 
-//	int recpYNMsBoard(int msNo);
-//
-//	int recpBoardDelete(int msNo);
-//
-//	int msFileDelete(int msNo);
+	void recpNameUpdate(MsBoardDTO msBoardDTO);
 
 
 }

@@ -39,4 +39,6 @@ public interface SignService {
     List<SignDTO> selectRequestList(Map<String, Object> searchList);
 
     List<MemberDTO> selectMemByDeptCode(String code);
+
+    MemberDTO selectMemByNum(Map<String, Object> num);
 }

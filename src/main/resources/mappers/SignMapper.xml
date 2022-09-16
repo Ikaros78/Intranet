@@ -1063,4 +1063,13 @@
           FROM MEMBER A
          WHERE A.DEPT_CODE = #{ code }
     </select>
+
+    <select id="selectMemByNum" resultMap="memberResultMap" parameterType="hashmap">
+        SELECT
+            A.MEM_NAME
+          , A.DEPT_RANK
+          , A.MEM_NUM
+        FROM MEMBER A
+        WHERE A.MEM_NUM = #{ num }
+    </select>
 </mapper>

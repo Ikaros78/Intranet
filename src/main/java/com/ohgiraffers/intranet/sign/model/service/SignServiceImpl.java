@@ -296,4 +296,13 @@ public class SignServiceImpl implements SignService {
         return memberList;
     }
 
+    /* 멤버번호로 인원 조회용 메소드 */
+    @Override
+    public MemberDTO selectMemByNum(Map<String, Object> numMap) {
+
+        MemberDTO member = signMapper.selectMemByNum(numMap);
+
+        return member;
+    }
+
 }

@@ -111,7 +111,7 @@
                         </button>
                         <!-- 이전 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/tempList?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '\''"
+                                th:onclick="'location.href=\'/sign/tempList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <

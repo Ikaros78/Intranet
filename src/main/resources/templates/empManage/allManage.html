@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
-    <title>일정 권한 관리</title>
+    <title>접근 권한 관리</title>
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -35,6 +36,7 @@
                 </li>
                 <li class="main"><a href="../manage/accessManage/boardManage.html">권한 관리</a>
                     <ul class="sub sub2">
+                        <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                         <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
                         <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
                         <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
@@ -43,19 +45,8 @@
             </ul>
         </div>
         <div id="container">
-            <h4 style="font-weight: bold;">게시판 권한 관리</h4>
+            <h4 style="font-weight: bold;">전체 권한 관리</h4>
             <hr>
-            <form id="dept" th:action="@{ /boardManage/list }" >
-                <span>부서</span> &nbsp
-                <select name="searchCondition" id="searchCondition">
-                    <option value="all"> 전체 </option>
-                    <th:block th:each="dept : ${ deptList }">
-                        <option th:value="${ dept.dept_code }" th:text="${ dept.dept_name }"></option>
-                    </th:block>
-                </select>&nbsp &nbsp
-                <button type="submit">검색</button>
-            </form>
-
 
             <div id="list">
                 <!--                <form id="list" th:action="@{/calendarManage/updateList}" method="post">-->
@@ -69,15 +60,16 @@
                             <th>직책</th>
                             <th>입사일자</th>
                             <th>전화번호</th>
-                            <th class="col-2">이메일</th>
-                            <th class="col-2">권한여부(부서게시판)</th>
-                            <th class="col-2">권한여부(공지사항)</th>
-                            <th class="col-1">권한 적용</th>
+                            <th>이메일</th>
+                            <th>권한여부(게시판권한)</th>
+                            <th>권한여부(인사권한)</th>
+                            <th>권한여부(일정권한)</th>
+                            <th>권한 적용</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="member : ${ memberList }">
+                        <tr th:each="member, stat : ${ memberList }">
                             <td id="mem_num" name="mem_num" th:text="${ member.mem_num }">1</td>
                             <td th:text="${ member.mem_name }">홍길동</td>
                             <td id="dept_name" name="dept_name" th:text="${ member.department.dept_name }">부서1</td>
@@ -86,22 +78,25 @@
                             <td th:text="${ member.mem_phone }">010-1234-5678</td>
                             <td th:text="${ member.mem_email }">onlyonlyonly@gmail.com</td>
 
-                            <th:block th:if="${ #lists.size(member.authorit) == 2 }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_db_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_DB_AUTH" checked></td>
                             </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == null }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" ></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getNt_db_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="NT_DB_AUTH" ></td>
                             </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_DB_ALL' }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL" checked ></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL"></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getHr_em_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="HR_EM_AUTH" checked></td>
                             </th:block>
-                            <th:block th:if="${ #lists.size(member.authorit) == 1 and member.authorit[0].auCode == 'ROLE_NT_ALL' }">
-                                <td><input type="checkbox" class="check" name="auCode" value="DB_ALL"></td>
-                                <td><input type="checkbox" class="check" name="auCode" value="NT_ALL" checked></td>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getHr_em_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="HR_EM_AUTH" ></td>
                             </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getCd_auth() != null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="CD_AUTH" checked></td>
+                            </th:block>
+                            <th:block th:if="${ authoritTypeList.get(stat.index).getCd_auth() == null }">
+                                <td><input type="checkbox" class="check" name="auCode" value="CD_AUTH" ></td>
+                            </th:block>
+
                             <td>
                                 <button type="button" class="btn" onclick="updateData(this)">적용</button>
                             </td>
@@ -120,28 +115,31 @@
         function updateData(e){
 
             let memNum = e.parentElement.parentElement.children[0].innerText;
-            let DB_ALL = e.parentElement.parentElement.children[7].children[0].checked;
-            let NT_ALL = e.parentElement.parentElement.children[8].children[0].checked;
+            let NT_DB_AUTH = e.parentElement.parentElement.children[7].children[0].checked;
+            let HR_EM_AUTH = e.parentElement.parentElement.children[8].children[0].checked;
+            let CD_AUTH = e.parentElement.parentElement.children[9].children[0].checked;
 
 
-            alert(memNum); //번호
-            alert(DB_ALL); // true
-            alert(NT_ALL); // true /false
+            // alert(memNum); //번호
+            // alert(NT_DB_AUTH); //
+            // alert(HR_EM_AUTH); // true
+            // alert(CD_AUTH); // true /false
 
             $.ajax({
-                url:"/boardManage/updateList",
+                url:"/allManage/updateList",
                 method: "POST",
                 data: {
                     memNum : memNum,
-                    db_all : DB_ALL,
-                    nt_all : NT_ALL
+                    nt_db_auth : NT_DB_AUTH,
+                    hr_em_auth : HR_EM_AUTH,
+                    cd_auth : CD_AUTH
                 },
                 success : function(data){
                     console.log(data + "성공했어");
                     if(data === "success"){
-                        alert("일정권한 적용이 성공적으로 완료되었습니다!");
+                        alert("접근권한 적용이 성공적으로 완료되었습니다!");
                     }else {
-                        alert("적용에 실패하였습니다.");
+                        alert("변경된 권한이 없습니다.");
                     }
                 },
                 error: function(data){

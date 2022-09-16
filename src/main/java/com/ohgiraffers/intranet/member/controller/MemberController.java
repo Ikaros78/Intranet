@@ -1,14 +1,15 @@
 package com.ohgiraffers.intranet.member.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.coyote.Request;
-import org.apache.coyote.Response;
+import com.ohgiraffers.intranet.common.exception.member.MemberUpdateException;
+
+import com.ohgiraffers.intranet.common.util.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ohgiraffers.intranet.common.exception.member.MemberRegistException;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import com.ohgiraffers.intranet.member.service.MemberService;
-
-import lombok.Setter;
+import com.ohgiraffers.intranet.member.service.MemberServiceImpl;
 
 @Controller
 @RequestMapping("/member")
@@ -26,9 +25,9 @@ public class MemberController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final PasswordEncoder passwordEncoder;
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
 
-    public MemberController(PasswordEncoder passwordEncoder, MemberService memberService) {
+    public MemberController(PasswordEncoder passwordEncoder, MemberServiceImpl memberService) {
         this.passwordEncoder = passwordEncoder;
         this.memberService = memberService;
     }
@@ -61,7 +60,7 @@ public class MemberController {
 
         log.info("");
         log.info("");
-        log.info("[MemberController] memberRegistInsert ============");
+        log.info("[MemberController] Starting memberRegistInsert...");
 
         // 우편번호 API를 통해 받은 데이터를 spring으로 들고 오는 코드
         String address = request.getParameter("mem_address") + " " + request.getParameter("mem_address2");
@@ -83,20 +82,20 @@ public class MemberController {
 
     /* 아이디 중복 체크 */
     @PostMapping("/checkDupId")
-    public ResponseEntity<String> checkDupId(@RequestBody MemberDTO memberDTO) throws JsonProcessingException {
+    public ResponseEntity<String> checkDupId(@RequestBody MemberDTO member) throws JsonProcessingException {
 
         log.info("");
         log.info("");
         log.info("[MEMBER CONTROLLER] Start Id Check.........");
 
         String idCheckResult = "중복된 아이디가 없습니다.";
-        log.info("[MEMBER CONTROLLER] 아이디 체크 : " + memberDTO.getMem_id());
+        log.info("[MEMBER CONTROLLER] 아이디 체크 : " + member.getMem_id());
 
-        if("".equals(memberDTO.getMem_id())){
+        if("".equals(member.getMem_id())){
             log.info("[MEMBER CONTROLLER] No Input Member Id");
             idCheckResult = "아이디를 입력해주십시오";
 
-        } else if(memberService.selectCheckMember(memberDTO.getMem_id())){
+        } else if(memberService.selectCheckMember(member.getMem_id())){
             log.info("[MEMBER CONTROLLER] Check Same Id");
             idCheckResult = "중복된 아이디입니다.";
         }
@@ -105,11 +104,51 @@ public class MemberController {
 
     }
     /* 마이페이지 개인 정보 조회 */
-    @PostMapping("/mypage")
-    public String memberInfoView(@ModelAttribute MemberDTO memberDTO, HttpServletRequest Request, RedirectAttributes attr){
+    @GetMapping("/mypage")
+    public String memberInfoView(){
 
         return "/member/mypage";
     }
+    @GetMapping("/mypageUpdate")
+    public String memberUpdatePage(){
+        return "/member/updateUserInfo";
+    }
+
+    /* 마이페이지 개인 정보 수정 */
+    @PostMapping("/mypageUpdate")
+    public String memberUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rttr) throws MemberUpdateException {
+
+        log.info("");
+        log.info("");
+        log.info("[MemberController] Starting memberUpdate....");
+
+        String address = request.getParameter("mem_address") + " " + request.getParameter("mem_address2");
+        member.setMem_address(address);
+
+        member.setMem_pw(passwordEncoder.encode(member.getMem_pw()));
+
+        log.info("[MemberController] Update MemberInfo : " + member);
+
+        memberService.memberUpdate(member);
+
+        /* 정보 수정 후 로그아웃 프로세스 진행 */
+        SessionUtil.invalidateSession(request, response);
+
+        rttr.addFlashAttribute("message", "회원정보 수정 성공. 로그인해주세요.");
+
+        return "redirect:/";
+
+    }
+
+//    /* 마이페이지 비밀번호 확인 팝업창 */
+//    @GetMapping("/checkPwd")
+//    public String getCheckPwd(){
+//
+//        return "/member/checkPwd";
+//    }
+
+
+
 
 
 }

@@ -1,7 +1,6 @@
 package com.ohgiraffers.intranet.config;
 
 import com.ohgiraffers.intranet.member.service.AuthenticationService;
-import com.ohgiraffers.intranet.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,24 +48,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-               // notice 게시판 접근 권한
-                .mvcMatchers("/notice/**").authenticated() // 개별 권한을 주겠다는 뜻.
-                .antMatchers("/notice/**").hasRole("ALL_ALL")
-                .antMatchers("/notice/**").hasRole("NT_ALL")
-               // calender 게시판 접근 권한
-                .mvcMatchers("/calender/**").authenticated()
-                .mvcMatchers("/calender/**").hasRole("CD_DEPT")
-                .mvcMatchers("/calender/**").hasRole("CD_ALL")
-                .mvcMatchers("/calender/**").hasRole("ALL_ALL")
-               // emplManage 게시판 접근 권한
-                .mvcMatchers("/emplManage/**").hasRole("EM_READ")
-                .mvcMatchers("/emplManage/**").hasRole("EM_ALL")
-                .mvcMatchers("/emplManage/**").hasRole("ALL_ALL")
+                .antMatchers("/", "/member/**", "/common/**").permitAll()
+                // notice 게시판 접근 권한
+//                .antMatchers("/notice/news/list/**", "/notice/gallery/**")
+//                .hasAnyAuthority("ROLE_NT_ALL", "ROLE_ALL_ALL")
+                // calendar 게시판 접근 권한
+//                .antMatchers("/calendar/main/**")
+//                .hasAnyAuthority("ROLE_CD_DEPT", "ROLE_CD_ALL", "ROLE_ALL_ALL")
+                // emplManage 게시판 접근 권한
+//                .antMatchers("/calendarManage/**", "/accessManage/**")
+//                .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
+//                .anyRequest().authenticated()
                // sign 게시판 접근 권한
                // board 게시판 접근 권한
                // authorManage 게시판 접근 권한
 
-                .anyRequest().permitAll()
                 // 추후 업로드 예정입니다 08/30 19시 35분.
 
            .and()
@@ -97,10 +93,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
                     .userDetailsService(userDetailsService()) // 사용자 정보를 받음.
 
+
                 //예외처리 핸들링
                .and()
                     .exceptionHandling()
                     .accessDeniedPage("/common/denied.html");
+
 ;    }
 
 

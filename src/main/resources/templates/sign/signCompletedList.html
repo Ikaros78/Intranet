@@ -125,7 +125,7 @@
                         </button>
                         <!-- 이전 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/completedList?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:onclick="'location.href=\'/sign/completedList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <

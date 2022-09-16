@@ -14,10 +14,10 @@
 
         <association property="writer" resultMap="memberResultMap"/>
         <association property="signForm" resultMap="signFormResultMap"/>
+        <association property="file" resultMap="signFileResultMap"/>
         <collection property="approver" resultMap="approverResultMap"/>
         <collection property="receiver" resultMap="receiverResultMap"/>
         <collection property="referencer" resultMap="referencerResultMap"/>
-        <collection property="fileList" resultMap="signFileResultMap"/>
     </resultMap>
 
     <resultMap type="ApproverDTO" id="approverResultMap">
@@ -237,6 +237,8 @@
               , FM.MEM_NAME RECEIVERNAME
               , G.REFERENCER_NO
               , GM.MEM_NAME REFERENCERNAME
+              , SF.SF_ORIGIN_NAME
+              , SF.SF_SAVE_NAME
           FROM SI_SIGN A
           JOIN MEMBER B ON (A.SIGN_WRITER = B.MEM_NUM)
           JOIN DEPARTMENT D ON(B.DEPT_CODE = D.DEPT_CODE)
@@ -247,6 +249,7 @@
           LEFT JOIN MEMBER FM ON(F.RECEIVER_NO = FM.MEM_NUM)
           LEFT JOIN REFERENCER G ON(A.SIGN_NO = G.SIGN_NO)
           LEFT JOIN MEMBER GM ON(G.REFERENCER_NO = GM.MEM_NUM)
+          LEFT JOIN SF_SIGN_FILE SF ON(SF.SIGN_NO = A.SIGN_NO)
          WHERE A.SIGN_NO = #{ signNo }
     </select>
 

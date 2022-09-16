@@ -107,10 +107,15 @@
                                         <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
                                     </tr>
                                     <tr>
-                                        <td th:text="${signDetail.signContent}" th:colspan="4"></td>
+                                        <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
                                     </tr>
                                     <tr>
-                                        <td th:colspan="4">파일이 여기로</td>
+                                        <td th:colspan="4">
+                                            <a th:if="${signDetail.file.originName != null}" class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
+                                                <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
+                                                <span th:text="${ signDetail.file.originName }"></span>
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

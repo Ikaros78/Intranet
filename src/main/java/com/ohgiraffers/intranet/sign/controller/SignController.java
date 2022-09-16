@@ -284,7 +284,36 @@ public class SignController {
     }
 
     @PostMapping("/registForm")
-    public ModelAndView resignRegistForm(ModelAndView mv, @RequestParam(name="originName", required = false)MultipartFile originName, HttpServletRequest request, @AuthenticationPrincipal User user) throws FileNotFoundException, SignApproveException {
+    public ModelAndView resignRegistForm(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        int mem_num = userInfo.getMem_num();
+
+        String formCode = request.getParameter("formCode");
+        String title = request.getParameter("signTitle");
+        String content = request.getParameter("signContent");
+
+        SignFormDTO selectForm = signService.selectFormByCode(formCode);
+
+        String deptName = memberService.selectDeptByNum(mem_num);
+
+        Map<String , Object> formMap = new HashMap<>();
+        formMap.put("userInfo", userInfo);
+        formMap.put("selectForm", selectForm);
+        formMap.put("deptName", deptName);
+        formMap.put("title", title);
+        formMap.put("content", content);
+
+        mv.addObject("formMap", formMap);
+
+        mv.setViewName("sign/resignRegistForm");
+
+        return mv;
+    }
+
+    @PostMapping("/registSign")
+    public ModelAndView registSign(ModelAndView mv, @RequestParam(name="originName", required = false)MultipartFile originName, HttpServletRequest request, @AuthenticationPrincipal User user) throws FileNotFoundException, SignApproveException {
 
         String writer = request.getParameter("signWriter");
         String formCode = request.getParameter("signFormCode");
@@ -389,9 +418,7 @@ public class SignController {
 
         }
 
-
-
-        mv.setViewName("redirect:/sign/waitingList");
+        mv.setViewName("redirect:/sign/requestList");
 
         return mv;
     }

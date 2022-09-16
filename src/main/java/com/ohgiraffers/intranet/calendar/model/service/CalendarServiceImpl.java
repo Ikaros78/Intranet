@@ -2,7 +2,6 @@ package com.ohgiraffers.intranet.calendar.model.service;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.calendar.model.dao.CalendarMapper;
 import com.ohgiraffers.intranet.calendar.model.dto.CalendarDTO;
-import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;

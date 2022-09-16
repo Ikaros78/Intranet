@@ -140,12 +140,12 @@ public class MemberController {
 
     }
 
-    /* 마이페이지 비밀번호 확인 팝업창 */
-    @GetMapping("/checkPwd")
-    public String getCheckPwd(){
-
-        return "/member/checkPwd";
-    }
+//    /* 마이페이지 비밀번호 확인 팝업창 */
+//    @GetMapping("/checkPwd")
+//    public String getCheckPwd(){
+//
+//        return "/member/checkPwd";
+//    }
 
 
 

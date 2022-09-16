@@ -31,4 +31,10 @@ public interface EmpMapper {
 
     /* 인사 발령 리스트 조회 */
     List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
+
+    /* 인사 발령 삭제(값 되돌리기) */
+    int hrDelete(int appointment);
+
+
+    int updateMember(int mem_num, String dept_rank, String dept_code);
 }

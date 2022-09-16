@@ -31,7 +31,8 @@
         <result property="date" column="PA_DATE"/>
         <result property="contents" column="PA_CONTENTS"/>
         <result property="bef_rank" column="PA_BEF_RANK"/>
-        <result property="bef_dept" column="PA_BEF_DEPT"/>
+        <result property="bef_name" column="PA_BEF_NAME"/>
+        <result property="bef_code" column="PA_BEF_CODE"/>
         <result property="mem_num" column="MEM_NUM"/>
 
         <association property="dept" resultMap="deptResultMap"/>
@@ -144,7 +145,8 @@
         , PA_DATE
         , PA_CONTENTS
         , PA_BEF_RANK
-        , PA_BEF_DEPT
+        , PA_BEF_NAME
+        , PA_BEF_CODE
         , MEM_NUM
         )
         VALUES
@@ -154,7 +156,8 @@
         , #{ date }
         , #{ contents }
         , #{ bef_rank }
-        , #{ bef_dept }
+        , #{ bef_name }
+        , #{ bef_code }
         , #{ mem_num }
         )
     </insert>
@@ -192,10 +195,12 @@
              , A.PA_DATE
              , A.MEM_NUM
              , A.PA_BEF_RANK
-             , A.PA_BEF_DEPT
+             , A.PA_BEF_NAME
+             , A.PA_BEF_CODE
              , A.PA_CONTENTS
              , D.MEM_NAME
              , D.DEPT_RANK
+             , D.DEPT_CODE
              , E.DEPT_NAME
         FROM ( SELECT ROWNUM RNUM
                     , B.PA_NO
@@ -203,7 +208,8 @@
                     , B.PA_DATE
                     , B.MEM_NUM
                     , B.PA_BEF_RANK
-                    , B.PA_BEF_DEPT
+                    , B.PA_BEF_NAME
+                    , B.PA_BEF_CODE
                     , B.PA_CONTENTS
                FROM (SELECT
                                C.PA_NO
@@ -211,7 +217,8 @@
                              , C.PA_DATE
                              , C.MEM_NUM
                              , C.PA_BEF_RANK
-                             , C.PA_BEF_DEPT
+                             , C.PA_BEF_NAME
+                             , C.PA_BEF_CODE
                              , C.PA_CONTENTS
                      FROM PA_PERSONNER_APPOINTMENT C
                      <where>
@@ -237,5 +244,18 @@
             ORDER BY 1 ASC
     </select>
 
+    <!-- 인사 발령 삭제(값 되돌리기) -->
+    <update id="updateMember">
+        UPDATE MEMBER
+        SET DEPT_RANK = #{ dept_rank }
+          , DEPT_CODE = #{ dept_code }
+        WHERE MEM_NUM = #{ mem_num }
+    </update>
+
+
+    <delete id="hrDelete">
+        DELETE FROM PA_PERSONNER_APPOINTMENT
+        WHERE PA_NO = #{ no }
+    </delete>
 
 </mapper>

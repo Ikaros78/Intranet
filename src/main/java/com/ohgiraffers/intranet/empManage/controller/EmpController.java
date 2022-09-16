@@ -132,9 +132,11 @@ public class EmpController {
     public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request){
 
         String bef_rank = request.getParameter("bef_rank");
-        String bef_dept = request.getParameter("bef_dept");
+        String bef_name = request.getParameter("bef_name");
+        String bef_code = request.getParameter("bef_code");
         log.info("bef_rank 값 확인 : " + bef_rank);
-        log.info("bef_dept 값 확인 : " + bef_dept);
+        log.info("bef_name 값 확인 : " + bef_name);
+        log.info("bef_code 값 확인 : " + bef_code);
 
         String dept_rank = request.getParameter("dept_rank");
         String dept_code = request.getParameter("dept_code");
@@ -177,6 +179,30 @@ public class EmpController {
         log.info("확인용2 : " + String.valueOf(result));
 
         return result;
+    }
+
+    @GetMapping("/hrDelete")
+    public String hrDelete(HttpServletRequest request){
+
+        int no = Integer.parseInt(request.getParameter("no")); // 발령 전 직급 테이블 넘버
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+        String dept_rank = request.getParameter("bef_rank");
+        String dept_code = request.getParameter("dept_code");
+
+        log.info("값 가져오나요 : " + no + " " + mem_num + dept_rank + dept_code);
+
+        int result = empService.updateMember(mem_num, dept_rank, dept_code);
+
+        if (result > 0){
+
+            int result2 = empService.hrDelete(no);
+        }
+
+
+
+
+
+        return "redirect:/emp/hrList";
     }
 
 

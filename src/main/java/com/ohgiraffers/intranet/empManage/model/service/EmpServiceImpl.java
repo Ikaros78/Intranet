@@ -81,5 +81,33 @@ public class EmpServiceImpl implements EmpService {
         return appointmentList;
     }
 
+    @Override
+    public int hrDelete(int no) {
+
+        int result = empMapper.hrDelete(no);
+
+        return result;
+    }
+
+
+    @Override
+    @Transactional
+    public int updateMember(int mem_num, String dept_rank, String dept_code) {
+
+        int result = empMapper.updateMember(mem_num, dept_rank, dept_code);
+
+        return result;
+    }
+
+    /* 인사 발령 삭제(값 되돌리기) */
+//    @Override
+//    @Transactional
+//    public int hrDelete(AppointmentDTO appointment, int no) {
+//
+//        int result = empMapper.hrDelete(appointment, no);
+//
+//        return result;
+//    }
+
 
 }

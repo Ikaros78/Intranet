@@ -12,7 +12,8 @@ public class AppointmentDTO {
     private Date date;
     private String contents;
     private String bef_rank;
-    private String bef_dept;
+    private String bef_name;
+    private String bef_code;
     private int mem_num;
     private MemberDTO member;
     private DepartmentDTO dept;
@@ -20,13 +21,14 @@ public class AppointmentDTO {
     public AppointmentDTO() {
     }
 
-    public AppointmentDTO(int no, String category, Date date, String contents, String bef_rank, String bef_dept, int mem_num, MemberDTO member, DepartmentDTO dept) {
+    public AppointmentDTO(int no, String category, Date date, String contents, String bef_rank, String bef_name, String bef_code, int mem_num, MemberDTO member, DepartmentDTO dept) {
         this.no = no;
         this.category = category;
         this.date = date;
         this.contents = contents;
         this.bef_rank = bef_rank;
-        this.bef_dept = bef_dept;
+        this.bef_name = bef_name;
+        this.bef_code = bef_code;
         this.mem_num = mem_num;
         this.member = member;
         this.dept = dept;
@@ -72,12 +74,20 @@ public class AppointmentDTO {
         this.bef_rank = bef_rank;
     }
 
-    public String getBef_dept() {
-        return bef_dept;
+    public String getBef_name() {
+        return bef_name;
     }
 
-    public void setBef_dept(String bef_dept) {
-        this.bef_dept = bef_dept;
+    public void setBef_name(String bef_name) {
+        this.bef_name = bef_name;
+    }
+
+    public String getBef_code() {
+        return bef_code;
+    }
+
+    public void setBef_code(String bef_code) {
+        this.bef_code = bef_code;
     }
 
     public int getMem_num() {
@@ -112,7 +122,8 @@ public class AppointmentDTO {
                 ", date=" + date +
                 ", contents='" + contents + '\'' +
                 ", bef_rank='" + bef_rank + '\'' +
-                ", bef_dept='" + bef_dept + '\'' +
+                ", bef_name='" + bef_name + '\'' +
+                ", bef_code='" + bef_code + '\'' +
                 ", mem_num=" + mem_num +
                 ", member=" + member +
                 ", dept=" + dept +

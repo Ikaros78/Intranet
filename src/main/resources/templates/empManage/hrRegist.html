@@ -17,7 +17,7 @@
                     <button type="button" id="send">검색</button>
                 </td>
                 <th>직원명</th>
-                <td id="name" class="greyBox"></td>
+                <td id="name" class="greyBox"><p class='pGrey' id='pName'></p></td>
             </tr>
             <tr>
                 <th>발령구분</th>
@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <th>직급</th>
-                <td id="rank" class="greyBox"></td>
+                <td id="rank" class="greyBox"><p class='pGrey' id='pDeptRank'></p></td>
                 <th>발령직급</th>
                 <td>
                     <select name="dept_rank" id="dept_rank">
@@ -46,7 +46,7 @@
             </tr>
             <tr>
                 <th>부서</th>
-                <td id="dept_name" class="greyBox"></td>
+                <td id="dept_name" class="greyBox"><p class='pGrey' id='pDeptName'></p></td>
                 <th>발령부서</th>
                 <td><select name="dept_code" id="dept_code">
                     <option value="select">선택</option>
@@ -63,7 +63,8 @@
             </tr>
         </table>
             <input type="hidden" name="bef_rank" id="bef_rank">
-            <input type="hidden" name="bef_dept" id="bef_dept">
+            <input type="hidden" name="bef_name" id="bef_name">
+            <input type="hidden" name="bef_code" id="bef_code">
         <button type="submit" id="save">저장</button>
     </form>
     <script>
@@ -77,16 +78,19 @@
                type: "GET",
                contentType: "application/json;charset=UTF-8",
                dataType: "json",
+                async:true,
                success: function(data){
 
                    console.log('data 나오나여 : ' + data)
+                   $("#pName").text(data.mem_name);
+                   $("#pDeptRank").text(data.dept_rank);
+                   $("#pDeptName").text(data.department.dept_name);
 
-                   $("#name").append("<p class='pGrey' id='pName'>" + data.mem_name + "</p>");
-                   $("#rank").append("<p class='pGrey'>" + data.dept_rank + "</p>");
-                   $("#dept_name").append("<p class='pGrey'>" + data.department.dept_name + "</p>");
+                   // $("#dept_name").append("<p class='pGrey'>" + data.department.dept_name + "</p>");
                    //input hidden에 값 담기 위해 지정해줌
                    $("#bef_rank").val(data.dept_rank);
-                   $("#bef_dept").val(data.department.dept_name);
+                   $("#bef_name").val(data.department.dept_name);
+                   $("#bef_code").val(data.dept_code);
                } ,
                 error: function(error){
                    console.log('에러 발생했어여ㅠ.. ' + error);

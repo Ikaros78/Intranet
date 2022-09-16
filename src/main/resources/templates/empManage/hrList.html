@@ -56,7 +56,7 @@
                 </form>
                 <div class="btnArea">
                     <button onclick="openPop()">발령등록</button>
-                    <button type="button" id="del">발령취소</button>
+                    <button type="button" onclick="hrDelete()">발령취소</button>
                 </div>
                         <table id="hrTable">
                             <thead>
@@ -72,18 +72,20 @@
                                     <th>비고</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbodyTest">
                                 <tr th:each="appoint : ${ appointList }">
 <!--                                    <td><input type="checkbox" name="chkList"></td>-->
                                     <td id="inputAppend"></td>
-                                    <td th:text="${ appoint.no }"></td>
+                                    <td id="appNo" th:text="${ appoint.no }"></td>
                                     <td th:text="${ appoint.category }"></td>
                                     <td th:text="${ appoint.date }"></td>
                                     <td th:text="${ appoint.mem_num }"></td>
                                     <td th:text="${ appoint.member.mem_name }"></td>
-                                    <td><span th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
-                                    <td><span th:text="${ appoint.bef_dept }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
+                                    <td><span class="rank" th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
+                                    <td><span class="dept" th:text="${ appoint.bef_name }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
                                     <td th:text="${ appoint.contents }"></td>
+                                    <td th:text="${ appoint.bef_code }" style="display: none;"></td>
+<!--                                    <input type="hidden" th:value="${ appoint.member.dept_code }" name="dept_code">-->
                                 </tr>
                             </tbody>
                         </table>
@@ -107,12 +109,57 @@
             }
 
             // 체크 박스 가장 상위만 체크 가능하도록
-                $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+            $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkBox' id='chkBox'/>");
+
+            // 체크 박스 체크 된 행의 no값 Delete로 넘기기
+            function hrDelete(){
+
+                let query = 'input[name="chkBox"]:checked';
+                let selectedElements = document.querySelectorAll(query);
+                let selectedElementsCnt = selectedElements.length;
+                // let no = $("tbody tr:first-child #appNo").value();
+                // let no = document.getElementsByTagName("td")[val].childNodes[1].nodeValue;
+                let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
+
+                    let test = no[0].getElementsByTagName("td");
+                    let test2 = no[0].getElementsByClassName("rank");
+                    // let test3 = no[0].getElementsByClassName("dept");
+
+                    let appNo = test[1].firstChild.data;
+                    let mem_num = test[4].firstChild.data;
+                    let bef_rank = test2[0].firstChild.data;
+                    // let bef_dept = test3[0].firstChild.data;
+                    let dept_code = test[9].firstChild.data;
+                // alert(appNo);
 
 
-                // $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+                if(selectedElementsCnt == 0){
+                    alert("발령 취소할 항목을 선택해주세요");
+                    return false;
+                } else {
+
+                    if(confirm("발령 취소하시겠습니까?")){
+
+                        // alert(no);
+                        location.href = "/emp/hrDelete?no=" + appNo + "&mem_num=" + mem_num + "&bef_rank=" + bef_rank + "&dept_code=" + dept_code;
+                    }
+                }
 
 
+            }
+
+
+            // $(document).ready(function (){
+            //     let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
+            //     for(let i = 0; i < no.length(); i++)
+            //     {
+            //         let test = no[i].getElementsByTagName("td");
+            //     }
+            // });
+
+
+                    // location.href = "/emp/hrDelete?checkArr=" + checkArr;
 
 
 

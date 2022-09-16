@@ -8,7 +8,6 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -28,7 +27,6 @@ import java.util.*;
 @RequestMapping(value = {"/notice/*"})
 public class NoticeController {
 
-//    @Value("src/main/resources")
     private String IMAGE_DIR;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final NoticeService noticeService;

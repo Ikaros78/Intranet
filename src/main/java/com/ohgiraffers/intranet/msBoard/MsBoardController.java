@@ -3,14 +3,17 @@ package com.ohgiraffers.intranet.msBoard;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +35,6 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 import com.ohgiraffers.intranet.msBoard.model.service.MsBoardService;
-import com.ohgiraffers.intranet.notice.model.dto.GalleryFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 
 @Controller
 @RequestMapping(value = { "/ms/*" })
@@ -210,6 +211,8 @@ public class MsBoardController {
 
 		msBoardService.MsboardInsert(msBoardDTO);
 
+		msBoardService.recpNameUpdate(msBoardDTO);
+		
 		// 저장 경로 설정
 		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
 		String fileUploadDirectory = filePath + "/msFile";
@@ -296,41 +299,100 @@ public class MsBoardController {
 
 	@GetMapping(value = "getMemberList", produces = "application/json; charset-UTF-8")
 	@ResponseBody
-	private List<MsMemberListDTO> getMemberList(HttpServletRequest request) throws Exception {
+	public List<MsMemberListDTO> getMemberListt(@RequestParam String data){
 
-		String dept_name = request.getParameter("data");
-		System.out.println("deptName 확인 : " + dept_name);
-		List<MsMemberListDTO> result = msBoardService.getMemberList(dept_name);
+		
+		System.out.println("deptName 확인 : " + data);
+		System.out.println("msBoardService 확인 : " + msBoardService);
+		List<MsMemberListDTO> result = msBoardService.getMemberListt(data);
 
+		System.out.println("result ============" + result);
+		
 		return result;
 	}
 
 	@GetMapping(value = "getMemberListSecond", produces = "application/json; charset-UTF-8")
 	@ResponseBody
-	private List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
+	public List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
 
 		String name = request.getParameter("data");
+		
+		System.out.println("namenamename"+ name);
 
 		List<MsMemberListDTO> result = msBoardService.getMemberListSecond(name);
 
 		return result;
 	}
 
-//	
-//	@Transactional
-//    @GetMapping("/recpDelete")
-//    public String recpBoardDelete(@ModelAttribute List<MsBoardDTO> msBoard, HttpServletRequest request){
-//
-//        int msNo = Integer.parseInt(request.getParameter("msNo"));
-//
-//        System.out.println("msBoard + + " + msBoard);
-//        //요기다가 update 문 작성해서 삭제여부 변경해준 다음에 
+	
+//	@ResponseBody
+//	@PostMapping(value = "recpDelete")
+//    public String recpBoardDelete(String arr) throws ParseException{
+
+//		 string 배열을 가져올건 list  
+//		List<String> list = new ArrayList<>();
+//		String[] arrList = msNo.split(",");
+//		list.addAll(Arrays.asList(arrList));
+//		
+//		System.out.println("msNomsNo++++"+ list);
+//		
+//		List<Integer> newList = new ArrayList<>();
+//		for(String i : list) {
+//			
+//			newList.add(Integer.parseInt(i));
+//			
+//			System.out.println(newList);
+//		}
+//		
+//		System.out.println("newListnewList" + newList);
+//		
+//		System.out.println(msNo);
+
+//		for(int i = 0; i < msNo.indexOf(i))
+		
+//		JSONParser jsonparse = new JSONParser();
+//		
+//		JSONArray jsonArray = (JSONArray) jsonparse.parse(arr);
+//		
+//		List<String> list = new ArrayList<String>();
+
+//		for (int i=0; i<jsonArray.size(); i++) {
+//		    list.add( Param.getString(i) );
+//		}
+//		
+//		
+//		for(int i = 0; i < Param.size(); i++) {
+//			
+//			Param.add(Integer.parseInt(i));
+//			
+//			System.out.println(Param);
+//		}
+//		
+
+//		제이슨 배열을 이름설정해서  ( 배열을) 파스에 파스 리스트
+//()불러온 값		
+//		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//        int msNo = Integer.parseInt(response("msNo"));
+
+//        System.out.println("msBoard +  " + msBoard);
+        //요기다가 update 문 작성해서 삭제여부 변경해준 다음에 
 //        msBoardService.recpYNMsBoard(msBoard); // 값
-//        
-//        // 받은사람 삭제 여부 및 보낸사람 삭제여부가 둘다 Y 이면 삭제를 진행하고  
+        
+        // 받은사람 삭제 여부 및 보낸사람 삭제여부가 둘다 Y 이면 삭제를 진행하고  
 //        msBoardService.recpBoardDelete(msBoard);
-//
-//        return "redirect:/ms/recp";
+
+//        return "a";
 //    }
 //    
 //    @GetMapping("/sendDelete")

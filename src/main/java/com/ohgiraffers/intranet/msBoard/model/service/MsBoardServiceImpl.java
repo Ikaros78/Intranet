@@ -1,12 +1,10 @@
 package com.ohgiraffers.intranet.msBoard.model.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
@@ -15,15 +13,17 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
-@Service
+
+@Service("msBoardService")
 public class MsBoardServiceImpl implements MsBoardService {
 
 	private MsBoardMapper msBoardMapper;
 
 	@Autowired
-	private MsBoardServiceImpl(MsBoardMapper msBoardMapper) {
+	public MsBoardServiceImpl(MsBoardMapper msBoardMapper) {
 
 		this.msBoardMapper = msBoardMapper;
+	
 	}
 
 //	받은 쪽지함 조회용 메소드 
@@ -82,6 +82,8 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	// 쪽지함 보내기용 메소드
 
+	
+	
 
 	public int MsboardInsert(MsBoardDTO msBoardDTO) {
 
@@ -96,6 +98,11 @@ public class MsBoardServiceImpl implements MsBoardService {
 		int result = msBoardMapper.MsFileInsert(msFileDTO);
 
 		return result;
+	}
+	
+	public void recpNameUpdate(MsBoardDTO msBoardDTO) {
+		
+		msBoardMapper.recpNameUpdate(msBoardDTO);
 	}
 
 	// 보낸 쪽지함 상세 페이지 조회용 메소드
@@ -115,12 +122,22 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return msDetail;
 
 	}
-
+	
 	// ajax 용 비동기 1
 	@Override
-	public List<MsMemberListDTO> getMemberList(String dept_name) throws Exception {
+	public List<DepartmentDTO> getdeptList() throws Exception {
+		
+		List<DepartmentDTO> deptList = msBoardMapper.getdeptList();
+		
+		return deptList;
+	}
 
-		List<MsMemberListDTO> memberList = msBoardMapper.getMemberList(dept_name);
+	// ajax 용 비동기 2
+	@Override
+	public List<MsMemberListDTO> getMemberListt(String data) {
+		System.out.println("data 확인 : " + data);
+		
+		List<MsMemberListDTO> memberList = msBoardMapper.getMemberListt(data);
 
 		return memberList;
 
@@ -134,15 +151,6 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		return memberList;
 
-	}
-
-	// ajax 용 비동기 2
-	@Override
-	public List<DepartmentDTO> getdeptList() throws Exception {
-
-		List<DepartmentDTO> deptList = msBoardMapper.getdeptList();
-
-		return deptList;
 	}
 
 	// 삭제용 메소드

@@ -109,16 +109,17 @@
 										, C.MS_RECP_NUM
 										, C.MS_CONTENTS
 										, C.MS_SEND_NUM
+<!-- 										, D.MEM_NUM -->
 									FROM  MS_BOARD C
-									<if test="searchCondition == 'writer'">
-									    JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
-									</if>
+<!-- 									<if test="searchCondition == 'writer'"> -->
+<!-- 									    JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM) -->
+<!-- 									</if> -->
 									<where>
 										<if test="searchCondition == 'msTitle'">
-							                AND C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
+							                 C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
 										</if>
 										<if test="searchCondition == 'sendName'">
-											AND C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+											 C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 										</if>
 											AND   C.MS_READ_YN = 'N'
 											AND   C.MEM_NUM = C.MS_RECP_NUM
@@ -393,7 +394,7 @@
 	</select>
 
 
-	<select id="getMemberList" resultMap="memberResultMap">
+	<select id="getMemberListt" resultMap="memberResultMap">
 		SELECT
 		A.MEM_NUM
 		, A.MEM_NAME
@@ -402,7 +403,7 @@
 		FROM MEMBER A
 		JOIN DEPARTMENT B ON(A.DEPT_CODE =
 		B.DEPT_CODE)
-		WHERE B.DEPT_NAME = #{ dept_name }
+		WHERE B.DEPT_NAME = #{ deptName }
 	</select>
 	
 	<select id="getMemberListSecond" resultMap="memberResultMap">
@@ -416,6 +417,15 @@
 		B.DEPT_CODE)
 		WHERE A.MEM_NAME = #{ name }
 	</select>
+	
+	<update id="recpNameUpdate">
+	 UPDATE MS_BOARD A 
+		SET A.MS_RECP_NAME 
+        = ( SELECT B.MEM_NAME
+       FROM MEMBER B
+      WHERE A.MS_RECP_NUM = B.MEM_NUM)
+	</update>
+	
 	
 	
 	<!-- 진짜 삭제 버튼 지우기  -->

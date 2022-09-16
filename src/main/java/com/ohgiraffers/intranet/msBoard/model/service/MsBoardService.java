@@ -9,6 +9,7 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
+
 public interface MsBoardService {
 
 	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
@@ -29,11 +30,13 @@ public interface MsBoardService {
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
 
-	List<MsMemberListDTO> getMemberList(String dept_name) throws Exception;
+	List<MsMemberListDTO> getMemberListt(String data);
 
 	List<DepartmentDTO> getdeptList() throws Exception;
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
+
+	void recpNameUpdate(MsBoardDTO msBoardDTO);
 
 //	void recpYNMsBoard(List<MsBoardDTO> msBoard);
 //

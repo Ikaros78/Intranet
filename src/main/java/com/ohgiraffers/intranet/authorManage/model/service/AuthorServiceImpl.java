@@ -23,36 +23,6 @@ public class AuthorServiceImpl implements AuthorService{
         this.authorMapper = authorMapper;
         this.memberMapper = memberMapper;
     }
-    
-    /* 게시판 권한 관리를 위한 사원번호별 권한 불러오기*/
-
-//    @Override
-//    public List<MemberDTO> selectBoardAuthority(String searchValue) {
-//
-//        List<MemberDTO> memberList = memberMapper.selectBoardAuthority(searchValue);
-//
-//        return memberList;
-//    }
-
-    /* 게시판 권한 관리를 위해 사원번호별로 일단 삭제하기 */
-//    @Transactional
-//    @Override
-//    public int deleteBoardAuthority(int memNum) {
-//
-//        int result = authorMapper.deleteBoardAuthority(memNum);
-//
-//        return result;
-//    }
-
-//    @Transactional
-//    @Override
-//    public int insertBoardAuthoirty(Map<String, Object> map) {
-//
-//
-//
-//        return 0;
-//    }
-
 
     /* 게시판 권한 관리를 위해 회원 조회용 */
     @Override
@@ -95,5 +65,14 @@ public class AuthorServiceImpl implements AuthorService{
         List<MemberDTO> memberList = memberMapper.selectMemberListForEmpManage();
 
         return memberList;
+    }
+
+
+    @Override
+    public int deleteEmpAuthority(int memNum) {
+
+        int result = memberMapper.deleteEmpAuthority(memNum);
+
+        return result;
     }
 }

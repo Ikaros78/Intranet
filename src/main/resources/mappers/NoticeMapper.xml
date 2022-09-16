@@ -398,7 +398,7 @@
         SET A.NW_VIEWS = (SELECT B.NW_VIEWS
                           FROM NW_NEWS B
                           WHERE B.NW_NO = #{ no }
-                         ) + 1
+                         ) + 15
         WHERE A.NW_NO = #{ no }
     </update>
 

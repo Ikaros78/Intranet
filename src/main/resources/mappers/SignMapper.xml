@@ -227,6 +227,7 @@
               , D.DEPT_NAME
               , A.SIGN_CONTENT
               , A.REG_DATE
+              , C.SF_CODE
               , C.SF_NAME
               , E.APPROVER_NO
               , E.IS_APPROVED
@@ -718,15 +719,6 @@
         ORDER BY 1 ASC
     </select>
 
-    <select id="selectAllMember" resultMap="memberResultMap">
-        SELECT
-                A.MEM_NUM
-              , A.MEM_NAME
-              , A.DEPT_CODE
-              , A.DEPT_RANK
-          FROM MEMBER A
-    </select>
-
     <select id="selectTotalProgressCount" parameterType="hashmap" resultType="_int">
         SELECT
         COUNT(*)
@@ -1063,4 +1055,12 @@
         ORDER BY 1 ASC
     </select>
 
+    <select id="selectMemByDeptCode" resultMap="memberResultMap" parameterType="String">
+        SELECT
+            A.MEM_NAME
+          , A.DEPT_RANK
+          , A.MEM_NUM
+          FROM MEMBER A
+         WHERE A.DEPT_CODE = #{ code }
+    </select>
 </mapper>

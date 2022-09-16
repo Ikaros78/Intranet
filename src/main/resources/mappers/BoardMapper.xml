@@ -102,24 +102,21 @@
         </where>
     </select>
 
-<!--    <select id="selectDetail" parameterType="_int" resultMap="noticeListResultMap">-->
-<!--        SELECT-->
-<!--            A.NT_NO-->
-<!--             , A.NT_TITLE-->
-<!--             , B.MEM_NAME-->
-<!--             , A.NT_DATE-->
-<!--             , C.DEPT_NAME-->
-<!--             , A.NT_VIEWS-->
-<!--             , D.NTF_ORIGIN_NAME-->
-<!--             , A.MEM_NUM-->
-<!--             , A.NT_CONTENTS-->
-<!--             , D.NTF_SAVE_NAME-->
-<!--        FROM NT_NOTICE A-->
-<!--                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)-->
-<!--                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)-->
-<!--                 LEFT JOIN NTF_NOTICE_FILE D ON(A.NT_NO = D.NT_NO)-->
-<!--        WHERE A.NT_NO = #{ no }-->
-<!--    </select>-->
+    <select id="selectBoardDetail" parameterType="String" resultMap="boardResultMap">
+        SELECT
+            A.FR_NO
+             , A.FR_TITLE
+             , B.MEM_NAME
+             , A.FR_DATE
+             , C.DEPT_NAME
+             , A.FR_VIEWS
+             , A.MEM_NUM
+             , A.FR_CONTENTS
+        FROM FR_FREE A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+        WHERE A.FR_NO = #{ no }
+    </select>
 
 
         <insert id="freeinsert" parameterType="com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO">
@@ -132,7 +129,7 @@
            ,A.FR_CONTENTS
            ,A.MEM_NUM
            ) VALUES(
-                    SEQ_FR_NO.NEXTVAL
+                    'FR' || SEQ_FR_NO.NEXTVAL
                         ,#{title}
                         ,SYSDATE
                         ,DEFAULT
@@ -141,5 +138,11 @@
             )
     </insert>
 
+    <update id="incresementBoardCount" parameterType="string">
+        update fr_free
+        set fr_views =  nvl(fr_views, 0) + 1
+        where fr_no = #{no}
+
+    </update>
 
 </mapper>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="UTF-8">
+  <title>자유게시판 상세조회</title>
+
+  <link rel="stylesheet" type="text/css" href="/resources/css/free/freeDetil/freeDetil.css">
+</head>
+<body>
+<hh1>자유게시판</hh1>
+<div class="frr_notice">
+  <notice>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</notice><notice>마음에 드는 게시글은 추천 버튼을 통해 추천할 수 있습니다.</notice>
+</div>
+<input id="b_writer" type="hidden" value="작성자이름">
+<hh2 id="b_title">제목이들어갈자리</hh2><section id="b_area" class="frr_viewer"></section>
+<div class="frr_bmenu">
+  <block class="frr_agree">1</block>
+</div>
+<section class="frr_reply">
+  <div class="frr_replylist">
+    <input class="frr_reply_input" placeholder="댓글을 입력하세요." type="text"><input class="frr_reply_btn" type="button" value="✎">
+  </div>
+  <div class="frr_replylist">
+    <div>
+      <span>테스트</span><span>영업팀</span><span>2022.08.13 15:46</span><input class="frr_replylist_btn" type="button" value="✎"><input class="frr_replylist_btn" type="button" value="✖">
+    </div>
+    <div>
+      <p>
+        댓글 테스트 입니다
+      </p>
+    </div>
+  </div>
+  <div class="frr_replylist">
+    <div>
+      <span>테스트</span><span>영업팀</span><span>2022.08.13 15:46</span><input class="frr_replylist_btn" type="button" value="⚑">
+    </div>
+    <div>
+      <p>
+        댓글 테스트 입니다
+      </p>
+    </div>
+  </div>
+</section>
+<div class="overlay">
+  <div id="selconf" style="margin: 100px 25%;">
+    <div class="conf_title">
+      게시글 신고
+    </div>
+    <div class="conf_description">
+      여러분의 관심과 신고가 건전하고 올바른 문화를 만듭니다.<br>
+      신고일 경우 신고자가 제재받을 수 있습니다.
+    </div>
+    <div class="conf_boardinf">
+      <p title="">
+        게시글이름
+      </p>
+      <p writer="">
+        작성자
+      </p>
+    </div>
+    <div class="conf_radio">
+      <div>
+        <input type="radio" name="conf_sel" value="1"><span>영리목적의 광고</span>
+      </div>
+      <div>
+        <input type="radio" name="conf_sel" value="1"><span>음란성/선정성 게시글</span>
+      </div>
+      <div>
+        <input type="radio" name="conf_sel" value="1"><span>도배 게시글/댓글</span>
+      </div>
+      <div>
+        <input type="radio" name="conf_sel" value="1"><span>개인정보 노출/사생활 침해</span>
+      </div>
+      <div>
+        <input type="radio" name="conf_sel" value="1"><span>기타</span>
+      </div>
+    </div>
+    <div class="conf_buttonlist">
+      <input type="button" value="신고하기" id="conf_do"><input type="button" value="취소" id="conf_exit">
+    </div>
+  </div>
+</div>
+</body>
+</html>

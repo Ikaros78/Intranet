@@ -82,7 +82,7 @@
                                         </button>
                                     <!-- 이전 페이지 버튼 -->
                                     <button
-                                            th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchName' + @{${searchList.searchName}} + '\''"
+                                            th:onclick="'location.href=\'/sign/registSelect?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchName' + @{${searchList.searchName}} + '\''"
                                             th:disabled="${selectCriteria.pageNo == 1}"
                                     >
                                         <

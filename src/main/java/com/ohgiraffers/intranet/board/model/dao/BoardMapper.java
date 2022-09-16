@@ -20,7 +20,7 @@ public interface BoardMapper {
 
     List<FreeinsertDTO> selectBoardList(SelectCriteria selectCriteria);
 
-    int incresementBoardCount(int no);
+    int incresementBoardCount(String no);
 
-    FreeinsertDTO selectBoardDetail(int no);
+    FreeinsertDTO selectBoardDetail(String no);
 }

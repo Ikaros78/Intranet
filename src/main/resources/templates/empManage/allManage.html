@@ -97,7 +97,7 @@
                                 <td><input type="checkbox" class="check" name="auCode" value="CD_AUTH" ></td>
                             </th:block>
 
-                            <td>
+                            <td sec:authorize="hasRole('ALL_AUTH')">
                                 <button type="button" class="btn" onclick="updateData(this)">적용</button>
                             </td>
                         </tr>

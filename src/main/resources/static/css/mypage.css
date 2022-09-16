@@ -1,7 +1,12 @@
 body {
     /* padding:1.5em; */
     background: #f5f5f5
+
   }
+
+#contents #sideBar{
+    float: left;
+}
   
   #infoTable table{
     margin-left: 7%;

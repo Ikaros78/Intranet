@@ -3,6 +3,7 @@ package com.ohgiraffers.intranet.calendar.controller;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
+import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,240 +2,246 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-    <meta charset="UTF-8">
-    <title>basic</title>
-    <link rel="stylesheet" th:href="@{/css/reset.css}">
-    <link rel="stylesheet" th:href="@{/css/calendarbasic.css}">
-    <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js'></script>
-    <script src='/docs/dist/demo-to-codepen.js'></script>
-    <script src="fullcalendar/lib/locales-all.js"></script>
-    <link th:href='@{/docs/dist/demo-to-codepen.css}' rel='stylesheet' />
+  <meta charset="UTF-8">
+  <title>일정관리 상세보기</title>
+  <link rel="stylesheet" th:href="@{/css/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/calendarbasic.css}">
+  <link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css' rel='stylesheet' />
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js'></script>
+  <script src='/docs/dist/demo-to-codepen.js'></script>
+  <script src="fullcalendar/lib/locales-all.js"></script>
+  <link th:href='@{/docs/dist/demo-to-codepen.css}' rel='stylesheet' />
 </head>
 <style>
-    #Update {
-        width: 1000px;
-    }
+  #Update {
+    width: 1000px;
+  }
 
-    #tb {
-        border-collapse: collapse;
-    }
+  #tb {
+    border-collapse: collapse;
+  }
 
-    #tb td {
-        border-collapse: collapse;
-        border-bottom: 0.5px solid black;
-        /* padding: 1px;
-        padding: 2px 0 2px 0; */
-        padding: 1px 1px 1px 1px;
-    }
+  #tb td {
+    border-collapse: collapse;
+    border-bottom: 0.5px solid black;
+    /* padding: 1px;
+    padding: 2px 0 2px 0; */
+    padding: 1px 1px 1px 1px;
+  }
 
-    .tname {
-        width: 120px;
-        height: 50px;
-        text-align: center;
-        background-color: #ddd;
-    }
+  .tname {
+    width: 120px;
+    height: 50px;
+    text-align: center;
+    background-color: #ddd;
+  }
 
-    .timeline {
-        width: 350px;
-    }
+  .timeline {
+    width: 350px;
+  }
 
-    .select {
-        width: 70px;
-        height: 34px;
-        padding-left: 5px;
-    }
+  .select {
+    width: 70px;
+    height: 34px;
+    padding-left: 5px;
+  }
 
-    .title {
-        width: 556px;
-        height: 30px;
-    }
+  .title {
+    width: 556px;
+    height: 30px;
+  }
 
-    .content {
-        width: 100%;
-        height: 150px;
-    }
+  .content {
+    width: 100%;
+    height: 150px;
+  }
 
-    .chch {
-        font-size: 16px;
-    }
+  .chch {
+    font-size: 16px;
+  }
 
-    .chch input {
-        width: 8px;
-        height: 8px;
-        margin-left: 10px;
-    }
+  .chch input {
+    width: 8px;
+    height: 8px;
+    margin-left: 10px;
+  }
 
-    .chek{
-        width: 8px;
-        height: 8px;
-        margin-left: 5px;
-        font-size: 10px;
+  .chek{
+    width: 8px;
+    height: 8px;
+    margin-left: 5px;
+    font-size: 10px;
 
-    }
+  }
 
-    .bton {
-        float: right;
-        border: 0px;
-        padding: 4px;
-        width: 60px;
-        height: 40px;
-        margin: 13px auto auto auto;
-        /*margin-top: 3px;*/
-    }
+  .bton {
+    float: right;
+    border: 0px;
+    padding: 4px;
+    width: 60px;
+    height: 40px;
+    margin: 13px auto auto auto;
+    /*margin-top: 3px;*/
+  }
 
-    .modify, .delete{
-        background-color: #aaa;
-        margin-right: 3px;
-    }
+  .modify, .delete{
+    background-color: #aaa;
+    margin-right: 3px;
+  }
 
-    th{
-        width: 650px;
-    }
+  th{
+    width: 650px;
+  }
 
-    span{
-        margin-bottom: 3px;
-    }
+  span{
+    margin-bottom: 3px;
+  }
 
 </style>
 
 <body>
 <div id="wrap">
-    <div th:replace="common/header.html"></div>
-    <div id="contents">
-        <div id="sideBar">
-            <h3>일정관리</h3>
-            <ul>
-                <li class="main"><a href="javascript:void(0)">일정관리</a>
-                    <ul class="sub sub1">
-                        <li><a href="/calendar/all?type=all">전체 일정</a></li>
-                        <li><a href="/calendar/all?type=dept">부서 일정</a></li>
-                        <li><a href="/calendar/all?type=solo">개인 일정</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div id="Update" style="float: left;">
-            <br><br><br><br><br>
-            <h1 class="nameUpdate">일정 상세보기</h1>
-            <br>
-            <form id="fm" method="post">
-                <input type="hidden" name="id" th:value="${cdDetail.id}">
-                <!--      <span style="margin-left: 680px;">-->
-                <!--                    생성자 :-->
-                <!--                </span>-->
-                <!--      /-->
-                <span style="margin-left: 630px" th:text="${cdDetail.wDate}">
+  <div th:replace="common/header.html"></div>
+  <div id="contents">
+    <div id="sideBar">
+      <h3>일정관리</h3>
+      <ul>
+          <li class="main"><a href="javascript:void(0)">일정관리</a>
+              <ul class="sub sub1">
+                  <li><a href="/calendar/all?type=all">전체 일정</a></li>
+                  <li><a href="/calendar/all?type=dept">부서 일정</a></li>
+                  <li><a href="/calendar/all?type=solo">개인 일정</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="Update" style="float: left;">
+      <br><br><br><br><br>
+      <h1 class="nameUpdate">일정 상세보기</h1>
+      <br>
+        <form id="fm" method="post">
+        <input type="hidden" name="id" th:value="${cdDetail.id}">
+<!--      <span style="margin-left: 680px;">-->
+<!--                    생성자 :-->
+<!--                </span>-->
+<!--      /-->
+      <span style="margin-left: 630px" th:text="${cdDetail.wDate}">
 <!--                    생성일 :-->
                 </span>
-                <hr><br>
-                <!-- 일정 테이블 -->
-                <div>
+      <hr><br>
+      <!-- 일정 테이블 -->
+            <div>
 
-                    <table id="tb" style="float: left;">
-                        <tr>
-                            <td style="border: 0;"></td>
-                            <th></th>
-                        </tr>
-                        <tr style="width: 500px;">
-                            <td class="tname">일정기간</td>
-                            <td class="timeline" style="padding-left: 15px;">
-                                <!--            2022 / 08 / 30 ~ 22/09/10-->
-                                <th:block>
-                                    <span th:text="${cdDetail.start}"></span>
-                                    ~
-                                    <span th:text="${cdDetail.end}"></span>
-                                </th:block>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tname">일정이름</td>
-                            <td style="padding-left: 15px;" th:text="${cdDetail.title}">
-                                <!--            HTML 출력화면 테스트-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tname">내용</td>
-                            <td style="padding-left: 15px;" th:text="${cdDetail.content}">
-                                <!--            내용은 이렇게 간단하게 받아야지-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tname">선택된 일정</td>
+      <table id="tb" style="float: left;">
+        <tr>
+          <td style="border: 0;"></td>
+          <th></th>
+        </tr>
+        <tr style="width: 500px;">
+          <td class="tname">일정기간</td>
+          <td class="timeline" style="padding-left: 15px;">
+<!--            2022 / 08 / 30 ~ 22/09/10-->
+              <th:block>
+                  <span th:text="${cdDetail.start}"></span>
+                  ~
+                  <span th:text="${cdDetail.end}"></span>
+              </th:block>
+          </td>
+        </tr>
+        <tr>
+          <td class="tname">일정이름</td>
+          <td style="padding-left: 15px;" th:text="${cdDetail.title}">
+<!--            HTML 출력화면 테스트-->
+          </td>
+        </tr>
+        <tr>
+          <td class="tname">내용</td>
+          <td style="padding-left: 15px;" th:text="${cdDetail.content}">
+<!--            내용은 이렇게 간단하게 받아야지-->
+          </td>
+        </tr>
+        <tr>
+          <td class="tname">선택된 일정</td>
 
-                            <td class="chch" style="padding-left: 15px;" th:switch="${cdDetail.type}">
-                                <span th:case="3">전체일정</span>
-                                <span th:case="2">부서일정</span>
-                                <span th:case="1">개인일정</span>
-                                <!--            개인일정-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="border: none;"></td>
-                            <td style="border: none;">
+          <td class="chch" style="padding-left: 15px;" th:switch="${cdDetail.type}">
+              <span th:case="3">전체일정</span>
+              <span th:case="2">부서일정</span>
+              <span th:case="1">개인일정</span>
+<!--            개인일정-->
+          </td>
+        </tr>
+        <tr>
+          <td style="border: none;"></td>
+          <td style="border: none;">
 
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </form>
-            <div style="width: 775px">
-
-
-                <button class="bton csb" ><a href="/calendar/all?type=all">취소</a></button>
-                <button class="bton modify" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}">수정</a></button>
-                <!--            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/delete(id=${cdDetail.id})}">삭제</a></button>-->
-                <!--            <button class="bton delete" onclick="deletebtn()">삭제</button>-->
-                <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }" th:onclick="removeCheck()">삭제</button>
+          </td>
+        </tr>
+      </table>
             </div>
+        </form>
+        <div style="width: 775px">
 
-            <th:block layout:fragment="script">
-                <script th:inline="javascript">
-                    // 게시글 삭제
-                    function removeCheck() {
-                        const id = [[ ${cdDetail.id} ]];
-                        if ( !confirm('삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?') ) {
-                            return false;
-                        }
 
-                        const formHtml = `
+            <button class="bton csb" onclick="goBack()">취소</button>
+            <button class="bton modify" style="padding: 0px" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/update(id=${cdDetail.id})}" style="display: block;width: 60px; line-height: 40px;">수정</a></button>
+<!--            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }"><a th:href="@{/calendar/delete(id=${cdDetail.id})}">삭제</a></button>-->
+              <!--            <button class="bton delete" onclick="deletebtn()">삭제</button>-->
+            <button class="bton delete" th:if="${#authentication.getPrincipal().getMem_num() eq cdDetail.memNum }" th:onclick="removeCheck()">삭제</button>
+        </div>
+
+                            <th:block layout:fragment="script">
+                                <script th:inline="javascript">
+                                    // 게시글 삭제
+                                    function removeCheck() {
+                                        const id = [[ ${cdDetail.id} ]];
+                                        if ( !confirm('삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?') ) {
+                                            return false;
+                                        }
+
+                                        const formHtml = `
                                   <form id="deleteForm" action="/calendar/delete?id=${id}" method="get">
                                       <input type="hidden" id="id" name="id" value="${id}" />
                                   </form>
                               `;
-                        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
-                        const form = doc.body.firstChild;
-                        document.body.append(form);
-                        document.getElementById('deleteForm').submit();
-                    }
+                                        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+                                        const form = doc.body.firstChild;
+                                        document.body.append(form);
+                                        document.getElementById('deleteForm').submit();
+                                    }
 
-                </script>
-            </th:block>
+                                </script>
+                            </th:block>
 
-            <!--/*
+        <script type="text/javascript">
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+
+              <!--/*
 
 
 
-             삭제 버튼
-                      <script>
-                          function deletebtn(){
-                              if(!confirm(id + '삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?')) {
-                                  return false;
-                              }
-                          }
-                      </script>
+               삭제 버튼
+                        <script>
+                            function deletebtn(){
+                                if(!confirm(id + '삭제하신 일정은 복구할 수 없습니다. \n 정말 삭제하시겠습니까?')) {
+                                    return false;
+                                }
+                            }
+                        </script>
 
-                          <script>
-                              const result = "${calendar.id}}"
-                              if (result === "${calendar.id}}"){
-                                  alert("캘린더 일정 삭제가 완료됐습니다.")
-                              }
-                          </script>
-            */-->
-        </div>
-
+                            <script>
+                                const result = "${calendar.id}}"
+                                if (result === "${calendar.id}}"){
+                                    alert("캘린더 일정 삭제가 완료됐습니다.")
+                                }
+                            </script>
+              */-->
     </div>
+
+  </div>
 </div>
 </body>
 

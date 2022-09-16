@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.authorManage.controller;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
-import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,12 +2,9 @@ package com.ohgiraffers.intranet.authorManage.controller;
 
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
 import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritTypeDTO;
-import com.ohgiraffers.intranet.authorManage.model.service.AuthorService;
-
 import com.ohgiraffers.intranet.authorManage.model.service.AuthorServiceImpl;
 import com.ohgiraffers.intranet.calendar.model.service.CalendarServiceImpl;
 import com.ohgiraffers.intranet.common.exception.authority.AuthorityUpdateException;
-import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,84 +17,85 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Controller
-@RequestMapping("/boardManage/*")
-public class BoardManageController {
+@RequestMapping("/allManage/*")
+public class AllManageController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final AuthorServiceImpl authorService;
-    private final CalendarServiceImpl calendarService;
 
     @Autowired
-    public BoardManageController(AuthorServiceImpl authorService, CalendarServiceImpl calendarService){
+    public AllManageController(AuthorServiceImpl authorService){
 
         this.authorService = authorService;
-        this.calendarService = calendarService;
+
     }
 
     @GetMapping("/list")
-    public ModelAndView BoardManageList(ModelAndView mv , HttpServletRequest request){
+    public ModelAndView AllManageList(ModelAndView mv , HttpServletRequest request){
 
-        String searchCondition = request.getParameter("searchCondition");
+        List<MemberDTO> memberList = authorService.selectMemberListForEmpAndAllManage();
 
-        List<MemberDTO> memberList = authorService.selectMemberListForCalendarAndBoardManage(searchCondition);
-        List<DepartmentDTO> deptList = calendarService.selectDeptList();
+        log.info("[AllManageController] memberList : " + memberList);
 
         List<AuthoritTypeDTO> authoritTypeList = new ArrayList<>();
-
-        for(int i = 0 ; i < memberList.size(); i ++){
+        for(int i = 0; i < memberList.size(); i++){
 
             AuthoritTypeDTO authoritTypeDTO = new AuthoritTypeDTO();
 
-            for(int j = 0 ; j < memberList.get(i).getAuthorit().size(); j ++){
+            for(int j = 0; j < memberList.get(i).getAuthorit().size(); j ++){
 
-                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_NT_ALL")){
-
-                    authoritTypeDTO.setNt_all("NT_ALL");
+                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_HR_EM_AUTH")){
+                    authoritTypeDTO.setHr_em_auth("HR_EM_AUTH");
                 }
-                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_DB_ALL")){
-
-                    authoritTypeDTO.setDb_all("DB_ALL");
+                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_NT_DB_AUTH")){
+                    authoritTypeDTO.setNt_db_auth("NT_DB_AUTH");
+                }
+                if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_CD_AUTH")){
+                    authoritTypeDTO.setCd_auth("CD_AUTH");
                 }
             }
             authoritTypeList.add(authoritTypeDTO);
         }
 
-        log.info("[BoardManageController] memberList : " + memberList);
-        log.info("[BoardManageController] deptList : " + deptList);
-        log.info("[BoardManageController] authoritTypeList : " + authoritTypeList);
+        log.info("List<AuthorityTypeDTO> authorityTypeList : " + authoritTypeList);
 
         mv.addObject("memberList", memberList);
-        mv.addObject("deptList", deptList);
-        mv.addObject("authoritTypeList",authoritTypeList);
+        mv.addObject("authoritTypeList", authoritTypeList);
 
-        mv.setViewName("/empManage/boardManage");
+        mv.setViewName("/empManage/allManage");
 
         return mv;
-
     }
 
     @PostMapping(value = "/updateList", produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String updateBoardAuthority(@RequestParam int memNum, @RequestParam boolean db_all, @RequestParam boolean nt_all) {
+    public String updateAllAuthority(@RequestParam int memNum, @RequestParam boolean nt_db_auth, @RequestParam boolean hr_em_auth,@RequestParam boolean cd_auth) {
 
-        System.out.println("memNum + cd_all + cd_dept = " + memNum + db_all + nt_all);
+        System.out.println("memNum = " + memNum + ", nt_db_auth = " + nt_db_auth + ", hr_em_auth = " + hr_em_auth + ", cd_auth = " + cd_auth);
 
-        int result = authorService.deleteBoardAuthority(memNum);
+        int result = authorService.deleteAllAuthority(memNum);
 
         List<AuthoritDTO> authList = new ArrayList<>();
-        if(db_all){
+        if(nt_db_auth){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("ROLE_DB_ALL");
+            auth.setAuCode("ROLE_NT_DB_AUTH");
             authList.add(auth);
         }
 
-        if(nt_all){
+        if(hr_em_auth){
             AuthoritDTO auth = new AuthoritDTO();
             auth.setMemNum(memNum);
-            auth.setAuCode("ROLE_NT_ALL");
+            auth.setAuCode("ROLE_HR_EM_AUTH");
+            authList.add(auth);
+        }
+
+        if(cd_auth){
+            AuthoritDTO auth = new AuthoritDTO();
+            auth.setMemNum(memNum);
+            auth.setAuCode("ROLE_CD_AUTH");
             authList.add(auth);
         }
 
@@ -115,7 +113,4 @@ public class BoardManageController {
 
         return data;
     }
-
-
-
 }

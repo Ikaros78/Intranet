@@ -1,10 +1,8 @@
 package com.ohgiraffers.intranet.member.service;
 
-import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
-import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
-import com.ohgiraffers.intranet.member.model.dto.Au_AuthorizationDTO;
-import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
-import com.ohgiraffers.intranet.member.model.dto.UserImpl;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import com.ohgiraffers.intranet.authorManage.model.dto.AuthoritDTO;
+import com.ohgiraffers.intranet.member.model.dao.MemberMapper;
+import com.ohgiraffers.intranet.member.model.dto.Au_AuthorizationDTO;
+import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
+import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
@@ -45,7 +45,6 @@ public class AuthenticationService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // 세션 내 사용자의 권한 정보를 리턴하는 코드
         if(member.getAuthorit().get(0).getAuCode() != null){
             List<AuthoritDTO> authorList = member.getAuthorit();
 
@@ -56,7 +55,6 @@ public class AuthenticationService implements UserDetailsService {
             }
         }
 
-        // 세션에 담긴 사용자의 정보
         UserImpl user = new UserImpl(member.getMem_id(),member.getMem_pw(), authorities);
         user.setDetails(member);
 

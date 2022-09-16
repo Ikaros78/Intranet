@@ -9,20 +9,7 @@
 <body onresize="parent.resizeTo(900, 600)" onload="parent.resizeTo(900,600)">
     <h1>발령 등록</h1>
     <form th:action="@{/emp/hrRegist}" method="post" id="hrRegist">
-        <input type="hidden" name="${}">
         <table>
-            <tr>
-                <th>발령구분</th>
-                <td><select name="category">
-                    <option>선택</option>
-                    <option value="승진">승진</option>
-                    <option value="부서이동">부서이동</option>
-                </select></td>
-            </tr>
-            <tr>
-                <th>발령일자</th>
-                <td><input type="date" name="date"></td>
-            </tr>
             <tr class="mem_num">
                 <th>사원번호</th>
                 <td id="selectNum">
@@ -33,12 +20,22 @@
                 <td id="name" class="greyBox"></td>
             </tr>
             <tr>
+                <th>발령구분</th>
+                <td><select name="category" id="category">
+                    <option value="select">선택</option>
+                    <option value="승진">승진</option>
+                    <option value="부서이동">부서이동</option>
+                </select></td>
+                <th>발령일자</th>
+                <td><input type="date" name="date" id="date"></td>
+            </tr>
+            <tr>
                 <th>직급</th>
                 <td id="rank" class="greyBox"></td>
                 <th>발령직급</th>
                 <td>
-                    <select name="dept_rank">
-                    <option>선택</option>
+                    <select name="dept_rank" id="dept_rank">
+                    <option value="select">선택</option>
                     <option value="사원">사원</option>
                     <option value="대리">대리</option>
                     <option value="과장">과장</option>
@@ -51,26 +48,27 @@
                 <th>부서</th>
                 <td id="dept_name" class="greyBox"></td>
                 <th>발령부서</th>
-                <td><select name="dept_name">
-                    <option>선택</option>
-                    <option value="인사부">인사부</option>
-                    <option value="기술지원부">기술지원부</option>
-                    <option value="영업1부">영업1부</option>
-                    <option value="영업2부">영업2부</option>
-                    <option value="사업부">사업부</option>
+                <td><select name="dept_code" id="dept_code">
+                    <option value="select">선택</option>
+                    <option value="D1">인사부</option>
+                    <option value="D2">기술지원부</option>
+                    <option value="D3">영업1부</option>
+                    <option value="D4">영업2부</option>
+                    <option value="D5">사업부</option>
                 </select></td>
             </tr>
             <tr>
                 <th>비고</th>
-                <td class="widthText" colspan="4"><input type="text" name="contents"></td>
+                <td class="widthText" colspan="4"><input type="text" name="contents" placeholder="30자 이내로 작성" id="contents"></td>
             </tr>
         </table>
             <input type="hidden" name="bef_rank" id="bef_rank">
             <input type="hidden" name="bef_dept" id="bef_dept">
-        <button type="submit" onclick="">저장</button>
+        <button type="submit" id="save">저장</button>
     </form>
     <script>
 
+        //ajax 값 받고 넘기기 (이름, 부서명, 직급)
         let mem_num = $("#mem_num").val();
 
         $("#send").click(function(){
@@ -83,9 +81,10 @@
 
                    console.log('data 나오나여 : ' + data)
 
-                   $("#name").append("<p class='pGrey'>" + data.mem_name + "</p>");
+                   $("#name").append("<p class='pGrey' id='pName'>" + data.mem_name + "</p>");
                    $("#rank").append("<p class='pGrey'>" + data.dept_rank + "</p>");
                    $("#dept_name").append("<p class='pGrey'>" + data.department.dept_name + "</p>");
+                   //input hidden에 값 담기 위해 지정해줌
                    $("#bef_rank").val(data.dept_rank);
                    $("#bef_dept").val(data.department.dept_name);
                } ,
@@ -93,6 +92,67 @@
                    console.log('에러 발생했어여ㅠ.. ' + error);
                 }
             });
+        });
+
+
+        // 저장 버튼 누르면 selectbox 선택 안됐을 경우 alert창 띄우고 값 안넘어가게 하기 + window 닫기
+        $(function() {
+
+            $("#save").click(function() {
+
+                let f1 = document.getElementById("category");
+                let f2 = document.getElementById("date");
+                let f3 = document.getElementById("dept_rank");
+                let f4 = document.getElementById("dept_code");
+                let f5 = document.getElementById("pName")
+                let f6 = document.getElementById("contents");
+
+                // alert(f5.innerText.length);
+
+            if(f5 == null) {
+                    alert('사원 번호를 검색해주세요')
+
+                    return false;
+                } else if(f1.value == "select"){
+                    alert('발령 구분을 지정해주세요')
+                    f1.focus();
+
+                    return false;
+                } else if(f2.value.length < 10) {
+
+                    alert('발령 날짜를 지정해주세요')
+                    f2.focus();
+
+                    return false;
+
+                } else if(f3.value == "select"){
+                    alert('발령 직급을 지정해주세요')
+                    f3.focus();
+
+                    return false;
+                } else if(f4.value == "select"){
+                    alert('발령 부서를 지정해주세요')
+                    f4.focus();
+
+                    return false;
+                } else if(f6.value.length > 30) {
+                    alert('비고사항은 30자 이내로 작성해주세요(' + f6.value.length + ' / 30)')
+                    f6.focus();
+
+                    return false;
+                } else {
+                let params = $("#hrRegist").serialize(); // form 안 값을 한 번에 전송 가능한 data로 만들어줌
+                $.ajax({ // 값이 DB로 넘어가기 전 창이 닫히는걸 방지하기 위해 ajax사용
+                   url: "/emp/hrRegist",
+                    data:params,
+                    success: function(data){
+                        window.opener.location.reload(); //팝업 닫기 전 부모 창 reload해줌
+                           window.close();
+                    }
+                });
+                }
+            });
+
         });
 
     </script>

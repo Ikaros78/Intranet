@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.List;
 
+
 public class AuthoritDTO {
 
     private int memNum;

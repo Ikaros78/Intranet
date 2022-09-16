@@ -27,12 +27,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/sign")
+@RequestMapping("/sign/*")
 public class SignController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -391,6 +392,47 @@ public class SignController {
         List<MemberDTO> memberList = signService.selectMemByDeptCode(code);
 
         return gson.toJson(memberList);
+    }
+
+    @GetMapping(value = "selectMemByNum", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public String selectMemByNum(HttpServletRequest request){
+
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+
+        String nums = request.getParameter("selectedMem");
+
+        log.info("num =" + nums);
+
+        String[] numList = nums.split(",");
+
+        int count = 0;
+
+        List<MemberDTO> memberList = new ArrayList<>();
+
+        Map<String, Object> numMap = new HashMap<>();
+
+        for(String num : numList){
+
+            numMap.put("num", num);
+
+            MemberDTO member = signService.selectMemByNum(numMap);
+
+            memberList.add(member);
+
+            count++;
+        }
+
+        if(count == memberList.size()){
+            return gson.toJson(memberList);
+        }
+
+        return null;
     }
 
     @GetMapping("/requestList")

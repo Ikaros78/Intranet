@@ -230,8 +230,9 @@
 
                     $td = $("<td name='approver' class='approver'>").val(data[index].mem_num);
                     $name = data[index].mem_name;
+                    $rank = data[index].dept_rank;
 
-                    $td.append($name);
+                    $td.append($name + " " + $rank);
 
                     $hiddenApprover = $("<input type='hidden' name='approver' class='approver'>").val(data[index].mem_num);
 

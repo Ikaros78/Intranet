@@ -30,12 +30,15 @@
 
   <div class="details">
     <div class="buttons" align="right">
-      <button id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
+      <th:block th:each="approve : ${ signDetail.approver }">
+          <button th:if="${ approve.isLastApprover eq 'Y' and approve.isApproved eq 'Y'}" id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
+          <button th:if="${ approve.isLastApprover eq 'Y' and approve.isApproved eq 'N'}" id="delete" type="submit" form="hiddenfrm" onclick='btn_click("delete");'>결재회수</button>
+      </th:block>
       <button id="print">인쇄</button>
       <button id="backtoList">목록</button>
     </div>
 
-    <form id="hiddenfrm" method="post" action="/sign/reWriteRegistForm">
+    <form id="hiddenfrm" method="post">
       <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
     </form>
 
@@ -56,9 +59,9 @@
           <tr>
             <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
             <th:block th:each="approve : ${signDetail.approver}">
-              <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
-              <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
-              <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
+              <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
+              <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
+              <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
             </th:block>
           </tr>
         </table>
@@ -90,7 +93,7 @@
               <th>참조자</th>
               <td>
                 <th:block th:each="reference : ${signDetail.referencer}" th:colspan="3">
-                  <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName}"></span>&nbsp
+                  <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName } + ' ' + ${ reference.referencer.referencerRank } + ' ' " + ></span>
                 </th:block>
               </td>
             </tr>
@@ -98,7 +101,7 @@
               <th>수신처</th>
               <td>
                 <th:block  th:each="receive : ${signDetail.receiver}" th:colspan="3">
-                  <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName}"></span>&nbsp
+                  <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName } + ' ' + ${ receive.receiver.receiverRank } + ' ' "></span>
                 </th:block>
               </td>
             </tr>
@@ -126,6 +129,14 @@
 </div>
 
 <script>
+
+  function btn_click(str){
+    if(str=="resign"){
+      hiddenfrm.action = "/sign/reWriteRegistForm";
+    }else if(str=="refuse"){
+      hiddenfrm.action = "/sign/refuse";
+    }
+  }
 
   var initBodyHtml;
 

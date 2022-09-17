@@ -28,12 +28,8 @@ public interface SignService {
     int refuseSign(Map<String, Object> refuse) throws SignApproveException;
     int selectTotalCompletedCount(Map<String, Object> searchMap);
     List<SignDTO> selectCompletedList(Map<String, Object> searchList);
-    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
-    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
     int selectTotalRefusedCount(Map<String, Object> searchMap);
     List<SignDTO> selectRefusedList(Map<String, Object> searchList);
-    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
-    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
     List<DepartmentDTO> selectDeptList();
     int selectTotalProgressCount(Map<String, Object> searchMap);
     List<SignDTO> selectProgressList(Map<String, Object> searchList);

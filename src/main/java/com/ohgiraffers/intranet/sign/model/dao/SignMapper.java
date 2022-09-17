@@ -36,25 +36,13 @@ public interface SignMapper {
 
     List<SignDTO> selectCompletedList(Map<String, Object> searchList);
 
-    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
-
-    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
-
     int selectTotalRefusedCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectRefusedList(Map<String, Object> searchList);
 
-    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
-
-    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
-
     int selectTotalProgressCount(Map<String, Object> searchMap);
 
-    int selectTotalMyProgressCount(Map<String, Object> searchMap);
-
     List<SignDTO> selectProgressList(Map<String, Object> searchList);
-
-    List<SignDTO> selectMyProgressList(Map<String, Object> searchList);
 
     int selectTotalTempCount(Map<String, Object> searchMap);
 

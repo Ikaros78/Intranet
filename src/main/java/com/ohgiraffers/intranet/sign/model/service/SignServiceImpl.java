@@ -148,24 +148,6 @@ public class SignServiceImpl implements SignService {
         return completedList;
     }
 
-    /* 자신이 기안하고 완료된 결재 갯수 조회용 메소드 */
-    @Override
-    public int selectTotalMyCompletedCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalMyCompletedCount(searchMap);
-
-        return result;
-    }
-
-    /* 자신이 기안하고 완료된 결재 조회용 메소드 */
-    @Override
-    public List<SignDTO> selectMyCompletedList(Map<String, Object> searchList) {
-
-        List<SignDTO> completedList = signMapper.selectMyCompletedList(searchList);
-
-        return completedList;
-    }
-
     /* 반려문서함 전체 갯수 조회용 메소드 */
     @Override
     public int selectTotalRefusedCount(Map<String, Object> searchMap) {
@@ -184,24 +166,6 @@ public class SignServiceImpl implements SignService {
         return refusedList;
     }
 
-    /* 자신이 기안하고 반려된 결재 갯수 조회용 메소드 */
-    @Override
-    public int selectTotalMyRefusedCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalMyRefusedCount(searchMap);
-
-        return result;
-    }
-
-    /* 자신이 기안하고 반려된 결재 조회용 메소드 */
-    @Override
-    public List<SignDTO> selectMyRefusedList(Map<String, Object> searchList) {
-
-        List<SignDTO> myRefusedList = signMapper.selectMyRefusedList(searchList);
-
-        return myRefusedList;
-    }
-
 
     /* 부서 전체 조회용 메소드 */
     @Override
@@ -218,9 +182,7 @@ public class SignServiceImpl implements SignService {
 
         int progressResult = signMapper.selectTotalProgressCount(searchMap);
 
-        int myProgressResult = signMapper.selectTotalMyProgressCount(searchMap);
-
-        int result = progressResult + myProgressResult;
+        int result = progressResult;
 
         return result;
     }
@@ -230,10 +192,6 @@ public class SignServiceImpl implements SignService {
     public List<SignDTO> selectProgressList(Map<String, Object> searchList) {
 
         List<SignDTO> progressList = signMapper.selectProgressList(searchList);
-
-        List<SignDTO> myProgressList = signMapper.selectMyProgressList(searchList);
-
-        progressList.addAll(myProgressList);
 
         return progressList;
     }

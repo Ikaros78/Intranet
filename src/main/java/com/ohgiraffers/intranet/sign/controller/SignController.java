@@ -830,10 +830,7 @@ public class SignController {
 
         int totalCompletedCount = signService.selectTotalCompletedCount(searchMap);
 
-        int totalMyCompletedCount = signService.selectTotalMyCompletedCount(searchMap);
-
-        int totalCount = totalCompletedCount + totalMyCompletedCount;
-
+        int totalCount = totalCompletedCount;
 
         log.info("totalCount : " + totalCount);
 
@@ -854,10 +851,6 @@ public class SignController {
         searchList.put("searchNum", searchNum);
 
         List<SignDTO> completedList = signService.selectCompletedList(searchList);
-
-        List<SignDTO> myCompletedList = signService.selectMyCompletedList(searchList);
-
-        completedList.addAll(myCompletedList);
 
         log.info("completedList : " + completedList);
 
@@ -914,9 +907,7 @@ public class SignController {
 
         int totalRefusedCount = signService.selectTotalRefusedCount(searchMap);
 
-        int totalMyRefusedCount = signService.selectTotalMyRefusedCount(searchMap);
-
-        int totalCount = totalRefusedCount + totalMyRefusedCount;
+        int totalCount = totalRefusedCount;
 
         log.info("totalCount : " + totalCount);
 
@@ -937,10 +928,6 @@ public class SignController {
         searchList.put("searchNum", searchNum);
 
         List<SignDTO> refusedList = signService.selectRefusedList(searchList);
-
-        List<SignDTO> myRefusedList = signService.selectMyRefusedList(searchList);
-
-        refusedList.addAll(myRefusedList);
 
         log.info("refusedList : " + refusedList);
 

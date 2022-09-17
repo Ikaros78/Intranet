@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>결재요청함 상세보기</title>
+  <title>수신함 상세보기</title>
 
   <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
@@ -25,19 +25,14 @@
 
 <div id="main-container">
   <div class="con-header col-offset-1">
-    <h2>결재요청함</h2>
+    <h2>수신함</h2>
   </div>
 
   <div class="details">
     <div class="buttons" align="right">
-      <button id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
       <button id="print">인쇄</button>
       <button id="backtoList">목록</button>
     </div>
-
-    <form id="hiddenfrm" method="post" action="/sign/reWriteRegistForm">
-      <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
-    </form>
 
     <div id="detail">
       <div id="detail-header">
@@ -65,6 +60,8 @@
       </div>
 
       <div id="table-form">
+        <form id="signform" method="post">
+          <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
           <table class="table detail">
             <caption></caption>
             <colgroup>
@@ -147,7 +144,7 @@
 
   const $backtoList = document.getElementById("backtoList");
   $backtoList.onclick = function(){
-    location.href = "/sign/requestList";
+    location.href = "/sign/receiveList";
   }
 
 

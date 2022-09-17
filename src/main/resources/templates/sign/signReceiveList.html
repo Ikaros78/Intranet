@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>참조/열람문서함</title>
+    <title>수신함</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
@@ -27,7 +27,7 @@
         
             <div id="main-container">
                 <div class="con-header col-offset-1">
-                    <h2>참조/열람문서함</h2>
+                    <h2>수신함</h2>
                 </div>
             
 
@@ -91,7 +91,7 @@
                 </div>  <!-- search-wrap -->
 
                 <div class="list-wrap">
-                    <table class="table table-borderd referenceList">
+                    <table class="table table-borderd receiveList">
                         <thead>
                             <tr>
                                 <th width="100px">문서번호</th>
@@ -103,7 +103,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="sign : ${ referenceList }">
+                            <tr th:each="sign : ${ receiveList }">
                                 <td th:text="${sign.signNo}"></td>
                                 <td th:text="${sign.signTitle}" name="title"></td>
                                 <td th:text="${sign.signForm.name}"></td>
@@ -118,14 +118,14 @@
                     <div class="pagingArea" align="center">
                         <!-- 맨 앞으로 이동 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/referenceList?currentPage='+ @{${selectCriteria.startPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:onclick="'location.href=\'/sign/receiveList?currentPage='+ @{${selectCriteria.startPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <<
                         </button>
                         <!-- 이전 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/referenceList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:onclick="'location.href=\'/sign/receiveList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <
@@ -134,28 +134,27 @@
                         <th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
                             <button
                                     th:text="${ page }"
-                                    th:onclick="'location.href=\'/sign/referenceList?currentPage='+ @{${page}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                    th:onclick="'location.href=\'/sign/receiveList?currentPage='+ @{${page}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                     th:disabled="${ selectCriteria.pageNo eq page }">
                             </button>
                         </th:block>
 
                         <!-- 다음 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/referenceList?currentPage='+ @{${selectCriteria.pageNo + 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:onclick="'location.href=\'/sign/receiveList?currentPage='+ @{${selectCriteria.pageNo + 1}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
                         >
                             >
                         </button>
                         <!-- 마지막 페이지로 이동 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/referenceList?currentPage='+ @{${selectCriteria.maxPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
+                                th:onclick="'location.href=\'/sign/receiveList?currentPage='+ @{${selectCriteria.maxPage}} + '&searchWriter=' + @{${searchList.searchWriter}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '&searchNum' + @{${searchList.searchNum}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}"
                         >
                             >>
                         </button>
                     </div>
                 </div> <!-- list-wrap -->
-
             </div>
         </div>
     </div>
@@ -168,7 +167,7 @@
             todayHighlight : true
         });
 
-        if(document.querySelectorAll('.referenceList td')){
+        if(document.querySelectorAll('.receiveList td')){
             const $tds = document.getElementsByName('title');
             for(let i = 0; i < $tds.length; i++) {
 
@@ -183,7 +182,7 @@
 
                 $tds[i].onclick = function() {
                     const no = this.parentNode.children[0].innerText;
-                    location.href = "/sign/referenceDetail?no=" + no;
+                    location.href = "/sign/receiveDetail?no=" + no;
                 }
             }
         }

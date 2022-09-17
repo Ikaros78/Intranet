@@ -81,4 +81,16 @@ public interface SignMapper {
     int registReferencer(Map<String, String> referencer);
 
     int registSignFile(SignFileDTO signFile);
+
+    int registTempSign(Map<String, String> insertMap);
+
+    int deleteSign(int signNo);
+
+    int selectTotalReferenceCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReferenceList(Map<String, Object> searchList);
+
+    int selectTotalReceiveCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReceiveList(Map<String, Object> searchList);
 }

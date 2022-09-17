@@ -383,5 +383,67 @@ public class SignServiceImpl implements SignService {
         return result;
     }
 
+    /* 결재 임시저장용 메소드 */
+    @Override
+    public int registTempSign(Map<String, String> insertMap) throws SignApproveException {
+
+        int result = signMapper.registTempSign(insertMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재임시저장에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 임시저장한 결재 삭제용 메소드 */
+    @Override
+    public int deleteSign(int signNo) throws SignApproveException {
+
+        int result = signMapper.deleteSign(signNo);
+
+        if(!(result > 0)){
+            throw new SignApproveException("기안 삭제에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 참조/열람문서함 전체 갯수 조회용 메소드 */
+    @Override
+    public int selectTotalReferenceCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalReferenceCount(searchMap);
+
+        return result;
+    }
+
+    /* 참조/열람문서함 전체 조회용 메소드 */
+    @Override
+    public List<SignDTO> selectReferenceList(Map<String, Object> searchList) {
+
+        List<SignDTO> referenceList = signMapper.selectReferenceList(searchList);
+
+        return referenceList;
+    }
+
+    /* 수신함 전체 갯수 조회용 메소드 */
+    @Override
+    public int selectTotalReceiveCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalReceiveCount(searchMap);
+
+        return result;
+    }
+
+    /* 수신함 전체 조회용 메소드 */
+    @Override
+    public List<SignDTO> selectReceiveList(Map<String, Object> searchList) {
+
+        List<SignDTO> receiveList = signMapper.selectReceiveList(searchList);
+
+        return receiveList;
+    }
+
 
 }

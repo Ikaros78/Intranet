@@ -232,6 +232,7 @@
               , E.APPROVER_NO
               , E.IS_APPROVED
               , E.SIGN_TYPE
+              , E.IS_REFUSED
               , EM.MEM_NAME APPROVERNAME
               , F.RECEIVER_NO
               , FM.MEM_NAME RECEIVERNAME
@@ -272,6 +273,7 @@
           FROM SI_SIGN A
           JOIN SF_SIGN_FORM B ON(A.SIGN_FORM = B.SF_CODE)
          WHERE A.SIGN_WRITER = #{ mem_num }
+           AND A.IS_TEMP = 'N'
         ORDER BY A.SIGN_NO DESC
         ) <![CDATA[
                   WHERE ROWNUM <= 5
@@ -1210,4 +1212,216 @@
         , #{ signNo }
         )
     </insert>
+
+    <insert id="registTempSign" parameterType="hashmap">
+        INSERT
+        INTO SI_SIGN A
+            (
+                 A.SIGN_NO
+               , A.SIGN_WRITER
+               , A.SIGN_FORM
+               , A.SIGN_CONTENT
+               , A.REG_DATE
+               , A.IS_TEMP
+               , A.SIGN_TITLE
+            )
+        VALUES
+            (
+            SEQ_SIGN_NO.NEXTVAL
+                , #{ writer }
+                , #{ formCode }
+                , #{ content }
+                , SYSDATE
+                , 'Y'
+                , #{ title }
+            )
+    </insert>
+
+    <delete id="deleteSign" parameterType="_int">
+        DELETE
+        FROM SI_SIGN A
+        WHERE A.SIGN_NO = #{ signNo }
+          AND A.IS_TEMP = 'Y'
+    </delete>
+
+    <select id="selectTotalReferenceCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN REFERENCER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND B.REFERENCER_NO = #{ mem_num }
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectReferenceList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN REFERENCER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND F.REFERENCER_NO = #{ mem_num }
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalReceiveCount" parameterType="hashmap" resultType="_int">
+        SELECT
+        COUNT(*)
+        FROM SI_SIGN A
+        JOIN RECEIVER B ON(A.SIGN_NO = B.SIGN_NO)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER C ON(A.SIGN_WRITER = C.MEM_NUM)
+        </if>
+        <if test="searchForm != null and searchForm != ''">
+            JOIN SF_SIGN_FORM D ON(A.SIGN_FORM = D.SF_CODE)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND A.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND A.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND A.SIGN_NO = #{ searchNum }
+            </if>
+            AND B.RECEIVER_NO = #{ mem_num }
+            AND A.IS_TEMP = 'N'
+        </where>
+    </select>
+
+    <select id="selectReceiveList" parameterType="hashmap" resultMap="generalSignResultMap">
+        SELECT
+        A.RNUM
+        , A.SIGN_NO
+        , A.SIGN_TITLE
+        , A.SIGN_WRITER
+        , A.REG_DATE
+        , D.MEM_NAME
+        , G.DEPT_NAME
+        , A.SF_NAME
+        FROM (SELECT ROWNUM RNUM
+        , B.SIGN_NO
+        , B.SIGN_TITLE
+        , B.SIGN_WRITER
+        , B.REG_DATE
+        , B.SF_NAME
+        FROM (SELECT C.SIGN_NO
+        , C.SIGN_TITLE
+        , C.SIGN_WRITER
+        , C.REG_DATE
+        , E.SF_NAME
+        FROM SI_SIGN C
+        JOIN RECEIVER F ON(C.SIGN_NO = F.SIGN_NO)
+        JOIN SF_SIGN_FORM E ON(C.SIGN_FORM = E.SF_CODE)
+        <if test="searchWriter != null and searchWriter != ''">
+            JOIN MEMBER D ON (C.SIGN_WRITER = D.MEM_NUM)
+        </if>
+        <where>
+            <if test="searchWriter != null and searchWriter != ''">
+                AND D.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
+            </if>
+            <if test="searchForm != null and searchForm != ''">
+                AND E.SF_NAME LIKE '%' || #{ searchForm } || '%'
+            </if>
+            <if test="searchTitle != null and searchTitle != ''">
+                AND C.SIGN_TITLE LIKE '%' || #{ searchTitle } || '%'
+            </if>
+            <if test="searchStartDate != null and searchStartDate != '' and searchEndDate != null and searchEndDate != ''">
+                AND C.REG_DATE BETWEEN #{ searchStartDate } AND #{ searchEndDate }
+            </if>
+            <if test="searchNum != null and searchNum != ''">
+                AND C.SIGN_NO = #{ searchNum }
+            </if>
+            AND F.RECEIVER_NO = #{ mem_num }
+            AND C.IS_TEMP = 'N'
+        </where>
+        ORDER BY C.SIGN_NO DESC
+        ) B
+        <![CDATA[
+                  WHERE ROWNUM <= #{ selectCriteria.endRow }
+                  ]]>
+        ) A
+        JOIN MEMBER D ON (A.SIGN_WRITER = D.MEM_NUM)
+        JOIN DEPARTMENT G ON(D.DEPT_CODE = G.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
 </mapper>

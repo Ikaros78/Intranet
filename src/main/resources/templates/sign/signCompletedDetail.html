@@ -19,116 +19,112 @@
 </head>
 <body>
 
-<div th:replace="/common/header.html"></div>
+    <div th:replace="/common/header.html"></div>
 
-<div th:replace="/sign/signSideBar.html"></div>
+    <div th:replace="/sign/signSideBar.html"></div>
 
-<div id="main-container">
-  <div class="con-header col-offset-1">
-    <h2>결재대기함</h2>
-  </div>
+    <div id="main-container">
+        <div class="con-header col-offset-1">
+            <h2>결재대기함</h2>
+        </div>
 
-  <div class="details">
-    <div class="buttons" align="right">
-      <button id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
-      <button id="toPDF">PDF변환</button>
-      <button id="addReader">열람권한</button>
-      <button id="process">진행현황</button>
-      <button id="print">인쇄</button>
-      <button id="backtoList">목록</button>
+        <div class="details">
+            <div class="buttons" align="right">
+                <button id="resign" type="submit" form="hiddenfrm" onclick='btn_click("resign");'>재기안</button>
+                <button id="toPDF">PDF변환</button>
+                <button id="addReader">열람권한</button>
+                <button id="print">인쇄</button>
+                <button id="backtoList">목록</button>
+            </div>
+
+            <form id="hiddenfrm" method="post" action="/sign/reWriteRegistForm">
+              <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
+            </form>
+
+            <div id="detail">
+                <div id="detail-header">
+                  <h1 align="center" th:text="${signDetail.signForm.name}"></h1>
+                </div>
+
+                <div id="approve-list" align="right">
+                    <table>
+                        <tr>
+                            <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
+                            <th style="border : 1px solid; width:100px">기안</th>
+                            <th:block th:each="approve : ${signDetail.approver}">
+                                <th th:text="${approve.signType}" style="border : 1px solid; width:100px; text-align: center"></th>
+                            </th:block>
+                        </tr>
+                        <tr>
+                            <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <th:block th:each="approve : ${signDetail.approver}">
+                                <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
+                                <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
+                                <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
+                            </th:block>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="table-form">
+                    <table class="table detail">
+                        <caption></caption>
+                        <colgroup>
+                          <col style="width: 15%;">
+                          <col style="width: 35%;">
+                          <col style="width: 15%;">
+                          <col style="width: 35%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>문서번호</th>
+                                <td th:text="${signDetail.signNo}"></td>
+                                <th>기안일자</th>
+                                <td th:text="${signDetail.regDate}"></td>
+                            </tr>
+                            <tr>
+                                <th>기안자</th>
+                                <td th:text="${signDetail.writer.mem_name}"></td>
+                                <th>기안부서</th>
+                                <td th:text="${signDetail.writer.department.dept_name}"></td>
+                            </tr>
+                            <tr th:colspan="4">
+                                <th>참조자</th>
+                                <td>
+                                    <th:block th:each="reference : ${signDetail.referencer}" th:colspan="3">
+                                      <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName}"></span>&nbsp
+                                    </th:block>
+                                </td>
+                            </tr>
+                            <tr th:colspan="4">
+                                <th>수신처</th>
+                                <td>
+                                    <th:block  th:each="receive : ${signDetail.receiver}" th:colspan="3">
+                                      <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName}"></span>&nbsp
+                                    </th:block>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>문서제목</th>
+                                <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td th:colspan="4">
+                                    <a th:if="${signDetail.file.originName != null}" class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
+                                      <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
+                                      <span th:text="${ signDetail.file.originName }"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+          </div>
+        </div>
     </div>
-
-    <form id="hiddenfrm" method="post" action="/sign/registForm">
-      <input type="hidden" name="formCode" th:value="${signDetail.signForm.code}">
-      <input type="hidden" name="signTitle" th:value="${signDetail.signTitle}">
-      <input type="hidden" name="signContent" th:value="${signDetail.signContent}">
-    </form>
-
-    <div id="detail">
-      <div id="detail-header">
-        <h1 align="center" th:text="${signDetail.signForm.name}"></h1>
-      </div>
-
-      <div id="approve-list" align="right">
-        <table>
-          <tr>
-            <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
-            <th style="border : 1px solid; width:100px">기안</th>
-            <th:block th:each="approve : ${signDetail.approver}">
-              <th th:text="${approve.signType}" style="border : 1px solid; width:100px; text-align: center"></th>
-            </th:block>
-          </tr>
-          <tr>
-            <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
-            <th:block th:each="approve : ${signDetail.approver}">
-              <td th:text="${approve.approver.approverName}" style="border : 1px solid; width:100px; text-align: center"></td>
-            </th:block>
-          </tr>
-        </table>
-      </div>
-
-      <div id="table-form">
-        <form id="signform" method="post">
-          <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
-          <table class="table detail">
-            <caption></caption>
-            <colgroup>
-              <col style="width: 15%;">
-              <col style="width: 35%;">
-              <col style="width: 15%;">
-              <col style="width: 35%;">
-            </colgroup>
-            <tbody>
-            <tr>
-              <th>문서번호</th>
-              <td th:text="${signDetail.signNo}"></td>
-              <th>기안일자</th>
-              <td th:text="${signDetail.regDate}"></td>
-            </tr>
-            <tr>
-              <th>기안자</th>
-              <td th:text="${signDetail.writer.mem_name}"></td>
-              <th>기안부서</th>
-              <td th:text="${signDetail.writer.department.dept_name}"></td>
-            </tr>
-            <tr th:colspan="4">
-              <th>참조자</th>
-              <td>
-                <th:block th:each="reference : ${signDetail.referencer}" th:colspan="3">
-                  <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName}"></span>&nbsp
-                </th:block>
-              </td>
-            </tr>
-            <tr th:colspan="4">
-              <th>수신처</th>
-              <td>
-                <th:block  th:each="receive : ${signDetail.receiver}" th:colspan="3">
-                  <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName}"></span>&nbsp
-                </th:block>
-              </td>
-            </tr>
-            <tr>
-              <th>문서제목</th>
-              <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
-            </tr>
-            <tr>
-              <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
-            </tr>
-            <tr>
-              <td th:colspan="4">
-                <a th:if="${signDetail.file.originName != null}" class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
-                  <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
-                  <span th:text="${ signDetail.file.originName }"></span>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 

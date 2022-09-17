@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>결재대기함 상세보기</title>
+  <title>기안문 작성</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
@@ -43,10 +43,10 @@
 
     <form id="frm" method="post" enctype="multipart/form-data">
         <input type="hidden" name="signWriter" th:value="${ formMap.userInfo.mem_num }">
-        <input type="hidden" name="signFormCode" th:value="${ formMap.selectForm.code }">
+        <input type="hidden" name="signFormCode" th:value="${ formMap.signDetail.signForm.code }">
 
         <div id="detail-header">
-            <h1 align="center" th:text="${ formMap.selectForm.name }"></h1>
+            <h1 align="center" th:text="${ formMap.signDetail.signForm.name }"></h1>
         </div>
 
         <div id="approve-list" align="right">
@@ -94,13 +94,13 @@
                     <tr>
                         <th>문서제목</th>
                         <td>
-                          <input type="text" name="signTitle" th:value="${ formMap.title }" required>
+                          <input type="text" name="signTitle" th:value="${ formMap.signDetail.signTitle }" required>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4">
                             <textarea id="summernote" name="signContent" placeholder="내용"></textarea>
-                            <input type="hidden" id="signContent" th:if="${ formMap.content != null }" th:value="${ formMap.content }">
+                            <input type="hidden" id="signContent" th:if="${ formMap.signDetail.signContent != null }" th:value="${ formMap.signDetail.signContent }">
                         </td>
                     </tr>
                     <tr>

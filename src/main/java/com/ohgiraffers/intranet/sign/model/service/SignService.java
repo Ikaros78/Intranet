@@ -65,4 +65,18 @@ public interface SignService {
 
     @Transactional
     int signFileInsert(SignFileDTO signFile) throws SignApproveException;
+
+    @Transactional
+    int registTempSign(Map<String, String> insertMap) throws SignApproveException;
+
+    @Transactional
+    int deleteSign(int signNo) throws SignApproveException;
+
+    int selectTotalReferenceCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReferenceList(Map<String, Object> searchList);
+
+    int selectTotalReceiveCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReceiveList(Map<String, Object> searchList);
 }

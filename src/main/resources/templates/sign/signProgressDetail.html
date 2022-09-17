@@ -30,7 +30,6 @@
 
     <div class="details">
         <div class="buttons" align="right">
-            <button id="process">진행현황</button>
             <button id="print">인쇄</button>
             <button id="backtoList">목록</button>
         </div>
@@ -52,7 +51,9 @@
                     <tr>
                         <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
                         <th:block th:each="approve : ${signDetail.approver}">
-                            <td th:text="${approve.approver.approverName}" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
                         </th:block>
                     </tr>
                 </table>

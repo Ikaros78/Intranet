@@ -35,6 +35,12 @@ public interface EmpMapper {
     /* 인사 발령 삭제(값 되돌리기) */
     int hrDelete(int appointment);
 
-
+    /* 멤버 인사 발령 정보로 업데이트 */
     int updateMember(int mem_num, String dept_rank, String dept_code);
+
+    /* 직원 상세 정보 조회 */
+    MemberDTO selectMemberDetail(int no);
+
+    /* 직원 정보 수정 - 관리자 */
+    int empUpdate(MemberDTO member);
 }

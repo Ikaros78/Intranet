@@ -181,6 +181,7 @@ public class EmpController {
         return result;
     }
 
+    /* 인사 발령 취소 */
     @GetMapping("/hrDelete")
     public String hrDelete(HttpServletRequest request){
 
@@ -198,12 +199,43 @@ public class EmpController {
             int result2 = empService.hrDelete(no);
         }
 
-
-
-
-
         return "redirect:/emp/hrList";
     }
 
+    /* 직원 상세 정보 조회 */
+    @GetMapping("/empDetail")
+    public String hrDetailPage(HttpServletRequest request, Model model){
+
+        int no = Integer.parseInt((request.getParameter("no")));
+
+        MemberDTO empDetail = empService.selectMemberDetail(no);
+        log.info("empDetail값 확인 : " + empDetail);
+        model.addAttribute("emp", empDetail);
+
+        return "empManage/empDetail";
+    }
+
+    /* 직원 정보 수정 - 관리자 */
+    @GetMapping("/empUpdate")
+    public String empUpdatePage(HttpServletRequest request, Model model){
+        int no = Integer.parseInt((request.getParameter("no")));
+
+        MemberDTO empDetail = empService.selectMemberDetail(no);
+        log.info("empDetail값 확인 : " + empDetail);
+        model.addAttribute("emp", empDetail);
+
+        return "empManage/empUpdate";
+    }
+
+    @PostMapping("/empUpdate")
+    public String empUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request){
+
+        int bef_num = Integer.parseInt(request.getParameter("bef_num"));
+        log.info("전 number값 받아오는지 확인 : " + bef_num);
+
+        int updateResult = empService.empUpdate(member);
+
+        return "redirect:/emp/empList";
+    }
 
 }

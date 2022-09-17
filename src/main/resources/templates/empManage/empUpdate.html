@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>직원상세정보조회</title>
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/empManage/empUpdate.css}">
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>직원관리</h3>
+                <ul>
+                    <li class="main"><a th:href="@{/emp/empList}">인사 관리</a>
+                        <ul class="sub sub1">
+                            <li><a th:href="@{/emp/empList}">직원 관리</a></li>
+                            <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
+                            <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
+                            <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                            <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="container">
+                <h4>직원 상세 정보 조회</h4><hr>
+                <p>상세정보</p>
+                <form th:action="@{/emp/empUpdate}" method="post">
+                    <table>
+                        <tr>
+                            <th>사원번호</th>
+                            <td><input type="hidden" name="bef_num" th:value="${ emp.mem_num }"></td>
+                            <td><input type="text" name="mem_num" th:value="${ emp.mem_num }"></td>
+                        </tr>
+                        <th>성명</th>
+                        <td th:text="${ emp.mem_name }"></td>
+                        </tr>
+                        <tr>
+                            <th>생년월일</th>
+                            <td th:text="${ emp.mem_birth }"></td>
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td th:text="${ emp.mem_email }"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${ emp.mem_phone }"></td>
+                        </tr>
+                        <tr>
+                            <th>부서명</th>
+                            <td><select name="dept_code" id="dept_code">
+                                <option value="D1">인사부</option>
+                                <option value="D2">기술지원부</option>
+                                <option value="D3">영업1부</option>
+                                <option value="D4">영업2부</option>
+                                <option value="D5">사업부</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <th>직급</th>
+                            <td th:text="${ emp.dept_rank }"></td>
+                        </tr>
+                        <tr>
+                            <th>입사일자</th>
+                            <td><input type="date" name="mem_joinDate" th:value="${ emp.mem_joinDate }"></td>
+                        </tr>
+                    </table>
+                    <button type="submit">저장</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 입사일 선택 script
+        $(function(){
+            $("#dept_code").val('[[${ emp.dept_code }]]').prop("selected", true);
+        })
+
+        // 저장 버튼 클릭 시 알럿창 띄운 후 해당 detail page로 이동
+        // function saveCheck(){
+        //     const no = [[ ${ emp.mem_num }]];
+        //     alert([[ ${ emp.mem_name }]] + '님의 정보 수정이 완료되었습니다.')
+        //     location.href='/emp/empDetail?no='+no;
+        // }
+    </script>
+</body>
+</html>

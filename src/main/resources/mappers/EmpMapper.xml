@@ -252,10 +252,35 @@
         WHERE MEM_NUM = #{ mem_num }
     </update>
 
-
+    <!-- 인사 발령 삭제(테이블 DB 삭제) -->
     <delete id="hrDelete">
         DELETE FROM PA_PERSONNER_APPOINTMENT
         WHERE PA_NO = #{ no }
     </delete>
 
+    <!-- 직원 정보 상세 조회 -->
+    <select id="selectMemberDetail" parameterType="_int" resultMap="memberResultMap">
+        SELECT
+               A.MEM_NUM
+             , A.MEM_NAME
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.MEM_BIRTH
+             , B.DEPT_NAME
+             , A.DEPT_CODE
+             , A.DEPT_RANK
+             , A.MEM_JOINDATE
+          FROM MEMBER A
+          LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)
+         WHERE A.MEM_NUM = #{ no }
+    </select>
+
+    <!-- 직원 정보 수정(관리자) -->
+    <update id="empUpdate">
+        UPDATE MEMBER
+           SET MEM_NUM = #{ mem_num }
+             , MEM_JOINDATE = #{ mem_joinDate }
+             , DEPT_CODE = #{ dept_code }
+         WHERE MEM_NUM = #{ bef_num }
+    </update>
 </mapper>

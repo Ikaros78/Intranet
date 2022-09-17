@@ -30,10 +30,15 @@ public interface EmpService {
     /* 인사 발령 리스트 조회 */
     List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
 
-    /* 인사 발령 삭제(값 되돌리기) */
+    /* 인사 발령 삭제(값 되돌리기)*/
+    int updateMember(int mem_num, String dept_rank, String dept_code);
+
+    /* 인사 발령 삭제(값 되돌리기 - Appointment table db 삭제) */
     int hrDelete(int no);
 
+    /* 직원 상세 정보 조회 */
+    MemberDTO selectMemberDetail(int no);
 
-
-    int updateMember(int mem_num, String dept_rank, String dept_code);
+    /* 직원 정보 수정 - 관리자 */
+    int empUpdate(MemberDTO member);
 }

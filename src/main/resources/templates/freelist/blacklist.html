@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>블랙리스트 관리</title>
+
+  <!-- 기본 공용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+
+  <!-- 개별 페이지 CSS -->
+  <link rel="stylesheet" th:href="@{/css/common/blackbaic.css}">
+</head>
+
+<body>
+<div id="wrap">
+  <div id="header">
+    <h1 class="logo"><a href=""><img src="resources/images/logo.png" alt="로고 이미지"></a></h1>
+    <ul class="lnb">
+      <li><a href="">마이페이지</a></li>
+      <li><a href="">로그아웃</a></li>
+    </ul>
+    <ul class="gnb">
+      <li><a href="../notice/noticeList.html">공지사항</a></li>
+      <li><a href="../../board/free/freeList.html">게시판</a></li>
+      <li><a href="../../calendar/cd_main.html">일정관리</a></li>
+      <li><a href="../../sign/testsignmain.html">전자결재</a></li>
+      <li><a href="../../message/messageRecpBox.html">쪽지함</a></li>
+      <li><a href="../../manage/emplManage/emplList.html">직원관리</a></li>
+    </ul>
+  </div>
+</div>
+<div id="contents">
+
+  <div id="sideBar">
+
+
+
+    <h3>게시판 관리</h3>
+    <ul>
+      <li class="main"><a href="#">신고 목록 관리</a>
+        <ul class="sub sub1">
+          <li><a href="#">신고 게시글 관리</a></li>
+          <li><a href="#">신고 댓글 관리</a></li>
+          <li><a href="#">블랙리스트 관리</a></li>
+        </ul>
+      </li>
+      <li class="main"><a href="#">권한 관리</a>
+
+
+
+
+
+      </li>
+    </ul>
+
+  </div>
+  <div class="content">
+    <div class="hs_content">
+      <div class="hs_title">
+        블랙리스트 관리
+      </div>
+      <div class="hs_board_main">
+        <div class="hs_table_search">
+          <select class="hs_board_search_option">
+            <option value="name">이름</option>
+            <option value="enumber">사원번호</option>
+          </select>
+          <input class="hs_board_search_keyword" type="text" placeholder="검색어를 입력해주세요"><input class="hs_board_search_button" type="button" value="🔍">
+        </div>
+        <table class="hs_table">
+          <thead>
+          <tr>
+            <th>
+              이름
+            </th>
+            <th>
+              사원번호
+            </th>
+            <th>
+              누적 신고 횟수
+            </th>
+            <th>
+              등록날짜
+            </th>
+            <th>
+              접근관리
+            </th>
+            <th>
+              상세관리
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="name">
+              김OO
+            </td>
+            <td class="employeenumber">
+              1231
+            </td>
+            <td class="mcount">
+              1
+            </td>
+            <td class="bdate">
+              2022/08/13
+            </td>
+            <td class="bblackbtn">
+              <input type="button" value="상세">
+            </td>
+            <td class="bdelete">
+              <input type="button" value="보기">
+            </td>
+          </tr>
+          <tr>
+            <td class="name">
+              김OO
+            </td>
+            <td class="employeenumber">
+              1231
+            </td>
+            <td class="mcount">
+              1
+            </td>
+            <td class="bdate">
+              2022/08/13
+            </td>
+            <td class="bblackbtn">
+              <input type="button" value="상세">
+            </td>
+            <td class="bdelete">
+              <input type="button" value="보기">
+            </td>
+          </tr>
+          <tr>
+            <td class="name">
+              김OO
+            </td>
+            <td class="employeenumber">
+              1231
+            </td>
+            <td class="mcount">
+              1
+            </td>
+            <td class="bdate">
+              2022/08/13
+            </td>
+            <td class="bblackbtn">
+              <input type="button" value="상세">
+            </td>
+            <td class="bdelete">
+              <input type="button" value="보기">
+            </td>
+          </tr>
+          <tr>
+            <td class="name">
+              김OO
+            </td>
+            <td class="employeenumber">
+              1231
+            </td>
+            <td class="mcount">
+              1
+            </td>
+            <td class="bdate">
+              2022/08/13
+            </td>
+            <td class="bblackbtn">
+              <input type="button" value="상세">
+            </td>
+            <td class="bdelete">
+              <input type="button" value="보기">
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="hs_table_foot">
+          <input class="hs_board_lshift shiftbtn" type="button" value="<<">
+          <input class="hs_board_left shiftbtn" type="button" value="<"><a class="hs_board_numbering">1</a>
+          <input class="hs_board_right shiftbtn" type="button" value=">"><input class="hs_board_rshift shiftbtn" type="button" value=">>">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

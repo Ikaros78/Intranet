@@ -5,6 +5,7 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -50,13 +51,14 @@ public class BoardController {
         return "";
 
     }
+
     @GetMapping("/list")
-    public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv){
+    public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv) {
 
         String currentPage = request.getParameter("currentPage");
         int pageNo = 1;
 
-        if(currentPage != null && !"".equals(currentPage)){
+        if (currentPage != null && !"".equals(currentPage)) {
             pageNo = Integer.parseInt(currentPage);
         }
 
@@ -66,7 +68,7 @@ public class BoardController {
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
-        log.info("검색조건 확인 : " +searchMap);
+        log.info("검색조건 확인 : " + searchMap);
 
         int totalCount = boardService.selectTotalCount(searchMap);
 
@@ -75,10 +77,11 @@ public class BoardController {
 
         SelectCriteria selectCriteria = null;
 
-        if(searchCondition != null && !"".equals(searchCondition)){
+        if (searchCondition != null && !"".equals(searchCondition)) {
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);{
+                    searchCondition, searchValue);
+            {
 
             }
         } else {
@@ -96,24 +99,55 @@ public class BoardController {
 
         log.info("dept값 가져오나 확인 : " + boardList);
 
-      mv.setViewName("freelist/freelist");
+        mv.setViewName("freelist/freelist");
 
         return mv;
     }
 
     @GetMapping("/detail")
-    public String boardDetailPage(HttpServletRequest request, Model model){
+    public String boardDetailPage(HttpServletRequest request, Model model) {
 
 
-        String no =request.getParameter("no");
+        String no = request.getParameter("no");
         log.info("no 값 : " + no);
 
         FreeinsertDTO boardDetail = boardService.selectBoardDetail(no);
         model.addAttribute("board", boardDetail);
 
-        return "/freelist/boardDetail";
+        return "freelist/boardDetail";
     }
 
+    @GetMapping("/update")
+    public String boardUpdatePage(HttpServletRequest request, Model model) {
+
+        String no = (request.getParameter("no"));
+
+        FreeinsertDTO board = boardService.selectboardDetail(no);
+        model.addAttribute("board", board);
+
+//        log.info("title 확인 : " + board.getTitle());
+
+
+        return "freelist/boardcorrection";
+    }
+
+//    @PostMapping("/update")
+//
+//    public String boardUpdatePag(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
+//
+//        //log.info("free insert : " + freeinsert.getTitle());
+//        //log.info("free insert : " +  freeinsert.getContents());
+//        //log.info("free insert : " +  freeinsert.getMem_num());
+//        //log.info("freeinsert : " + freeinsert);
+//
+//        int registResult = boardService.boardUpdate(freeinsert);
+//
+//        log.info("registResult : " + registResult);
+//
+//        return "board/boardcorrection";
+//
+//
+//    }
 
 }
 

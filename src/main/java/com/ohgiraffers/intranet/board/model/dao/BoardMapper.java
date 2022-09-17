@@ -23,4 +23,6 @@ public interface BoardMapper {
     int incresementBoardCount(String no);
 
     FreeinsertDTO selectBoardDetail(String no);
+
+    int boardUpdate(FreeinsertDTO board);
 }

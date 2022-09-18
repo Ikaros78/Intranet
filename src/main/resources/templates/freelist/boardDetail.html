@@ -68,6 +68,20 @@
             </div>
 
             <div>
+                <form id="commentForm" th:action="@{ /board/comment }" method="post">
+                    <input type="text" id="comment-input" name="contents" placeholder="댓글을 입력해 주세요.">
+                    <input
+                            type="hidden"
+                            id="mem_num"
+                            name="mem_num"
+                            th:value="${ #authentication.getPrincipal().getMem_num() }">
+                    <input
+                            type="hidden"
+                            id="board_no"
+                            name="board_no"
+                            th:value="${ board.no }">
+                    <input type="submit" id="submit" value="등록">
+                </form>
                 <input type="text">
                 <button class="bot">댓글</button>
                 <table>
@@ -78,6 +92,7 @@
                 </table>
 
             </div>
+
             <div class="btnArea">
                 <button class="list singo">신고</button>
                 <button th:if="${#authentication.getPrincipal().getMem_num() eq board.member.mem_num }" class="list update"

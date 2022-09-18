@@ -49,6 +49,16 @@
 
     </resultMap>
 
+    <resultMap id="boardcomment" type="com.ohgiraffers.intranet.board.model.dto.CommentDTO">
+        <id property="no" column="FC_NO"/>
+        <result property="contents" column="FC_CONTENTS"/>
+        <result property="date" column="FC_DATE"/>
+        <result property="mem_num" column="MEM_NUM"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+
+
+    </resultMap>
 
 
 
@@ -283,5 +293,25 @@
         WHERE NB_NO = #{ no }
 
     </delete>
+
+    <insert id="boardcomment">
+        INSERT
+        INTO FC_FREE_COMMENT A(
+            A.FC_NO
+           ,A.FC_CONTENTS
+           ,A.FC_DATE
+           ,A.MEM_NUM
+           ) VALUES(
+            'FC' || SEQ_FC_NO.NEXTVAL
+               ,#{contents}
+               ,SYSDATE
+               ,#{mem_num}
+            )
+    </insert>
+
+
+
+
+
 
 </mapper>

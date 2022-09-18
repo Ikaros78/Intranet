@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.board.controller;
 
 
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
+import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
@@ -48,9 +49,22 @@ public class BoardController {
 
         log.info("registResult : " + registResult);
 
-        return "";
+        return "redirect:/board/list";
 
     }
+//    댓글
+
+    @PostMapping("/comment")
+    public String boardcomment(@ModelAttribute CommentDTO boardcomment, HttpServletRequest request) {
+
+        int registResult = boardService.boardcomment(boardcomment);
+
+        String no = request.getParameter("board_no");
+
+        return "redirect:/board/detail?no="+no;
+
+    }
+
 
     @GetMapping("/list")
     public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv) {

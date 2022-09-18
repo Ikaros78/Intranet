@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.board.model.dao;
 
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
+import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.apache.ibatis.annotations.Mapper;
@@ -45,4 +46,7 @@ public interface BoardMapper {
     int boardeiUpdatePag(AnonyDTO anonyinsert);
 
     void eiboardDelete(String no);
+
+
+    int boardcomment(CommentDTO boardcomment);
 }

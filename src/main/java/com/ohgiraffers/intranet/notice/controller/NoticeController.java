@@ -37,7 +37,7 @@ public class NoticeController {
         this.noticeService = noticeService;
     }
 
-    //공지사항
+    /* 공지사항 등록 */
     @GetMapping("/regist")
     public String noticeRegistPage(){
 
@@ -98,6 +98,7 @@ public class NoticeController {
 
     }
 
+    /* 공지사항 리스트 조회 */
     @GetMapping("/list")
     public ModelAndView noticeList(HttpServletRequest request, ModelAndView mv){
 
@@ -138,7 +139,8 @@ public class NoticeController {
 
         mv.addObject("noticeList", noticeList);
         mv.addObject("selectCriteria", selectCriteria);
-        log.info("selectCriteria 확인 : " + selectCriteria);
+        mv.addObject("searchValue", searchValue);
+        log.info("selectCriteria : " + selectCriteria + " / searchValue : " + searchValue);
 
         log.info("dept값 가져오나 확인 : " + noticeList);
 
@@ -147,6 +149,7 @@ public class NoticeController {
         return mv;
     }
 
+    /* 공지사항 상세보기 */
     @GetMapping("/detail")
     public String noticeDetailPage(HttpServletRequest request, Model model){
 
@@ -160,6 +163,7 @@ public class NoticeController {
         return "/notice/noticeDetail";
     }
 
+    /* 공지사항 수정 */
     @GetMapping("/update")
     public String noticeUpdatePage(HttpServletRequest request, Model model){
 
@@ -238,6 +242,8 @@ public class NoticeController {
                 new File(fileUploadDirectory + "//" + saveName).delete();
             }
 
+        } else {
+            int result = noticeService.noticeUpdate(notice);
         }
 
         log.info("notice값 불러오나 확인 " + notice);
@@ -259,7 +265,7 @@ public class NoticeController {
         return "redirect:/notice/list";
     }
 
-    // 사내소식
+    /* 사내소식 등록 */
     @GetMapping("/news/regist")
     public String newsRegistPage(){
 
@@ -319,6 +325,7 @@ public class NoticeController {
 
     }
 
+    /* 사내소식 리스트 조회 */
     @GetMapping("/news/list")
     public ModelAndView newsList(HttpServletRequest request, ModelAndView mv){
 
@@ -357,6 +364,7 @@ public class NoticeController {
 
         mv.addObject("newsList", newsList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchValue", searchValue);
 
         mv.setViewName("notice/news/newsList");
 
@@ -450,11 +458,13 @@ public class NoticeController {
                 new File(fileUploadDirectory + "//" + saveName).delete();
             }
 
+        } else {
+            int result = noticeService.newsUpdate(news);
         }
 
         rttr.addFlashAttribute("message", "수정이 완료되었습니다");
 
-        return "redirect:/notice/news/list";
+        return "redirect:/notice/news/detail?no="+news.getNo();
     }
 
     @GetMapping("/news/delete")
@@ -653,6 +663,7 @@ public class NoticeController {
 
             mv.addObject("galleryList", galleryList);
             mv.addObject("selectCriteria", selectCriteria);
+            mv.addObject("searchValue", searchValue);
 
             mv.setViewName("notice/gallery/galleryList");
 
@@ -824,6 +835,7 @@ public class NoticeController {
             return "redirect:/notice/gallery/list";
         }
 
+        /* 갤러리 게시글 삭제 */
         @GetMapping("/gallery/delete")
         public String galleryDelete(@ModelAttribute GalleryDTO gallery, HttpServletRequest request){
 

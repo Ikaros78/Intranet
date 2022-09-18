@@ -120,5 +120,25 @@ public class EmpServiceImpl implements EmpService {
         return result;
     }
 
+    /* 바뀌기 전 직원 번호 DB 저장 */
+    @Override
+    @Transactional
+    public int numModify(MemberDTO member) {
+
+        int result = empMapper.numModify(member);
+
+        return result;
+    }
+
+    /* 이전 직원 번호 삭제 */
+    @Override
+    @Transactional
+    public int numDelete(MemberDTO member) {
+
+        int result = empMapper.numDelete(member);
+
+        return result;
+    }
+
 
 }

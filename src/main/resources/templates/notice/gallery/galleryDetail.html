@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>갤러리:상세보기</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
     <link rel="stylesheet" th:href="@{/css/gallery/galleryDetail.css}">
@@ -51,13 +53,13 @@
                         </div>
                         <p class="txtArea" th:utext="${ gallery.contents }"></p>
                     </div>
-                    <div class="btnArea">
-                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list update"
-                                th:onclick="|location.href='@{ /notice/gallery/update(no=${ gallery.no }) }'|">수정</button>
-                        <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
-                        <button class="list" onclick="location.href='/notice/gallery/list'">목록</button>
+                        <div class="btnArea">
+                            <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list update"
+                                    th:onclick="|location.href='@{ /notice/gallery/update(no=${ gallery.no }) }'|">수정</button>
+                            <button th:if="${#authentication.getPrincipal().getMem_num() eq gallery.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
+                            <button class="list" onclick="location.href='/notice/gallery/list'">목록</button>
+                        </div>
                     </div>
-                </div>
         </div>
     </div>
         <script>

@@ -57,6 +57,7 @@ public class BoardService {
 
 
     public FreeinsertDTO selectboardDetail(String no) {
-        return null;
+
+        return boardMapper.selectBoardDetail(no);
     }
 }

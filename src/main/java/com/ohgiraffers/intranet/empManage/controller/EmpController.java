@@ -72,6 +72,7 @@ public class EmpController {
 
         mv.addObject("memberList", memberList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchValue", searchValue);
 
         mv.setViewName("empManage/empList");
 
@@ -115,6 +116,7 @@ public class EmpController {
 
         mv.addObject("appointList", appointList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchValue", searchValue);
 
         mv.setViewName("empManage/hrList");
 
@@ -233,7 +235,21 @@ public class EmpController {
         int bef_num = Integer.parseInt(request.getParameter("bef_num"));
         log.info("전 number값 받아오는지 확인 : " + bef_num);
 
-        int updateResult = empService.empUpdate(member);
+//        int modifyResult = empService.numModify(member); // 이전 직원번호 테이블에 먼저 넣어줌
+//        log.info("modifyResult : " + modifyResult);
+
+//        if(modifyResult > 0) {
+            int updateResult = empService.empUpdate(member); // 정보 업데이트
+//
+//            if(updateResult > 0){
+//                int deleteResult = empService.numDelete(member); // 이전 직원번호 삭제
+//
+//            }
+//        } else {
+//
+            log.info("직원 정보 수정에 실패하였습니다.");
+//        }
+
 
         return "redirect:/emp/empList";
     }

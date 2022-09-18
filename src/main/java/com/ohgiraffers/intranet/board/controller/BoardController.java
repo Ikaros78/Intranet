@@ -120,12 +120,12 @@ public class BoardController {
     @GetMapping("/update")
     public String boardUpdatePage(HttpServletRequest request, Model model) {
 
-        String no = (request.getParameter("no"));
+        String no = request.getParameter("no");
 
         FreeinsertDTO board = boardService.selectboardDetail(no);
         model.addAttribute("board", board);
 
-//        log.info("title 확인 : " + board.getTitle());
+        log.info("title 확인 : " + board.getTitle());
 
 
         return "freelist/boardcorrection";

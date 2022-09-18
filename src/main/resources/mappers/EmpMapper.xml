@@ -16,6 +16,7 @@
         <result property="mem_address" column="MEM_ADDRESS"/>
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
+        <result property="bef_num" column="BEF_NUM"/>
 
         <association property="department" resultMap="deptResultMap"/>
     </resultMap>
@@ -283,4 +284,26 @@
              , DEPT_CODE = #{ dept_code }
          WHERE MEM_NUM = #{ bef_num }
     </update>
+
+    <!-- 바뀌기 전 직원 번호 DB 저장 -->
+<!--    <insert id="numModify">-->
+<!--        INSERT-->
+<!--          INTO MEMBER_MODIFY-->
+<!--        (-->
+<!--          BEF_NUM-->
+<!--        , MEM_NUM-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--          #{ bef_num }-->
+<!--        , #{ mem_num }-->
+<!--        )-->
+<!--    </insert>-->
+
+     <!-- 이전 직원 번호 삭제 -->
+<!--    <update id="numDelete">-->
+<!--        UPDATE MEMBER-->
+<!--           SET BEF_NUM IS NULL-->
+<!--          FROM MEM_NUM = #{ mem_num }-->
+<!--    </update>-->
 </mapper>

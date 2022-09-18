@@ -41,4 +41,10 @@ public interface EmpService {
 
     /* 직원 정보 수정 - 관리자 */
     int empUpdate(MemberDTO member);
+
+    /* 바뀌기 전 직원 번호 DB 저장 */
+    int numModify(MemberDTO member);
+
+    /* 이전 직원 번호 삭제 */
+    int numDelete(MemberDTO member);
 }

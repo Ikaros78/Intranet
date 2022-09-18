@@ -1,11 +1,11 @@
 package com.ohgiraffers.intranet.board.controller;
 
 
+import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -125,29 +125,167 @@ public class BoardController {
         FreeinsertDTO board = boardService.selectboardDetail(no);
         model.addAttribute("board", board);
 
-//        log.info("title 확인 : " + board.getTitle());
 
 
         return "freelist/boardcorrection";
     }
 
-//    @PostMapping("/update")
-//
-//    public String boardUpdatePag(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
-//
-//        //log.info("free insert : " + freeinsert.getTitle());
-//        //log.info("free insert : " +  freeinsert.getContents());
-//        //log.info("free insert : " +  freeinsert.getMem_num());
-//        //log.info("freeinsert : " + freeinsert);
-//
-//        int registResult = boardService.boardUpdate(freeinsert);
-//
-//        log.info("registResult : " + registResult);
-//
-//        return "board/boardcorrection";
-//
-//
-//    }
+    @PostMapping("/update")
+
+    public String boardUpdatePag(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
+
+        //log.info("free insert : " + freeinsert.getTitle());
+        //log.info("free insert : " +  freeinsert.getContents());
+        //log.info("free insert : " +  freeinsert.getMem_num());
+        //log.info("freeinsert : " + freeinsert);
+
+        int registResult = boardService.boardUpdate(freeinsert);
+
+        log.info("registResult : " + registResult);
+
+        return "board/boardcorrection";
+
+
+    }
+
+    @GetMapping("/delete")
+
+    public String boardDelete(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
+
+        String no = request.getParameter("no");
+
+        boardService.boardDelete(freeinsert);
+
+        return "redirect:/board/list";
+    }
+
+
+//    익명
+
+    @GetMapping("/eiboard/list")
+
+    public ModelAndView eiboardlist(HttpServletRequest request, ModelAndView mv) {
+
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if (currentPage != null && !"".equals(currentPage)) {
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchCondition = request.getParameter("searchCondition");
+        String searchValue = request.getParameter("searchValue");
+
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+        log.info("검색조건 확인 : " + searchMap);
+
+        int totalCount = boardService.selectTotalCounte(searchMap);
+
+        int limit = 10;
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = null;
+
+        if (searchCondition != null && !"".equals(searchCondition)) {
+
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
+                    searchCondition, searchValue);
+            {
+
+            }
+        } else {
+
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+        }
+        log.info("selectCriteria 확인 : " + selectCriteria);
+
+        List<AnonyDTO> eiboardList = boardService.selectBoardListe(selectCriteria);
+        log.info("boardlist 확인 : " + eiboardList);
+
+        mv.addObject("eiboardlist", eiboardList);
+        mv.addObject("selectCriteria", selectCriteria);
+        log.info("selectCriteria 확인 : " + selectCriteria);
+
+        log.info("dept값 가져오나 확인 : " + eiboardList);
+
+        mv.setViewName("freelist/anonymous");
+
+        return mv;
+    }
+
+    @GetMapping("/ei/insert")
+    public String eiboardinsertPage() {
+
+        return "freelist/anonyinsert";
+    }
+
+    @PostMapping("/ei/insert")
+    public String eiboardinsertPage(@ModelAttribute AnonyDTO anonyinsert, HttpServletRequest request) {
+
+        log.info("anonyinsert : " + anonyinsert);
+
+        int registResult = boardService.anonyinsert(anonyinsert);
+
+        log.info("registResult : " + registResult);
+
+        return "redirect:/board/eiboard/list";
+
+    }
+
+    @GetMapping("ei/detail")
+    public String eiboardDetailPage(HttpServletRequest request, Model model) {
+
+
+        String no = request.getParameter("no");
+        log.info("no 값 : " + no);
+
+        AnonyDTO eiboardDetail = boardService.selecteiBoardDetail(no);
+        model.addAttribute("eiboard", eiboardDetail);
+
+        return "freelist/anonyDetail";
+    }
+
+    @GetMapping("ei/update")
+    public String boardeiUpdatePage(HttpServletRequest request, Model model) {
+
+        String no = (request.getParameter("no"));
+
+        AnonyDTO eiboard = boardService.selectboardeiDetail(no);
+        model.addAttribute("eiboard", eiboard);
+
+
+
+        return "freelist/anonycorrection";
+    }
+
+    @PostMapping("ei/update")
+
+    public String boardeiUpdatePag(@ModelAttribute AnonyDTO anonyinsert, HttpServletRequest request) {
+
+
+
+        int registResult = boardService.eiboardUpdate(anonyinsert);
+
+        log.info("registResult : " + registResult);
+
+        return "redirect:/board/eiboard/list";
+
+
+    }
+
+    @GetMapping("ei/delete")
+
+    public String eiboardDelete(@ModelAttribute AnonyDTO anonyinsert, HttpServletRequest request) {
+
+        String no = request.getParameter("no");
+
+        boardService.eiboardDelete(anonyinsert);
+
+        return "redirect:/board/eiboard/list";
+    }
+
 
 }
 

@@ -1,6 +1,7 @@
 package com.ohgiraffers.intranet.board.model.service;
 
 import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
+import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
@@ -44,19 +45,85 @@ public class BoardService {
 
         int result = boardMapper.incresementBoardCount(no); //조회수 증가
 
-        if(result > 0){
+        if (result > 0) {
             boardDetail = boardMapper.selectBoardDetail(no);
         }
         return boardDetail;
     }
 
-    @Transactional
-    public int boardUpdate(FreeinsertDTO board) {
-        return boardMapper.boardUpdate(board);
-    }
+
+
 
 
     public FreeinsertDTO selectboardDetail(String no) {
-        return null;
+        return boardMapper.selectBoardDetail(no);
+    }
+
+
+    @Transactional
+    public int boardUpdate(FreeinsertDTO freeinsert) {
+        return boardMapper.selectUpdate(freeinsert);
+
+    }
+    @Transactional
+    public void boardDelete(FreeinsertDTO freeinsert) {
+      boardMapper.boardDelete(freeinsert.getNo());
+    }
+
+//    익명
+
+    public List<AnonyDTO> selectBoardListe(SelectCriteria selectCriteria) {
+        List<AnonyDTO> eiboardList = boardMapper.selectBoardListe(selectCriteria);
+
+        return eiboardList;
+    }
+
+
+    public int selectTotalCounte(Map<String, String> searchMap) {
+
+        int result = boardMapper.selectTotalCounte(searchMap);
+
+        return result;
+
+    }
+
+    @Transactional
+    public int anonyinsert(AnonyDTO anonyinsert) {
+
+    return boardMapper.anonyinsert(anonyinsert);
+    }
+
+
+
+    public AnonyDTO selecteiBoardDetail(String no) {
+
+        AnonyDTO eiboardDetail = null;
+
+            int result = boardMapper.incresementeiBoardCount(no); //조회수 증가
+
+            if (result > 0) {
+                eiboardDetail = boardMapper.selecteiBoardDetail(no);
+            }
+            return eiboardDetail;
+        }
+
+    public AnonyDTO selectboardeiDetail(String no) {
+
+        AnonyDTO eiboardDetail = null;
+        eiboardDetail = boardMapper.selecteiBoardDetail(no);
+
+        return eiboardDetail;
+
+    }
+
+    public int eiboardUpdate(AnonyDTO anonyinsert) {
+        return boardMapper.boardeiUpdatePag(anonyinsert);
+
+    }
+
+    public void eiboardDelete(AnonyDTO anonyinsert) {
+
+            boardMapper.eiboardDelete(anonyinsert.getNo());
     }
 }
+

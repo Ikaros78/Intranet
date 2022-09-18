@@ -1,5 +1,6 @@
 package com.ohgiraffers.intranet.board.model.dao;
 
+import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +26,23 @@ public interface BoardMapper {
     FreeinsertDTO selectBoardDetail(String no);
 
     int boardUpdate(FreeinsertDTO board);
+
+    int selectUpdate(FreeinsertDTO freeinsert);
+
+    void boardDelete(String no);
+
+    List<AnonyDTO> selectBoardListe(SelectCriteria selectCriteria);
+
+    int selectTotalCounte(Map<String, String> searchMap);
+
+    int anonyinsert(AnonyDTO anonyinsert);
+
+
+    AnonyDTO selecteiBoardDetail(String no);
+
+    int incresementeiBoardCount(String no);
+
+    int boardeiUpdatePag(AnonyDTO anonyinsert);
+
+    void eiboardDelete(String no);
 }

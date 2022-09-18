@@ -86,17 +86,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
 
                 //자동 로그인 코드
-        http.rememberMe()
-                    .key("heechang!") // token 생성 값. 필수
-                    .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
-                    .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
-                    .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
-                    .userDetailsService(userDetailsService()) // 사용자 정보를 받음.
+//        http.rememberMe()
+//                    .key("heechang!") // token 생성 값. 필수
+//                    .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
+//                    .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
+//                    .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
+//                    .userDetailsService(userDetailsService()) // 사용자 정보를 받음.
 
 
                 //예외처리 핸들링
-               .and()
-                    .exceptionHandling()
+               http.exceptionHandling()
                     .accessDeniedPage("/common/denied.html");
 
 ;    }

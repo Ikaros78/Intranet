@@ -32,13 +32,13 @@
         <table>
           <thead>
           <tr>
-            <th style="text-align: center">마이페이지</th>
-            <th style="text-align: center">개인정보 조회</th>
+            <th style="text-align: center; font-size:1.3rem">마이페이지</th>
+            <th style="text-align: center; font-size:1.3rem">개인정보 조회</th>
           </tr>
           </thead>
           <tbody>
           <tr>
-            <td style="padding-right: 100px;">이름</td>
+            <td style="padding-right: 200px;">이름</td>
             <td style="padding-right: 450px;"><span th:text="${ #authentication.getPrincipal().getMem_name() }"></span></td>
           </tr>
           <tr>
@@ -50,23 +50,51 @@
             <td><span th:text="${ #authentication.getPrincipal().getMem_email() }"></span></td>
           </tr>
           <tr>
-            <td>사원번호</td>
-            <td><span th:text="${ #authentication.getPrincipal().getMem_num() }"></span></td>
-          </tr>
-          <tr>
             <td>주소</td>
             <td><span th:text="${ #authentication.getPrincipal().getMem_address() }"></span></td>
           </tr>
           <tr>
+            <td>사원번호</td>
+            <td><span th:text="${ #authentication.getPrincipal().getMem_num() }"></span></td>
+          </tr>
+          <tr>
             <td>부서명</td>
             <td><span th:text="${ #authentication.getPrincipal().getDepartment().getDept_name() }"></span></td>
+          </tr>
+          <tr>
+            <td>직급</td>
+            <td><span th:text="${ #authentication.getPrincipal().getDept_rank() }"></span></td>
           </tr>
           </tbody>
         </table>
       </form>
       <button th:onclick="|location.href='@{/member/mypageUpdate}'|">개인정보 수정</button>
     </div>
+    <div>
+       <a href="javascript:showPopUp()"><img src="">채팅창</a>
+    </div>
   </div>
 </div>
+  <script type="text/javascript">
+    function showPopUp() {
+
+      //창 크기 지정
+      let width = 550;
+      let height = 910;
+
+      //pc화면기준 가운데 정렬
+      let left = (window.screen.width / 2) - (width/2);
+      let top = (window.screen.height / 4);
+
+      //윈도우 속성 지정
+      let windowStatus = 'width='+width+', height='+height+', left='+left+', top='+top+', resizable=yes';
+
+      //연결하고싶은url
+      const url = "https://intranetchat.run.goorm.io";
+
+      //등록된 url 및 window 속성 기준으로 팝업창을 연다.
+      window.open(url, "hello popup", windowStatus);
+    }
+  </script>
 </th:block>
 </html>

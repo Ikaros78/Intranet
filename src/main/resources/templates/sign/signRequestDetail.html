@@ -112,9 +112,9 @@
             <tr>
               <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
             </tr>
-            <tr>
+            <tr th:if="${signDetail.file.originName != null}">
               <td th:colspan="4">
-                <a th:if="${signDetail.file.originName != null}" class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
+                <a class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
                   <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
                   <span th:text="${ signDetail.file.originName }"></span>
                 </a>
@@ -123,6 +123,31 @@
             </tbody>
           </table>
         </form>
+      </div>
+
+      <div id="opinion">
+        <h3>결재의견</h3>
+        <table class="table opinion">
+          <thead>
+          <tr>
+            <th width="150px">결재</th>
+            <th width="200px">결재자</th>
+            <th width="200px">결재일시</th>
+            <th width="800px">의견</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="approve : ${ signDetail.approver }">
+            <th:block th:if="${approve.isApproved eq 'Y'}">
+              <td th:if="${approve.isRefused eq 'N'}" th:text="결재"></td>
+              <td th:if="${approve.isRefused eq 'Y'}" th:text="반려"></td>
+              <td th:text="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank}"></td>
+              <td th:text="${approve.approveDate}"></td>
+              <td th:text="${approve.opinion}"></td>
+            </th:block>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

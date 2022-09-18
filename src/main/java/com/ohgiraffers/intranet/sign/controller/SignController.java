@@ -444,13 +444,16 @@ public class SignController {
     public ModelAndView approveSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         int signNo = Integer.parseInt(request.getParameter("signNo"));
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
+        log.info("opinion = " + opinion);
         log.info("signNo = " + signNo);
 
         Map<String, Object> approve = new HashMap<>();
         approve.put("signNo", signNo);
+        approve.put("opinion", opinion);
         approve.put("mem_num", mem_num);
 
         int result = signService.approveSign(approve);
@@ -465,11 +468,13 @@ public class SignController {
     public ModelAndView refuseSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         int signNo = Integer.parseInt(request.getParameter("signNo"));
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
         Map<String, Object> refuse = new HashMap<>();
         refuse.put("signNo", signNo);
+        refuse.put("opinion", opinion);
         refuse.put("mem_num", mem_num);
 
         int result = signService.refuseSign(refuse);

@@ -234,6 +234,8 @@
               , E.SIGN_TYPE
               , E.IS_REFUSED
               , E.IS_LAST_APPROVER
+              , E.APPROVE_DATE
+              , E.OPINION
               , EM.MEM_NAME APPROVERNAME
               , EM.DEPT_RANK APPROVERRANK
               , F.RECEIVER_NO
@@ -333,6 +335,7 @@
         SET
             A.IS_APPROVED = 'Y'
           , A.APPROVE_DATE = SYSDATE
+          , A.OPINION = #{ opinion }
         WHERE A.SIGN_NO = #{ signNo }
           AND A.APPROVER_NO = #{ mem_num }
     </update>
@@ -344,6 +347,7 @@
             A.IS_APPROVED = 'Y'
           , A.APPROVE_DATE = SYSDATE
           , A.IS_REFUSED = 'Y'
+          , A.OPINION = #{ opinion }
         WHERE A.SIGN_NO = #{ signNo }
           AND A.APPROVER_NO = #{ mem_num }
     </update>

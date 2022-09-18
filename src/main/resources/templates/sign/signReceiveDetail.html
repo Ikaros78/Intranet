@@ -106,9 +106,9 @@
             <tr>
               <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
             </tr>
-            <tr>
+            <tr th:if="${signDetail.file.originName != null}">
               <td th:colspan="4">
-                <a th:if="${signDetail.file.originName != null}" class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
+                <a class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
                   <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
                   <span th:text="${ signDetail.file.originName }"></span>
                 </a>

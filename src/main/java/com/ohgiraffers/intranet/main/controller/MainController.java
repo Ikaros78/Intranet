@@ -4,10 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.member.model.dto.UserImpl;
+import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.service.MsBoardServiceImpl;
 import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import com.ohgiraffers.intranet.notice.model.service.NoticeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,6 +97,60 @@ public class MainController {
         return gson.toJson(noticeList);
     }
 
+    /* 메인페이지 메시지 요청 */
+    @GetMapping("/mainMs")
+    @ResponseBody
+    public String selectMessage(HttpServletRequest request, @AuthenticationPrincipal User user) {
 
+        int pageNo = 1;
+
+        String searchCondition = request.getParameter("searchCondition");
+        String searchValue = request.getParameter("searchValue");
+        int memNum = ((UserImpl) user).getMem_num();
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("searchCondition", searchCondition);
+        searchMap.put("searchValue", searchValue);
+        searchMap.put("memNum", memNum);
+
+        int totalCount = msBoardService.selectTotalCount(searchMap);
+
+        /* 한 페이지에 보여 줄 게시물 수 */
+        int limit = 8; // 얘도 파라미터로 전달받아도 된다.
+
+        /* 한 번에 보여질 페이징 버튼의 갯수 */
+        int buttonAmount = 0;
+
+        /* 페이징 처리를 위한 로직 호출 후 페이징 처리에 관한 정보를 담고 있는 인스턴스를 반환받는다. */
+        SelectCriteria selectCriteria = null;
+
+        if (searchCondition != null && !"".equals(searchCondition)) {
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition,
+                    searchValue);
+        } else {
+            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+        }
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("selectCriteria", selectCriteria);
+        searchList.put("memNum", memNum);
+
+        System.out.println("searchList + " + searchList);
+
+        List<MsBoardDTO> boardList = msBoardService.selectMsRecpBoard(searchList);
+
+//        mv.addObject("boardList", boardList);
+//        mv.addObject("selectCriteria", selectCriteria);
+//        mv.addObject("searchList", searchList);
+//        mv.setViewName("message/messageRecpBox");
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
+        System.out.println("boardList = " + boardList);
+        System.out.println("searchList = " + searchList);
+        System.out.println("gson = " + gson);
+
+        return gson.toJson(boardList);
+    }
 
 }

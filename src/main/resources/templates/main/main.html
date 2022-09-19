@@ -135,9 +135,14 @@
         border-right: 1px solid #aaa;
         border-bottom: 1px solid #aaa;
     }
-    .more{
+    .moreNo{
         float: right;
-        margin-top: -16px;
+        margin-top: -18px;
+        font-size: 12px;
+    }
+    .moreMs{
+        float: right;
+        margin-top: -18px;
         font-size: 12px;
     }
 
@@ -164,7 +169,7 @@
 
             <table id="noTable">
 
-                <p class="tableName"><strong>공지사항</strong></p><span class="more"><a a th:href="@{/notice/list}">+ 더보기</a></span>
+                <p class="tableName"><strong>공지사항</strong></p><span class="moreNo"><a th:href="@{/notice/list}">+ 더보기</a></span>
                 <hr color="#999999" noshade>
                 <thead>
                 <th class="noTitle">제목</th>
@@ -172,11 +177,6 @@
                 <th class="noDate">등록일</th>
                 </thead>
                 <tbody>
-<!--                <tr th:each="notice : ${noticeList}">-->
-<!--                    <td class="ddd" th:text="${notice.title}"></td>-->
-<!--                    <td class="dd" th:text="${notice.mem_num}"></td>-->
-<!--                    <td class="dddd" th:text="${notice.date}"></td>-->
-<!--                </tr>-->
                 </tbody>
                 <script>
 
@@ -228,7 +228,7 @@
 
             <table id="boTable">
 
-                <strong><p class="tableName">부서게시판</p></strong>
+                <strong><p class="tableName">부서공지사항</p></strong>
                 <hr color="#999999" noshade>
                 <thead>
                 <th class="boTitle">제목</th>
@@ -236,7 +236,6 @@
                 <th class="boDate">등록일</th>
                 </thead>
                 <tbody>
-
                 </tbody>
 
 
@@ -248,7 +247,7 @@
 
             <table id="msTable">
 
-                <strong><p class="tableName">메시지함</p></strong>
+                <p class="tableName"><strong>메시지함</strong></p><span class="moreMs"><a th:href="@{/ms/recp}">+ 더보기</a></span>
                 <hr color="#999999" noshade>
                 <thead>
                 <th class="msTitle">제목</th>
@@ -256,9 +255,47 @@
                 <th class="msDate">받은날짜</th>
                 </thead>
                 <tbody>
-
                 </tbody>
+                <script>
 
+                    $.ajax({
+
+                        url: "mainMs",
+                        /* 타입 : get */
+                        /* 데이터 : noMs */
+
+                        success:function(data){
+
+                            console.table(data);
+
+                            const noMs = JSON.parse(data);
+
+                            console.log(noMs);
+                            const $table = $("#msTable tbody");
+                            $table.html(""); // 초기화
+
+                            for (let idx in noMs) {
+
+                                $tr = $("<tr>");
+                                $msTitle = $('<td class="ddd">').text(noMs[idx].msTitle);
+                                $member = $('<td class="dd">').text(noMs[idx].sendName);
+                                $sendDate = $('<td class="dddd">').text(noMs[idx].sendDate);
+
+                                $tr.append($msTitle);
+                                $tr.append($member);
+                                $tr.append($sendDate);
+
+                                $table.append($tr);
+                            }
+                        },
+                        error: function(error) {
+
+                            console.log(error);
+                        }
+
+                    });
+
+                </script>
             </table>
 
         </div><!-- 메시지 end -->

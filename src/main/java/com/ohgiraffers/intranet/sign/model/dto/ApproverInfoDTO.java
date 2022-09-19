@@ -13,13 +13,13 @@ public class ApproverInfoDTO {
     private java.sql.Date mem_birth;
     private String mem_email;
     private String mem_address;
-    private String dept_rank;
+    private String approverRank;
     private String dept_code;
 
     public ApproverInfoDTO() {
     }
 
-    public ApproverInfoDTO(int mem_num, String mem_id, String mem_pw, String approverName, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code) {
+    public ApproverInfoDTO(int mem_num, String mem_id, String mem_pw, String approverName, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String approverRank, String dept_code) {
         this.mem_num = mem_num;
         this.mem_id = mem_id;
         this.mem_pw = mem_pw;
@@ -29,7 +29,7 @@ public class ApproverInfoDTO {
         this.mem_birth = mem_birth;
         this.mem_email = mem_email;
         this.mem_address = mem_address;
-        this.dept_rank = dept_rank;
+        this.approverRank = approverRank;
         this.dept_code = dept_code;
     }
 
@@ -105,12 +105,12 @@ public class ApproverInfoDTO {
         this.mem_address = mem_address;
     }
 
-    public String getDept_rank() {
-        return dept_rank;
+    public String getApproverRank() {
+        return approverRank;
     }
 
-    public void setDept_rank(String dept_rank) {
-        this.dept_rank = dept_rank;
+    public void setApproverRank(String approverRank) {
+        this.approverRank = approverRank;
     }
 
     public String getDept_code() {
@@ -133,7 +133,7 @@ public class ApproverInfoDTO {
                 ", mem_birth=" + mem_birth +
                 ", mem_email='" + mem_email + '\'' +
                 ", mem_address='" + mem_address + '\'' +
-                ", dept_rank='" + dept_rank + '\'' +
+                ", approverRank='" + approverRank + '\'' +
                 ", dept_code='" + dept_code + '\'' +
                 '}';
     }

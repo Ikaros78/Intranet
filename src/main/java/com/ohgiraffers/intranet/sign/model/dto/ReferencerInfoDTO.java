@@ -13,13 +13,13 @@ public class ReferencerInfoDTO {
     private java.sql.Date mem_birth;
     private String mem_email;
     private String mem_address;
-    private String dept_rank;
+    private String referencerRank;
     private String dept_code;
 
     public ReferencerInfoDTO() {
     }
 
-    public ReferencerInfoDTO(int mem_num, String mem_id, String mem_pw, String referencerName, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code) {
+    public ReferencerInfoDTO(int mem_num, String mem_id, String mem_pw, String referencerName, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String referencerRank, String dept_code) {
         this.mem_num = mem_num;
         this.mem_id = mem_id;
         this.mem_pw = mem_pw;
@@ -29,7 +29,7 @@ public class ReferencerInfoDTO {
         this.mem_birth = mem_birth;
         this.mem_email = mem_email;
         this.mem_address = mem_address;
-        this.dept_rank = dept_rank;
+        this.referencerRank = referencerRank;
         this.dept_code = dept_code;
     }
 
@@ -105,12 +105,12 @@ public class ReferencerInfoDTO {
         this.mem_address = mem_address;
     }
 
-    public String getDept_rank() {
-        return dept_rank;
+    public String getReferencerRank() {
+        return referencerRank;
     }
 
-    public void setDept_rank(String dept_rank) {
-        this.dept_rank = dept_rank;
+    public void setReferencerRank(String referencerRank) {
+        this.referencerRank = referencerRank;
     }
 
     public String getDept_code() {
@@ -133,7 +133,7 @@ public class ReferencerInfoDTO {
                 ", mem_birth=" + mem_birth +
                 ", mem_email='" + mem_email + '\'' +
                 ", mem_address='" + mem_address + '\'' +
-                ", dept_rank='" + dept_rank + '\'' +
+                ", referencerRank='" + referencerRank + '\'' +
                 ", dept_code='" + dept_code + '\'' +
                 '}';
     }

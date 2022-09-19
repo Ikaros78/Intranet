@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.board.model.service;
 import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,4 +50,14 @@ public class BoardService {
         return boardDetail;
     }
 
+    @Transactional
+    public int boardUpdate(FreeinsertDTO board) {
+        return boardMapper.boardUpdate(board);
+    }
+
+
+    public FreeinsertDTO selectboardDetail(String no) {
+
+        return boardMapper.selectBoardDetail(no);
+    }
 }

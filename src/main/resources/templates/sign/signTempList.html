@@ -46,7 +46,7 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            <labeL>양식명</labeL>
+                                            <label>양식명</label>
                                         </th>
                                         <td>
                                             <input type="text" title="양식명" name="searchForm">
@@ -54,13 +54,13 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <labeL>제목</labeL>
+                                            <label>제목</label>
                                         </th>
                                         <td>
                                             <input type="text" title="제목" name="searchTitle">
                                         </td>
                                         <th scope="row">
-                                            <labe>등록일</labe>
+                                            <label>등록일</label>
                                         </th>
                                         <td>
                                             <input type="text" title="시작일" name="searchStartDate" class="datePicker">
@@ -111,7 +111,7 @@
                         </button>
                         <!-- 이전 페이지 버튼 -->
                         <button
-                                th:onclick="'location.href=\'/sign/tempList?currentPage='+ @${selectCriteria.pageNo - 1}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '\''"
+                                th:onclick="'location.href=\'/sign/tempList?currentPage='+ @{${selectCriteria.pageNo - 1}} + '&searchForm=' + @{${searchList.searchForm}} + '&searchTitle=' + @{${searchList.searchTitle}} + '&searchStartDate=' + @{${searchList.searchStartDate}} + '&searchEndDate=' + @{${searchList.searchEndDate}} + '\''"
                                 th:disabled="${selectCriteria.pageNo == 1}"
                         >
                             <
@@ -142,7 +142,7 @@
                     </div>
                 </div> <!-- list-wrap -->
 
-                <div class="col-2-offset-8" align="right">
+                <div class="col-2-offset-8 signAll" align="right">
                     <button id="deleteChecked">삭제</button>
                 </div>
             </div>

@@ -13,17 +13,15 @@
 		<result property="sendDate" column="MS_SEND_DATE" />
 		<result property="recpDate" column="MS_RECP_DATE" />
 		<result property="readYn" column="MS_READ_YN" />
-		<result property="memNum" column="MEM_NUM" />
 		<result property="sendDel" column="MS_SEND_DEL" />
 		<result property="recpDel" column="MS_RECP_DEL" />
 		<result property="recpNum" column="MS_RECP_NUM" />
 		<result property="contents" column="MS_CONTENTS" />
 		<result property="sendNum" column="MS_SEND_NUM" />
+		<result property="memNum" column="MEM_NUM" />
 		<collection property="msFile" resultMap="MsFileResultMap"/>
 	</resultMap>
 	
-
-
 	<resultMap type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO" id="deptResultMap">
 		<id property="dept_code" column="DEPT_CODE" />
 		<result property="dept_name" column="DEPT_NAME" />
@@ -62,11 +60,12 @@
 				AND A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 				AND A.MS_READ_YN = 'N'
-				AND A.MEM_NUM = A.MS_RECP_NUM	
+				AND A.MS_RECP_NUM = #{ memNum }
+				AND A.MS_RECP_DEL = 'N'
 		</where>
 	</select>
 
-	<select id="selectMsRecpBoard" resultMap="MsboardResultMap">
+	<select id="selectMsRecpBoard" resultMap="MsboardResultMap" parameterType="hashmap">
 		SELECT
 			  A.RNUM
 			, A.MS_NO
@@ -76,7 +75,6 @@
 			, A.MS_SEND_DATE
 			, A.MS_RECP_DATE
 			, A.MS_READ_YN
-			, A.MEM_NUM
 			, A.MS_SEND_DEL
 			, A.MS_RECP_DEL
 			, A.MS_RECP_NUM
@@ -90,7 +88,6 @@
 						, B.MS_SEND_DATE
 						, B.MS_RECP_DATE
 						, B.MS_READ_YN
-						, B.MEM_NUM
 						, B.MS_SEND_DEL
 						, B.MS_RECP_DEL
 						, B.MS_RECP_NUM
@@ -103,33 +100,29 @@
 										, C.MS_SEND_DATE
 										, C.MS_RECP_DATE
 										, C.MS_READ_YN
-										, C.MEM_NUM
 										, C.MS_SEND_DEL
 										, C.MS_RECP_DEL
 										, C.MS_RECP_NUM
 										, C.MS_CONTENTS
 										, C.MS_SEND_NUM
 									FROM  MS_BOARD C
-									<if test="searchCondition == 'writer'">
-									    JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
-									</if>
 									<where>
 										<if test="searchCondition == 'msTitle'">
-							                AND C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
+							                AND   C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
 										</if>
 										<if test="searchCondition == 'sendName'">
-											AND C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+											AND   C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 										</if>
 											AND   C.MS_READ_YN = 'N'
-											AND   C.MEM_NUM = C.MS_RECP_NUM
+											AND   C.MS_RECP_NUM = #{ memNum }
 											AND   C.MS_RECP_DEL = 'N'
 									</where>
 									ORDER BY C.MS_NO DESC )B
 							               <![CDATA[
-							                  WHERE ROWNUM <= #{ endRow }
+							                  WHERE ROWNUM <= #{ selectCriteria.endRow }
 							                  ]]>
 						) A
-						WHERE A.RNUM >= #{ startRow }
+						WHERE A.RNUM >= #{ selectCriteria.startRow }
 					</select>
 
 	<select id="selectSendTotalCount" resultType="_int"
@@ -147,11 +140,12 @@
 			<if test="searchCondition == 'recpName'">
 				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
-		        AND A.MEM_NUM = A.MS_SEND_NUM
+		        AND A.MS_SEND_NUM = #{ memNum }
+		        AND A.MS_SEND_DEL = 'N'
 		</where>
 	</select>
 
-	<select id="selectMsSendBoard" resultMap="MsboardResultMap">
+	<select id="selectMsSendBoard" resultMap="MsboardResultMap" parameterType="hashmap">
 		SELECT
 		A.RNUM
 		, A.MS_NO
@@ -161,7 +155,6 @@
 		, A.MS_SEND_DATE
 		, A.MS_RECP_DATE
 		, A.MS_READ_YN
-		, A.MEM_NUM
 		, A.MS_SEND_DEL
 		, A.MS_RECP_DEL
 		, A.MS_RECP_NUM
@@ -175,7 +168,6 @@
 		, B.MS_SEND_DATE
 		, B.MS_RECP_DATE
 		, B.MS_READ_YN
-		, B.MEM_NUM
 		, B.MS_SEND_DEL
 		, B.MS_RECP_DEL
 		, B.MS_RECP_NUM
@@ -188,7 +180,6 @@
 		, C.MS_SEND_DATE
 		, C.MS_RECP_DATE
 		, C.MS_READ_YN
-		, C.MEM_NUM
 		, C.MS_SEND_DEL
 		, C.MS_RECP_DEL
 		, C.MS_RECP_NUM
@@ -196,24 +187,21 @@
 		, C.MS_SEND_NUM
 		FROM MS_BOARD C
 		<where>
-			<if test="searchCondition == 'msTitle'">
-				C.MS_TITLE = #{ searchValue }
-			</if>
 			<if test="searchCondition == 'sendName'">
 				C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 			<if test="searchCondition == 'recpName'">
 				C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
-			AND   C.MEM_NUM = C.MS_SEND_NUM
+			AND   C.MS_SEND_NUM = #{ memNum }
 			AND   C.MS_SEND_DEL = 'N'
 		</where>
 		ORDER BY C.MS_NO DESC )B
 			               <![CDATA[
-			                  WHERE ROWNUM <= #{ endRow }
+			                  WHERE ROWNUM <= #{ selectCriteria.endRow }
 			                  ]]>
 		) A
-		WHERE A.RNUM >= #{ startRow }
+		WHERE A.RNUM >= #{ selectCriteria.startRow }
 	</select>
 
 	<select id="selectAllRecpTotalCount" resultType="_int"
@@ -231,11 +219,13 @@
 			<if test="searchCondition == 'recpName'">
 				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
-		        AND A.MEM_NUM = A.MS_RECP_NUM
+		        AND A.MS_RECP_NUM = #{ memNum }
+		        AND A.MS_RECP_DEL = 'N'
+		        
 		</where>
 	</select>
 
-	<select id="selectMsAllRecpBoard" resultMap="MsboardResultMap">
+	<select id="selectMsAllRecpBoard" resultMap="MsboardResultMap" parameterType="hashmap">
 		SELECT
 				A.RNUM
 				, A.MS_NO
@@ -245,7 +235,6 @@
 				, A.MS_SEND_DATE
 				, A.MS_RECP_DATE
 				, A.MS_READ_YN
-				, A.MEM_NUM
 				, A.MS_SEND_DEL
 				, A.MS_RECP_DEL
 				, A.MS_RECP_NUM
@@ -259,7 +248,6 @@
 						, B.MS_SEND_DATE
 						, B.MS_RECP_DATE
 						, B.MS_READ_YN
-						, B.MEM_NUM
 						, B.MS_SEND_DEL
 						, B.MS_RECP_DEL
 						, B.MS_RECP_NUM
@@ -272,7 +260,6 @@
 						, C.MS_SEND_DATE
 						, C.MS_RECP_DATE
 						, C.MS_READ_YN
-						, C.MEM_NUM
 						, C.MS_SEND_DEL
 						, C.MS_RECP_DEL
 						, C.MS_RECP_NUM
@@ -289,15 +276,15 @@
 							<if test="searchCondition == 'recpName'">
 								C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 							</if>
-							AND C.MEM_NUM = C.MS_RECP_NUM
+							AND C.MS_RECP_NUM = #{ memNum }
 							AND C.MS_RECP_DEL = 'N'
 						</where>
 						ORDER BY C.MS_NO DESC )B
 							               <![CDATA[
-							                  WHERE ROWNUM <= #{ endRow }
+							                  WHERE ROWNUM <= #{ selectCriteria.endRow }
 							                  ]]>
 						) A
-						WHERE A.RNUM >= #{ startRow }
+						WHERE A.RNUM >= #{ selectCriteria.startRow }
 					</select>
 
 	<insert id="MsboardInsert">
@@ -347,9 +334,9 @@
 		, #{ saveName }
 		, #{ savePath }
 		, SYSDATE
-		, #{ msNo }
+		, #{ refmsNo }
 		)
-		<selectKey keyProperty="msNo" resultType="_int" order="BEFORE">
+		<selectKey keyProperty="refmsNo" resultType="_int" order="BEFORE">
 			SELECT
 			SEQ_MS_NO.CURRVAL
 			FROM DUAL
@@ -364,6 +351,7 @@
 		, A.MS_RECP_NAME
 		, A.MS_SEND_DATE
 		, A.MS_RECP_DATE
+		, A.MS_CONTENTS
 		, A.MS_READ_YN
 		, A.MEM_NUM
         , B.MSF_ORIGINAL_NAME
@@ -393,7 +381,7 @@
 	</select>
 
 
-	<select id="getMemberList" resultMap="memberResultMap">
+	<select id="getMemberListt" resultMap="memberResultMap">
 		SELECT
 		A.MEM_NUM
 		, A.MEM_NAME
@@ -402,7 +390,7 @@
 		FROM MEMBER A
 		JOIN DEPARTMENT B ON(A.DEPT_CODE =
 		B.DEPT_CODE)
-		WHERE B.DEPT_NAME = #{ dept_name }
+		WHERE B.DEPT_NAME = #{ deptName }
 	</select>
 	
 	<select id="getMemberListSecond" resultMap="memberResultMap">
@@ -416,6 +404,14 @@
 		B.DEPT_CODE)
 		WHERE A.MEM_NAME = #{ name }
 	</select>
+	
+	<update id="recpNameUpdate">
+	 UPDATE MS_BOARD A 
+		SET A.MS_RECP_NAME 
+        = ( SELECT B.MEM_NAME
+       FROM MEMBER B
+      WHERE A.MS_RECP_NUM = B.MEM_NUM)
+	</update>
 	
 	
 	<!-- 진짜 삭제 버튼 지우기  -->
@@ -439,20 +435,21 @@
 	<update id="recpYNMsBoard">
 		UPDATE
 		MS_BOARD A
-		SET A.MS_RECP_DEL = 'N'
+		SET A.MS_RECP_DEL = 'Y'
 		WHERE
 			A.MS_NO = #{ msNo }
-		AND A.MS_READ_DEL = 'Y'
+		AND A.MS_RECP_DEL = 'N'
 	</update>
 	<!-- 보낸사람 삭제 여부 변경 업데이트 -->
 	<update id="sendYNMsBoard">
 		UPDATE
 		MS_BOARD A
-		SET A.MS_SEND_DEL = 'N'
+		SET A.MS_SEND_DEL = 'Y'
 		WHERE
 		    A.MS_NO = #{ msNo }
-		AND A.MS_SEND_YN = 'Y'
+		AND A.MS_SEND_DEL = 'N'
 	</update>
+	
 	<!-- 파일 삭제  -->
 	 <delete id="msFileDelete">
         DELETE

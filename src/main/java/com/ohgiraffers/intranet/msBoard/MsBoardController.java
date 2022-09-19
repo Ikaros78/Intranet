@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -28,19 +33,18 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
+import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 import com.ohgiraffers.intranet.msBoard.model.service.MsBoardService;
-import com.ohgiraffers.intranet.notice.model.dto.GalleryFileDTO;
-import com.ohgiraffers.intranet.notice.model.dto.NoticeDTO;
 
 @Controller
 @RequestMapping(value = { "/ms/*" })
 public class MsBoardController {
 
 	public final MsBoardService msBoardService;
-	
+
 	@Autowired
 	public MsBoardController(MsBoardService msBoardService) {
 
@@ -51,7 +55,8 @@ public class MsBoardController {
 //	받은 쪽지함 Controller
 
 	@GetMapping(value = "/recp")
-	public ModelAndView selectMsRecpBoard(ModelAndView mv, HttpServletRequest request) {
+	public ModelAndView selectMsRecpBoard(ModelAndView mv, HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
 
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -62,10 +67,12 @@ public class MsBoardController {
 
 		String searchCondition = request.getParameter("searchCondition");
 		String searchValue = request.getParameter("searchValue");
+		int memNum = ((UserImpl) user).getMem_num();
 
-		Map<String, String> searchMap = new HashMap<>();
+		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
+		searchMap.put("memNum", memNum);
 
 		int totalCount = msBoardService.selectTotalCount(searchMap);
 
@@ -85,12 +92,17 @@ public class MsBoardController {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
 
-		List<MsBoardDTO> boardList = msBoardService.selectMsRecpBoard(selectCriteria);
+		Map<String, Object> searchList = new HashMap<>();
+		searchList.put("selectCriteria", selectCriteria);
+		searchList.put("memNum", memNum);
 
-		System.out.println("boardList + "  + boardList);
-		
+		System.out.println("searchList + " + searchList);
+
+		List<MsBoardDTO> boardList = msBoardService.selectMsRecpBoard(searchList);
+
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("searchList", searchList);
 		mv.setViewName("message/messageRecpBox");
 
 		return mv;
@@ -99,7 +111,8 @@ public class MsBoardController {
 //	보낸 쪽지함 Controller
 
 	@GetMapping(value = "/send")
-	public ModelAndView selectMsSendBoard(ModelAndView mv, HttpServletRequest request) {
+	public ModelAndView selectMsSendBoard(ModelAndView mv, HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
 
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -110,10 +123,12 @@ public class MsBoardController {
 
 		String searchCondition = request.getParameter("searchCondition");
 		String searchValue = request.getParameter("searchValue");
+		int memNum = ((UserImpl) user).getMem_num();
 
-		Map<String, String> searchMap = new HashMap<>();
+		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
+		searchMap.put("memNum", memNum);
 
 		int totalCount = msBoardService.selectSendTotalCount(searchMap);
 
@@ -133,10 +148,17 @@ public class MsBoardController {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
 
-		List<MsBoardDTO> boardList = msBoardService.selectMsSendBoard(selectCriteria);
+		Map<String, Object> searchList = new HashMap<>();
+		searchList.put("selectCriteria", selectCriteria);
+		searchList.put("memNum", memNum);
+
+		System.out.println("searchList + " + searchList);
+
+		List<MsBoardDTO> boardList = msBoardService.selectMsSendBoard(searchList);
 
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("searchList", searchList);
 		mv.setViewName("message/messageSendBox");
 
 		return mv;
@@ -145,7 +167,8 @@ public class MsBoardController {
 	// 받은쪽지함 전체 검색
 
 	@GetMapping(value = "/allrecp")
-	public ModelAndView selectMsAllRecpBoard(ModelAndView mv, HttpServletRequest request) {
+	public ModelAndView selectMsAllRecpBoard(ModelAndView mv, HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
 
 		String currentPage = request.getParameter("currentPage");
 		int pageNo = 1;
@@ -156,10 +179,12 @@ public class MsBoardController {
 
 		String searchCondition = request.getParameter("searchCondition");
 		String searchValue = request.getParameter("searchValue");
+		int memNum = ((UserImpl) user).getMem_num();
 
-		Map<String, String> searchMap = new HashMap<>();
+		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("searchCondition", searchCondition);
 		searchMap.put("searchValue", searchValue);
+		searchMap.put("memNum", memNum);
 
 		int totalCount = msBoardService.selectAllRecpTotalCount(searchMap);
 
@@ -179,10 +204,17 @@ public class MsBoardController {
 			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
 		}
 
-		List<MsBoardDTO> boardList = msBoardService.selectMsAllRecpBoard(selectCriteria);
+		Map<String, Object> searchList = new HashMap<>();
+		searchList.put("selectCriteria", selectCriteria);
+		searchList.put("memNum", memNum);
+
+		System.out.println("searchList + " + searchList);
+
+		List<MsBoardDTO> boardList = msBoardService.selectMsAllRecpBoard(searchList);
 
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("searchList", searchList);
 		mv.setViewName("message/messageAllBox");
 
 		return mv;
@@ -195,6 +227,7 @@ public class MsBoardController {
 
 		return "message/messageSend";
 	}
+
 	@Transactional
 	@PostMapping("/msinsert")
 	public String MsboardInsert(@RequestParam List<MultipartFile> msfile, @ModelAttribute MsBoardDTO msBoardDTO,
@@ -208,7 +241,16 @@ public class MsBoardController {
 		msBoardDTO.getSendNum();
 		msBoardDTO.getSendName();
 
+		System.out.println("msfilemsfilemsfile" + msfile);
+		
+		int msfilesize = msfile.size();
+		
+		
+		System.out.println("msfilesizemsfilesizemsfilesize" + msfilesize);
+		
 		msBoardService.MsboardInsert(msBoardDTO);
+
+		msBoardService.recpNameUpdate(msBoardDTO);
 
 		// 저장 경로 설정
 		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
@@ -227,28 +269,39 @@ public class MsBoardController {
 		System.out.println("===============" + msfile);
 
 		// 리스트로 받아준 파일들을 이름 설정 해서 돌려주고
+
+		
 		try {
 
 			for (int i = 0; i < msfile.size(); i++) {
+		
+				if(msfile.get(i).getOriginalFilename().length() != 0){
+					
+					System.out.println("---------------------------------------");
+					System.out.println("---------------------------------------" + msfile.get(i).getOriginalFilename().length());
+					System.out.println("---------------------------------------");
+					
+					originFileName = msfile.get(i).getOriginalFilename();
+					ext = originFileName.substring(originFileName.lastIndexOf("."));
+					savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-				originFileName = msfile.get(i).getOriginalFilename();
-				ext = originFileName.substring(originFileName.lastIndexOf("."));
-				savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+					MsFileDTO msFileDTO = new MsFileDTO();
+					msFileDTO.setOriginName(originFileName);
+					msFileDTO.setSaveName(savedName);
+					msFileDTO.setSavePath(fileUploadDirectory);
 
-				MsFileDTO msFileDTO = new MsFileDTO();
-				msFileDTO.setOriginName(originFileName);
-				msFileDTO.setSaveName(savedName);
-				msFileDTO.setSavePath(fileUploadDirectory);
+					int result = msBoardService.MsFileInsert(msFileDTO);
+
+					if (result != 0) {
+
+						msfile.get(i).transferTo(new File(fileUploadDirectory + "\\" + savedName));
+						model.addAttribute("message", "파일 업로드 성공!");
+
+					} 
 				
-				int result = msBoardService.MsFileInsert(msFileDTO);
-				
-				if(result != 0 ) {
-			
-					msfile.get(i).transferTo(new File(fileUploadDirectory + "\\" + savedName));
 				}
+			
 			}
-
-			model.addAttribute("message", "파일 업로드 성공!");
 
 		} catch (Exception e) {
 
@@ -259,27 +312,26 @@ public class MsBoardController {
 				savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 
 				new File(fileUploadDirectory + "\\" + savedName).delete();
-				;
-
+	
+				}
+	
+				model.addAttribute("message", "파일 업로드 실패!");
 			}
 
-			model.addAttribute("message", "파일 업로드 실패!");
-		}
-
+        
 		return "redirect:/ms/recp";
 	}
-
 	// 쪽지 상세보기 컨트롤러
 
 	@GetMapping("/msdetail")
 	public String selectMsBoardDetail(HttpServletRequest request, Model model) {
 
-		int msNo = Integer.parseInt(request.getParameter("msNo"));		
-		
+		int msNo = Integer.parseInt(request.getParameter("msNo"));
+
 		MsBoardDTO boardDetail = msBoardService.selectMsBoardDetail(msNo);
-		
-		model.addAttribute("msBoard",boardDetail);
-		
+
+		model.addAttribute("msBoard", boardDetail);
+
 		return "message/messageDetail";
 	}
 
@@ -296,54 +348,91 @@ public class MsBoardController {
 
 	@GetMapping(value = "getMemberList", produces = "application/json; charset-UTF-8")
 	@ResponseBody
-	private List<MsMemberListDTO> getMemberList(HttpServletRequest request) throws Exception {
+	public List<MsMemberListDTO> getMemberListt(@RequestParam String data) {
 
-		String dept_name = request.getParameter("data");
-		System.out.println("deptName 확인 : " + dept_name);
-		List<MsMemberListDTO> result = msBoardService.getMemberList(dept_name);
+		System.out.println("deptName 확인 : " + data);
+		System.out.println("msBoardService 확인 : " + msBoardService);
+		List<MsMemberListDTO> result = msBoardService.getMemberListt(data);
+
+		System.out.println("result ============" + result);
 
 		return result;
 	}
 
-	@GetMapping(value = "getMemberListSecond", produces = "application/json; charset-UTF-8")
+//	@GetMapping(value = "getMemberListSecond", produces = "application/json; charset-UTF-8")
+//	@ResponseBody
+//	public List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
+//
+//		String name = request.getParameter("data");
+//		
+//		System.out.println("namenamename"+ name);
+//
+//		List<MsMemberListDTO> result = msBoardService.getMemberListSecond(name);
+//
+//		return result;
+//	}
+
 	@ResponseBody
-	private List<MsMemberListDTO> getMemberListSecond(HttpServletRequest request) throws Exception {
+	@PostMapping(value = "recpDelete")
+	public String recpBoardDelete(HttpServletRequest request) throws ParseException{
 
-		String name = request.getParameter("data");
+		String test = request.getParameter("arr");
+		
+		JSONParser jsonparse = new JSONParser();
 
-		List<MsMemberListDTO> result = msBoardService.getMemberListSecond(name);
+		JSONArray json = (JSONArray)jsonparse.parse(test);
 
-		return result;
+		System.out.println(" json json " + json);
+		
+		
+		for(int i = 0; i < json.size(); i++) {
+			
+			MsBoardDTO msboardDTO = new MsBoardDTO();
+			
+			Integer.parseInt((String) json.get(i));
+		
+			System.out.println("Integer.parseInt((String) json.get(i)); + " + Integer.parseInt((String) json.get(i)));
+			
+			msboardDTO.setMsNo(Integer.parseInt((String) json.get(i)));
+			
+			msBoardService.recpYNMsBoard(msboardDTO);
+	
+			msBoardService.recpBoardDelete(msboardDTO);
+		}
+			
+		return "redirect:/ms/recp";
+
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "sendDelete")
+	public String sendBoardDelete(HttpServletRequest request) throws ParseException{
 
-//	
-//	@Transactional
-//    @GetMapping("/recpDelete")
-//    public String recpBoardDelete(@ModelAttribute List<MsBoardDTO> msBoard, HttpServletRequest request){
-//
-//        int msNo = Integer.parseInt(request.getParameter("msNo"));
-//
-//        System.out.println("msBoard + + " + msBoard);
-//        //요기다가 update 문 작성해서 삭제여부 변경해준 다음에 
-//        msBoardService.recpYNMsBoard(msBoard); // 값
-//        
-//        // 받은사람 삭제 여부 및 보낸사람 삭제여부가 둘다 Y 이면 삭제를 진행하고  
-//        msBoardService.recpBoardDelete(msBoard);
-//
-//        return "redirect:/ms/recp";
-//    }
-//    
-//    @GetMapping("/sendDelete")
-//    public String sendBoardDelete(@ModelAttribute MsBoardDTO msBoard, HttpServletRequest request){
-//    	
-//    	int msNo = Integer.parseInt(request.getParameter("msNo"));
-//    	
-//    	msBoardService.sendYNMsBoard(msBoard);
-//    	
-//    	msBoardService.sendBoardDelete(msNo);
-//    	
-//    	return "redirect:/ms/send";
-//    }
+		String test = request.getParameter("arr");
+		
+		JSONParser jsonparse = new JSONParser();
+
+		JSONArray json = (JSONArray)jsonparse.parse(test);
+
+		System.out.println(" json json " + json);
+		
+		
+		for(int i = 0; i < json.size(); i++) {
+			
+			MsBoardDTO msboardDTO = new MsBoardDTO();
+			
+			Integer.parseInt((String) json.get(i));
+		
+			System.out.println("Integer.parseInt((String) json.get(i)); + " + Integer.parseInt((String) json.get(i)));
+			
+			msboardDTO.setMsNo(Integer.parseInt((String) json.get(i)));
+			
+			msBoardService.sendYNMsBoard(msboardDTO);
 	
-	
+			msBoardService.sendBoardDelete(msboardDTO);
+		}
+			
+		return "redirect:/ms/send";
+
+	}
 }

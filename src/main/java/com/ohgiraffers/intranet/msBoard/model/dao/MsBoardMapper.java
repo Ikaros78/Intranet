@@ -14,28 +14,29 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 @Mapper
 public interface MsBoardMapper {
 
-	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsRecpBoard(Map<String, Object> searchList);
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectTotalCount(Map<String, Object> searchMap);
 
-	List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsSendBoard(Map<String, Object> searchList);
 
-	int selectSendTotalCount(Map<String, String> searchMap);
+	int selectSendTotalCount(Map<String, Object> searchMap);
 
-	List<MsBoardDTO> selectMsAllRecpBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsAllRecpBoard(Map<String, Object> searchList);
 
-	int selectAllRecpTotalCount(Map<String, String> searchMap);
+	int selectAllRecpTotalCount(Map<String, Object> searchMap);
 	
 //////////////////////////////////////////	
 	
+
+	int MsboardInsert(MsBoardDTO msBoardDTO,MsFileDTO msFileDTO);
+
 	int MsFileInsert(MsFileDTO msFileDTO);
 
 	int YNChangeMsBoard(int msNo);
 
-	int MsboardInsert(MsBoardDTO msBoardDTO);
+	List<MsMemberListDTO> getMemberListt(String data);
 
-	List<MsMemberListDTO> getMemberList(String dept_name) throws Exception;
-	
 	List<DepartmentDTO> getdeptList() throws Exception;
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
@@ -44,11 +45,21 @@ public interface MsBoardMapper {
 
 	List<MsFileDTO> selectMsBoardFileDetail(int msNo);
 
-//	int recpYNMsBoard(int msNo);
-//
-//	int recpBoardDelete(int msNo);
-//
-//	int msFileDelete(int msNo);
+	void recpNameUpdate(MsBoardDTO msBoardDTO);
+
+	int MsboardInsert(MsBoardDTO msBoardDTO);
+	
+	void recpYNMsBoard(int i);
+
+	int recpBoardDelete(int msNo);
+
+	void msFileDelete(int msNo);
+
+	void sendYNMsBoard(int msNo);
+
+	int sendBoardDelete(int msNo);
+
+	CharSequence count_receive_note(String payload);
 
 
 }

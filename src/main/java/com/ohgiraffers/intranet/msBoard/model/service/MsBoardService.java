@@ -11,17 +11,17 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
 public interface MsBoardService {
 
-	List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsRecpBoard(Map<String, Object> searchList);
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectTotalCount(Map<String, Object> searchMap);
 
-	List<MsBoardDTO> selectMsAllRecpBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsAllRecpBoard(Map<String, Object> searchList);
 	
-	int selectAllRecpTotalCount(Map<String, String> searchMap);
+	int selectAllRecpTotalCount(Map<String, Object> searchMap);
 
-	List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria);
+	List<MsBoardDTO> selectMsSendBoard(Map<String, Object> searchList);
 	
-	int selectSendTotalCount(Map<String, String> searchMap);
+	int selectSendTotalCount(Map<String, Object> searchMap);
 	
 	int MsFileInsert(MsFileDTO msFileDTO);
 
@@ -29,28 +29,21 @@ public interface MsBoardService {
 
 	int MsboardInsert(MsBoardDTO msBoardDTO);
 
-	List<MsMemberListDTO> getMemberList(String dept_name) throws Exception;
+	List<MsMemberListDTO> getMemberListt(String data);
 
 	List<DepartmentDTO> getdeptList() throws Exception;
 
 	List<MsMemberListDTO> getMemberListSecond(String name) throws Exception;
 
-//	void recpYNMsBoard(List<MsBoardDTO> msBoard);
-//
-//	void recpBoardDelete(List<MsBoardDTO> msBoard);
+	void recpNameUpdate(MsBoardDTO msBoardDTO);
 
-//	void recpBoardDelete(MsBoardDTO msBoard);
-//
-//	void sendBoardDelete(MsBoardDTO msBoard);
-////
-//	int sendBoardDelete(int msNo);
-//
-//	int recpBoardDelete(int msNo);
-//	
-//	int recpYNMsBoard(int msNo);
-//
-//	int sendYNMsBoard(int msBoard);
+	void recpYNMsBoard(MsBoardDTO msboardDTO);
 
+	void recpBoardDelete(MsBoardDTO msboardDTO);
+
+	void sendYNMsBoard(MsBoardDTO msboardDTO);
+
+	void sendBoardDelete(MsBoardDTO msboardDTO);
 
 	
 }

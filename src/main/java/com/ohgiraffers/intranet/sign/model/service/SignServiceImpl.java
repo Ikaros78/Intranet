@@ -6,6 +6,7 @@ import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dao.SignMapper;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFileDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class SignServiceImpl implements SignService {
     public List<SignDTO> selectRecentForm(int mem_num) {
 
         List<SignDTO> recentForm = signMapper.selectRecentForm(mem_num);
-        
+
         return recentForm;
     }
 
@@ -147,24 +148,6 @@ public class SignServiceImpl implements SignService {
         return completedList;
     }
 
-    /* 자신이 기안하고 완료된 결재 갯수 조회용 메소드 */
-    @Override
-    public int selectTotalMyCompletedCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalMyCompletedCount(searchMap);
-
-        return result;
-    }
-
-    /* 자신이 기안하고 완료된 결재 조회용 메소드 */
-    @Override
-    public List<SignDTO> selectMyCompletedList(Map<String, Object> searchList) {
-
-        List<SignDTO> completedList = signMapper.selectMyCompletedList(searchList);
-
-        return completedList;
-    }
-
     /* 반려문서함 전체 갯수 조회용 메소드 */
     @Override
     public int selectTotalRefusedCount(Map<String, Object> searchMap) {
@@ -183,24 +166,6 @@ public class SignServiceImpl implements SignService {
         return refusedList;
     }
 
-    /* 자신이 기안하고 반려된 결재 갯수 조회용 메소드 */
-    @Override
-    public int selectTotalMyRefusedCount(Map<String, Object> searchMap) {
-
-        int result = signMapper.selectTotalMyRefusedCount(searchMap);
-
-        return result;
-    }
-
-    /* 자신이 기안하고 반려된 결재 조회용 메소드 */
-    @Override
-    public List<SignDTO> selectMyRefusedList(Map<String, Object> searchList) {
-
-        List<SignDTO> myRefusedList = signMapper.selectMyRefusedList(searchList);
-
-        return myRefusedList;
-    }
-
 
     /* 부서 전체 조회용 메소드 */
     @Override
@@ -217,9 +182,7 @@ public class SignServiceImpl implements SignService {
 
         int progressResult = signMapper.selectTotalProgressCount(searchMap);
 
-        int myProgressResult = signMapper.selectTotalMyProgressCount(searchMap);
-
-        int result = progressResult + myProgressResult;
+        int result = progressResult;
 
         return result;
     }
@@ -229,10 +192,6 @@ public class SignServiceImpl implements SignService {
     public List<SignDTO> selectProgressList(Map<String, Object> searchList) {
 
         List<SignDTO> progressList = signMapper.selectProgressList(searchList);
-
-        List<SignDTO> myProgressList = signMapper.selectMyProgressList(searchList);
-
-        progressList.addAll(myProgressList);
 
         return progressList;
     }
@@ -295,5 +254,154 @@ public class SignServiceImpl implements SignService {
 
         return memberList;
     }
+
+    /* 멤버번호로 인원 조회용 메소드 */
+    @Override
+    public MemberDTO selectMemByNum(Map<String, Object> numMap) {
+
+        MemberDTO member = signMapper.selectMemByNum(numMap);
+
+        return member;
+    }
+
+    /* 결재 등록용 메소드 */
+    @Override
+    public int registSign(Map<String, String> insertMap) throws SignApproveException {
+
+        int result = signMapper.registSign(insertMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 결재선 등록용 메소드 */
+    @Override
+    public int registApprover(Map<String, String> approver) throws SignApproveException {
+
+        int result = signMapper.registApprover(approver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재자 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+    /* 결재선 최종결재자 등록용 메소드 */
+    @Override
+    public int registFianlApprover(Map<String, String> approver) throws SignApproveException {
+
+        int result = signMapper.registLastApprover(approver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재자 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 수신처 등록용 메소드 */
+    @Override
+    public int registReceiver(Map<String, String> receiver) throws SignApproveException {
+
+        int result = signMapper.registReceiver(receiver);
+
+        if(!(result > 0)){
+            throw new SignApproveException("수신처 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 참조자 등록용 메소드 */
+    @Override
+    public int registReferencer(Map<String, String> referencer) throws SignApproveException {
+
+        int result = signMapper.registReferencer(referencer);
+
+        if(!(result > 0)){
+            throw new SignApproveException("수신처 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 첨부파일 등록용 메소드 */
+    @Override
+    public int signFileInsert(SignFileDTO signFile) throws SignApproveException {
+
+        int result = signMapper.registSignFile(signFile);
+
+        if(!(result > 0)){
+            throw new SignApproveException("첨부파일 등록에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 결재 임시저장용 메소드 */
+    @Override
+    public int registTempSign(Map<String, String> insertMap) throws SignApproveException {
+
+        int result = signMapper.registTempSign(insertMap);
+
+        if(!(result > 0)){
+            throw new SignApproveException("결재임시저장에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 임시저장한 결재 삭제용 메소드 */
+    @Override
+    public int deleteSign(int signNo) throws SignApproveException {
+
+        int result = signMapper.deleteSign(signNo);
+
+        if(!(result > 0)){
+            throw new SignApproveException("기안 삭제에 실패하였습니다. 다시 시도해주세요.");
+        }
+
+        return result;
+    }
+
+    /* 참조/열람문서함 전체 갯수 조회용 메소드 */
+    @Override
+    public int selectTotalReferenceCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalReferenceCount(searchMap);
+
+        return result;
+    }
+
+    /* 참조/열람문서함 전체 조회용 메소드 */
+    @Override
+    public List<SignDTO> selectReferenceList(Map<String, Object> searchList) {
+
+        List<SignDTO> referenceList = signMapper.selectReferenceList(searchList);
+
+        return referenceList;
+    }
+
+    /* 수신함 전체 갯수 조회용 메소드 */
+    @Override
+    public int selectTotalReceiveCount(Map<String, Object> searchMap) {
+
+        int result = signMapper.selectTotalReceiveCount(searchMap);
+
+        return result;
+    }
+
+    /* 수신함 전체 조회용 메소드 */
+    @Override
+    public List<SignDTO> selectReceiveList(Map<String, Object> searchList) {
+
+        List<SignDTO> receiveList = signMapper.selectReceiveList(searchList);
+
+        return receiveList;
+    }
+
 
 }

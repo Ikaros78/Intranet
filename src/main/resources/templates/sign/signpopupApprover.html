@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결재선</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    #check-btn {display: none;}
+    #check-btn:checked ~ .menubars { display: block;}
+    .menubars { display: none;}
+
+    #wrap{position: relative}
+
+    #container{width: 100%;height: 520px;}
+    #search-box {float:left; width:350px; height: 500px; border: 2px solid #EAEAEA;overflow: auto;}
+    #select-move-box {float:left; width : 120px; height: 200px; border: 2px solid #EAEAEA; margin: 200px 15px;}
+    #select-move-box tr td{text-align: center;}
+    #select-box {float:left; width: 500px; height: 500px; border: 2px solid #EAEAEA;}
+
+    #submit-buttons{width:100%;}
+</style>
+</head>
+<body>
+    <div id="wrap">
+
+        <div id="header" style="background-color: #797578;">
+            <h2 style="color: white;">결재선지정</h2>
+        </div>
+
+        <div id="container">
+
+            <div id="search-box">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input id="check-btn" type="checkbox"/>
+                                <label for="check-btn">회사조직도</label>
+                                    <ul class="menubars" th:each="department : ${ deptList }">
+                                        <li th:text="${ department.dept_name }" class="deptLi"></li>
+                                        <input type="hidden" th:value="${ department.dept_code }" class="dept">
+                                        <ul class="members"></ul>
+                                    </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="select-move-box">
+                <table align="center">
+                    <thead>
+                        <tr>
+                            <th>결재방법</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="hidden" name="signType" value="결재">결재
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><br></td>
+                        </tr>
+                        <tr>
+                            <td><button id="add">></button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="remove"><</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="refresh">새로고침</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="select-box">
+                <h4>결재선 정보</h4>
+                    <table id="approver">
+                        <thead>
+                            <tr>
+                                <td>결재자</td>
+                            </tr>
+                        </thead>
+                        <tbody id="approverBody">
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+    </div>
+    <div id="submit-buttons" align="right">
+        <button id="apply">적용</button>
+        <button id="close">닫기</button>
+    </div>
+
+<script>
+
+    if(document.getElementsByClassName('dept')){
+        const $his = document.getElementsByClassName('dept');
+        const $lis = document.getElementsByClassName('deptLi');
+        const $members = document.getElementsByClassName('members')
+
+        for(let i = 0; i < $lis.length; i++){
+
+            $lis[i].onmouseenter = function() {
+                this.style.cursor = "pointer";
+            }
+
+            $lis[i].onclick = function(){
+
+                let code = 'code=' + $his[i].value;
+
+                $.ajax({
+                    url:"selectMemByDeptCode",
+                    type: "GET",
+                    data: code,
+                    success: function(data){
+
+                        console.table(data);
+
+                        $members[i].innerHTML="";
+
+                        for(let index in data){
+
+                            $name = data[index].mem_name;
+                            $rank = data[index].dept_rank;
+
+                            $checkbox = $("<input type='checkbox' name='checkMem'>").val(data[index].mem_num);
+                            $br = $("<br>");
+
+
+                            $members[i].append($checkbox[0]);
+                            $members[i].append($name + ' ' + $rank);
+                            $members[i].append($br[0]);
+                        }
+
+                    },
+                    error:function(error){
+                        console.log(error);
+                    }
+
+
+                });
+            }
+        }
+    }
+
+    $("#add").on("click",function(){
+
+        let $selectedMem = [];
+        $("input[name='checkMem']:checked").each(function(){
+            const num = $(this).val();
+            $selectedMem.push(num);
+        })
+
+        console.table($selectedMem);
+
+        let data = "selectedMem=" + $selectedMem;
+
+        $.ajax({
+            url:"selectMemByNum",
+            type: "GET",
+            data: data,
+            success: function(data){
+
+                console.table(data);
+
+                $body = $("#approverBody");
+
+                for(let index in data){
+
+                    $tr = $("<tr>");
+                    $td = $("<td class='tdMem'>");
+                    $name = data[index].mem_name;
+                    $rank = data[index].dept_rank;
+
+                    $checkbox = $("<input type='checkbox' name='addedMem'>").val(data[index].mem_num);
+
+                    $td.append($checkbox[0]);
+                    $td.append($name + ' ' + $rank);
+
+                    $tr.append($td);
+
+                    $body.append($tr[0]);
+
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+
+    })
+
+    $("#remove").on("click",function() {
+
+        $("input[name='addedMem']:checked").each(function () {
+            const num = $(this).val();
+
+            $($(this).parent()).detach();
+        })
+
+    })
+
+    $("#refresh").on("click",function() {
+
+        $("#approverBody").empty();
+
+    })
+
+    $("#apply").on("click",function(){
+
+        let $selectedMem = [];
+        $("input[name='addedMem']").each(function(){
+            const num = $(this).val();
+            $selectedMem.push(num);
+            })
+
+        let data = "selectedMem=" + $selectedMem;
+
+        $.ajax({
+            url:"selectMemByNum",
+            type: "GET",
+            data: data,
+            success: function(data){
+
+                for(let index in data) {
+
+                    $td = $("<td name='approver' class='approver'>").val(data[index].mem_num);
+                    $name = data[index].mem_name;
+                    $rank = data[index].dept_rank;
+
+                    $td.append($name + " " + $rank);
+
+                    $hiddenApprover = $("<input type='hidden' name='approver' class='approver'>").val(data[index].mem_num);
+
+                    $(opener.document).find('#approverHead').append('<th style="border : 1px solid" class="approveType">결재</th>')
+                    $(opener.document).find('#approverBody').append($td[0]);
+                    $(opener.document).find('#approverBody').append($hiddenApprover[0]);
+
+                }
+
+                window.self.close();
+
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+
+    })
+
+
+    $("#close").on("click",function(){
+        window.close();
+    })
+
+</script>
+
+</body>
+</html>

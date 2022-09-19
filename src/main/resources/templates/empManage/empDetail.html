@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>직원상세정보조회</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/empManage/empDetail.css}">
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>직원관리</h3>
+                <ul>
+                    <li class="main"><a th:href="@{/emp/empList}">인사 관리</a>
+                        <ul class="sub sub1">
+                            <li><a th:href="@{/emp/empList}">직원 관리</a></li>
+                            <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
+                            <li><a th:href="@{/member/regist}">직원 등록</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
+                            <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
+                            <li><a th:href="@{/empManage/list}">인사 권한 관리</a></li>
+                            <li><a th:href="@{/boardManage/list}">게시판 권한 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="container">
+                <h4>직원 상세 정보 조회</h4><hr>
+                <p>상세정보</p>
+
+                    <table>
+                        <tr>
+                            <th>사원번호</th>
+                            <td th:text="${ emp.mem_num }"></td>
+                        </tr>
+                        <tr>
+                            <th>성명</th>
+                            <td th:text="${ emp.mem_name }"></td>
+                        </tr>
+                        <tr>
+                            <th>생년월일</th>
+                            <td th:text="${ emp.mem_birth }"></td>
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td th:text="${ emp.mem_email }"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${ emp.mem_phone }"></td>
+                        </tr>
+                        <tr>
+                            <th>부서명</th>
+                            <td th:text="${ emp.department.dept_name }"></td>
+                        </tr>
+                        <tr>
+                            <th>직급</th>
+                            <td th:text="${ emp.dept_rank }"></td>
+                        </tr>
+                        <tr>
+                            <th>입사일자</th>
+                            <td th:text="${ emp.mem_joinDate }"></td>
+                        </tr>
+                    </table>
+                    <th:block sec:authorize="hasRole('ROLE_HR_EM_AUTH')">
+                        <button th:onclick="|location.href='@{ /emp/empUpdate(no=${ emp.mem_num }) }'|">수정</button>
+                    </th:block>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

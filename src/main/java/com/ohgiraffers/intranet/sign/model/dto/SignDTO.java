@@ -17,15 +17,15 @@ public class SignDTO {
 
     private MemberDTO writer;
     private SignFormDTO signForm;
+    private SignFileDTO file;
     private List<ApproverDTO> approver;
     private List<ReceiverDTO> receiver;
     private List<ReferencerDTO> referencer;
-    private List<SignFileDTO> fileList;
 
     public SignDTO() {
     }
 
-    public SignDTO(int signNo, int signWriter, String signFormCode, String signTitle, String signContent, Date regDate, String isTemp, MemberDTO writer, SignFormDTO signForm, List<ApproverDTO> approver, List<ReceiverDTO> receiver, List<ReferencerDTO> referencer, List<SignFileDTO> fileList) {
+    public SignDTO(int signNo, int signWriter, String signFormCode, String signTitle, String signContent, Date regDate, String isTemp, MemberDTO writer, SignFormDTO signForm, SignFileDTO file, List<ApproverDTO> approver, List<ReceiverDTO> receiver, List<ReferencerDTO> referencer) {
         this.signNo = signNo;
         this.signWriter = signWriter;
         this.signFormCode = signFormCode;
@@ -35,10 +35,10 @@ public class SignDTO {
         this.isTemp = isTemp;
         this.writer = writer;
         this.signForm = signForm;
+        this.file = file;
         this.approver = approver;
         this.receiver = receiver;
         this.referencer = referencer;
-        this.fileList = fileList;
     }
 
     public int getSignNo() {
@@ -137,12 +137,12 @@ public class SignDTO {
         this.referencer = referencer;
     }
 
-    public List<SignFileDTO> getFileList() {
-        return fileList;
+    public SignFileDTO getFile() {
+        return file;
     }
 
-    public void setFileList(List<SignFileDTO> fileList) {
-        this.fileList = fileList;
+    public void setFile(SignFileDTO file) {
+        this.file = file;
     }
 
     @Override
@@ -157,10 +157,10 @@ public class SignDTO {
                 ", isTemp='" + isTemp + '\'' +
                 ", writer=" + writer +
                 ", signForm=" + signForm +
+                ", file=" + file +
                 ", approver=" + approver +
                 ", receiver=" + receiver +
                 ", referencer=" + referencer +
-                ", fileList=" + fileList +
                 '}';
     }
 }

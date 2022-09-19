@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>직원정보조회</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
     <link rel="stylesheet" th:href="@{/css/empManage/empList.css}">
@@ -73,6 +74,7 @@
                         <ul class="sub sub1">
                             <li><a th:href="@{/emp/empList}">직원 관리</a></li>
                             <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
+                            <li><a th:href="@{/member/regist}">직원 등록</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
@@ -91,12 +93,12 @@
                 <form th:action="@{/emp/empList}" method="get">
                     <input type="hidden" name="currentPage" value="1">
                     <select name="searchCondition">
-                        <option value="mem_name">성명</option>
-                        <option value="mem_num">사원번호</option>
-                        <option value="dept_name">부서</option>
-                        <option value="dept_rank">직급</option>
+                        <option value="mem_name" th:selected="${ selectCriteria.getSearchCondition() == 'mem_name'}">성명</option>
+                        <option value="mem_num" th:selected="${ selectCriteria.getSearchCondition() == 'mem_num'}">사원번호</option>
+                        <option value="dept_name" th:selected="${ selectCriteria.getSearchCondition() == 'dept_name'}">부서</option>
+                        <option value="dept_rank" th:selected="${ selectCriteria.getSearchCondition() == 'dept_rank'}">직급</option>
                     </select>
-                    <input type="search" name="searchValue">
+                    <input type="search" name="searchValue" th:value="${ selectCriteria.getSearchValue() }">
                     <button type="submit">검색</button>
                 </form>
                 <input type="button" value="엑셀다운로드" onclick="download();" class="excelDown"/>
@@ -143,7 +145,7 @@
 
             $trs[i].onclick = function(){
                 const no = this.parentNode.children[0].innerText;
-                location.href = "/emplManage/detail?no=" + no;
+                location.href = "/emp/empDetail?no=" + no;
             }
         }
     }

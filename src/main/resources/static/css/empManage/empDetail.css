@@ -14,7 +14,7 @@
 #contents #container table td{font-size: 17px; padding-left : 20px; }
 #contents #container table tr select{width: 120px; height: 30px; font-size: 17px;}
 
-#contents #container form button{width: 80px; line-height: 36px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff; transition: all .5s;
+#contents #container button{width: 80px; line-height: 36px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff; transition: all .5s;
     position: absolute; bottom: -80px; right: 0;}
 #contents #container form button:hover{background-color: #e25f27;}
 

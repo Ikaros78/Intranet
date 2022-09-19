@@ -5,10 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결재요청함</title>
-
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
     <link rel="stylesheet" type="text/css" href="/css/basic.css">
@@ -19,11 +16,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
-    <style>
-        ul {
-            padding: 0 !important;
-        }
-    </style>
+    
 </head>
 <body>
 
@@ -34,61 +27,51 @@
         
             <div id="main-container">
                 <div class="con-header col-offset-1">
-                    <h4 style="font-weight: bold; padding-top: 22px">결재 요청함</h4>
+                    <h2>결재요청함</h2>
                 </div>
 
 
-                <div class="search-wrap" style="height: 150px">
+                <div class="search-wrap">
                     <div class="form-group">
                         <form id="searchForm" action="/sign/requestList" method="get">
                             <input type="hidden" name="currentPage" value="1">
 
-                            <div class="row">
-                                <table class="col-9" style="margin-left: 50px">
-                                    <!--                                    <colgroup>-->
-                                    <!--                                        <col style="width:7%";>-->
-                                    <!--                                        <col style="width:33%";>-->
-                                    <!--                                        <col style="width:7%";>-->
-                                    <!--                                        <col style="width:33%";>-->
-                                    <!--                                    </colgroup>-->
-                                    <tbody class="px-5">
-                                    <tr>
-                                        <th scope="row" style="
-    /* padding-right: 30px; */
-">
-                                            <label>양식명</label>
-                                        </th>
-                                        <td class="py-2">
-                                            <input type="text" class="form-control" title="양식명" name="searchForm">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label>제목</label>
-                                        </th>
-                                        <td class="py-2">
-                                            <input type="text" class="form-control" title="제목" name="searchTitle">
-                                        </td>
-                                        <th scope="row" class="ps-5" style="padding-left: 120px;">
-                                            <labe>기안일</labe>
-                                        </th>
-                                        <td class="row py-2">
-                                            <input type="text" class="form-control datePicker col-4" title="시작일" name="searchStartDate" style="max-width: max-content;/* padding-left: 10px; */">
-
-                                            <span class="col-1 d-flex flex-wrap align-content-center justify-content-center">~</span>
-
-                                            <input type="text" class="form-control datePicker col-4" title="종료일" name="searchEndDate" style="max-width: max-content">
-                                            <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
-
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="d-flex flex-wrap align-content-center justify-content-end col-2">
-                                    <button type="submit" class="btn btn-secondary d-flex flex-wrap align-content-center">검색</button>
-                                </div>
-                            </div>
-
+                            <table>
+                                <colgroup>
+                                    <col style="width:7%";>
+                                    <col style="width:33%";>
+                                    <col style="width:7%";>
+                                    <col style="width:33%";>
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <label>양식명</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="양식명" name="searchForm">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label>제목</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="제목" name="searchTitle">
+                                    </td>
+                                    <th scope="row">
+                                        <label>기안일</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" title="시작일" name="searchStartDate" class="datePicker">
+                                        <span>~</span>
+                                        <input type="text" title="종료일" name="searchEndDate" class="datePicker">
+                                        <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
+                                        <button type="submit" class="btn btn-color7">검색</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </form>
                     </div>              <!-- form-group -->
                 </div>  <!-- search-wrap -->
@@ -158,7 +141,7 @@
                 </div> <!-- list-wrap -->
 
                 <div class="col-2-offset-8 signAll" align="right">
-                    <button type="submit" id="regist" class="btn btn-secondary mx-4">등록</button>
+                    <button id="regist">등록</button>
                 </div>
             </div>
     </div>

@@ -5,17 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결재대기함</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link rel="stylesheet" type="text/css" href="/css/basic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signmain.css">
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     
 </head>
 <body>
@@ -46,13 +45,13 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            <labeL>기안자</labeL>
+                                            <label>기안자</label>
                                         </th>
                                         <td>
                                             <input type="text" title="기안자" name="searchWriter">
                                         </td>
                                         <th scope="row">
-                                            <labeL>양식명</labeL>
+                                            <label>양식명</label>
                                         </th>
                                         <td>
                                             <input type="text" title="양식명" name="searchForm">
@@ -60,19 +59,21 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <labeL>제목</labeL>
+                                            <label>제목</label>
                                         </th>
                                         <td>
                                             <input type="text" title="제목" name="searchTitle">
                                         </td>
                                         <th scope="row">
-                                            <labe>배정일</labe>
+                                            <label>배정일</label>
                                         </th>
-                                        <td>
-                                            <input type="text" title="시작일" name="searchStartDate" class="datePicker">
-                                            <span>~</span>
-                                            <input type="text" title="종료일" name="searchEndDate" class="datePicker">     
-                                            <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
+                                        <td id="reportrange" class="form-control" style="cursor: pointer; max-width: max-content;">
+                                            <i class="fa fa-calendar"></i>
+                                            <span class="date">
+                                            <!-- 날짜 입력한 값 들어감 -->
+                                            </span>
+                                            <input type="hidden" id="startDate" name="searchStartDate">
+                                            <input type="hidden" id="endDate" name="searchEndDate">
                                             <button type="submit" class="btn btn-color7">검색</button>
                                         </td>
                                     </tr>
@@ -167,10 +168,64 @@
     
 
     <script type="text/javascript">
-        $('.datePicker').datepicker({
-            format : "yyyy-mm-dd",
-            language : "kr",
-            todayHighlight : true
+
+        $(function(){
+
+            let start = moment();
+            let end = moment();
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('YYYY-MM-DD') + ' ~ ' + end.format('YYYY-MM-DD'));
+                $('#reportrange #startDate').val(start.format('YYYY-MM-DD'));
+                $('#reportrange #endDate').val(end.format('YYYY-MM-DD'));
+            }
+
+            $('#reportrange').daterangepicker({
+                showDropdowns: true,
+                minYear: 2020,
+                maxYear: 2030,
+                autoApply: true,
+                autoUpdateInput: false,
+                "linkedCalendars": false,
+                "locale": {
+                    "format": "YYYY/MM/DD",
+                    "separator": " ~ ",
+                    "applyLabel": "확인",
+                    "cancelLabel": "취소",
+                    "fromLabel": "From",
+                    "toLabel": "To",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "W",
+                    "daysOfWeek": [
+                        "일",
+                        "월",
+                        "화",
+                        "수",
+                        "목",
+                        "금",
+                        "토"
+                    ],
+                    "monthNames": [
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월"
+                    ],
+                    "firstDay": 7
+                },
+                startDate: start,
+                endDate: end,
+            }, cb)
+
+            cb(start, end);
         });
 
         function selectAll(selectAll)  {
@@ -214,9 +269,11 @@
                     checkArr.push(signNo);
                 })
 
+                let opinion = prompt("결재의견을 입력해주세요","");
+
                 console.table(checkArr);
 
-                location.href = "/sign/signChecked?checkArr=" + checkArr;
+                location.href = "/sign/signChecked?checkArr=" + checkArr + "&opinion=" + opinion;
 
             }
 

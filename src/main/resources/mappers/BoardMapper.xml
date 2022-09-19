@@ -57,8 +57,12 @@
         <result property="fr_no" column="FR_NO"/>
 
         <association property="member" resultMap="memberResultMap"/>
+    </resultMap>
 
-
+    <resultMap id="frRecommendResultMap" type="FrRecommendDTO">
+        <result property="fr_no" column="FR_NO"/>
+        <result property="mem_num" column="MEM_NUM"/>
+        <result property="like_yn" column="LIKE_YN"/>
     </resultMap>
 
 
@@ -325,6 +329,11 @@
      WHERE FR_NO = #{ fr_no }
     </select>
 
+    <select id="selectRecCount" resultMap="frRecommendResultMap">
+        SELECT COUNT(*)
+          FROM FR_RECOMMEND
+         WHERE LIKE_YN = 'Y'
+    </select>
 
 
 

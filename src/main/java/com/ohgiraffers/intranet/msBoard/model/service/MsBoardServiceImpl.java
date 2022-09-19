@@ -15,7 +15,6 @@ import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsFileDTO;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsMemberListDTO;
 
-
 @Service("msBoardService")
 public class MsBoardServiceImpl implements MsBoardService {
 
@@ -25,21 +24,25 @@ public class MsBoardServiceImpl implements MsBoardService {
 	public MsBoardServiceImpl(MsBoardMapper msBoardMapper) {
 
 		this.msBoardMapper = msBoardMapper;
-	
+
 	}
 
 //	받은 쪽지함 조회용 메소드 
 
 	@Override
-	public List<MsBoardDTO> selectMsRecpBoard(SelectCriteria selectCriteria) {
+	public List<MsBoardDTO> selectMsRecpBoard(Map<String, Object> searchList) {
 
-		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsRecpBoard(selectCriteria);
+		System.out.println("searchListsearchList" + searchList);
+
+		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsRecpBoard(searchList);
+
+		System.out.println("msBoardlist + " + msBoardlist);
 
 		return msBoardlist;
 	}
 
 	// 받은 쪽지함 글 갯수 확인용 메소드
-	public int selectTotalCount(Map<String, String> searchMap) {
+	public int selectTotalCount(Map<String, Object> searchMap) {
 
 		int result = msBoardMapper.selectTotalCount(searchMap);
 
@@ -48,16 +51,16 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 //	보낸 쪽지함 조회용 메소드
 	@Override
-	public List<MsBoardDTO> selectMsSendBoard(SelectCriteria selectCriteria) {
+	public List<MsBoardDTO> selectMsSendBoard(Map<String, Object> searchList) {
 
-		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsSendBoard(selectCriteria);
+		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsSendBoard(searchList);
 
 		return msBoardlist;
 	}
 
 	// 보낸 쪽지함 글 갯수 확인용 메소드
 	@Override
-	public int selectSendTotalCount(Map<String, String> searchMap) {
+	public int selectSendTotalCount(Map<String, Object> searchMap) {
 
 		int result = msBoardMapper.selectSendTotalCount(searchMap);
 
@@ -66,16 +69,16 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 //	받은 쪽지함 전체 조회용 메소드
 	@Override
-	public List<MsBoardDTO> selectMsAllRecpBoard(SelectCriteria selectCriteria) {
+	public List<MsBoardDTO> selectMsAllRecpBoard(Map<String, Object> searchList) {
 
-		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsAllRecpBoard(selectCriteria);
+		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsAllRecpBoard(searchList);
 
 		return msBoardlist;
 	}
 
 // 받은 쪽지함 전체 글 갯수 확인용 메소드
 	@Override
-	public int selectAllRecpTotalCount(Map<String, String> searchMap) {
+	public int selectAllRecpTotalCount(Map<String, Object> searchMap) {
 
 		int result = msBoardMapper.selectAllRecpTotalCount(searchMap);
 
@@ -84,10 +87,6 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	// 쪽지함 보내기용 메소드
 
-
-	
-	
-
 	public int MsboardInsert(MsBoardDTO msBoardDTO) {
 
 		int result = msBoardMapper.MsboardInsert(msBoardDTO);
@@ -95,43 +94,42 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return result;
 	}
 
-
 	public int MsFileInsert(MsFileDTO msFileDTO) {
 
 		int result = msBoardMapper.MsFileInsert(msFileDTO);
 
 		return result;
 	}
-	
+
 	public void recpNameUpdate(MsBoardDTO msBoardDTO) {
-		
+
 		msBoardMapper.recpNameUpdate(msBoardDTO);
 	}
 
 	// 보낸 쪽지함 상세 페이지 조회용 메소드
 	@Override
 	public MsBoardDTO selectMsBoardDetail(int msNo) {
-		
+
 		MsBoardDTO msDetail = msBoardMapper.selectMsBoardDetail(msNo);
-		// 지금 파일 이름이 다르니까 
-		
+		// 지금 파일 이름이 다르니까
+
 		System.out.println("msDetail : " + msDetail);
-		
+
 		if (msDetail.equals(msDetail)) {
 
-			 msBoardMapper.YNChangeMsBoard(msNo);
+			msBoardMapper.YNChangeMsBoard(msNo);
 		}
 
 		return msDetail;
 
 	}
-	
+
 	// ajax 용 비동기 1
 	@Override
 	public List<DepartmentDTO> getdeptList() throws Exception {
-		
+
 		List<DepartmentDTO> deptList = msBoardMapper.getdeptList();
-		
+
 		return deptList;
 	}
 
@@ -139,7 +137,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 	@Override
 	public List<MsMemberListDTO> getMemberListt(String data) {
 		System.out.println("data 확인 : " + data);
-		
+
 		List<MsMemberListDTO> memberList = msBoardMapper.getMemberListt(data);
 
 		return memberList;
@@ -155,7 +153,8 @@ public class MsBoardServiceImpl implements MsBoardService {
 		return memberList;
 
 	}
-}
+
+
 	// 삭제용 메소드
 
 //	public int recpBoardDelete(int msNo) {
@@ -186,45 +185,44 @@ public class MsBoardServiceImpl implements MsBoardService {
 //
 //		return result;
 //	}
-	
-	
-//	//update recp 
-//	@Transactional
-//	public void recpYNMsBoard(MsBoardDTO msBoard) {
-//		
-//		 msBoardMapper.recpYNMsBoard(msBoard.getMsNo());
-//	}
-//	
-//	//update send
-//	@Transactional
-//	public void sendYNMsBoard(MsBoardDTO msBoard) {
-//		
-//		 msBoardMapper.recpYNMsBoard(msBoard.getMsNo());
-//	}
-//	
-//	
-//	@Transactional
-//	public void recpBoardDelete(MsBoardDTO msBoard) {
-//
-//		int result = msBoardMapper.sendBoardDelete(msBoard.getMsNo());
-//
-//		if (result > 0) {
-//
-//			msBoardMapper.msFileDelete(msBoard.getMsNo());
-//		}
-//
-//		
-//	}
-//
-//	@Transactional
-//	public void sendBoardDelete(MsBoardDTO msBoard) {
-//
-//		int result = msBoardMapper.sendBoardDelete(msBoard.getMsNo());
-//
-//		if (result > 0) {
-//
-//			msBoardMapper.msFileDelete(msBoard.getMsNo());
-//		}
-//		
-//	}
 
+	// update recp
+	@Transactional
+	public void recpYNMsBoard(MsBoardDTO msBoard) {
+
+		msBoardMapper.recpYNMsBoard(msBoard.getMsNo());
+
+	}
+
+	@Transactional
+	public void recpBoardDelete(MsBoardDTO msBoard) {
+
+		int result = msBoardMapper.recpBoardDelete(msBoard.getMsNo());
+
+		if (result > 0) {
+
+			msBoardMapper.msFileDelete(msBoard.getMsNo());
+		}
+
+	}
+	
+	//update send
+	@Transactional
+	public void sendYNMsBoard(MsBoardDTO msBoard) {
+		
+		 msBoardMapper.sendYNMsBoard(msBoard.getMsNo());
+	}
+	
+
+	@Transactional
+	public void sendBoardDelete(MsBoardDTO msBoard) {
+
+		int result = msBoardMapper.sendBoardDelete(msBoard.getMsNo());
+
+		if (result > 0) {
+
+			msBoardMapper.msFileDelete(msBoard.getMsNo());
+		}
+		
+	}
+}

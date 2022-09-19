@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.fileboard.model.dao.FileMapper">
+
+	<resultMap id="FileboardResultMap" type="com.ohgiraffers.intranet.fileboard.model.dto.FileBoardDTO">
+		<id property="fbNo" column="FB_NO" />
+		<result property="fbTitle" column="FB_TITLE" />
+		<result property="fbDate" column="FB_DATE" />
+		<result property="fbViews" column="FB_VIEWS" />
+		<result property="fbContent" column="FB_CONTENTS" />
+		<result property="memnum" column="MEM_NUM" />
+		<association property="file" resultMap="FileFileResultMap"/>
+	</resultMap>
+
+	<resultMap id="FileFileResultMap" type="com.ohgiraffers.intranet.fileboard.model.dto.FileFileDTO">
+		<id property="ffNo" column="FF_NO" />
+		<result property="ffOriginName" column="FF_ORIGIN_NAME" />
+		<result property="ffSaveName" column="FF_SAVE_NAME" />
+		<result property="ffSavePath" column="FF_SAVE_PATH" />
+		<result property="deleteYn" column="FF_DELETE_YN" />
+		<result property="fbNo" column="FB_NO" />
+	</resultMap>
+
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM FB_FILE A
+    </select>
+	
+	<select id="fileBoardList" resultMap="FileboardResultMap">
+        SELECT A.RNUM
+        , A.FB_NO
+        , A.FB_TITLE
+        , A.FB_DATE
+        , A.FB_VIEWS
+        , A.FB_CONTENTS
+        , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+        , B.FB_NO
+        , B.FB_TITLE
+        , B.FB_DATE
+        , B.FB_VIEWS
+        , B.FB_CONTENTS
+        , B.MEM_NUM
+        FROM (SELECT
+          C.FB_NO
+        , C.FB_TITLE
+        , C.FB_DATE
+        , C.FB_VIEWS
+        , C.FB_CONTENTS
+        , C.MEM_NUM
+        FROM FB_FILE C
+        ORDER BY C.FB_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <!-- 공지사항 등록 -->
+    <insert id="fileBoardRegist" parameterType="FileBoardDTO">
+        INSERT
+        INTO FB_FILE
+        (
+          FB_NO
+        , FB_TITLE
+        , FB_DATE
+        , FB_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+        (
+          SEQ_FB_NO.NEXTVAL
+        , #{fbTitle}
+        , SYSDATE
+        , #{fbContent}
+        , #{memnum}
+        )
+    </insert>
+
+    <!-- 공지사항 파일 등록 -->
+    <insert id="fileFileInsert" parameterType="FileFileDTO">
+        <selectKey keyProperty="fbNo" order="BEFORE" resultType="_int">
+            SELECT
+            SEQ_FB_NO.CURRVAL
+            FROM DUAL
+        </selectKey>
+        INSERT
+        INTO FF_FILE_FILE
+        (
+          FF_NO
+        , FF_ORIGIN_NAME
+        , FF_SAVE_NAME
+        , FF_SAVE_PATH
+        , FF_DELETE_YN
+        , FB_NO
+        )
+        VALUES
+        (
+        SEQ_FF_NO.NEXTVAL
+        , #{ffOriginName}
+        , #{ffSaveName}
+        , #{ffSavePath}
+        ,  DEFAULT
+        , #{fbNo}
+        )
+    </insert>
+
+    <select id="fileBoardDetail" parameterType="_int" resultMap="FileboardResultMap">
+        SELECT
+               A.FB_NO
+		      , A.FB_TITLE
+		      , A.FB_DATE
+		      , A.FB_VIEWS
+		      , A.FB_CONTENTS
+		      , A.MEM_NUM
+        FROM    FB_FILE A
+        WHERE   A.FB_NO = #{ fbno }
+    </select>
+
+    <update id="incresementFileBoardCount" parameterType="_int">
+        UPDATE
+            FB_FILE A
+        SET A.FB_VIEWS = (SELECT B.FB_VIEWS
+                          FROM FB_FILE B
+                          WHERE B.FB_NO = #{ fbno }
+                         ) + 1
+        WHERE A.FB_NO = #{ fbno }
+    </update>
+<!--     <delete id="deleteFile"> -->
+<!--         DELETE -->
+<!--         FROM NTF_NOTICE_FILE -->
+<!--         WHERE NT_NO = #{ ntNo } -->
+<!--     </delete> -->
+
+<!--     공지사항 업데이트 -->
+<!--     <update id="noticeUpdate"> -->
+<!--         UPDATE -->
+<!--             NT_NOTICE -->
+<!--         SET NT_TITLE = #{ title } -->
+<!--           , NT_CONTENTS = #{ contents } -->
+<!--         WHERE NT_NO = #{ no } -->
+<!--     </update> -->
+
+<!--     공지사항 삭제 -->
+<!--     <delete id="noticeDelete" parameterType="int"> -->
+<!--         DELETE -->
+<!--         FROM NT_NOTICE -->
+<!--         WHERE NT_NO = #{ no } -->
+<!--     </delete> -->
+
+
+
+
+
+	</mapper>

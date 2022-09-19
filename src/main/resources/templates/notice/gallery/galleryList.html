@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>갤러리</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
     <link rel="stylesheet" th:href="@{/css/common/paging.css}">
@@ -35,7 +36,7 @@
 <!--                    <div class="date">-->
 <!--                        <input type="date"> ~ <input type="date">-->
 <!--                    </div>-->
-                    <input type="search" name="searchValue" id="searchValue">
+                    <input type="search" name="searchValue" id="searchValue" th:value="${ selectCriteria.getSearchValue() }">
                     <button>검색</button>
                 </form>
                 <ul id="thumbnailArea">
@@ -46,7 +47,9 @@
                             <div class="bcground"></div>
                     </li>
                 </ul>
-                <button class="registBtn" onclick="location.href='/notice/gallery/regist'">등록하기</button>
+                <th:block sec:authorize="hasRole('ROLE_NT_ALL')">
+                    <button class="registBtn" onclick="location.href='/notice/gallery/regist'">등록하기</button>
+                </th:block>
                 <div th:replace="/notice/gallery/paging"></div>
             </div>
         </div>

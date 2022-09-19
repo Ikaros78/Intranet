@@ -7,6 +7,7 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
+import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -64,15 +65,13 @@ public class BoardController {
         return "redirect:/board/detail?no="+no;
 
     }
-
-
     @GetMapping("/list")
-    public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv) {
+    public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv){
 
         String currentPage = request.getParameter("currentPage");
         int pageNo = 1;
 
-        if (currentPage != null && !"".equals(currentPage)) {
+        if(currentPage != null && !"".equals(currentPage)){
             pageNo = Integer.parseInt(currentPage);
         }
 
@@ -82,7 +81,7 @@ public class BoardController {
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);
-        log.info("검색조건 확인 : " + searchMap);
+        log.info("검색조건 확인 : " +searchMap);
 
         int totalCount = boardService.selectTotalCount(searchMap);
 
@@ -91,11 +90,10 @@ public class BoardController {
 
         SelectCriteria selectCriteria = null;
 
-        if (searchCondition != null && !"".equals(searchCondition)) {
+        if(searchCondition != null && !"".equals(searchCondition)){
 
             selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);
-            {
+                    searchCondition, searchValue);{
 
             }
         } else {
@@ -299,6 +297,7 @@ public class BoardController {
 
         return "redirect:/board/eiboard/list";
     }
+
 
 
 }

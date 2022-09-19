@@ -59,5 +59,7 @@ public interface MsBoardMapper {
 
 	int sendBoardDelete(int msNo);
 
+	CharSequence count_receive_note(String payload);
+
 
 }

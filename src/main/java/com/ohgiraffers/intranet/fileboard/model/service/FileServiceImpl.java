@@ -57,15 +57,15 @@ public class FileServiceImpl implements FileService  {
 	
     /* 상세페이지 조회용 메소드 */
     @Override
-    public FileBoardDTO fileBoardDetail(int no) {
+    public FileBoardDTO fileBoardDetail(int fbNo) {
 
     	FileBoardDTO fileBoard = null;
 
-        int result = fileMapper.incresementFileBoardCount(no); //조회수 증가
+        int result = fileMapper.incresementFileBoardCount(fbNo); //조회수 증가
 
         if(result > 0){
         	
-        	fileBoard = fileMapper.fileBoardDetail(no);
+        	fileBoard = fileMapper.fileBoardDetail(fbNo);
         }
         return fileBoard;
     }

@@ -11,6 +11,7 @@
 		<result property="fbViews" column="FB_VIEWS" />
 		<result property="fbContent" column="FB_CONTENTS" />
 		<result property="memnum" column="MEM_NUM" />
+		<association property="file" resultMap="FileFileResultMap"/>
 	</resultMap>
 
 	<resultMap id="FileFileResultMap" type="com.ohgiraffers.intranet.fileboard.model.dto.FileFileDTO">
@@ -112,14 +113,14 @@
 
     <select id="fileBoardDetail" parameterType="_int" resultMap="FileboardResultMap">
         SELECT
-              , A.FB_NO
+               A.FB_NO
 		      , A.FB_TITLE
 		      , A.FB_DATE
 		      , A.FB_VIEWS
 		      , A.FB_CONTENTS
 		      , A.MEM_NUM
         FROM    FB_FILE A
-        WHERE   A.FB_NO = #{ no }
+        WHERE   A.FB_NO = #{ fbno }
     </select>
 
     <update id="incresementFileBoardCount" parameterType="_int">
@@ -127,9 +128,9 @@
             FB_FILE A
         SET A.FB_VIEWS = (SELECT B.FB_VIEWS
                           FROM FB_FILE B
-                          WHERE B.FB_NO = #{ no }
+                          WHERE B.FB_NO = #{ fbno }
                          ) + 1
-        WHERE A.NT_NO = #{ no }
+        WHERE A.FB_NO = #{ fbno }
     </update>
 <!--     <delete id="deleteFile"> -->
 <!--         DELETE -->

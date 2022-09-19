@@ -17,7 +17,7 @@ public interface FileService {
 
 	int fileBoardRegist(FileBoardDTO fileboard);
 
-	FileBoardDTO fileBoardDetail(int no);
+	FileBoardDTO fileBoardDetail(int fbNo);
 //
 //	void fileBoardDelete(FileBoardDTO fileboard);
 

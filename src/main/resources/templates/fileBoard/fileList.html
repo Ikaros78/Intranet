@@ -51,23 +51,18 @@
                         <th>번호</th>
                         <th><img th:src="@{/images/clip.png}" alt="첨부파일"></th>
                         <th>제목</th>
-                        <th>등록자</th>
+                        <th>작성자</th>
                         <th>등록일</th>
-                        <th>조회</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="fileList : ${ fileList }">
                             <td th:text="${ fileList.fbNo }"></td>
-                  			<td th:if="${fileList.file.OriginName != null}"><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
-                            <!--/*  
-                            <td th:if="${fileList.file.OriginName == null}"></td>
+                  			<td th:if="${fileList.file.ffOriginName != null}"><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
+                            <td th:if="${fileList.file.ffOriginName == null}"></td>
                             <td th:text="${ fileList.fbTitle }"></td>
-                            <td><span th:text="${ fileList.memnum}"></span>&nbsp;
-                            <span th:text="${ notice.getDept().dept_name }"/></td>
-      */-->
+                            <!--/*        */-->
                             <td th:text="${ fileList.fbDate }"></td>
-                            <td th:text="${ fileList.fbViews }"></td>
                         </tr>
                     </tbody>    
                 </table>

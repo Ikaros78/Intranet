@@ -20,7 +20,7 @@ public interface FileMapper {
 
 	int fileBoardRegist(FileBoardDTO fileBoard);
 
-	FileBoardDTO fileBoardDetail(int no);
+	FileBoardDTO fileBoardDetail(int fbNo);
 
 	int incresementFileBoardCount(int no);
 

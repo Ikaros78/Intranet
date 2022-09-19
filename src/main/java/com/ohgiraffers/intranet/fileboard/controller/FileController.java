@@ -146,12 +146,14 @@ public class FileController {
     @GetMapping("/fileDetail")
     public String fileBoardDetail(HttpServletRequest request, Model model){
 
-        int no = Integer.parseInt(request.getParameter("fbno"));
+        int fbNo = Integer.parseInt(request.getParameter("fbNo"));
 
-        FileBoardDTO fileDetail = fileService.fileBoardDetail(no);
+        System.out.println("nonononono" + fbNo);
+        
+        FileBoardDTO fileDetail = fileService.fileBoardDetail(fbNo);
         model.addAttribute("Detail", fileDetail);
 
-        return "/file/fileDetail";
+        return "fileBoard/fileDetail";
     }
 
 //    @GetMapping("/fileDelete")

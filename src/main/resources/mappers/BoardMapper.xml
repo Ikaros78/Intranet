@@ -37,6 +37,29 @@
         <result property="dept_name" column="DEPT_NAME"/>
     </resultMap>
 
+    <resultMap id="eiboardResultMap" type="com.ohgiraffers.intranet.board.model.dto.AnonyDTO">
+        <id property="no" column="NB_NO"/>
+        <result property="title" column="NB_TITLE"/>
+        <result property="date" column="NB_DATE"/>
+        <result property="views" column="NB_VIEWS"/>
+        <result property="contents" column="NB_CONTENTS"/>
+        <result property="mem_num" column="MEM_NUM"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+
+    </resultMap>
+
+    <resultMap id="boardcomment" type="com.ohgiraffers.intranet.board.model.dto.CommentDTO">
+        <id property="fc_no" column="FC_NO"/>
+        <result property="contents" column="FC_CONTENTS"/>
+        <result property="date" column="FC_DATE"/>
+        <result property="mem_num" column="MEM_NUM"/>
+        <result property="fr_no" column="FR_NO"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+
+
+    </resultMap>
 
 
 
@@ -144,5 +167,168 @@
         where fr_no = #{no}
 
     </update>
+    
+    <update id="boardUpdate">
+        UPDATE
+            FR_FREE
+        SET FR_TITLE = #{ title }
+           ,FR_CONTENTS = #{ contents }
+        WHERE FR_NO = #{ no }
+
+
+    </update>
+
+    <delete id="boardDelete" >
+     DELETE
+     FROM FR_FREE
+     WHERE FR_NO = #{ no }
+
+    </delete>
+
+
+    <select id="selectBoardListe" resultMap="eiboardResultMap">
+        SELECT A.RNUM
+        , A.NB_NO
+        , A.MEM_NUM
+        , A.NB_TITLE
+        , D.MEM_NAME
+        , A.NB_DATE
+        , A.NB_VIEWS
+
+        FROM (SELECT ROWNUM RNUM
+        , B.NB_NO
+        , B.NB_TITLE
+        , B.NB_DATE
+        , B.NB_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+        C.NB_NO
+        , C.NB_TITLE
+        , C.NB_DATE
+        , C.NB_VIEWS
+        , C.MEM_NUM
+        FROM NB_NONE C
+
+        <where>
+            <if test="searchCondition == 'title'">
+                C.NB_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+
+        </where>
+        ORDER BY C.NB_DATE DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        WHERE A.RNUM >= #{ startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalCounte" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM NB_NONE A
+        <where>
+
+            <if test="searchCondition == 'title'">
+                A.NB_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+        </where>
+    </select>
+
+    <insert id="anonyinsert" parameterType="com.ohgiraffers.intranet.board.model.dto.AnonyDTO">
+        INSERT
+        INTO NB_NONE A(
+            A.NB_NO
+           ,A.NB_TITLE
+           ,A.NB_DATE
+           ,A.NB_VIEWS
+           ,A.NB_CONTENTS
+           ,A.MEM_NUM
+           ) VALUES(
+            'NB' || SEQ_NB_NO.NEXTVAL
+                ,#{title}
+                ,SYSDATE
+                ,DEFAULT
+                ,#{contents}
+                ,#{mem_num}
+            )
+    </insert>
+
+    <select id="selecteiBoardDetail" parameterType="String" resultMap="eiboardResultMap">
+        SELECT
+            A.NB_NO
+             , A.NB_TITLE
+             , B.MEM_NAME
+             , A.NB_DATE
+             , A.NB_VIEWS
+             , A.MEM_NUM
+             , A.NB_CONTENTS
+        FROM NB_NONE A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+
+        WHERE A.NB_NO = #{ no }
+    </select>
+    <update id="incresementeiBoardCount" parameterType="string">
+        update nb_none
+        set nb_views =  nvl(nb_views, 0) + 1
+        where nb_no = #{no}
+
+    </update>
+
+    <update id="boardeiUpdatePag">
+        UPDATE
+           NB_NONE
+        SET NB_TITLE = #{ title }
+          ,NB_CONTENTS = #{ contents }
+        WHERE NB_NO = #{ no }
+
+
+    </update>
+
+
+    <delete id="eiboardDelete" >
+        DELETE
+        FROM NB_NONE
+        WHERE NB_NO = #{ no }
+
+    </delete>
+
+    <insert id="boardcomment">
+        INSERT
+        INTO FC_FREE_COMMENT A(
+            A.FC_NO
+           ,A.FC_CONTENTS
+           ,A.FC_DATE
+           ,A.MEM_NUM
+           ,A.FR_NO
+           ) VALUES(
+            'FC' || SEQ_FC_NO.NEXTVAL
+               ,#{contents}
+               ,SYSDATE
+               ,#{mem_num}
+               ,#{fr_no}
+            )
+    </insert>
+
+    <select id="selectComentList" resultMap="boardcomment">
+        SELECT
+               A.FC_NO
+             , A.FC_CONTENTS
+             , A.FC_DATE
+             , A.MEM_NUM
+             , A.FR_NO
+             , B.MEM_NAME
+          FROM FC_FREE_COMMENT A
+          LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+     WHERE FR_NO = #{ fr_no }
+    </select>
+
+
+
+
+
+
 
 </mapper>

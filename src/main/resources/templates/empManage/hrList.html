@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>인사발령조회</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
 <!--    <link rel="stylesheet" th:href="@{/css/common/paging.css}">-->
@@ -24,6 +25,7 @@
                         <ul class="sub sub1">
                             <li><a th:href="@{/emp/empList}">직원 관리</a></li>
                             <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
+                            <li><a th:href="@{/member/regist}">직원 등록</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
@@ -42,22 +44,20 @@
                     <input type="hidden" name="currentPage" value="1">
                     <label>발령구분</label>
                     <select name="searchCondition" id="searchCondition">
-                        <option>전체</option>
-                        <option value="promotion">승진</option>
-                        <option value="move">부서이동</option>
+                        <option th:selected="${ selectCriteria.getSearchCondition() == ''}">전체</option>
+                        <option value="promotion" th:selected="${ selectCriteria.getSearchCondition() == 'promotion'}">승진</option>
+                        <option value="move" th:selected="${ selectCriteria.getSearchCondition() == 'move'}">부서이동</option>
                     </select>
                     <label for="searchValue">사원명</label>
-                    <input type="search" class="inputSearch" name="searchValue" id="searchValue">
-<!--                    <label for="">발령일자</label>-->
-<!--                    <input type="text" name="date" class="pa_date" value="" id="pa_date"/>-->
-<!--                    <input type="hidden" id="startDate" name="startDate">-->
-<!--                    <input type="hidden" id="endDate" name="endDate">-->
+                    <input type="search" class="inputSearch" name="searchValue" id="searchValue" th:value="${ selectCriteria.getSearchValue() }">
                     <button>검색</button>
                 </form>
-                <div class="btnArea">
-                    <button onclick="openPop()">발령등록</button>
-                    <button type="button" id="del">발령취소</button>
-                </div>
+                <th:block sec:authorize="hasRole('ROLE_HR_EM_AUTH')">
+                    <div class="btnArea">
+                        <button onclick="openPop()">발령등록</button>
+                        <button type="button" onclick="hrDelete()">발령취소</button>
+                    </div>
+                </th:block>
                         <table id="hrTable">
                             <thead>
                                 <tr>
@@ -72,18 +72,20 @@
                                     <th>비고</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbodyTest">
                                 <tr th:each="appoint : ${ appointList }">
 <!--                                    <td><input type="checkbox" name="chkList"></td>-->
                                     <td id="inputAppend"></td>
-                                    <td th:text="${ appoint.no }"></td>
+                                    <td id="appNo" th:text="${ appoint.no }"></td>
                                     <td th:text="${ appoint.category }"></td>
                                     <td th:text="${ appoint.date }"></td>
                                     <td th:text="${ appoint.mem_num }"></td>
                                     <td th:text="${ appoint.member.mem_name }"></td>
-                                    <td><span th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
-                                    <td><span th:text="${ appoint.bef_dept }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
+                                    <td><span class="rank" th:text="${ appoint.bef_rank }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.member.dept_rank }"></span></td>
+                                    <td><span class="dept" th:text="${ appoint.bef_name }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
                                     <td th:text="${ appoint.contents }"></td>
+                                    <td th:text="${ appoint.bef_code }" style="display: none;"></td>
+<!--                                    <input type="hidden" th:value="${ appoint.member.dept_code }" name="dept_code">-->
                                 </tr>
                             </tbody>
                         </table>
@@ -107,12 +109,58 @@
             }
 
             // 체크 박스 가장 상위만 체크 가능하도록
-                $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+            $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkBox' id='chkBox'/>");
+
+            // 체크 박스 체크 된 행의 no값 Delete로 넘기기
+            function hrDelete(){
+
+                let query = 'input[name="chkBox"]:checked';
+                let selectedElements = document.querySelectorAll(query);
+                let selectedElementsCnt = selectedElements.length;
+                // let no = $("tbody tr:first-child #appNo").value();
+                // let no = document.getElementsByTagName("td")[val].childNodes[1].nodeValue;
+                let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
+
+                    let test = no[0].getElementsByTagName("td");
+                    let test2 = no[0].getElementsByClassName("rank");
+                    // let test3 = no[0].getElementsByClassName("dept");
+
+                    let appNo = test[1].firstChild.data;
+                    let mem_num = test[4].firstChild.data;
+                    let bef_rank = test2[0].firstChild.data;
+                    // let bef_dept = test3[0].firstChild.data;
+                    let dept_code = test[9].firstChild.data;
+                    let mem_name = test[5].firstChild.data;
+                // alert(appNo);
 
 
-                // $("tbody tr:first-child #inputAppend").append("<input type='checkbox' name='chkList' id='chk'/>");
+
+                if(selectedElementsCnt == 0){
+                    alert("발령 취소할 항목을 선택해주세요");
+                    return false;
+                } else {
+
+                    if(confirm(mem_name + "님의 발령을 취소하시겠습니까?")){
+
+                        alert(mem_name + '님의 발령 취소가 완료되었습니다.');
+                        location.href = "/emp/hrDelete?no=" + appNo + "&mem_num=" + mem_num + "&bef_rank=" + bef_rank + "&dept_code=" + dept_code;
+                    }
+                }
 
 
+            }
+
+
+            // $(document).ready(function (){
+            //     let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
+            //     for(let i = 0; i < no.length(); i++)
+            //     {
+            //         let test = no[i].getElementsByTagName("td");
+            //     }
+            // });
+
+
+                    // location.href = "/emp/hrDelete?checkArr=" + checkArr;
 
 
 

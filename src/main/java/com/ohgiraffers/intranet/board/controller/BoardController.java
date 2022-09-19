@@ -4,10 +4,10 @@ package com.ohgiraffers.intranet.board.controller;
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
+import com.ohgiraffers.intranet.board.model.dto.EiCommentDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
-import com.ohgiraffers.intranet.notice.model.dto.NewsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -263,16 +262,30 @@ public class BoardController {
     }
 
     @GetMapping("ei/detail")
-    public String eiboardDetailPage(HttpServletRequest request, Model model) {
+    public ModelAndView eiboardDetailPage(HttpServletRequest request, ModelAndView mv) {
 
 
         String no = request.getParameter("no");
         log.info("no 값 : " + no);
 
         AnonyDTO eiboardDetail = boardService.selecteiBoardDetail(no);
-        model.addAttribute("eiboard", eiboardDetail);
+        mv.addObject("eiboard", eiboardDetail);
 
-        return "freelist/anonyDetail";
+
+        String nb_no = request.getParameter("no");
+
+        List<EiCommentDTO> eicommentList = boardService.selecteiComentList(nb_no);
+
+        log.info("eicommentList 확인 : " + eicommentList);
+
+
+        mv.addObject("eicommentList", eicommentList);
+        mv.setViewName("freelist/anonyDetail");
+
+
+        return mv;
+
+
     }
 
     @GetMapping("ei/update")
@@ -330,6 +343,38 @@ public class BoardController {
 
             return mv;
         }
+//      익명 댓글 리스트 조회
+    @PostMapping("/ei/comment")
+    public String boardeicomment(@ModelAttribute EiCommentDTO boardeicomment, HttpServletRequest request) {
+
+        String nb_no = request.getParameter("nb_no");
+        boardeicomment.setNb_no(nb_no);
+        log.info("nb_no값 : " + boardeicomment.getNb_no());
+
+        int registResult = boardService.boardeicomment(boardeicomment);
+
+
+        return "redirect:/board/ei/detail?no="+nb_no;
+
+    }
+//      익명 댓글
+    @GetMapping("ei/comment")
+    public ModelAndView selecteicomment(HttpServletRequest request, ModelAndView mv) {
+
+        String nb_no = request.getParameter("nb_no");
+
+        List<EiCommentDTO> eicommentList = boardService.selecteiComentList(nb_no);
+
+        log.info("eicommentList 확인 : " + eicommentList);
+
+
+        mv.addObject("eicommentList", eicommentList);
+        mv.setViewName("freelist/anonyDetail");
+
+
+        return mv;
+    }
+
 
 
 }

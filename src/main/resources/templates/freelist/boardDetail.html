@@ -18,7 +18,7 @@
                 <li class="main"><a href="../free/freeList.html">자유 게시판</a>
                     <ul class="sub sub1">
                         <li><a th:href="@{/board/list}">자유 게시판</a></li>
-                        <li><a href="#">익명 게시판</a></li>
+                        <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
                     </ul>
                 </li>
                 <li class="main"><a href="#">업무 게시판</a>
@@ -44,7 +44,7 @@
                     <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                     <span> </span><span class="date" th:text="${ board.date }">22-09-19</span><br>
                 </p>
-                <div class="body">내용확인</div>
+                <div class="body" th:text="${board.contents}"></div>
                 <form action="@{ /board/suggest }" method="post">
                     <div class="d-flex justify-content-end">
                         <div class="suggestBox">
@@ -65,7 +65,7 @@
                 <button th:if="${#authentication.getPrincipal().getMem_num() eq board.member.mem_num }" class="list update"
                         th:onclick="|location.href='@{ /board/update(no=${ board.no }) }'|">수정</button>
                 <button class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
-                <button class="list">목록</button>
+                <button class="list" th:onclick="|location.href='@{ /board/list}'|">목록</button>
             </div>
             <div class="cmtBox">
                 <form id="commentForm" th:action="@{ /board/comment }" method="post">

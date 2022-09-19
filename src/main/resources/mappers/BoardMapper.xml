@@ -61,6 +61,18 @@
 
     </resultMap>
 
+    <resultMap id="boardeicomment" type="com.ohgiraffers.intranet.board.model.dto.EiCommentDTO">
+        <id property="nc_no" column="NC_NO"/>
+        <result property="contents" column="NC_CONTENTS"/>
+        <result property="date" column="NC_DATE"/>
+        <result property="mem_num" column="MEM_NUM"/>
+        <result property="nb_no" column="NB_NO"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+
+
+    </resultMap>
+
 
 
     <select id="selectBoardList" resultMap="boardResultMap">
@@ -324,10 +336,36 @@
           LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
      WHERE FR_NO = #{ fr_no }
     </select>
-
-
-
-
+<!--        익명 인설트-->
+    <insert id="boardeicomment">
+        INSERT
+        INTO NC_NONE_COMMENT A(
+            A.NC_NO
+           ,A.NC_CONTENTS
+           ,A.NC_DATE
+           ,A.MEM_NUM
+           ,A.NB_NO
+           ) VALUES(
+            'NC' || SEQ_NC_NO.NEXTVAL
+                ,#{contents}
+                ,SYSDATE
+                ,#{mem_num}
+                ,#{nb_no}
+            )
+    </insert>
+<!--            익명 셀렉트-->
+    <select id="selecteiComentList" resultMap="boardeicomment">
+        SELECT
+            A.NC_NO
+             , A.NC_CONTENTS
+             , A.NC_DATE
+             , A.MEM_NUM
+             , A.NB_NO
+             , B.MEM_NAME
+        FROM NC_NONE_COMMENT A
+                 LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        WHERE NB_NO = #{ nb_no }
+    </select>
 
 
 

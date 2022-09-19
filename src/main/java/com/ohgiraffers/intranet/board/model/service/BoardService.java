@@ -4,10 +4,10 @@ import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
+import com.ohgiraffers.intranet.board.model.dto.EiCommentDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -154,8 +154,23 @@ public class BoardService {
        System.out.println("commentlist" + commentlist);
                return commentlist;
        }
+//        익명
+    public int boardeicomment(EiCommentDTO boardeicomment) {
+
+        int reult = boardMapper.boardeicomment(boardeicomment);
+
+        return reult;
 
     }
+//    익명
+    public List<EiCommentDTO> selecteiComentList(String nb_no) {
+        List<EiCommentDTO> eicommentlist = boardMapper.selecteiComentList(nb_no);
+
+        System.out.println("eicommentlist" + eicommentlist);
+        return eicommentlist;
+
+    }
+}
 
 //
 //   public CommentDTO selectComentList(String no) {

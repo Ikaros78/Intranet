@@ -9,16 +9,7 @@
 	<link rel="stylesheet" th:href="@{/css/common/basic.css}">
 	<link rel="stylesheet" th:href="@{/css/msBoard/board.css}">
 </head>
-<script>
-	function checkAll() {
-		if ($("#cboxAll").is(':checked')) {
-			$("input[name=cbox]").prop("checked", true);
-		} else {
-			$("input[name=cbox]").prop("checked", false);
-		}
-	}
-
-</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
 <body>
 	<div id="wrap">
@@ -48,71 +39,167 @@
 					<button	style="width:70px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">검색</button>
 				</form>
 			</div>
-			<button type="button"
-				style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
-
+			<button id="selectedElementsCnt" name="selectedElementsCnt" class="btn btn-danger" onclick="boardDelete()"
+			style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
 			<div class="table-area">
 				<table align="center" id="listArea">
 					<tr>
-						<th><input type="checkbox" id="cboxAll" name="cboxAll" onclick="checkAll();"
-								style="margin: 10px"></th>
+					<th>
+						<label class="checkbox-inline">
+				        <input type="checkbox" id="allCheckBox" onclick="allChecked()">
+				        </label></th>
 						<th>보낸사람</th>
 						<th>제목</th>
 						<th>날짜</th>
 						<th>글번호</th>
 					</tr>
 					<tr th:each="boardList : ${ boardList }">
-						<td><input type="checkbox" name="cbox" style="margin: 10px"></td>
-						<td th:text="${boardList.sendName}"></td>
-						<td th:text="${boardList.msTitle}"></td>
-						<td th:text="${boardList.sendDate}"></td>
-						<td th:text="${boardList.msNo}"></td>
+						
+						
+					    <td><label class="checkbox-inline">
+						<input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${boardList.msNo}" style="margin: 10px">
+						</label></td>						
+						<td name="click" id="click" th:text="${boardList.sendName}"></td>
+						<td name="click" id="click" th:text="${boardList.msTitle}"></td>
+						<td name="click" id="click" th:text="${boardList.sendDate}"></td>
+						<td name="click" id="click" th:text="${boardList.msNo}"></td>
 					</tr>
+					
 				</table>
 			</div>
 		</div>
 	</div>
 
 	<!-- 페이지 처리 -->
-	<div class="page-nation" align="">
-						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${selectCriteria.startPage}} + '\''"
-								th:disabled="${selectCriteria.pageNo == 1}">
+						<div class="page-nation" align="">
+						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${searchList.selectCriteria.startPage}} + '\''"
+								th:disabled="${searchList.selectCriteria.pageNo == 1}">
 								<<</button>
 						<!-- 이전 페이지 버튼 -->
-						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
-								th:disabled="${selectCriteria.pageNo == 1}"><</button>
+						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${searchList.selectCriteria.pageNo - 1}} + '\''"
+								th:disabled="${searchList.selectCriteria.pageNo == 1}"><</button>
 						<!-- 숫자 버튼 -->
-						<th:block th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+						<th:block th:each="page : ${#numbers.sequence(searchList.selectCriteria.startPage, searchList.selectCriteria.endPage)}">
 						 	<button th:text="${ page }"
 									th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${page}} + '\''"
-									th:disabled="${ selectCriteria.pageNo eq page }"></button>
+									th:disabled="${ searchList.selectCriteria.pageNo eq page }"></button>
 						</th:block>
 
 						<!-- 다음 페이지 버튼 -->
-						<button	th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
-								th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">></button>
+						<button	th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${searchList.selectCriteria.pageNo + 1}} + '\''"
+								th:disabled="${searchList.selectCriteria.pageNo == searchList.selectCriteria.maxPage}">></button>
 						<!-- 마지막 페이지로 이동 버튼 -->
-						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
-								th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">>></button>
+						<button th:onclick="'location.href=\'/ms/allrecp?currentPage='+ @{${searchList.selectCriteria.maxPage}} + '\''"
+								th:disabled="${searchList.selectCriteria.pageNo == searchList.selectCriteria.maxPage}">>></button>
 	</div>
 
-		<script>
-			if (document.querySelectorAll("#listArea td")) {
-				const $tds = document.querySelectorAll("#listArea td");
-				for (let i = 0; i < $tds.length; i++) {
+		<script th:inline="javascript">
+		if (document.querySelectorAll("#listArea #click")) {
+			const $tds = document.querySelectorAll("#listArea #click");
+			for (let i = 0; i < $tds.length; i++) {
 
-					$tds[i].onmouseenter = function () {
+               $tds[i].onmouseenter = function(){
 
-						this.parentNode.style.cursor = "pointer";
-					}
+                    this.parentNode.style.cursor = "pointer";
+                }
 
-					$tds[i].onclick = function () {
-						const msNo = this.parentNode.children[4].innerText;
-						/* chileren[ 행에 있는 index 위치 찾는거 ] */
-						location.href = "/ms/msdetail?msNo=" + msNo;
-					}
+				$tds[i].onclick = function() {
+					const msNo = this.parentNode.children[4].innerText;
+					/* chileren[ 행에 있는 index 위치 찾는거 ] */
+					location.href = "/ms/msdetail?msNo=" + msNo;
 				}
 			}
-		</script>
+		}
+	</script>
+	<script>
+		 function allChecked(target){
+			  const checkbox = document.getElementById('allCheckBox');
+			  const is_checked = checkbox.checked;
+  		      if(is_checked){
+		         
+		            chkAllChecked()
+		        }else{
+		         
+		            chkAllUnChecked()
+		        }
+		    }
+		    
+			function chkClicked(){
+				const allCount = document.querySelectorAll(".chk").length;
+	
+		          //체크된 체크박스 전체개수
+		        const query = 'input[name="chk"]:checked'
+		        const selectedElements = document.querySelectorAll(query)
+		        const selectedElementsCnt = selectedElements.length;
+
+		        //체크박스 전체개수와 체크된 체크박스 전체개수가 같으면 전체 체크박스 체크
+		        if(allCount == selectedElementsCnt){
+		             document.getElementById('allCheckBox').checked = true;
+		        }
+		
+		        //같지않으면 전체 체크박스 해제
+		        else{
+		            document.getElementById('allCheckBox').checked = false;
+		        }
+		    }
+
+		    //체크박스 전체 체크
+		    function chkAllChecked(){
+		        document.querySelectorAll(".chk").forEach(function(v, i) {
+		            v.checked = true;
+		        });
+		    }
+		
+		    //체크박스 전체 체크 해제
+		    function chkAllUnChecked(){
+		        document.querySelectorAll(".chk").forEach(function(v, i) {
+		            v.checked = false;
+		        });
+		    }  
+			function boardDelete(){
+		        //체크박스 체크된 항목
+		        const query = 'input[name="chk"]:checked'
+		        const selectedElements = document.querySelectorAll(query)
+		
+		        //체크박스 체크된 항목의 개수
+		        const selectedElementsCnt = selectedElements.length;
+		
+		        if(selectedElementsCnt == 0){
+		            alert("삭제할 항목을 선택해주세요.");
+		            return false;
+		        }
+		
+		        else{
+			
+		            if (confirm("정말로 삭제하시겠습니까?")) {
+		                //배열생성
+		                let arr = new Array(selectedElementsCnt);
+						
+		                document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+		                    arr[i] = v.value;
+				        });
+		
+						$.ajax({
+							   url : 'recpDelete',
+							   type : 'POST', 
+							   data : { arr : JSON.stringify(arr) },
+							   success:function(data){
+								
+									alert("가냐?");
+									console.log("data +++++" + data);
+									location.reload();
+								},
+							
+							   error:function(error){
+								
+									console.log('error');
+							   }
+								
+							})		
+		              }
+
+		        }
+		    }	
+	</script>
 	</body>
 </html>

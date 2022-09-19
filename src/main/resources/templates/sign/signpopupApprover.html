@@ -177,11 +177,9 @@
                     $rank = data[index].dept_rank;
 
                     $checkbox = $("<input type='checkbox' name='addedMem'>").val(data[index].mem_num);
-                    $hidden = $("<input type='hidden' name='approverMem'>").val(data[index].mem_num);
 
                     $td.append($checkbox[0]);
                     $td.append($name + ' ' + $rank);
-                    $td.append($hidden[0]);
 
                     $tr.append($td);
 
@@ -232,12 +230,16 @@
 
                     $td = $("<td name='approver' class='approver'>").val(data[index].mem_num);
                     $name = data[index].mem_name;
+                    $rank = data[index].dept_rank;
 
-                    $td.append($name);
+                    $td.append($name + " " + $rank);
+
+                    $hiddenApprover = $("<input type='hidden' name='approver' class='approver'>").val(data[index].mem_num);
 
                     $(opener.document).find('#approverHead').append('<th style="border : 1px solid" class="approveType">결재</th>')
-
                     $(opener.document).find('#approverBody').append($td[0]);
+                    $(opener.document).find('#approverBody').append($hiddenApprover[0]);
+
                 }
 
                 window.self.close();

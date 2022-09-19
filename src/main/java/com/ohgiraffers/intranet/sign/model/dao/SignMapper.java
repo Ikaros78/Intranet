@@ -2,6 +2,7 @@ package com.ohgiraffers.intranet.sign.model.dao;
 
 import com.ohgiraffers.intranet.member.model.dto.MemberDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignDTO;
+import com.ohgiraffers.intranet.sign.model.dto.SignFileDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -35,25 +36,13 @@ public interface SignMapper {
 
     List<SignDTO> selectCompletedList(Map<String, Object> searchList);
 
-    int selectTotalMyCompletedCount(Map<String, Object> searchMap);
-
-    List<SignDTO> selectMyCompletedList(Map<String, Object> searchList);
-
     int selectTotalRefusedCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectRefusedList(Map<String, Object> searchList);
 
-    int selectTotalMyRefusedCount(Map<String, Object> searchMap);
-
-    List<SignDTO> selectMyRefusedList(Map<String, Object> searchList);
-
     int selectTotalProgressCount(Map<String, Object> searchMap);
 
-    int selectTotalMyProgressCount(Map<String, Object> searchMap);
-
     List<SignDTO> selectProgressList(Map<String, Object> searchList);
-
-    List<SignDTO> selectMyProgressList(Map<String, Object> searchList);
 
     int selectTotalTempCount(Map<String, Object> searchMap);
 
@@ -68,4 +57,28 @@ public interface SignMapper {
     List<MemberDTO> selectMemByDeptCode(String code);
 
     MemberDTO selectMemByNum(Map<String, Object> numMap);
+
+    int registSign(Map<String, String> insertMap);
+
+    int registApprover(Map<String, String> approver);
+
+    int registLastApprover(Map<String, String> approver);
+
+    int registReceiver(Map<String, String> receiver);
+
+    int registReferencer(Map<String, String> referencer);
+
+    int registSignFile(SignFileDTO signFile);
+
+    int registTempSign(Map<String, String> insertMap);
+
+    int deleteSign(int signNo);
+
+    int selectTotalReferenceCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReferenceList(Map<String, Object> searchList);
+
+    int selectTotalReceiveCount(Map<String, Object> searchMap);
+
+    List<SignDTO> selectReceiveList(Map<String, Object> searchList);
 }

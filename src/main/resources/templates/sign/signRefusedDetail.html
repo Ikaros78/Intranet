@@ -25,7 +25,7 @@
 
 <div id="main-container">
     <div class="con-header col-offset-1">
-        <h2>결재대기함</h2>
+        <h2>반려문서함</h2>
     </div>
 
     <div class="details">
@@ -35,10 +35,8 @@
             <button id="backtoList">목록</button>
         </div>
 
-        <form id="hiddenfrm" method="post" action="/sign/registForm">
-            <input type="hidden" name="formCode" th:value="${signDetail.signForm.code}">
-            <input type="hidden" name="signTitle" th:value="${signDetail.signTitle}">
-            <input type="hidden" name="signContent" th:value="${signDetail.signContent}">
+        <form id="hiddenfrm" method="post" action="/sign/reWriteRegistForm">
+            <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
         </form>
 
         <div id="detail">
@@ -58,24 +56,24 @@
                     <tr>
                         <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
                         <th:block th:each="approve : ${signDetail.approver}">
-                            <td th:text="${approve.approver.approverName}" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
+                            <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
                         </th:block>
                     </tr>
                 </table>
             </div>
 
             <div id="table-form">
-                <form id="signform" method="post">
-                    <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
-                    <table class="table detail">
-                        <caption></caption>
-                        <colgroup>
-                            <col style="width: 15%;">
-                            <col style="width: 35%;">
-                            <col style="width: 15%;">
-                            <col style="width: 35%;">
-                        </colgroup>
-                        <tbody>
+                <table class="table detail">
+                    <caption></caption>
+                    <colgroup>
+                        <col style="width: 15%;">
+                        <col style="width: 35%;">
+                        <col style="width: 15%;">
+                        <col style="width: 35%;">
+                    </colgroup>
+                    <tbody>
                         <tr>
                             <th>문서번호</th>
                             <td th:text="${signDetail.signNo}"></td>
@@ -92,7 +90,7 @@
                             <th>참조자</th>
                             <td>
                                 <th:block th:each="reference : ${signDetail.referencer}" th:colspan="3">
-                                    <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName}"></span>&nbsp
+                                    <span th:if="${ reference.referencerNo != 0 }" th:text="${ reference.referencer.referencerName } + ' ' + ${ reference.referencer.referencerRank } + ' ' " + ></span>
                                 </th:block>
                             </td>
                         </tr>
@@ -100,7 +98,7 @@
                             <th>수신처</th>
                             <td>
                                 <th:block  th:each="receive : ${signDetail.receiver}" th:colspan="3">
-                                    <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName}"></span>&nbsp
+                                    <span th:if="${ receive.receiverNo != 0 }" th:text="${ receive.receiver.receiverName } + ' ' + ${ receive.receiver.receiverRank } + ' ' "></span>
                                 </th:block>
                             </td>
                         </tr>
@@ -109,14 +107,43 @@
                             <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
                         </tr>
                         <tr>
-                            <td th:text="${signDetail.signContent}" th:colspan="4"></td>
+                            <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
                         </tr>
-                        <tr>
-                            <td th:colspan="4">파일이 여기로</td>
+                        <tr th:if="${signDetail.file.originName != null}">
+                            <td th:colspan="4">
+                                <a class="fileDownload" th:href="|/upload/signFile/${ signDetail.file.getSaveName()}|" th:value="${ signDetail.file.getOriginName() }" download>
+                                    <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
+                                    <span th:text="${ signDetail.file.originName }"></span>
+                                </a>
+                            </td>
                         </tr>
-                        </tbody>
-                    </table>
-                </form>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="opinion">
+                <h3>결재의견</h3>
+                <table class="table opinion">
+                    <thead>
+                    <tr>
+                        <th width="150px">결재</th>
+                        <th width="200px">결재자</th>
+                        <th width="200px">결재일시</th>
+                        <th width="800px">의견</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="approve : ${ signDetail.approver }">
+                        <th:block th:if="${approve.isApproved eq 'Y'}">
+                            <td th:if="${approve.isRefused eq 'N'}" th:text="결재"></td>
+                            <td th:if="${approve.isRefused eq 'Y'}" th:text="반려"></td>
+                            <td th:text="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank}"></td>
+                            <td th:text="${approve.approveDate}"></td>
+                            <td th:text="${approve.opinion}"></td>
+                        </th:block>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

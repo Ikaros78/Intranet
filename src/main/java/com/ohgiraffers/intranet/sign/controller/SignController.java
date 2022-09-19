@@ -18,22 +18,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
-@RequestMapping("/sign/*")
+@RequestMapping("/sign")
 public class SignController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -115,7 +113,7 @@ public class SignController {
         List<SignDTO> waitingList = signService.selectWaitingList(searchList);
 
         System.out.println("waitingList = " + waitingList);
-        
+
         mv.addObject("waitingList", waitingList);
         mv.addObject("selectCriteria", selectCriteria);
         mv.addObject("searchList", searchList);
@@ -141,16 +139,17 @@ public class SignController {
     }
 
     @GetMapping("/signChecked")
-    @Transactional
     public ModelAndView signChecked(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         String getSignList = request.getParameter("checkArr");
         String[] signNoList = getSignList.split(",");
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
         Map<String, Object> signMap = new HashMap<>();
         signMap.put("mem_num", mem_num);
+        signMap.put("opinion", opinion);
 
         int count = 0;
 
@@ -178,7 +177,6 @@ public class SignController {
     }
 
     @GetMapping("/deleteChecked")
-    @Transactional
     public ModelAndView deleteChecked(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         String getSignList = request.getParameter("checkArr");
@@ -288,46 +286,176 @@ public class SignController {
     }
 
     @PostMapping("/registForm")
+    public ModelAndView signRegistForm(ModelAndView mv, @RequestParam(name="originName", required = false)MultipartFile originName, HttpServletRequest request, @AuthenticationPrincipal User user) throws FileNotFoundException, SignApproveException {
+
+        String writer = request.getParameter("signWriter");
+        String formCode = request.getParameter("signFormCode");
+        String title = request.getParameter("signTitle");
+        String content = request.getParameter("signContent");
+        String[] approver = request.getParameterValues("approver");
+        String[] receiver = request.getParameterValues("receiver");
+        String[] referencer = request.getParameterValues("referencer");
+
+        log.info("writer = " + writer);
+        log.info("formCode = " + formCode);
+        log.info("title = " + title);
+        log.info("content = " + content);
+
+        Map<String, String> insertMap = new HashMap<>();
+        insertMap.put("writer",writer);
+        insertMap.put("formCode",formCode);
+        insertMap.put("title",title);
+        insertMap.put("content",content);
+
+        int signResult = signService.registSign(insertMap);
+
+        Map<String, String> approverMap = new HashMap<>();
+        Map<String, String> receiverMap = new HashMap<>();
+        Map<String, String> referencerMap = new HashMap<>();
+
+
+        for(int i = 0; i < approver.length; i++){
+
+            approverMap.put("approver", approver[i]);
+
+            if(i == approver.length - 1){
+
+                int registFinal = signService.registFianlApprover(approverMap);
+            }else{
+
+                int registApprover = signService.registApprover(approverMap);
+            }
+        }
+
+        if(receiver != null){
+
+            for(int i = 0; i < receiver.length; i++){
+
+                receiverMap.put("receiver", receiver[i]);
+
+                int registReceiver = signService.registReceiver(receiverMap);
+
+            }
+        }
+
+        if(referencer != null){
+
+            for(int i = 0; i < referencer.length; i++){
+
+                referencerMap.put("referencer", referencer[i]);
+
+                int registReferencer = signService.registReferencer(referencerMap);
+
+            }
+        }
+
+
+        SignFileDTO signFile = new SignFileDTO();
+
+        String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
+
+        String fileUploadDirectory = filePath +	 "/signFile";
+
+        File mkdir = new File(fileUploadDirectory);
+
+        if(!mkdir.exists()){
+            mkdir.mkdirs();
+        }
+
+        String originFileName = "";
+        String ext = "";
+        String saveName = "";
+
+        if(originName.getSize() > 0) { //파일 첨부한거 있으면
+            //파일명 변경하고
+            originFileName = originName.getOriginalFilename();
+            ext = originFileName.substring(originFileName.lastIndexOf("."));
+            saveName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+            signFile.setOriginName(originFileName);
+            signFile.setSaveName(saveName);
+            signFile.setSavePath(fileUploadDirectory);
+
+            log.info("signFile 확인 : " + signFile);
+            // file insert
+            int fileResult = signService.signFileInsert(signFile);
+
+            try {
+                originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+                new File(fileUploadDirectory + "//" + saveName).delete();
+            }
+
+        }
+
+        mv.setViewName("redirect:/sign/requestList");
+
+        return mv;
+    }
+
+    @PostMapping("/saveTemp")
+    public ModelAndView saveTemp(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user) throws SignApproveException {
+
+        String writer = request.getParameter("signWriter");
+        String formCode = request.getParameter("signFormCode");
+        String title = request.getParameter("signTitle");
+        String content = request.getParameter("signContent");
+
+        Map<String, String> insertMap = new HashMap<>();
+        insertMap.put("writer",writer);
+        insertMap.put("formCode",formCode);
+        insertMap.put("title",title);
+        insertMap.put("content", content);
+
+        int signResult = signService.registTempSign(insertMap);
+
+        mv.setViewName("redirect:/sign/tempList");
+
+        return mv;
+    }
+
+    @PostMapping("/reWriteRegistForm")
     public ModelAndView resignRegistForm(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
 
         UserImpl userInfo = ((UserImpl)user);
 
         int mem_num = userInfo.getMem_num();
 
-        String formCode = request.getParameter("formCode");
-        String title = request.getParameter("signTitle");
-        String content = request.getParameter("signContent");
+        String signNo = request.getParameter("signNo");
 
-        SignFormDTO selectForm = signService.selectFormByCode(formCode);
+        SignDTO sign = signService.selectSignDetail(signNo);
 
         String deptName = memberService.selectDeptByNum(mem_num);
 
         Map<String , Object> formMap = new HashMap<>();
         formMap.put("userInfo", userInfo);
-        formMap.put("selectForm", selectForm);
+        formMap.put("signDetail", sign);
         formMap.put("deptName", deptName);
-        formMap.put("title", title);
-        formMap.put("content", content);
 
         mv.addObject("formMap", formMap);
 
-        mv.setViewName("sign/resignRegistForm");
+        mv.setViewName("sign/reWriteRegistForm");
 
         return mv;
     }
 
     @PostMapping("/approve")
-    @Transactional
     public ModelAndView approveSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         int signNo = Integer.parseInt(request.getParameter("signNo"));
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
+        log.info("opinion = " + opinion);
         log.info("signNo = " + signNo);
 
         Map<String, Object> approve = new HashMap<>();
         approve.put("signNo", signNo);
+        approve.put("opinion", opinion);
         approve.put("mem_num", mem_num);
 
         int result = signService.approveSign(approve);
@@ -339,21 +467,35 @@ public class SignController {
     }
 
     @PostMapping("/refuse")
-    @Transactional
     public ModelAndView refuseSign(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         int signNo = Integer.parseInt(request.getParameter("signNo"));
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
         Map<String, Object> refuse = new HashMap<>();
         refuse.put("signNo", signNo);
+        refuse.put("opinion", opinion);
         refuse.put("mem_num", mem_num);
 
         int result = signService.refuseSign(refuse);
 
         mv.setViewName("redirect:/sign/waitingList");
         rttr.addFlashAttribute("message", "반려 완료하였습니다.");
+
+        return mv;
+    }
+
+    @PostMapping("/delete")
+    public ModelAndView deleteSign(ModelAndView mv,HttpServletRequest request, RedirectAttributes rttr) throws SignApproveException{
+
+        int signNo = Integer.parseInt(request.getParameter("signNo"));
+
+        int result = signService.deleteSign(signNo);
+
+        mv.setViewName("redirect:/sign/tempList");
+        rttr.addFlashAttribute("message", "삭제 완료하였습니다.");
 
         return mv;
     }
@@ -369,7 +511,39 @@ public class SignController {
         mv.addObject("deptList", deptList);
         mv.addObject("userInfo", userInfo);
 
-        mv.setViewName("sign/signpopupmain");
+        mv.setViewName("/sign/signpopupApprover");
+
+        return mv;
+    }
+
+    @GetMapping(value = "/addReceiver", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ModelAndView addReceiver(ModelAndView mv, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        List<DepartmentDTO> deptList = signService.selectDeptList();
+
+        mv.addObject("deptList", deptList);
+        mv.addObject("userInfo", userInfo);
+
+        mv.setViewName("/sign/signpopupReceiver");
+
+        return mv;
+    }
+
+    @GetMapping(value = "/addReferencer", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ModelAndView addReferencer(ModelAndView mv, @AuthenticationPrincipal User user){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        List<DepartmentDTO> deptList = signService.selectDeptList();
+
+        mv.addObject("deptList", deptList);
+        mv.addObject("userInfo", userInfo);
+
+        mv.setViewName("/sign/signpopupReferencer");
 
         return mv;
     }
@@ -663,10 +837,7 @@ public class SignController {
 
         int totalCompletedCount = signService.selectTotalCompletedCount(searchMap);
 
-        int totalMyCompletedCount = signService.selectTotalMyCompletedCount(searchMap);
-
-        int totalCount = totalCompletedCount + totalMyCompletedCount;
-
+        int totalCount = totalCompletedCount;
 
         log.info("totalCount : " + totalCount);
 
@@ -687,10 +858,6 @@ public class SignController {
         searchList.put("searchNum", searchNum);
 
         List<SignDTO> completedList = signService.selectCompletedList(searchList);
-
-        List<SignDTO> myCompletedList = signService.selectMyCompletedList(searchList);
-
-        completedList.addAll(myCompletedList);
 
         log.info("completedList : " + completedList);
 
@@ -747,9 +914,7 @@ public class SignController {
 
         int totalRefusedCount = signService.selectTotalRefusedCount(searchMap);
 
-        int totalMyRefusedCount = signService.selectTotalMyRefusedCount(searchMap);
-
-        int totalCount = totalRefusedCount + totalMyRefusedCount;
+        int totalCount = totalRefusedCount;
 
         log.info("totalCount : " + totalCount);
 
@@ -770,10 +935,6 @@ public class SignController {
         searchList.put("searchNum", searchNum);
 
         List<SignDTO> refusedList = signService.selectRefusedList(searchList);
-
-        List<SignDTO> myRefusedList = signService.selectMyRefusedList(searchList);
-
-        refusedList.addAll(myRefusedList);
 
         log.info("refusedList : " + refusedList);
 
@@ -802,17 +963,144 @@ public class SignController {
     }
 
     @GetMapping("/referenceList")
-    public ModelAndView signReferenceList(ModelAndView mv){
+    public ModelAndView signReferenceList(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
+
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)) {
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchWriter = request.getParameter("searchWriter");
+        String searchForm = request.getParameter("searchForm");
+        String searchTitle = request.getParameter("searchTitle");
+        String searchStartDate = request.getParameter("searchStartDate");
+        String searchEndDate = request.getParameter("searchEndDate");
+        String searchNum = request.getParameter("searchNum");
+        int mem_num = ((UserImpl)user).getMem_num();
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("mem_num", mem_num);
+        searchMap.put("searchWriter", searchWriter);
+        searchMap.put("searchForm", searchForm);
+        searchMap.put("searchTitle", searchTitle);
+        searchMap.put("searchStartDate", searchStartDate);
+        searchMap.put("searchEndDate", searchEndDate);
+        searchMap.put("searchNum", searchNum);
+
+        int totalCount = signService.selectTotalReferenceCount(searchMap);
+
+        int limit = 10;
+
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("mem_num", mem_num);
+        searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchWriter", searchWriter);
+        searchList.put("searchForm", searchForm);
+        searchList.put("searchTitle", searchTitle);
+        searchList.put("searchStartDate", searchStartDate);
+        searchList.put("searchEndDate", searchEndDate);
+        searchList.put("searchNum", searchNum);
+
+        List<SignDTO> referenceList = signService.selectReferenceList(searchList);
+
+        mv.addObject("referenceList", referenceList);
+        mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchList", searchList);
 
         mv.setViewName("sign/signReferenceList");
 
         return mv;
     }
 
-    @GetMapping("/teamList")
-    public ModelAndView signTeamList(ModelAndView mv){
+    @GetMapping("/referenceDetail")
+    public ModelAndView signReferenceDetail(ModelAndView mv, HttpServletRequest request){
 
-        mv.setViewName("sign/signTeamList");
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signReferenceDetail");
+
+        return mv;
+    }
+
+    @GetMapping("/receiveList")
+    public ModelAndView signReceiveList(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user){
+
+        String currentPage = request.getParameter("currentPage");
+        int pageNo = 1;
+
+        if(currentPage != null && !"".equals(currentPage)) {
+            pageNo = Integer.parseInt(currentPage);
+        }
+
+        String searchWriter = request.getParameter("searchWriter");
+        String searchForm = request.getParameter("searchForm");
+        String searchTitle = request.getParameter("searchTitle");
+        String searchStartDate = request.getParameter("searchStartDate");
+        String searchEndDate = request.getParameter("searchEndDate");
+        String searchNum = request.getParameter("searchNum");
+        int mem_num = ((UserImpl)user).getMem_num();
+
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("mem_num", mem_num);
+        searchMap.put("searchWriter", searchWriter);
+        searchMap.put("searchForm", searchForm);
+        searchMap.put("searchTitle", searchTitle);
+        searchMap.put("searchStartDate", searchStartDate);
+        searchMap.put("searchEndDate", searchEndDate);
+        searchMap.put("searchNum", searchNum);
+
+
+        int totalCount = signService.selectTotalReceiveCount(searchMap);
+
+        int limit = 10;
+
+        int buttonAmount = 5;
+
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("mem_num", mem_num);
+        searchList.put("selectCriteria", selectCriteria);
+        searchList.put("searchWriter", searchWriter);
+        searchList.put("searchForm", searchForm);
+        searchList.put("searchTitle", searchTitle);
+        searchList.put("searchStartDate", searchStartDate);
+        searchList.put("searchEndDate", searchEndDate);
+        searchList.put("searchNum", searchNum);
+
+        List<SignDTO> receiveList = signService.selectReceiveList(searchList);
+
+        mv.addObject("receiveList", receiveList);
+        mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchList", searchList);
+
+        mv.setViewName("sign/signReceiveList");
+
+        return mv;
+    }
+
+    @GetMapping("/receiveDetail")
+    public ModelAndView signReceiveDetail(ModelAndView mv, HttpServletRequest request){
+
+        String signNo = request.getParameter("no");
+        SignDTO signDetail = signService.selectSignDetail(signNo);
+
+        log.info("signDetail : " + signDetail);
+
+        mv.addObject("signDetail" , signDetail);
+
+        mv.setViewName("sign/signReceiveDetail");
 
         return mv;
     }

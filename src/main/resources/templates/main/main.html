@@ -1,11 +1,277 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
     <title>인트라넷 메인</title>
     <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/calendarbasic.css}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
+<style>
+    /* 전체 틀 */
+    #sideBar{
+        margin-right: 5px;
+    }
+    #imgBox{
+        width: auto;
+    }
+    #imgMain{
+        width: 1665px;
+        height: 450px;
+        margin-left: -47px;
+        margin-top: -15px;
+    }
+    #sig{
+        margin-top: 19px;
+        margin-right: 10px;
+    }
+    #sig p{
+        text-align: center;
+        font-size: 24px;
+    }
+    #no{
+        width: 480px;
+        height: 380px;
+        float: left;
+        margin-right: 60px;
+        margin-top: 20px;
+    }
+    #bo{
+        width: 480px;
+        height: 380px;
+        float: left;
+        margin-right: 60px;
+        margin-top: 20px;
+    }
+    #ms{
+        width: 480px;
+        height: 380px;
+        float: left;
+        margin-top: 20px;
+    }
+    /* 테이블 */
+    table{
+        text-align: center;
+        font-size: 18px;
+    }
+    .tableName{
+        font-size: 24px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    /* 공지사항 테이블 헤더 */
+    .noTitle{
+        width: 260px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: #FFA57E;
+    }
+    .noName{
+        width: 75px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: #FFA57E;
+    }
+    .noDate{
+        width: 140px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: #FFA57E;
+    }
+    /* 공지사항 테이블 헤더 끝 */
+    /* 게시판 테이블 헤더 */
+    .boTitle{
+        width: 260px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(245, 204, 166);
+    }
+    .boName{
+        width: 75px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(245, 204, 166);
+    }
+    .boDate{
+        width: 140px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(245, 204, 166);
+    }
+    /* 게시판 테이블 헤더 끝 */
+    /* 메시지 테이블 헤더 */
+    .msTitle{
+        width: 230px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(236, 138, 46);
+    }
+    .msName{
+        width: 110px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(236, 138, 46);
+    }
+    .msDate{
+        width: 140px;
+        font-size: 20px;
+        padding: 7px;
+        background-color: rgb(236, 138, 46);
+    }
+    /* 메시지 헤더 끝 */
+    .dd{
+        padding: 6px;
+        border-bottom: 1px solid #aaa;
+    }
+    .ddd{
+        padding: 6px;
+        border-left: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+    }
+    .dddd{
+        padding: 6px;
+        border-right: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+    }
+    .more{
+        float: right;
+        margin-top: -16px;
+        font-size: 12px;
+    }
+
+</style>
 <body>
-    <div th:include="common/header.html"></div>
+<div id="wrap">
+    <div th:replace="common/header.html"></div>
+    <div id="contents">
+        <div id="sideBar" style="float: left; margin-right: 50px;">
+            <h3><span th:text="${#authentication.getPrincipal().getMem_name()}"></span>님<br>환영합니다</h3>
+            <div id="sig">
+                <strong><p>대기중인 결재 : <span>5</span>개</p></strong>
+            </div>
+        </div>
+        <br>
+        <div id="imgBox" style="float: left;">
+            <img id="imgMain" src="/images/main.jpg" alt="메인사진">
+
+
+
+        </div><!-- 이미지 박스 end -->
+
+        <div id="no">
+
+            <table id="noTable">
+
+                <p class="tableName"><strong>공지사항</strong></p><span class="more"><a a th:href="@{/notice/list}">+ 더보기</a></span>
+                <hr color="#999999" noshade>
+                <thead>
+                <th class="noTitle">제목</th>
+                <th class="noName">작성자</th>
+                <th class="noDate">등록일</th>
+                </thead>
+                <tbody>
+<!--                <tr th:each="notice : ${noticeList}">-->
+<!--                    <td class="ddd" th:text="${notice.title}"></td>-->
+<!--                    <td class="dd" th:text="${notice.mem_num}"></td>-->
+<!--                    <td class="dddd" th:text="${notice.date}"></td>-->
+<!--                </tr>-->
+                </tbody>
+                <script>
+
+                        $.ajax({
+
+                           url: "mainNo",
+                           /* 타입 : get */
+                           /* 데이터 : noMv */
+
+                           success:function(data){
+
+                               console.table(data);
+
+                               const noMv = JSON.parse(data);
+
+                               console.log(noMv);
+                               const $table = $("#noTable tbody");
+                               $table.html(""); // 초기화
+
+                               for (let idx in noMv) {
+
+                                   $tr = $("<tr>");
+                                   $title = $('<td class="ddd">').text(noMv[idx].title);
+                                   $member = $('<td class="dd">').text(noMv[idx].member.mem_name);
+                                   $date = $('<td class="dddd">').text(noMv[idx].date);
+
+                                   $tr.append($title);
+                                   $tr.append($member);
+                                   $tr.append($date);
+
+                                   $table.append($tr);
+                               }
+                           },
+                           error: function(error) {
+
+                               console.log(error);
+                           }
+
+                        });
+
+                </script>
+
+
+            </table>
+
+        </div><!-- 공지사항 end-->
+
+        <div id="bo">
+
+            <table id="boTable">
+
+                <strong><p class="tableName">부서게시판</p></strong>
+                <hr color="#999999" noshade>
+                <thead>
+                <th class="boTitle">제목</th>
+                <th class="boName">작성자</th>
+                <th class="boDate">등록일</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+
+            </table>
+
+        </div><!-- 게시판 end -->
+
+        <div id="ms">
+
+            <table id="msTable">
+
+                <strong><p class="tableName">메시지함</p></strong>
+                <hr color="#999999" noshade>
+                <thead>
+                <th class="msTitle">제목</th>
+                <th class="msName">보낸사람</th>
+                <th class="msDate">받은날짜</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+            </table>
+
+        </div><!-- 메시지 end -->
+
+
+
+
+    </div><!-- content end -->
+
+
+</div>
+
+
 </body>
 </html>

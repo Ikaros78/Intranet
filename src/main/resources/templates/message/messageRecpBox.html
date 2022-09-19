@@ -27,6 +27,8 @@
 			<h3 style="position: relative; top: 40px; left: 80px">받은쪽지함</h3><br>
 <!--/*		<hr style="width: 1000px; position: relative; left:50px; top:50px"><br> */-->
 			<div id="messageheader" style="float:left; position:relative; top:60px; left: 60px">
+			<input type="hidden" id="memNum" name="memNum" th:value="${ #authentication.getPrincipal().getMem_num()}">
+			<input type="hidden" id="mem_name" name="mem_name" th:value="${ #authentication.getPrincipal().getMem_name()}">
 				<form th:action="@{/ms/recp}" method="get">
 					<input type="hidden" name="searchbox" value="1">
 					<select name="searchCondition" id="searchCondition" 
@@ -44,21 +46,21 @@
 			style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
 			</div>
 			<div class="table-area">
-				<table align="center" id="listArea">
-					<tr>
+				<table align="center" id="listArea" >
+					<tr >
 						<th>
 						
                         <label class="checkbox-inline">
 				        <input type="checkbox" id="allCheckBox" onclick="allChecked()">
-				        </label>
+				        </label></th>
 						<th>보낸사람</th>
 						<th>제목</th>
 						<th>날짜</th>
 						<th>글번호</th>
 					</tr>
 					<tr th:each=" boardList : ${ boardList }">
-						<td>
-						<label class="checkbox-inline">
+						
+						<td><label class="checkbox-inline">
 						<input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${boardList.msNo}" style="margin: 10px">
 						</label></td>
 						<td name="click" id="click" th:text="${boardList.recpName}"></td>
@@ -74,25 +76,25 @@
 		<!-- 페이지 처리 -->
 		<div class="page-nation" align="">
 			<!-- 맨 앞으로 이동 버튼 -->
-			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.startPage}} + '\''"
-					th:disabled="${selectCriteria.pageNo == 1}"><<</button>
+			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${searchList.selectCriteria.startPage}} + '\''"
+					th:disabled="${searchList.selectCriteria.pageNo == 1}"><<</button>
 			<!-- 이전 페이지 버튼 -->
-			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo - 1}} + '\''"
-					th:disabled="${selectCriteria.pageNo == 1}"><</button>
+			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${searchList.selectCriteria.pageNo - 1}} + '\''"
+					th:disabled="${searchList.selectCriteria.pageNo == 1}"><</button>
 			<!-- 숫자 버튼 -->
-			<th:block	th:each="page : ${#numbers.sequence(selectCriteria.startPage, selectCriteria.endPage)}">
+			<th:block	th:each="page : ${#numbers.sequence(searchList.selectCriteria.startPage, searchList.selectCriteria.endPage)}">
 				<button th:text="${ page }"
 				     	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${page}} + '\''"
-						th:disabled="${ selectCriteria.pageNo eq page }"></button>
+						th:disabled="${ searchList.selectCriteria.pageNo eq page }"></button>
 			</th:block>
 
 			<!-- 다음 페이지 버튼 -->
-			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.pageNo + 1}} + '\''"
-				    th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
+			<button	th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${searchList.selectCriteria.pageNo + 1}} + '\''"
+				    th:disabled="${searchList.selectCriteria.pageNo == selectCriteria.maxPage}">
 				></button>
 			<!-- 마지막 페이지로 이동 버튼 -->
-			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${selectCriteria.maxPage}} + '\''"
-				    th:disabled="${selectCriteria.pageNo == selectCriteria.maxPage}">
+			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${searchList.selectCriteria.maxPage}} + '\''"
+				    th:disabled="${searchList.selectCriteria.pageNo == searchList.selectCriteria.maxPage}">
 				>></button>
 			</div>
 
@@ -189,9 +191,9 @@
 							   data : { arr : JSON.stringify(arr) },
 							   success:function(data){
 								
-									alert("가냐?");
+									alert("정말 정말 정말로 삭제하시겠습니까? 복구 안되는데.. 진짜 맞아요? 맞아? 삭제가 뭔지 알죠? 삭제입니다!!!!!!!!!!!");
 									console.log("data +++++" + data);
-									//location.reload();
+									location.reload();
 								},
 							
 							   error:function(error){
@@ -205,6 +207,7 @@
 		        }
 		    }	
 	</script>
+
 
 </body>
 </html>

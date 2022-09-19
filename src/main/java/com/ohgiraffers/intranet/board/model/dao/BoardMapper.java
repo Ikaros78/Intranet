@@ -2,7 +2,6 @@ package com.ohgiraffers.intranet.board.model.dao;
 
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FrRecommendDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.apache.ibatis.annotations.Mapper;
@@ -52,8 +51,5 @@ public interface BoardMapper {
     int boardcomment(CommentDTO boardcomment);
 
     List<CommentDTO> selectComentList(String no);
-
-    /* 게시글 추천 수 */
-    int selectRecCount(String fr_no);
 
 }

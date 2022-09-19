@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.board.controller;
 
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FrRecommendDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
@@ -139,16 +138,7 @@ public class BoardController {
         List<CommentDTO> commentList = boardService.selectComentList(fr_no);
         log.info("List값 확인 : " + commentList);
 
-        int recCount = boardService.selectRecCount(fr_no);
-
-        FrRecommendDTO frRecommend = new FrRecommendDTO();
-
-        frRecommend.setRecCount(recCount);
-        log.info("recCount 값 확인 : " + frRecommend.getRecCount());
-
-
         mv.addObject("commentList", commentList);
-        mv.addObject("recommend", frRecommend);
         mv.setViewName("freelist/boardDetail");
 
         return mv;

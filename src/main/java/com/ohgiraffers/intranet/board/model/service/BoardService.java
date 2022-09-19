@@ -3,7 +3,6 @@ package com.ohgiraffers.intranet.board.model.service;
 import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
 import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
 import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FrRecommendDTO;
 import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
@@ -156,12 +155,6 @@ public class BoardService {
                return commentlist;
        }
 
-    public int selectRecCount(String fr_no) {
-
-        int result = boardMapper.selectRecCount(fr_no);
-
-        return result;
-    }
 }
 
 //

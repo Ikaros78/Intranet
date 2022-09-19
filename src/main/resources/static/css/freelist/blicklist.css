@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+#wrap{width: 100%;}
+#header, #contents{width: 1920px; margin: 0 auto;}
+
+#header{ height: 100px; background-color: #FFA57E; position: relative; box-shadow: 0px 1px 2px #ccc;}
+#header .logo{width: 250px; height: 100px;}
+#header .logo a{display: block; line-height: 100px; width: 250px; text-align: center; background-color: #fff;}
+#header .logo a img{width: 130px; margin-top: 15px}
+#header .lnb {position: absolute; top: 20px;right: 40px;}
+#header .lnb li{float: left; width: 100px; text-align: center;}
+#header .lnb li a{color:#fff; font-size: 17px; font-weight: bold;}
+#header .gnb {position: absolute; top: 0px; left: 320px;}
+#header .gnb li{float: left; width: 170px; margin-right: 10px;}
+#header .gnb li a{width: 110px; line-height: 100px; font-size: 30px; font-weight: 900; color:#fff;
+    text-shadow: 1px 1px 2px #e25f27; transition: all .3s; display: block; text-align: center;}
+#header .gnb li a:hover{text-shadow: none;}
+
+#contents{height: 1200px;}
+#contents #sideBar{width: 250px; background-color: #eee; height: 100%; box-shadow: 1px 0px 2px #ccc; float:left}
+#contents #sideBar h3{font-size: 35px; text-align: center; padding: 15px 0; background-color: #313131; color:#fff;
+    margin-bottom: 15px;}
+#contents #sideBar .main{background-color: #999; text-indent: 10px;}
+#contents #sideBar .main>a{line-height: 50px; display: block; font-size: 25px; font-weight: bold;}
+#contents #sideBar .main .sub{background-color:#eee;border-bottom: 2px solid #fff; text-indent: 23px; }
+#contents #sideBar .main .sub a{font-size: 18px; display: block; width: 250px; line-height: 30px; }
+#contents #sideBar .main .sub a:hover{color: rgb(255, 120, 66);}

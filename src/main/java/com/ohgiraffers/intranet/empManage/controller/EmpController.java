@@ -72,6 +72,7 @@ public class EmpController {
 
         mv.addObject("memberList", memberList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchValue", searchValue);
 
         mv.setViewName("empManage/empList");
 
@@ -91,6 +92,10 @@ public class EmpController {
 
         String searchCondition = request.getParameter("searchCondition");
         String searchValue = request.getParameter("searchValue");
+
+        if(searchValue != null){
+            searchCondition = "writer";
+        }
 
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
@@ -115,6 +120,7 @@ public class EmpController {
 
         mv.addObject("appointList", appointList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject("searchValue", searchValue);
 
         mv.setViewName("empManage/hrList");
 
@@ -132,9 +138,11 @@ public class EmpController {
     public String hrRegist(@ModelAttribute AppointmentDTO appointment, HttpServletRequest request){
 
         String bef_rank = request.getParameter("bef_rank");
-        String bef_dept = request.getParameter("bef_dept");
+        String bef_name = request.getParameter("bef_name");
+        String bef_code = request.getParameter("bef_code");
         log.info("bef_rank 값 확인 : " + bef_rank);
-        log.info("bef_dept 값 확인 : " + bef_dept);
+        log.info("bef_name 값 확인 : " + bef_name);
+        log.info("bef_code 값 확인 : " + bef_code);
 
         String dept_rank = request.getParameter("dept_rank");
         String dept_code = request.getParameter("dept_code");
@@ -179,5 +187,75 @@ public class EmpController {
         return result;
     }
 
+    /* 인사 발령 취소 */
+    @GetMapping("/hrDelete")
+    public String hrDelete(HttpServletRequest request){
+
+        int no = Integer.parseInt(request.getParameter("no")); // 발령 전 직급 테이블 넘버
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+        String dept_rank = request.getParameter("bef_rank");
+        String dept_code = request.getParameter("dept_code");
+
+        log.info("값 가져오나요 : " + no + " " + mem_num + dept_rank + dept_code);
+
+        int result = empService.updateMember(mem_num, dept_rank, dept_code);
+
+        if (result > 0){
+
+            int result2 = empService.hrDelete(no);
+        }
+
+        return "redirect:/emp/hrList";
+    }
+
+    /* 직원 상세 정보 조회 */
+    @GetMapping("/empDetail")
+    public String hrDetailPage(HttpServletRequest request, Model model){
+
+        int no = Integer.parseInt((request.getParameter("no")));
+
+        MemberDTO empDetail = empService.selectMemberDetail(no);
+        log.info("empDetail값 확인 : " + empDetail);
+        model.addAttribute("emp", empDetail);
+
+        return "empManage/empDetail";
+    }
+
+    /* 직원 정보 수정 - 관리자 */
+    @GetMapping("/empUpdate")
+    public String empUpdatePage(HttpServletRequest request, Model model){
+        int no = Integer.parseInt((request.getParameter("no")));
+
+        MemberDTO empDetail = empService.selectMemberDetail(no);
+        log.info("empDetail값 확인 : " + empDetail);
+        model.addAttribute("emp", empDetail);
+
+        return "empManage/empUpdate";
+    }
+
+    @PostMapping("/empUpdate")
+    public String empUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request){
+
+        int bef_num = Integer.parseInt(request.getParameter("bef_num"));
+        log.info("전 number값 받아오는지 확인 : " + bef_num);
+
+//        int modifyResult = empService.numModify(member); // 이전 직원번호 테이블에 먼저 넣어줌
+//        log.info("modifyResult : " + modifyResult);
+
+//        if(modifyResult > 0) {
+            int updateResult = empService.empUpdate(member); // 정보 업데이트
+//
+//            if(updateResult > 0){
+//                int deleteResult = empService.numDelete(member); // 이전 직원번호 삭제
+//
+//            }
+//        } else {
+//
+            log.info("직원 정보 수정에 실패하였습니다.");
+//        }
+
+
+        return "redirect:/emp/empList";
+    }
 
 }

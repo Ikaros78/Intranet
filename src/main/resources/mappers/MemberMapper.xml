@@ -105,13 +105,12 @@
     <update id="memberUpdate">
         UPDATE
                MEMBER A
-           SET A.MEM_ID = #{ mem_id }
-             , A.MEM_PW = #{ mem_pw }
+           SET A.MEM_PW = #{ mem_pw }
              , A.MEM_ADDRESS = #{ mem_address }
              , A.MEM_PHONE = #{ mem_phone }
              , A.MEM_EMAIL = #{ mem_email }
              , A.MEM_NAME = #{ mem_name }
-         WHERE A.MEM_NUM = #{ mem_num }
+         WHERE A.MEM_ID = #{ mem_id }
     </update>
 
     <!-- 일정권한 , 게시판 권한 관리를 위해 사원 리스트 조회  -->

@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>basic</title>
+	<link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
 </head>
@@ -32,12 +33,12 @@
 				   th:value="${ msBoard.originName }" download>
 				<span>다운로드(<span th:text="${ msBoard.originName }"></span>)</span></a></p>
 				<br>
-				<table class="asdqwe" style="width: 1100px; height: 400px;">
+				<div class="" style="width: 1100px; height: 400px;">
 					<tr>
-						<th th:utext="${ msBoard.contents }" style="vertical-align: top; text-align: left;">
-						</th>
+						<p th:utext="${ msBoard.contents }" style="vertical-align: top; text-align: left;">
+				
 					</tr>
-				</table>
+				</div>
 					<hr style="width: 1100px; position: relative; left:250px;"><br>
 				<!--/*	<button class="list delete" id="deleteBtn"  onclick="removeCheck()" style="position: relative; top: 20px; left: 350px; padding: 10px 12px;">삭제</button> */-->
 					<button onclick="goBack()" style="position: relative; top: 20px; left: 250px; padding: 10px 12px;">뒤로가기</button>

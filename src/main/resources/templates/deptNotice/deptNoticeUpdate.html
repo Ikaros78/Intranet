@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항:수정</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <!-- include libraries(jQuery, bootstrap) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/notice/noticeUpdate.css}">
+</head>
+<body>
+    <div id="wrap" style="margin-top: -20px;">
+        <div th:replace="common/header.html"></div>
+        <div id="contents">
+            <div id="sideBar">
+                <h3>게시판</h3>
+                <ul>
+                    <li class="main">
+                        <a href="th:href=@{/board/list}">자유 게시판</a>
+                        <ul class="sub sub1">
+                            <li><a th:href="@{/board/list}">자유 게시판</a></li>
+                            <li><a href="#">익명 게시판</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="#">업무 게시판</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/deptNotice/list}">부서별 공지사항</a></li>
+                            <li><a href="#">파일 게시판</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="admin"><a href="">게시판관리(관리자)</a></div>
+            </div>
+            <div id="container">
+                <form th:action="@{/deptNotice/update}" method="post">
+                    <h4>부서별 공지사항</h4><hr>
+                    <table>
+                        <input type="hidden" id="db_no" name="db_no" th:value="${ deptNotice.db_no }">
+                        <tr>
+                            <th>제목</th>
+                            <td><input type="text" name="db_title" th:value="${ deptNotice.db_title }"></td>
+                        </tr>
+                        <tr>
+                            <th>등록자</th>
+                            <td><span th:text="${ deptNotice.member.mem_name }"></span>&nbsp;
+                                <span th:text="${ deptNotice.dept.dept_name }"></span></td>
+                        </tr>
+                    </table>
+                        <textarea id="summernote" name="db_contents" th:text="${ deptNotice.db_contents }"></textarea>
+                        <div class="btnArea">
+<!--                            <button class="updateBtn" th:onclick="|location.href='@{ /notice/list }'|">수정</button>-->
+                            <button class="updateBtn">수정</button>
+                            <button class="cancleBtn" th:onclick="|location.href='@{ /deptNoice/list }'|">취소</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <script>
+            $(document).ready(function() { //썸머노트 사용 위한 스크립트
+            //여기 아래 부분
+                $('#summernote').summernote({
+                    height: 500,                 // 에디터 높이
+                    focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                    lang: "ko-KR",					// 한글 설정
+                    placeholder: '게시글을 작성하세요',	//placeholder 설정
+                    toolbar: [
+                        ['fontname', ['fontname']],
+                        ['fontsize', ['fontsize']],
+                        ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+                        ['color', ['forecolor','color']],
+                        ['table', ['table']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['insert',['link','video']]
+                    ],
+                        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+                        fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']  
+                });
+            });
+        </script>
+
+</body>
+
+</html>

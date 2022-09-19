@@ -64,8 +64,7 @@
                             <th>권한여부(게시판권한)</th>
                             <th>권한여부(인사권한)</th>
                             <th>권한여부(일정권한)</th>
-                            <th>권한 적용</th>
-
+                            <th sec:authorize="hasRole('ALL_AUTH')">권한 적용</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -137,7 +136,7 @@
                 success : function(data){
                     console.log(data + "성공했어");
                     if(data === "success"){
-                        alert("접근권한 적용이 성공적으로 완료되었습니다!");
+                        alert("접근권한 적용이 성공적으로 완료되었습니다! \n변경된 권한은 재로그인시 적용됩니다.");
                     }else {
                         alert("변경된 권한이 없습니다.");
                     }

@@ -114,7 +114,7 @@
              , A.FR_CONTENTS
         FROM FR_FREE A
                  LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
-                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+                 LEFT JOIN DEPARTMENT C ON(B.DEPT_CODE = C.DEPT_CODE)
         WHERE A.FR_NO = #{ no }
     </select>
 

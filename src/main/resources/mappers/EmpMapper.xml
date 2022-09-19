@@ -16,6 +16,7 @@
         <result property="mem_address" column="MEM_ADDRESS"/>
         <result property="dept_rank" column="DEPT_RANK"/>
         <result property="dept_code" column="DEPT_CODE"/>
+        <result property="bef_num" column="BEF_NUM"/>
 
         <association property="department" resultMap="deptResultMap"/>
     </resultMap>
@@ -31,7 +32,8 @@
         <result property="date" column="PA_DATE"/>
         <result property="contents" column="PA_CONTENTS"/>
         <result property="bef_rank" column="PA_BEF_RANK"/>
-        <result property="bef_dept" column="PA_BEF_DEPT"/>
+        <result property="bef_name" column="PA_BEF_NAME"/>
+        <result property="bef_code" column="PA_BEF_CODE"/>
         <result property="mem_num" column="MEM_NUM"/>
 
         <association property="dept" resultMap="deptResultMap"/>
@@ -144,7 +146,8 @@
         , PA_DATE
         , PA_CONTENTS
         , PA_BEF_RANK
-        , PA_BEF_DEPT
+        , PA_BEF_NAME
+        , PA_BEF_CODE
         , MEM_NUM
         )
         VALUES
@@ -154,7 +157,8 @@
         , #{ date }
         , #{ contents }
         , #{ bef_rank }
-        , #{ bef_dept }
+        , #{ bef_name }
+        , #{ bef_code }
         , #{ mem_num }
         )
     </insert>
@@ -170,17 +174,20 @@
     <!-- 인사 발령 수 조회 -->
     <select id="selectHrListTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
-          FROM PA_PERSONNER_APPOINTMENT
+          FROM PA_PERSONNER_APPOINTMENT A
+          <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+          </if>
         <where>
             <if test="searchCondition == 'promotion'">
-                PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+                AND A.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
             </if>
             <if test="searchCondition == 'move'">
-                PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+                AND A.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
             </if>
-<!--            <if test="searchCondition == '전체'">-->
-<!--                #{ searchValue } || '%'-->
-<!--            </if>-->
+            <if test="searchCondition == 'writer'">
+                AND B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
         </where>
     </select>
 
@@ -192,10 +199,12 @@
              , A.PA_DATE
              , A.MEM_NUM
              , A.PA_BEF_RANK
-             , A.PA_BEF_DEPT
+             , A.PA_BEF_NAME
+             , A.PA_BEF_CODE
              , A.PA_CONTENTS
              , D.MEM_NAME
              , D.DEPT_RANK
+             , D.DEPT_CODE
              , E.DEPT_NAME
         FROM ( SELECT ROWNUM RNUM
                     , B.PA_NO
@@ -203,7 +212,8 @@
                     , B.PA_DATE
                     , B.MEM_NUM
                     , B.PA_BEF_RANK
-                    , B.PA_BEF_DEPT
+                    , B.PA_BEF_NAME
+                    , B.PA_BEF_CODE
                     , B.PA_CONTENTS
                FROM (SELECT
                                C.PA_NO
@@ -211,19 +221,23 @@
                              , C.PA_DATE
                              , C.MEM_NUM
                              , C.PA_BEF_RANK
-                             , C.PA_BEF_DEPT
+                             , C.PA_BEF_NAME
+                             , C.PA_BEF_CODE
                              , C.PA_CONTENTS
                      FROM PA_PERSONNER_APPOINTMENT C
+                    <if test="searchCondition == 'writer'">
+                        JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+                    </if>
                      <where>
                          <if test="searchCondition == 'promotion'">
-                             C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+                             AND C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
                          </if>
                          <if test="searchCondition == 'move'">
-                             C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+                             AND C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
                          </if>
-<!--                         <if test="searchCondition == '전체'">-->
-<!--                             #{ searchValue } || '%'-->
-<!--                         </if>-->
+                         <if test="searchCondition == 'writer'">
+                             AND D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+                         </if>
                      </where>
                      ORDER BY C.PA_NO DESC
                      ) B
@@ -237,5 +251,65 @@
             ORDER BY 1 ASC
     </select>
 
+    <!-- 인사 발령 삭제(값 되돌리기) -->
+    <update id="updateMember">
+        UPDATE MEMBER
+        SET DEPT_RANK = #{ dept_rank }
+          , DEPT_CODE = #{ dept_code }
+        WHERE MEM_NUM = #{ mem_num }
+    </update>
 
+    <!-- 인사 발령 삭제(테이블 DB 삭제) -->
+    <delete id="hrDelete">
+        DELETE FROM PA_PERSONNER_APPOINTMENT
+        WHERE PA_NO = #{ no }
+    </delete>
+
+    <!-- 직원 정보 상세 조회 -->
+    <select id="selectMemberDetail" parameterType="_int" resultMap="memberResultMap">
+        SELECT
+               A.MEM_NUM
+             , A.MEM_NAME
+             , A.MEM_PHONE
+             , A.MEM_EMAIL
+             , A.MEM_BIRTH
+             , B.DEPT_NAME
+             , A.DEPT_CODE
+             , A.DEPT_RANK
+             , A.MEM_JOINDATE
+          FROM MEMBER A
+          LEFT JOIN DEPARTMENT B ON (A.DEPT_CODE = B.DEPT_CODE)
+         WHERE A.MEM_NUM = #{ no }
+    </select>
+
+    <!-- 직원 정보 수정(관리자) -->
+    <update id="empUpdate">
+        UPDATE MEMBER
+           SET MEM_NUM = #{ mem_num }
+             , MEM_JOINDATE = #{ mem_joinDate }
+             , DEPT_CODE = #{ dept_code }
+         WHERE MEM_NUM = #{ bef_num }
+    </update>
+
+    <!-- 바뀌기 전 직원 번호 DB 저장 -->
+<!--    <insert id="numModify">-->
+<!--        INSERT-->
+<!--          INTO MEMBER_MODIFY-->
+<!--        (-->
+<!--          BEF_NUM-->
+<!--        , MEM_NUM-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--          #{ bef_num }-->
+<!--        , #{ mem_num }-->
+<!--        )-->
+<!--    </insert>-->
+
+     <!-- 이전 직원 번호 삭제 -->
+<!--    <update id="numDelete">-->
+<!--        UPDATE MEMBER-->
+<!--           SET BEF_NUM IS NULL-->
+<!--          FROM MEM_NUM = #{ mem_num }-->
+<!--    </update>-->
 </mapper>

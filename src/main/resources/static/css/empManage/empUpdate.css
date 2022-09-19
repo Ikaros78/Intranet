@@ -12,9 +12,12 @@
 #contents #container table th{width: 200px; background-color: rgba(238, 238, 238, 0.384);}
 #contents #container table tr{height: 45px; border-top: 1px solid #ddd;}
 #contents #container table td{font-size: 17px; padding-left : 20px; }
-#contents #container table tr select{width: 120px; height: 30px; font-size: 17px;}
+#contents #container table tr select{width: 130px; height: 30px; font-size: 17px;}
 
-#contents #container button{width: 80px; line-height: 36px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff; transition: all .5s;
+#contents #container form button{width: 80px; line-height: 36px; border-radius: 5px; border: none; cursor: pointer; background-color: #FFA57E; color: #fff; transition: all .5s;
     position: absolute; bottom: -80px; right: 0;}
 #contents #container form button:hover{background-color: #e25f27;}
+
+input[type=text]{width: 130px; height: 30px;}
+input[type=date]{width: 130px; height: 30px; font-size: 17px;}
 

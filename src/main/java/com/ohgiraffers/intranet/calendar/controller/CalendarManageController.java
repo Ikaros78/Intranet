@@ -48,7 +48,7 @@ public class CalendarManageController {
                     authoritTypeDTO.setCd_all("CD_ALL");
                 }
                 if(memberList.get(i).getAuthorit().get(j).getAuCode() != null && memberList.get(i).getAuthorit().get(j).getAuCode().equals("ROLE_CD_DEPT")){
-                    authoritTypeDTO.setCd_auth("CD_DEPT");
+                    authoritTypeDTO.setCd_dept("CD_DEPT");
                 }
             }
             authoritTypeList.add(authoritTypeDTO);

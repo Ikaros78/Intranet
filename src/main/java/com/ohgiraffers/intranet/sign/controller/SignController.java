@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/sign/*")
+@RequestMapping("/sign")
 public class SignController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());

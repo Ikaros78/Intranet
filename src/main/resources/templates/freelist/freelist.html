@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>자유게시판</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
     <link rel="stylesheet" th:href="@{/css/freelist/freelistBoard.css}">
@@ -23,7 +24,6 @@
                     </li>
                     <li class="main"><a href="#">업무 게시판</a>
                         <ul class="sub sub2">
-                            <li><a href="#">부서별 공지사항</a></li>
                             <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
                         </ul>
                     </li>

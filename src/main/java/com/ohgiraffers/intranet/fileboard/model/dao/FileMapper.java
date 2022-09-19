@@ -32,6 +32,4 @@ public interface FileMapper {
 
 	int fileBoardDelete(int fbNo);
 
-//	int fileBoardDelete(int fbNo);
-
 }

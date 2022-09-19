@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>임시저장함 상세보기</title>
+    <title>참조/열람함 상세보기</title>
 
     <link rel="stylesheet" type="text/css" href="/css/basic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
@@ -25,13 +25,11 @@
 
 <div id="main-container">
     <div class="con-header col-offset-1">
-        <h2>임시저장함</h2>
+        <h2>참조/열람함</h2>
     </div>
 
     <div class="details">
         <div class="buttons" align="right">
-            <button id="rewrite" type="submit" form="signform" onclick='btn_click("rewrite");'>수정</button>
-            <button id="delete" type="submit" form="signform" onclick='btn_click("delete");'>삭제</button>
             <button id="print">인쇄</button>
             <button id="backtoList">목록</button>
         </div>
@@ -46,13 +44,13 @@
                     <tr>
                         <th style="border : 1px solid; width:20px" rowspan="2">발신부서</th>
                         <th style="border : 1px solid; width:100px">기안</th>
-                        <th:block th:if="${approver != null}" th:each="approve : ${signDetail.approver}">
+                        <th:block th:each="approve : ${signDetail.approver}">
                             <th th:text="${approve.signType}" style="border : 1px solid; width:100px; text-align: center"></th>
                         </th:block>
                     </tr>
                     <tr>
                         <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
-                        <th:block th:if="${approver != null}" th:each="approve : ${signDetail.approver}">
+                        <th:block th:each="approve : ${signDetail.approver}">
                             <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
                             <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
                             <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'Y'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>반려'" style="border : 1px solid; width:100px; text-align: center"></td>
@@ -106,7 +104,7 @@
                             <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
                         </tr>
                         <tr>
-                            <td th:if="${signDetail.signContent != null}" th:text="${signDetail.signContent}" th:colspan="4"></td>
+                            <td th:utext="${signDetail.signContent}" th:colspan="4"></td>
                         </tr>
                         <tr th:if="${signDetail.file.originName != null}">
                             <td th:colspan="4">
@@ -120,21 +118,36 @@
                     </table>
                 </form>
             </div>
+
+            <div id="opinion">
+                <h3>결재의견</h3>
+                <table class="table opinion">
+                    <thead>
+                    <tr>
+                        <th width="150px">결재</th>
+                        <th width="200px">결재자</th>
+                        <th width="200px">결재일시</th>
+                        <th width="800px">의견</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="approve : ${ signDetail.approver }">
+                        <th:block th:if="${approve.isApproved eq 'Y'}">
+                            <td th:if="${approve.isRefused eq 'N'}" th:text="결재"></td>
+                            <td th:if="${approve.isRefused eq 'Y'}" th:text="반려"></td>
+                            <td th:text="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank}"></td>
+                            <td th:text="${approve.approveDate}"></td>
+                            <td th:text="${approve.opinion}"></td>
+                        </th:block>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-
-    function btn_click(str){
-        if(str=="rewrite"){
-            signform.action = "/sign/reWriteRegistForm";
-        }else if(str=="delete"){
-
-
-            signform.action = "/sign/delete";
-        }
-    }
 
     var initBodyHtml;
 
@@ -156,7 +169,7 @@
 
     const $backtoList = document.getElementById("backtoList");
     $backtoList.onclick = function(){
-        location.href = "/sign/tempList";
+        location.href = "/sign/referenceList";
     }
 
 

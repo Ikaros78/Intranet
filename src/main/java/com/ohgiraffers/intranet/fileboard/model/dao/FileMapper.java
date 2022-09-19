@@ -24,6 +24,14 @@ public interface FileMapper {
 
 	int incresementFileBoardCount(int no);
 
+	int fileBoardUpdate(FileBoardDTO fileBoard);
+
+	int fileFileDelete(int fbNo);
+
+	void fileFileUpdate(FileFileDTO fileFile);
+
+	int fileBoardDelete(int fbNo);
+
 //	int fileBoardDelete(int fbNo);
 
 }

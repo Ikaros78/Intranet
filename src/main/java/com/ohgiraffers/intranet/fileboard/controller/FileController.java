@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
@@ -33,7 +34,7 @@ import com.ohgiraffers.intranet.notice.model.dto.NoticeFileDTO;
 import com.ohgiraffers.intranet.notice.model.service.NoticeService;
 
 @Controller
-@RequestMapping(value={"/file/*"})
+@RequestMapping(value = { "/file/*" })
 public class FileController {
 
 	private final FileService fileService;
@@ -44,127 +45,212 @@ public class FileController {
 		this.fileService = fileService;
 	}
 
-    @GetMapping("/fileList")
-    public ModelAndView fileBoardList(HttpServletRequest request, ModelAndView mv){
+	@GetMapping("/fileList")
+	public ModelAndView fileBoardList(HttpServletRequest request, ModelAndView mv) {
 
-        String currentPage = request.getParameter("currentPage");
-        int pageNo = 1;
+		String currentPage = request.getParameter("currentPage");
+		int pageNo = 1;
 
-        if(currentPage != null && !"".equals(currentPage)){
-                pageNo = Integer.parseInt(currentPage);
-        }
+		if (currentPage != null && !"".equals(currentPage)) {
+			pageNo = Integer.parseInt(currentPage);
+		}
 
-        String searchCondition = request.getParameter("searchCondition");
-        String searchValue = request.getParameter("searchValue");
+		String searchCondition = request.getParameter("searchCondition");
+		String searchValue = request.getParameter("searchValue");
 
-        Map<String, String> searchMap = new HashMap<>();
-        searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchValue", searchValue);
+		Map<String, String> searchMap = new HashMap<>();
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
 
-        int totalCount = fileService.selectTotalCount(searchMap);
+		int totalCount = fileService.selectTotalCount(searchMap);
 
-        int limit = 10;
-        int buttonAmount = 5;
+		int limit = 10;
+		int buttonAmount = 5;
 
-        SelectCriteria selectCriteria = null;
+		SelectCriteria selectCriteria = null;
 
-        if(searchCondition != null && !"".equals(searchCondition)){
+		if (searchCondition != null && !"".equals(searchCondition)) {
 
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount,
-                    searchCondition, searchValue);
-        } else {
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition,
+					searchValue);
+		} else {
 
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-        }
+			selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+		}
 
-        List<FileBoardDTO> fileList = fileService.fileBoardList(selectCriteria);
+		List<FileBoardDTO> fileList = fileService.fileBoardList(selectCriteria);
 
-        mv.addObject("fileList", fileList);
-        mv.addObject("selectCriteria", selectCriteria);
-        mv.setViewName("fileBoard/fileList");
+		mv.addObject("fileList", fileList);
+		mv.addObject("selectCriteria", selectCriteria);
+		mv.setViewName("fileBoard/fileList");
 
-        return mv;
-    }
-	
-	
-    @GetMapping("/fileRegist")
-    public String fileRegistPage(){
+		return mv;
+	}
 
-        return "fileBoard/fileRegist";
-    }
+	@GetMapping("/fileRegist")
+	public String fileRegistPage() {
 
-    @PostMapping("/fileRegist")
-    public String fileBoardRegist(@ModelAttribute FileBoardDTO fileboard, HttpServletRequest request, @RequestParam(name="originName", required=false) MultipartFile originName) throws FileNotFoundException {
+		return "fileBoard/fileRegist";
+	}
 
-        //notice insert
-        int registResult = fileService.fileBoardRegist(fileboard);
+	@PostMapping("/fileRegist")
+	public String fileBoardRegist(@ModelAttribute FileBoardDTO fileboard, HttpServletRequest request,
+			@RequestParam(name = "originName", required = false) MultipartFile originName)
+			throws FileNotFoundException {
 
-        FileFileDTO fileFile = new FileFileDTO();
+		// notice insert
+		int registResult = fileService.fileBoardRegist(fileboard);
 
-        String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
+		FileFileDTO fileFile = new FileFileDTO();
 
-        String fileUploadDirectory = filePath +	 "/fileBoardFile";
+		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
 
-        File mkdir = new File(fileUploadDirectory);
+		String fileUploadDirectory = filePath + "/fileBoardFile";
 
-        if(!mkdir.exists()){
-            mkdir.mkdirs();
-        }
+		File mkdir = new File(fileUploadDirectory);
 
-        String originFileName = "";
-        String ext = "";
-        String saveName = "";
+		if (!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
 
-        if(originName.getSize() > 0) { //파일 첨부한거 있으면
-            //파일명 변경하고
-            originFileName = originName.getOriginalFilename();
-            ext = originFileName.substring(originFileName.lastIndexOf("."));
-            saveName = UUID.randomUUID().toString().replace("-", "") + ext;
+		String originFileName = "";
+		String ext = "";
+		String saveName = "";
 
-            fileFile.setFfOriginName(originFileName);
-            fileFile.setFfSaveName(saveName);
-            fileFile.setFfSavePath(fileUploadDirectory);
+		if (originName.getSize() > 0) { // 파일 첨부한거 있으면
+			// 파일명 변경하고
+			originFileName = originName.getOriginalFilename();
+			ext = originFileName.substring(originFileName.lastIndexOf("."));
+			saveName = UUID.randomUUID().toString().replace("-", "") + ext;
 
-            // file insert
-            int fileResult = fileService.fileFileInsert(fileFile);
+			fileFile.setFfOriginName(originFileName);
+			fileFile.setFfSaveName(saveName);
+			fileFile.setFfSavePath(fileUploadDirectory);
 
-            try {
-                originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
+			// file insert
+			int fileResult = fileService.fileFileInsert(fileFile);
 
-            } catch (IOException e) {
+			try {
+				originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
 
-                e.printStackTrace();
-                new File(fileUploadDirectory + "//" + saveName).delete();
-            }
+			} catch (IOException e) {
 
-        }
+				e.printStackTrace();
+				new File(fileUploadDirectory + "//" + saveName).delete();
+			}
 
-        return "redirect:/file/fileList";
+		}
 
-    }
-    
-    @GetMapping("/fileDetail")
-    public String fileBoardDetail(HttpServletRequest request, Model model){
+		return "redirect:/file/fileList";
 
-        int fbNo = Integer.parseInt(request.getParameter("fbNo"));
+	}
 
-        System.out.println("nonononono" + fbNo);
-        
-        FileBoardDTO fileDetail = fileService.fileBoardDetail(fbNo);
-        model.addAttribute("Detail", fileDetail);
+	@GetMapping("/fileDetail")
+	public String fileBoardDetail(HttpServletRequest request, Model model) {
 
-        return "fileBoard/fileDetail";
-    }
+		int fbNo = Integer.parseInt(request.getParameter("fbNo"));
 
-//    @GetMapping("/fileDelete")
-//    public String fileBoardDelete(@ModelAttribute FileBoardDTO fileboard, HttpServletRequest request){
-//
-//        int no = Integer.parseInt(request.getParameter("no"));
-//
-//        fileService.fileBoardDelete(fileboard);
-//
-//        return "redirect:/file/list";
-//    }
-    
-    
+		System.out.println("nonononono" + fbNo);
+
+		FileBoardDTO fileDetail = fileService.fileBoardDetail(fbNo);
+		model.addAttribute("Detail", fileDetail);
+
+		return "fileBoard/fileDetail";
+	}
+
+	@GetMapping("/fileUpdate")
+	public String fileBoardUpdatepage(HttpServletRequest request, Model model) {
+
+		int fbNo = Integer.parseInt(request.getParameter("no"));
+
+		FileBoardDTO fileUpdate = fileService.fileBoardDetail(fbNo);
+		model.addAttribute("fileUpdate", fileUpdate);
+
+		return "fileBoard/fileUpdate";
+	}
+
+	@PostMapping("/fileUpdate")
+	public String fileBoardUpdate(@ModelAttribute FileBoardDTO fileBoard, RedirectAttributes rttr,
+			@RequestParam(name = "originName", required = false) MultipartFile originName)
+			throws FileNotFoundException {
+
+		FileFileDTO fileFile = new FileFileDTO();
+
+		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
+
+		String fileUploadDirectory = filePath + "/noticeFile";
+
+		File mkdir = new File(fileUploadDirectory);
+
+		if (!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+
+		String originFileName = "";
+		String ext = "";
+		String saveName = "";
+
+		if (originName.getSize() > 0) { // 파일 첨부한거 있으면
+			// 파일명 변경하고
+			originFileName = originName.getOriginalFilename();
+			ext = originFileName.substring(originFileName.lastIndexOf("."));
+			saveName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+			int result = fileService.fileBoardUpdate(fileBoard);
+
+			if (result > 0) {
+
+				if (fileBoard.getFile() != null) {
+
+					int result2 = fileService.fileFileDelete(fileBoard.getFbNo());
+
+					if (result2 > 0) {
+
+						fileFile.setFbNo(fileBoard.getFbNo());
+						fileFile.setFfOriginName(originFileName);
+						fileFile.setFfSaveName(saveName);
+						fileFile.setFfSavePath(fileUploadDirectory);
+
+						fileService.fileFileUpdate(fileFile);
+					}
+
+				} else {
+
+					fileFile.setFbNo(fileBoard.getFbNo());
+					fileFile.setFfOriginName(originFileName);
+					fileFile.setFfSaveName(saveName);
+					fileFile.setFfSavePath(fileUploadDirectory);
+
+					fileService.fileFileUpdate(fileFile);
+				}
+
+			}
+
+			// file insert
+
+			try {
+				originName.transferTo(new File(fileUploadDirectory + "//" + saveName));
+			} catch (IOException e) {
+
+				e.printStackTrace();
+				new File(fileUploadDirectory + "//" + saveName).delete();
+			}
+
+		}
+
+		rttr.addFlashAttribute("message", "수정이 완료되었습니다");
+
+		return "redirect:/file/fileList";
+	}
+
+	@GetMapping("/fileDelete")
+	public String fileBoardDelete(@ModelAttribute FileBoardDTO fileboard, HttpServletRequest request) {
+
+		int no = Integer.parseInt(request.getParameter("no"));
+
+		fileService.fileBoardDelete(fileboard);
+
+		return "redirect:/file/fileList";
+	}
+
 }

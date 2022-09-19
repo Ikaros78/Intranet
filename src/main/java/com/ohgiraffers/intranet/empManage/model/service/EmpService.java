@@ -29,4 +29,22 @@ public interface EmpService {
 
     /* 인사 발령 리스트 조회 */
     List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
+
+    /* 인사 발령 삭제(값 되돌리기)*/
+    int updateMember(int mem_num, String dept_rank, String dept_code);
+
+    /* 인사 발령 삭제(값 되돌리기 - Appointment table db 삭제) */
+    int hrDelete(int no);
+
+    /* 직원 상세 정보 조회 */
+    MemberDTO selectMemberDetail(int no);
+
+    /* 직원 정보 수정 - 관리자 */
+    int empUpdate(MemberDTO member);
+
+    /* 바뀌기 전 직원 번호 DB 저장 */
+    int numModify(MemberDTO member);
+
+    /* 이전 직원 번호 삭제 */
+    int numDelete(MemberDTO member);
 }

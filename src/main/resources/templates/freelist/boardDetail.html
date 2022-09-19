@@ -3,35 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>자유게시판:상세조회</title>
+    <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
     <link rel="stylesheet" th:href="@{/css/freelist/bordDetail.css}">
 </head>
 <body>
-<div id="wrap" style="margin-top: -20px;">
-    <div id="header">
-        <h1 class="logo"><a href=""><img src="../../resources/images/logo.png" alt="로고 이미지"></a></h1>
-        <ul class="lnb">
-            <li><a href="">마이페이지</a></li>
-            <li><a href="">로그아웃</a></li>
-        </ul>
-        <ul class="gnb">
-            <li><a href="../notice/noticeList.html">공지사항</a></li>
-            <li><a href="../../board/free/freeList.html">게시판</a></li>
-            <li><a href="../../calendar/cd_main.html">일정관리</a></li>
-            <li><a href="../../sign/testsignmain.html">전자결재</a></li>
-            <li><a href="../../message/messageRecpBox.html">쪽지함</a></li>
-            <li><a href="../../manage/emplManage/emplList.html">직원관리</a></li>
-        </ul>
-    </div>
+<div id="wrap">
+    <div th:replace="common/header.html"></div>
     <div id="contents">
-        <div id="sideBar">
+        <div id="sideBar" style="height:100%;">
             <h3>게시판</h3>
             <ul>
                 <li class="main"><a href="../free/freeList.html">자유 게시판</a>
                     <ul class="sub sub1">
                         <li><a th:href="@{/board/list}">자유 게시판</a></li>
-                        <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
+                        <li><a href="#">익명 게시판</a></li>
                     </ul>
                 </li>
                 <li class="main"><a href="#">업무 게시판</a>
@@ -48,83 +35,83 @@
         <div id="container">
             <h4>자유게시판</h4><hr>
             <div>
-                <img src="resources/images/circleMark.png" alt="">
-                <span>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span>
+                <img th:src="@{/images/circleMark.png}" alt="">
+                <span class="notice">부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span>
                 <p class="title">
-
-                <span th:text="${ board.title }"></span><br>
-                <span class="writer" th:text="${ board.member.mem_name }"></span>
-                <span class="writer" th:text="${ board.department.dept_name }"></span>
-                <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                <span> </span><span class="date" th:text="${ board.date }"></span>
-
-                <div class="d-flex justify-content-end">
-                    <button class="suggest">추천</button>
-                 </div>
-                <div class="body">
-                    <p th:utext="${ board.contents }">
-                </div>
-
-            </div>
-
-            <div>
-                <form id="commentForm" th:action="@{ /board/comment }" method="post">
-                    <input type="text" id="comment-input" name="contents" placeholder="댓글을 입력해 주세요.">
-                    <input
-                            type="hidden"
-                            id="mem_num"
-                            name="mem_num"
-                            th:value="${ #authentication.getPrincipal().getMem_num() }">
-                    <input
-                            type="hidden"
-                            id="board_no"
-                            name="board_no"
-                            th:value="${ board.no }">
-                    <input type="submit" id="submit" value="등록">
+                    <span th:text="${ board.title }">제목확인</span><br>
+                    <span class="writer" th:text="${ board.member.mem_name }">이름</span>
+                    <span class="writer" th:text="${ board.department.dept_name }">부서명</span>
+                    <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                    <span> </span><span class="date" th:text="${ board.date }">22-09-19</span><br>
+                </p>
+                <div class="body">내용확인</div>
+                <form action="@{ /board/suggest }" method="post">
+                    <div class="d-flex justify-content-end">
+                        <div class="suggestBox">
+                            <button class="suggest">추천</button>
+                            <span>123</span>
+                        </div>
+                    </div>
                 </form>
-                <input type="text">
-                <button class="bot">댓글</button>
-                <table>
 
 
 
 
-                </table>
 
             </div>
 
             <div class="btnArea">
                 <button class="list singo">신고</button>
                 <button th:if="${#authentication.getPrincipal().getMem_num() eq board.member.mem_num }" class="list update"
-                                 th:onclick="|location.href='@{ /board/update(no=${ board.no }) }'|">수정</button>
-                <button th:if="${#authentication.getPrincipal().getMem_num() eq board.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
+                        th:onclick="|location.href='@{ /board/update(no=${ board.no }) }'|">수정</button>
+                <button class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
                 <button class="list">목록</button>
             </div>
+            <div class="cmtBox">
+                <form id="commentForm" th:action="@{ /board/comment }" method="post">
+                    <input type="text" class="cmt" id="comment-input" name="contents" placeholder="댓글을 입력해 주세요.">
+                    <input
+                            type="hidden"
+                            id="mem_num"
+                            name="mem_num"
+                            th:value="${ #authentication.getPrincipal().getMem_num() }">
+
+                    <input
+                            type="hidden"
+                            id="fr_no"
+                            name="fr_no"
+                            th:value="${ board.no }">
+
+                    <button class="bot">등록</button>
+                </form>
+            </div>
+            <table class="cmtTable" th:each="comment : ${ commentList }">
+                <tr>
+                    <td>
+                        <span class="writer" th:text="${ comment.member.mem_name }"></span>
+                        <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                        <span> </span><span class="date" th:text="${ comment.date }"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="writer" th:utext="${ comment.contents }"></span>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-        function removeCheck() {
-            const no = [[ ${board.no} ]];
-            if ( !confirm("게시글을 삭제할까요?") ) {
-                return false;
-            }
-
-            const formHtml = `
-                    <form id="deleteForm" action="/board/delete?no=${no}" method="get">
-                        <input type="hidden" id="no" name="no" value="${no}" />
-                    </form>
-                `;
-            const doc = new DOMParser().parseFromString(formHtml, 'text/html');
-            const form = doc.body.firstChild;
-            document.body.append(form);
-            document.getElementById('deleteForm').submit();
-
+</div>
+</div>
+<script>
+    function removeCheck() {
+        if(confirm("정말 삭제하시겠습니까?") == true){
+            alert("삭제되었습니다.");
+        } else {
+            return false;
         }
-            /*]]>*/
-        </script>
-    </th:block>
+    }
+</script>
 </body>
 </html>
 

@@ -49,4 +49,6 @@ public interface BoardMapper {
 
 
     int boardcomment(CommentDTO boardcomment);
+
+    List<CommentDTO> selectComentList(String no);
 }

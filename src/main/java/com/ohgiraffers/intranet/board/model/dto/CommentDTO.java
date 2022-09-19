@@ -6,7 +6,7 @@ import java.sql.Date;
 
 public class CommentDTO {
 
-    private String no;
+    private String fc_no;
 
     private String contents;
 
@@ -16,22 +16,30 @@ public class CommentDTO {
 
     private MemberDTO member;
 
-   public CommentDTO() {}
+    private String fr_no;
 
-    public CommentDTO(String no, String contents, Date date, int mem_num, MemberDTO member) {
-        this.no = no;
+    public CommentDTO() {
+    }
+
+
+
+
+
+    public CommentDTO(String fc_no, String contents, Date date, int mem_num, MemberDTO member, String fr_no) {
+        this.fc_no = fc_no;
         this.contents = contents;
         this.date = date;
         this.mem_num = mem_num;
         this.member = member;
+        this.fr_no = fr_no;
     }
 
-    public String getNo() {
-        return no;
+    public String getFc_no() {
+        return fc_no;
     }
 
-    public void setNo(String no) {
-        this.no = no;
+    public void setFc_no(String fc_no) {
+        this.fc_no = fc_no;
     }
 
     public String getContents() {
@@ -66,14 +74,23 @@ public class CommentDTO {
         this.member = member;
     }
 
+    public String getFr_no() {
+        return fr_no;
+    }
+
+    public void setFr_no(String fr_no) {
+        this.fr_no = fr_no;
+    }
+
     @Override
     public String toString() {
         return "CommentDTO{" +
-                "no='" + no + '\'' +
+                "fc_no='" + fc_no + '\'' +
                 ", contents='" + contents + '\'' +
                 ", date=" + date +
                 ", mem_num=" + mem_num +
                 ", member=" + member +
+                ", fr_no='" + fr_no + '\'' +
                 '}';
     }
 }

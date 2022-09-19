@@ -50,10 +50,11 @@
     </resultMap>
 
     <resultMap id="boardcomment" type="com.ohgiraffers.intranet.board.model.dto.CommentDTO">
-        <id property="no" column="FC_NO"/>
+        <id property="fc_no" column="FC_NO"/>
         <result property="contents" column="FC_CONTENTS"/>
         <result property="date" column="FC_DATE"/>
         <result property="mem_num" column="MEM_NUM"/>
+        <result property="fr_no" column="FR_NO"/>
 
         <association property="member" resultMap="memberResultMap"/>
 
@@ -301,13 +302,29 @@
            ,A.FC_CONTENTS
            ,A.FC_DATE
            ,A.MEM_NUM
+           ,A.FR_NO
            ) VALUES(
             'FC' || SEQ_FC_NO.NEXTVAL
                ,#{contents}
                ,SYSDATE
                ,#{mem_num}
+               ,#{fr_no}
             )
     </insert>
+
+    <select id="selectComentList" resultMap="boardcomment">
+        SELECT
+               A.FC_NO
+             , A.FC_CONTENTS
+             , A.FC_DATE
+             , A.MEM_NUM
+             , A.FR_NO
+             , B.MEM_NAME
+          FROM FC_FREE_COMMENT A
+          LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+     WHERE FR_NO = #{ fr_no }
+    </select>
+
 
 
 

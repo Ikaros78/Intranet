@@ -7,6 +7,7 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -54,9 +55,6 @@ public class BoardService {
     }
 
 
-    public FreeinsertDTO selectboardDetail(String no) {
-        return boardMapper.selectBoardDetail(no);
-    }
 
 
     @Transactional
@@ -135,5 +133,43 @@ public class BoardService {
 
     }
 
-}
+
+
+
+    public FreeinsertDTO selectboardDetail(String no) {
+
+        FreeinsertDTO boardDetail = null;
+
+        int result = boardMapper.incresementBoardCount(no); //조회수 증가
+
+        if (result > 0) {
+            boardDetail = boardMapper.selectBoardDetail(no);
+        }
+        return boardDetail;
+    }
+
+    public List<CommentDTO> selectComentList(String fr_no) {
+        List<CommentDTO> commentlist = boardMapper.selectComentList(fr_no);
+
+       System.out.println("commentlist" + commentlist);
+               return commentlist;
+       }
+
+    }
+
+//
+//   public CommentDTO selectComentList(String no) {
+//       List<CommentDTO> commentlist = boardMapper.selectComentList(no);
+//
+//       System.out.println("commentlist" + commentlist);
+//
+//
+//            return null;
+//        }
+
+
+
+
+
+
 

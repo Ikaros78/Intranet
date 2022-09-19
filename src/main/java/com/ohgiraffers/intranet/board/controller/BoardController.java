@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +59,14 @@ public class BoardController {
     @PostMapping("/comment")
     public String boardcomment(@ModelAttribute CommentDTO boardcomment, HttpServletRequest request) {
 
+        String fr_no = request.getParameter("fr_no");
+        boardcomment.setFr_no(fr_no);
+        log.info("fr_no값 : " + boardcomment.getFr_no());
+
         int registResult = boardService.boardcomment(boardcomment);
 
-        String no = request.getParameter("board_no");
 
-        return "redirect:/board/detail?no="+no;
+        return "redirect:/board/detail?no="+fr_no;
 
     }
     @GetMapping("/list")
@@ -117,16 +121,26 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public String boardDetailPage(HttpServletRequest request, Model model) {
+    public ModelAndView boardDetailPage(HttpServletRequest request, ModelAndView mv) {
 
 
         String no = request.getParameter("no");
         log.info("no 값 : " + no);
 
         FreeinsertDTO boardDetail = boardService.selectBoardDetail(no);
-        model.addAttribute("board", boardDetail);
+        mv.addObject("board", boardDetail);
 
-        return "freelist/boardDetail";
+        String fr_no = request.getParameter("no");
+        log.info("fr_no값 불러오나 확인 : " + fr_no);
+
+        List<CommentDTO> commentList = boardService.selectComentList(fr_no);
+        log.info("List값 확인 : " + commentList);
+
+        mv.addObject("commentList", commentList);
+        mv.setViewName("freelist/boardDetail");
+
+        return mv;
+
     }
 
     @GetMapping("/update")
@@ -141,6 +155,8 @@ public class BoardController {
 
         return "freelist/boardcorrection";
     }
+
+
 
     @PostMapping("/update")
 
@@ -298,6 +314,22 @@ public class BoardController {
         return "redirect:/board/eiboard/list";
     }
 
+        @GetMapping("comment")
+        public ModelAndView selectcomment(HttpServletRequest request, ModelAndView mv) {
+
+            String fr_no = request.getParameter("fr_no");
+
+            List<CommentDTO> commentList = boardService.selectComentList(fr_no);
+
+            log.info("commentList 확인 : " + commentList);
+
+
+            mv.addObject("commentList", commentList);
+            mv.setViewName("freelist/boardDetail");
+
+
+            return mv;
+        }
 
 
 }

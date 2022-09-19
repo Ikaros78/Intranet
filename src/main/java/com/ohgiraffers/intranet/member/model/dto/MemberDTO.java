@@ -28,10 +28,12 @@ public class MemberDTO {
     private DepartmentDTO department;
     private Au_AuthorizationDTO au_authorization;
 
+    private int bef_num;
+
     public MemberDTO() {
     }
 
-    public MemberDTO(int mem_num, String mem_id, String mem_pw, String mem_name, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code, List<AuthoritDTO> authorit, DepartmentDTO department, Au_AuthorizationDTO au_authorization) {
+    public MemberDTO(int mem_num, String mem_id, String mem_pw, String mem_name, String mem_phone, Date mem_joinDate, Date mem_birth, String mem_email, String mem_address, String dept_rank, String dept_code, List<AuthoritDTO> authorit, DepartmentDTO department, Au_AuthorizationDTO au_authorization, int bef_num) {
         this.mem_num = mem_num;
         this.mem_id = mem_id;
         this.mem_pw = mem_pw;
@@ -46,6 +48,7 @@ public class MemberDTO {
         this.authorit = authorit;
         this.department = department;
         this.au_authorization = au_authorization;
+        this.bef_num = bef_num;
     }
 
     public int getMem_num() {
@@ -160,6 +163,14 @@ public class MemberDTO {
         this.au_authorization = au_authorization;
     }
 
+    public int getBef_num() {
+        return bef_num;
+    }
+
+    public void setBef_num(int bef_num) {
+        this.bef_num = bef_num;
+    }
+
     @Override
     public String toString() {
         return "MemberDTO{" +
@@ -177,6 +188,7 @@ public class MemberDTO {
                 ", authorit=" + authorit +
                 ", department=" + department +
                 ", au_authorization=" + au_authorization +
+                ", bef_num=" + bef_num +
                 '}';
     }
 }

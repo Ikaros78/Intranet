@@ -153,5 +153,64 @@ public class EmpServiceImpl implements EmpService {
         return appointmentList;
     }
 
+    /* 인사 발령 삭제 */
+    @Override
+    @Transactional
+    public int hrDelete(int no) {
+
+        int result = empMapper.hrDelete(no);
+
+        return result;
+    }
+
+    /* 인사 발령 수정 */
+    @Override
+    @Transactional
+    public int updateMember(int mem_num, String dept_rank, String dept_code) {
+
+        int result = empMapper.updateMember(mem_num, dept_rank, dept_code);
+
+        return result;
+    }
+
+    /* 직원 상세 정보 조회 */
+    @Override
+    public MemberDTO selectMemberDetail(int no) {
+
+        MemberDTO member = empMapper.selectMemberDetail(no);
+
+        return member;
+    }
+
+    /* 직원 정보 수정 - 관리자 */
+    @Override
+    @Transactional
+    public int empUpdate(MemberDTO member) {
+
+        int result = empMapper.empUpdate(member);
+
+        return result;
+    }
+
+    /* 바뀌기 전 직원 번호 DB 저장 */
+    @Override
+    @Transactional
+    public int numModify(MemberDTO member) {
+
+        int result = empMapper.numModify(member);
+
+        return result;
+    }
+
+    /* 이전 직원 번호 삭제 */
+    @Override
+    @Transactional
+    public int numDelete(MemberDTO member) {
+
+        int result = empMapper.numDelete(member);
+
+        return result;
+    }
+
 
 }

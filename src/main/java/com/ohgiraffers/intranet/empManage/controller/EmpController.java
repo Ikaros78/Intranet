@@ -129,7 +129,7 @@ public class EmpController {
         searchList.put("searchName", searchName);
         searchList.put("selectCriteria", selectCriteria);
 
-        List<AppointmentDTO> appointList = empService.selectHrListe(searchList);
+        List<AppointmentDTO> appointList = empService.selectHrList(searchList);
 
         mv.addObject("appointList", appointList);
         mv.addObject("selectCriteria", selectCriteria);
@@ -249,8 +249,8 @@ public class EmpController {
     @PostMapping("/empUpdate")
     public String empUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request){
 
-        int bef_num = Integer.parseInt(request.getParameter("bef_num"));
-        log.info("전 number값 받아오는지 확인 : " + bef_num);
+        int mem_num = Integer.parseInt(request.getParameter("mem_num"));
+        log.info(" number값 받아오는지 확인 : " + mem_num);
 
 //        int modifyResult = empService.numModify(member); // 이전 직원번호 테이블에 먼저 넣어줌
 //        log.info("modifyResult : " + modifyResult);

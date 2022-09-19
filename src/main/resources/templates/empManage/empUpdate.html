@@ -39,8 +39,8 @@
                     <table>
                         <tr>
                             <th>사원번호</th>
-                            <td><input type="text" name="mem_num" th:value="${ emp.mem_num }"></td>
-                            <td><input type="hidden" name="bef_num" th:value="${ emp.mem_num }"></td>
+                            <td th:text="${ emp.mem_num }"></td>
+                            <input type="hidden" name="mem_num" th:value="${ emp.mem_num }">
                         </tr>
                         <th>성명</th>
                         <td th:text="${ emp.mem_name }"></td>

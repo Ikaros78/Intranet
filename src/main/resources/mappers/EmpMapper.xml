@@ -52,7 +52,7 @@
                 A.MEM_NAME LIKE '%' || #{ searchValue } || '%'
             </if>
             <if test="searchCondition == 'mem_num'">
-                A.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+                A.MEM_NUM LIKE #{ searchValue }
             </if>
             <if test="searchCondition == 'dept_name'">
                 B.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
@@ -103,7 +103,7 @@
                                 C.MEM_NAME LIKE '%' || #{ searchValue } || '%'
                             </if>
                             <if test="searchCondition == 'mem_num'">
-                                C.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+                                C.MEM_NUM LIKE #{ searchValue }
                             </if>
                             <if test="searchCondition == 'dept_name'">
                                 D.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
@@ -285,10 +285,9 @@
     <!-- 직원 정보 수정(관리자) -->
     <update id="empUpdate">
         UPDATE MEMBER
-           SET MEM_NUM = #{ mem_num }
-             , MEM_JOINDATE = #{ mem_joinDate }
+           SET MEM_JOINDATE = #{ mem_joinDate }
              , DEPT_CODE = #{ dept_code }
-         WHERE MEM_NUM = #{ bef_num }
+         WHERE MEM_NUM = #{ mem_num }
     </update>
 
     <!-- 바뀌기 전 직원 번호 DB 저장 -->

@@ -93,6 +93,10 @@ public class EmpController {
         String searchCondition = request.getParameter("searchCondition");
         String searchValue = request.getParameter("searchValue");
 
+        if(searchValue != null){
+            searchCondition = "writer";
+        }
+
         Map<String, String> searchMap = new HashMap<>();
         searchMap.put("searchCondition", searchCondition);
         searchMap.put("searchValue", searchValue);

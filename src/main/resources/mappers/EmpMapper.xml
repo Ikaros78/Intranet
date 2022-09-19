@@ -174,17 +174,20 @@
     <!-- 인사 발령 수 조회 -->
     <select id="selectHrListTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
-          FROM PA_PERSONNER_APPOINTMENT
+          FROM PA_PERSONNER_APPOINTMENT A
+          <if test="searchCondition == 'writer'">
+            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+          </if>
         <where>
             <if test="searchCondition == 'promotion'">
-                PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+                AND A.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
             </if>
             <if test="searchCondition == 'move'">
-                PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+                AND A.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
             </if>
-<!--            <if test="searchCondition == '전체'">-->
-<!--                #{ searchValue } || '%'-->
-<!--            </if>-->
+            <if test="searchCondition == 'writer'">
+                AND B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
         </where>
     </select>
 
@@ -222,16 +225,19 @@
                              , C.PA_BEF_CODE
                              , C.PA_CONTENTS
                      FROM PA_PERSONNER_APPOINTMENT C
+                    <if test="searchCondition == 'writer'">
+                        JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+                    </if>
                      <where>
                          <if test="searchCondition == 'promotion'">
-                             C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+                             AND C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
                          </if>
                          <if test="searchCondition == 'move'">
-                             C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+                             AND C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
                          </if>
-<!--                         <if test="searchCondition == '전체'">-->
-<!--                             #{ searchValue } || '%'-->
-<!--                         </if>-->
+                         <if test="searchCondition == 'writer'">
+                             AND D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+                         </if>
                      </where>
                      ORDER BY C.PA_NO DESC
                      ) B

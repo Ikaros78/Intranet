@@ -266,6 +266,7 @@
             SET
                 A.IS_APPROVED = 'Y'
               , A.APPROVE_DATE = SYSDATE
+              , A.OPINION = #{ opinion }
             WHERE A.SIGN_NO = #{ sign }
               AND A.APPROVER_NO = #{ mem_num }
     </update>

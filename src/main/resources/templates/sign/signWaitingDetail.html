@@ -64,7 +64,7 @@
                         <div id="table-form">
                             <form id="signform" method="post">
                                 <input type="hidden" name="signNo" th:value="${signDetail.signNo}">
-                                <input type="hidden" id="opinion" name="opinion">
+                                <input type="hidden" id="getOpinion" name="opinion">
                             <table class="table detail">
                                 <caption></caption>
                                 <colgroup>
@@ -121,6 +121,31 @@
                             </table>
                             </form>
                         </div>
+
+                        <div id="opinion">
+                            <h3>결재의견</h3>
+                            <table class="table opinion">
+                                <thead>
+                                <tr>
+                                    <th width="150px">결재</th>
+                                    <th width="200px">결재자</th>
+                                    <th width="200px">결재일시</th>
+                                    <th width="800px">의견</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="approve : ${ signDetail.approver }">
+                                    <th:block th:if="${approve.isApproved eq 'Y'}">
+                                        <td th:if="${approve.isRefused eq 'N'}" th:text="결재"></td>
+                                        <td th:if="${approve.isRefused eq 'Y'}" th:text="반려"></td>
+                                        <td th:text="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank}"></td>
+                                        <td th:text="${approve.approveDate}"></td>
+                                        <td th:text="${approve.opinion}"></td>
+                                    </th:block>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,12 +155,12 @@
     function btn_click(str){
         if(str=="sign"){
 
-            document.getElementById("opinion").value = prompt("결재의견을 입력해주세요","");
+            document.getElementById("getOpinion").value = prompt("결재의견을 입력해주세요","");
 
             signform.action = "/sign/approve";
         }else if(str=="refuse"){
 
-            document.getElementById("opinion").value = prompt("반려의견을 입력해주세요","");
+            document.getElementById("getOpinion").value = prompt("반려의견을 입력해주세요","");
 
             signform.action = "/sign/refuse";
         }

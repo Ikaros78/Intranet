@@ -143,11 +143,13 @@ public class SignController {
 
         String getSignList = request.getParameter("checkArr");
         String[] signNoList = getSignList.split(",");
+        String opinion = request.getParameter("opinion");
 
         int mem_num = ((UserImpl)user).getMem_num();
 
         Map<String, Object> signMap = new HashMap<>();
         signMap.put("mem_num", mem_num);
+        signMap.put("opinion", opinion);
 
         int count = 0;
 

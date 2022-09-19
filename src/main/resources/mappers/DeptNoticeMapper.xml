@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.intranet.deptNotice.model.dao.DeptNoticeMapper">
+
+    <!--                          공지사항                                 -->
+    <resultMap id="noticeListResultMap" type="DbDeptDTO">
+        <id property="db_no" column="DB_NO"/>
+        <result property="db_title" column="DB_TITLE"/>
+        <result property="db_date" column="DB_DATE"/>
+        <result property="db_views" column="DB_VIEWS"/>
+        <result property="db_contents" column="DB_CONTENTS"/>
+        <result property="mem_num" column="MEM_NUM"/>
+
+        <association property="dept" resultMap="deptResultMap"/>
+        <association property="member" resultMap="memberResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
+
+    <resultMap id="deptResultMap" type="com.ohgiraffers.intranet.member.model.dto.DepartmentDTO">
+        <id property="dept_code" column="DEPT_CODE"/>
+        <result property="dept_name" column="DEPT_NAME"/>
+    </resultMap>
+
+
+    <insert id="deptNoticeRegist" parameterType="DbDeptDTO">
+        INSERT
+        INTO DB_DEPT
+        (
+          DB_NO
+        , DB_TITLE
+        , DB_DATE
+        , DB_VIEWS
+        , DB_CONTENTS
+        , MEM_NUM
+        )
+        VALUES
+            (
+                SEQ_DB_DEPT_NO.NEXTVAL
+            , #{db_title}
+            , SYSDATE
+            , DEFAULT
+            , #{db_contents}
+            , #{mem_num}
+            )
+    </insert>
+
+
+    <select id="selectDeptNoticeList" resultMap="noticeListResultMap">
+        SELECT A.RNUM
+        , A.DB_NO
+        , A.DB_TITLE
+        , D.MEM_NAME
+        , A.DB_DATE
+        , E.DEPT_NAME
+        , A.DB_VIEWS
+        , A.MEM_NUM
+        FROM (SELECT ROWNUM RNUM
+        , B.DB_NO
+        , B.DB_TITLE
+        , B.DB_DATE
+        , B.DB_VIEWS
+        , B.MEM_NUM
+        FROM (SELECT
+          C.DB_NO
+        , C.DB_TITLE
+        , C.DB_DATE
+        , C.DB_VIEWS
+        , C.MEM_NUM
+        FROM DB_DEPT C
+        JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+        <where>
+            <if test="selectCriteria.searchCondition == 'title'">
+                C.DB_TITLE LIKE '%' || #{ selectCriteria.searchValue } || '%'
+            </if>
+            <if test="selectCriteria.searchCondition == 'writer'">
+                D.MEM_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
+            </if>
+        AND D.DEPT_CODE = #{ deptCode }
+        </where>
+        ORDER BY C.DB_NO DESC
+        ) B
+        <![CDATA[
+              WHERE ROWNUM <= #{ selectCriteria.endRow }
+              ]]>
+        ) A
+        LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
+        LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
+        WHERE A.RNUM >= #{ selectCriteria.startRow }
+        ORDER BY 1 ASC
+    </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT COUNT(*)
+        FROM DB_DEPT A
+        JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+        <where>
+            <if test="searchCondition == 'writer'">
+                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            </if>
+            <if test="searchCondition == 'title'">
+                A.DB_TITLE LIKE '%' || #{ searchValue } || '%'
+            </if>
+            AND B.DEPT_CODE = #{ deptCode }
+        </where>
+    </select>
+
+    <update id="incresementNoticeCount" parameterType="_int">
+        UPDATE
+            DB_DEPT A
+        SET A.DB_VIEWS = (SELECT B.DB_VIEWS
+                          FROM DB_DEPT B
+                          WHERE B.DB_NO = #{ no }
+                         ) + 1
+        WHERE A.DB_NO = #{ no }
+    </update>
+
+    <!-- 공지사항 상세보기 -->
+    <select id="selectDeptNoticeDetail" parameterType="_int" resultMap="noticeListResultMap">
+        SELECT
+            A.DB_NO
+             , A.DB_TITLE
+             , B.MEM_NAME
+             , A.DB_DATE
+             , C.DEPT_NAME
+             , A.DB_VIEWS
+             , A.MEM_NUM
+             , A.DB_CONTENTS
+        FROM DB_DEPT A
+                 LEFT JOIN MEMBER B ON (A.MEM_NUM = B.MEM_NUM)
+                 LEFT JOIN DEPARTMENT C ON(C.DEPT_CODE = B.DEPT_CODE)
+        WHERE A.DB_NO = #{ no }
+    </select>
+
+
+    <!-- 공지사항 업데이트 -->
+    <update id="deptNoticeUpdate">
+        UPDATE
+            DB_DEPT
+        SET DB_TITLE = #{ db_title }
+          , DB_CONTENTS = #{ db_contents }
+        WHERE DB_NO = #{ db_no }
+    </update>
+
+    <!-- 공지사항 삭제-->
+    <delete id="deptNoticeDelete" parameterType="int">
+        DELETE
+        FROM DB_DEPT
+        WHERE DB_NO = #{ db_no }
+    </delete>
+
+
+
+</mapper>

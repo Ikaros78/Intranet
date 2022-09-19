@@ -90,16 +90,16 @@ public class EmpController {
             pageNo = Integer.parseInt(currentPage);
         }
 
-        String searchCondition = request.getParameter("searchCondition");
-        String searchValue = request.getParameter("searchValue");
+//        String searchCondition = request.getParameter("searchCondition");
+//        String searchValue = request.getParameter("searchValue");
 
-        if(searchValue != null){
-            searchCondition = "writer";
-        }
+        String searchCategory = request.getParameter("searchCategory");
+        String searchName = request.getParameter("searchName");
 
-        Map<String, String> searchMap = new HashMap<>();
-        searchMap.put("searchCondition", searchCondition);
-        searchMap.put("searchValue", searchValue);
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("searchCategory", searchCategory);
+        searchMap.put("searchName", searchName);
+
         log.info("검색조건 확인 : " + searchMap);
 
         int totalCount = empService.selectHrListTotalCount(searchMap);
@@ -107,20 +107,33 @@ public class EmpController {
         int limit = 10;
         int buttonAmount = 5;
 
-        SelectCriteria selectCriteria = null;
+//        SelectCriteria selectCriteria = null;
+//
+//        if(searchCondition != null && !"".equals(searchCondition)){
+//            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
+//        } else {
+//            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+//        }
+//        log.info("selectCriteria 확인 : " + selectCriteria);
 
-        if(searchCondition != null && !"".equals(searchCondition)){
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount, searchCondition, searchValue);
-        } else {
-            selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
-        }
-        log.info("selectCriteria 확인 : " + selectCriteria);
+//        List<AppointmentDTO> appointList = empService.selectHrList(selectCriteria);
+//
+//        mv.addObject("appointList", appointList);
+//        mv.addObject("selectCriteria", selectCriteria);
+//        mv.addObject("searchValue", searchValue);
 
-        List<AppointmentDTO> appointList = empService.selectHrList(selectCriteria);
+        SelectCriteria selectCriteria = Pagenation.getSelectCriteria(pageNo, totalCount, limit, buttonAmount);
+
+        Map<String, Object> searchList = new HashMap<>();
+        searchList.put("searchCategory", searchCategory);
+        searchList.put("searchName", searchName);
+        searchList.put("selectCriteria", selectCriteria);
+
+        List<AppointmentDTO> appointList = empService.selectHrListe(searchList);
 
         mv.addObject("appointList", appointList);
         mv.addObject("selectCriteria", selectCriteria);
-        mv.addObject("searchValue", searchValue);
+        mv.addObject("searchList", searchList);
 
         mv.setViewName("empManage/hrList");
 

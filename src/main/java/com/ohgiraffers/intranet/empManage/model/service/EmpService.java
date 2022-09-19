@@ -25,7 +25,7 @@ public interface EmpService {
     int appointmentUpdate(MemberDTO member);
 
     /* 인사 발령 수 조회 */
-    int selectHrListTotalCount(Map<String, String> searchMap);
+    int selectHrListTotalCount(Map<String, Object> searchMap);
 
     /* 인사 발령 리스트 조회 */
     List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
@@ -47,4 +47,6 @@ public interface EmpService {
 
     /* 이전 직원 번호 삭제 */
     int numDelete(MemberDTO member);
+
+    List<AppointmentDTO> selectHrListe(Map<String, Object> searchList);
 }

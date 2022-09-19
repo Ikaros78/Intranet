@@ -66,20 +66,25 @@ public class EmpServiceImpl implements EmpService {
 
     /* 인사 발령 수 조회 */
     @Override
-    public int selectHrListTotalCount(Map<String, String> searchMap) {
+    public int selectHrListTotalCount(Map<String, Object> searchMap) {
         int result = empMapper.selectHrListTotalCount(searchMap);
 
         return result;
     }
 
-    /* 인사 발령 리스트 조회 */
     @Override
     public List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria) {
-
-        List<AppointmentDTO> appointmentList = empMapper.selectHrList(selectCriteria);
-
-        return appointmentList;
+        return null;
     }
+
+    /* 인사 발령 리스트 조회 */
+//    @Override
+//    public List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria) {
+//
+//        List<AppointmentDTO> appointmentList = empMapper.selectHrList(selectCriteria);
+//
+//        return appointmentList;
+//    }
 
     /* 인사 발령 삭제 */
     @Override
@@ -138,6 +143,14 @@ public class EmpServiceImpl implements EmpService {
         int result = empMapper.numDelete(member);
 
         return result;
+    }
+
+    @Override
+    public List<AppointmentDTO> selectHrListe(Map<String, Object> searchList) {
+
+        List<AppointmentDTO> appointmentList = empMapper.selectHrList(searchList);
+
+        return appointmentList;
     }
 
 

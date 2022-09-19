@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>결재대기함 상세보기</title>
+    <title>기안문 작성</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
@@ -41,13 +41,12 @@
             <button id="backtoList">취소</button>
         </div>
 
-        <form id="approverFrm" method="post">
-
-        </form>
-
         <form id="frm" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="signWriter" th:value="${ formMap.userInfo.mem_num }">
+            <input type="hidden" name="signFormCode" th:value="${ formMap.selectForm.code }">
+
         <div id="detail-header">
-            <h1 align="center" th:text="${ formMap.selectForm.name }" th:value="${ formMap.selectForm.code }"></h1>
+            <h1 align="center" th:text="${ formMap.selectForm.name }"></h1>
         </div>
 
         <div id="approve-list" align="right">
@@ -86,21 +85,21 @@
                 </tr>
                 <tr>
                     <th>참조자</th>
-                    <td>참조자 여기로</td>
+                    <td id="referencerBody"></td>
                 </tr>
                 <tr>
                     <th>수신처</th>
-                    <td>수신처도 여기로</td>
+                    <td id="receiverBody"></td>
                 </tr>
                 <tr>
                     <th>문서제목</th>
-                    <td><input type="text" name="signTitle"></td>
+                    <td><input type="text" name="signTitle" required></td>
                 </tr>
                 <tr>
-                    <td colspan="4"><textarea id="summernote" name="content" placeholder="내용"></textarea></td>
+                    <td colspan="4"><textarea id="summernote" name="signContent" placeholder="내용"></textarea></td>
                 </tr>
                 <tr>
-                    <td><input type="file" id="file1" name="file1"></td>
+                    <td><input type="file" id="file" name="originName"></td>
                 </tr>
                 </tbody>
             </table>
@@ -127,7 +126,6 @@
     let windowX = window.screen.width / 2 - 525;
     let windowY = window.screen.height / 2 - 400;
 
-
     $("#addApprover").on("click",function(){
 
         $(".approveType").detach();
@@ -139,13 +137,17 @@
 
     $("#addReceiver").on("click",function(){
 
-        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
+        $("#receiverBody").empty();
+
+        let w = window.open("/sign/addReceiver","수신처선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
 
     });
 
     $("#addReferencer").on("click",function(){
 
-        let w = window.open("/sign/addApprover","결재자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
+        $("#referencerBody").empty();
+
+        let w = window.open("/sign/addReferencer","참조자선택",'width=1050,height=650,left='+ windowX +',top='+ windowY);
 
     });
 
@@ -162,6 +164,9 @@
     $backtoList.onclick = function(){
         location.href = "/sign/registSelect";
     }
+
+
+
 
 </script>
 

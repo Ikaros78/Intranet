@@ -28,6 +28,7 @@ public class MemberDTO {
     private DepartmentDTO department;
     private Au_AuthorizationDTO au_authorization;
 
+    // 관리자 직원 정보(mem_num) 수정을 위한 추가
     private int bef_num;
 
     public MemberDTO() {

@@ -10,26 +10,28 @@
   <title>Document</title>
   <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
 </head>
-<th:block>
+<style>
+  #sig{
+    margin-top: 19px;
+    margin-right: 10px;
+  }
+  #sig p{
+    text-align: center;
+    font-size: 24px;
+  }
+</style>
+<body>
 <div id="wrap">
   <div th:replace="common/header.html"></div>
-  <div id="contents">
-    <div id="sideBar">
-      <h3>공지사항</h3>
-      <ul>
-        <li class="main">
-          <a th:href="@{/notice/list}">공지사항</a>
-        </li>
-        <li class="main">
-          <a th:href="@{/notice/news/list}">사내소식</a>
-        </li>
-        <li class="main">
-          <a href="">갤러리</a>
-        </li>
-      </ul>
+  <div id="contents" style="height: 1200px;">
+    <div id="sideBar" style="float: left; margin-right: 50px;">
+      <h3><span th:text="${#authentication.getPrincipal().getMem_name()}"></span>님<br>환영합니다</h3>
+      <div id="sig">
+        <strong><p>대기중인 결재 : <span>5</span>개</p></strong>
+      </div>
     </div>
     <div id="myPage">
-      <form action="get">
+<!--      <form action="get">-->
         <table>
           <thead>
           <tr>
@@ -68,34 +70,12 @@
           </tr>
           </tbody>
         </table>
-      </form>
+<!--      </form>-->
       <button th:onclick="|location.href='@{/member/mypageUpdate}'|">개인정보 수정</button>
     </div>
-    <div>
-       <a href="javascript:showPopUp()"><img src="">채팅창</a>
-    </div>
+    <div th:replace="common/chatImage"></div>
   </div>
 </div>
-  <script type="text/javascript">
-    function showPopUp() {
 
-      //창 크기 지정
-      let width = 550;
-      let height = 910;
-
-      //pc화면기준 가운데 정렬
-      let left = (window.screen.width / 2) - (width/2);
-      let top = (window.screen.height / 4);
-
-      //윈도우 속성 지정
-      let windowStatus = 'width='+width+', height='+height+', left='+left+', top='+top+', resizable=yes';
-
-      //연결하고싶은url
-      const url = "https://intranetchat.run.goorm.io";
-
-      //등록된 url 및 window 속성 기준으로 팝업창을 연다.
-      window.open(url, "hello popup", windowStatus);
-    }
-  </script>
-</th:block>
+<body>
 </html>

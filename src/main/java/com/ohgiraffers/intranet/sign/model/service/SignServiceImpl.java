@@ -403,5 +403,14 @@ public class SignServiceImpl implements SignService {
         return receiveList;
     }
 
+    /* 열람권한 추가용 메소드 */
+    @Override
+    public int addReader(Map<String, Object> numMap) {
+
+        int result = signMapper.addReader(numMap);
+
+        return result;
+    }
+
 
 }

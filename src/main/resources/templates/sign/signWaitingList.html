@@ -37,10 +37,10 @@
 
                             <table>
                                 <colgroup>
-                                    <col style="width:7%";>
-                                    <col style="width:33%";>
-                                    <col style="width:7%";>
-                                    <col style="width:33%";>
+                                    <col style="width:10%";>
+                                    <col style="width:55%";>
+                                    <col style="width:10%";>
+                                    <col style="width:55%";>
                                 </colgroup>
                                 <tbody>
                                     <tr>
@@ -97,7 +97,7 @@
                             <tr>
                                 <th width="20px"><input type="checkbox" onclick="selectAll(this)"></th>
                                 <th width="80px">문서번호</th>
-                                <th width="600px">문서제목</th>
+                                <th width="600px" style="text-align: left">문서제목</th>
                                 <th width="200px">양식명</th>
                                 <th width="130px">기안자</th>
                                 <th width="150px">기안부서</th>
@@ -108,7 +108,7 @@
                             <tr th:each="sign : ${ waitingList }">
                                 <td><input type="checkbox" name="waitingSign" th:value="${sign.signNo}"></td>
                                 <td th:text="${sign.signNo}"></td>
-                                <td th:text="${sign.signTitle}" name="title"></td>
+                                <td th:text="${sign.signTitle}" name="title" style="text-align: left"></td>
                                 <td th:text="${sign.signForm.name}"></td>
                                 <td th:text="${sign.writer.mem_name}"></td>
                                 <td th:text="${sign.writer.department.dept_name}"></td>
@@ -269,11 +269,13 @@
                     checkArr.push(signNo);
                 })
 
-                let opinion = prompt("결재의견을 입력해주세요","");
-
                 console.table(checkArr);
 
-                location.href = "/sign/signChecked?checkArr=" + checkArr + "&opinion=" + opinion;
+                let opinion = prompt("결재의견을 입력해주세요","");
+
+                if(opinion != null){
+                    location.href = "/sign/signChecked?checkArr=" + checkArr + "&opinion=" + opinion;
+                }
 
             }
 

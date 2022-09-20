@@ -24,6 +24,8 @@
 <body>
     <div id="wrap">
 
+
+
         <div id="header" style="background-color: #797578;">
             <h2 style="color: white;">열람권한 추가</h2>
         </div>
@@ -77,6 +79,7 @@
             <div id="select-box">
                 <h4>참조자 정보</h4>
                     <table id="referencer">
+                        <input type="hidden" th:value="${ signNo }" id="signNo">
                         <thead>
                             <tr>
                                 <td>참조자</td>
@@ -217,24 +220,16 @@
             $selectedMem.push(num);
             })
 
-        let data = "selectedMem=" + $selectedMem;
+        let signNo = document.getElementById('signNo').value;
+        let data = $selectedMem;
 
         $.ajax({
-            url:"selectMemByNum",
-            type: "GET",
-            data: data,
+            url:"addReader",
+            type: "POST",
+            data: {data : JSON.stringify(data),signNo : signNo},
             success: function(data){
 
-                for(let index in data) {
-
-                    $hiddenReferencer = $("<input type='hidden' name='referencer' class='referencer'>").val(data[index].mem_num);
-                    $name = data[index].mem_name;
-                    $rank = data[index].dept_rank;
-
-                    $(opener.document).find('#referencerBody').append($name + " " + $rank + " ");
-                    $(opener.document).find('#referencerBody').append($hiddenReferencer[0]);
-                }
-
+                window.opener.location.reload();
                 window.self.close();
 
             },

@@ -75,4 +75,7 @@ public interface SignService {
     int selectTotalReceiveCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectReceiveList(Map<String, Object> searchList);
+
+    @Transactional
+    int addReader(Map<String, Object> numMap);
 }

@@ -1151,4 +1151,18 @@
         ORDER BY 1 ASC
     </select>
 
+    <insert id="addReader" parameterType="hashmap">
+        INSERT
+        INTO REFERENCER A
+            (
+                 A.SIGN_NO
+               , A.REFERENCER_NO
+            )
+        VALUES
+            (
+              #{ signNo }
+            , #{ num }
+            )
+    </insert>
+
 </mapper>

@@ -81,4 +81,6 @@ public interface SignMapper {
     int selectTotalReceiveCount(Map<String, Object> searchMap);
 
     List<SignDTO> selectReceiveList(Map<String, Object> searchList);
+
+    int addReader(Map<String, Object> numMap);
 }

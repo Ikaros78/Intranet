@@ -314,12 +314,13 @@
                         C.SF_NAME LIKE '%'|| #{ searchName } || '%'
                     </if>
                 </where>
-                ORDER BY C.SF_CODE ASC) B
+                ) B
                 <![CDATA[
                           WHERE ROWNUM <= #{ selectCriteria.endRow }
                           ]]>
             ) A
             WHERE A.RNUM >= #{ selectCriteria.startRow }
+            ORDER BY 1 ASC
     </select>
 
     <select id="selectFormByCode" resultMap="signFormResultMap">

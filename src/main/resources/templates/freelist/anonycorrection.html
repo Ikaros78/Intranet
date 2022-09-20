@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>자유게시판:등록</title>
+  <title>익명게시판:수정</title>
   <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
   <!-- include libraries(jQuery, bootstrap) -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +24,7 @@
         <li class="main"><a href="@{board/freelist}">자유 게시판</a>
           <ul class="sub sub1">
             <li><a href="../free/freeList.html">자유 게시판</a></li>
-            <li><a href="#">익명 게시판</a></li>
+            <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
           </ul>
         </li>
         <li class="main"><a href="#">업무 게시판</a>
@@ -39,13 +39,13 @@
       </div>
     </div>
     <div id="container">
-      <h4>자유 게시판</h4>
+      <h4>익명 게시판</h4>
       <hr>
       <div class="topNotice">
         <img src="resources/images/circleMark.png" alt="">
         <span>부적절한 게시글 및 댓글의 경우 신고를 할수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span>
       </div>
-      <form th:action="@{/board/insert}"method="post" >
+      <form th:action="@{/board/ei/update}"method="post" >
 
         <input
                 type="hidden"
@@ -54,10 +54,16 @@
                 th:value="${ #authentication.getPrincipal().getMem_num() }">
         <table>
           <tr>
+            <input
+                type="hidden"
+                name="no"
+                th:value="${eiboard.no}">
+
+
 
             <th>제목</th>
             <td>
-              <input th:value="${ board.title }" type="text" name="title">
+              <input th:value="${ eiboard.title }" type="text" name="title">
 
             </td>
           </tr>
@@ -67,13 +73,12 @@
           <tr>
             <th>등록자</th>
             <td>
-              <span th:text="${ board.member.mem_name }"></span>&nbsp;
-              <span th:text="${ board.department.dept_name }"></span>
+              <span>  익명  </span>
             </td>
           </tr>
         </table>
 
-        <textarea id="summernote" name="contents" th:text="${ board.contents }"></textarea>
+        <textarea id="summernote" name="contents" th:text="${ eiboard.contents }"></textarea>
         <button class="registBtn" type="submit">수정</button>
 
       </form>
@@ -103,104 +108,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -12,6 +12,9 @@ import com.ohgiraffers.intranet.member.model.dto.UserImpl;
 import com.ohgiraffers.intranet.member.service.MemberService;
 import com.ohgiraffers.intranet.sign.model.dto.*;
 import com.ohgiraffers.intranet.sign.model.service.SignService;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1103,5 +1106,67 @@ public class SignController {
         mv.setViewName("sign/signReceiveDetail");
 
         return mv;
+    }
+
+    @GetMapping(value = "/addReader", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ModelAndView addReader(ModelAndView mv, @AuthenticationPrincipal User user,HttpServletRequest request){
+
+        UserImpl userInfo = ((UserImpl)user);
+
+        int signNo = Integer.parseInt(request.getParameter("signNo"));
+
+        List<DepartmentDTO> deptList = signService.selectDeptList();
+
+        mv.addObject("deptList", deptList);
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("signNo", signNo);
+
+        mv.setViewName("/sign/signpopupReader");
+
+        return mv;
+    }
+
+    @PostMapping(value = "addReader", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public String addReader(HttpServletRequest request) throws ParseException {
+
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+
+        String nums = request.getParameter("data");
+
+        JSONParser jsonParser = new JSONParser();
+
+        JSONArray numList = (JSONArray)jsonParser.parse(nums);
+
+        int signNo = Integer.parseInt(request.getParameter("signNo"));
+
+        log.info("num =" + nums);
+        log.info("signNo =" + signNo);
+
+        int count = 0;
+
+        Map<String, Object> numMap = new HashMap<>();
+        numMap.put("signNo", signNo);
+
+        for(int i = 0; i < numList.size(); i++){
+
+            numMap.put("num", numList.get(i));
+
+            int result = signService.addReader(numMap);
+
+            count += result;
+        }
+
+        if(count == numList.size()){
+            return gson.toJson("success");
+        }
+
+        return null;
     }
 }

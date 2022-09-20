@@ -25,10 +25,10 @@ public interface EmpService {
     int appointmentUpdate(MemberDTO member);
 
     /* 인사 발령 수 조회 */
-    int selectHrListTotalCount(Map<String, String> searchMap);
+    int selectHrListTotalCount(Map<String, Object> searchMap);
 
     /* 인사 발령 리스트 조회 */
-    List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
+    List<AppointmentDTO> selectHrList(Map<String, Object> searchList);
 
     /* 인사 발령 삭제(값 되돌리기)*/
     int updateMember(int mem_num, String dept_rank, String dept_code);
@@ -47,4 +47,6 @@ public interface EmpService {
 
     /* 이전 직원 번호 삭제 */
     int numDelete(MemberDTO member);
+
+
 }

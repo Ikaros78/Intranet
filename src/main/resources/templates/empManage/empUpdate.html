@@ -22,7 +22,7 @@
                             <li><a th:href="@{/member/regist}">직원 등록</a></li>
                         </ul>
                     </li>
-                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                    <li class="main"><a th:href="@{/allManage/list}">권한 관리</a>
                         <ul class="sub sub2">
                             <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                             <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
@@ -39,8 +39,8 @@
                     <table>
                         <tr>
                             <th>사원번호</th>
-                            <td><input type="text" name="mem_num" th:value="${ emp.mem_num }"></td>
-                            <td><input type="hidden" name="bef_num" th:value="${ emp.mem_num }"></td>
+                            <td th:text="${ emp.mem_num }"></td>
+                            <input type="hidden" name="mem_num" th:value="${ emp.mem_num }">
                         </tr>
                         <th>성명</th>
                         <td th:text="${ emp.mem_name }"></td>

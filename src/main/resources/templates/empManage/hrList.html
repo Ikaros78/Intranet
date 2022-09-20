@@ -21,14 +21,14 @@
             <div id="sideBar">
                 <h3>직원관리</h3>
                 <ul>
-                    <li class="main"><a th:href="@{/emp/empList}">인사 관리</a>
+                    <li class="main"><a th:href="@{/allManage/list}">인사 관리</a>
                         <ul class="sub sub1">
                             <li><a th:href="@{/emp/empList}">직원 관리</a></li>
                             <li><a th:href="@{/emp/hrList}">직원 발령 관리</a></li>
                             <li><a th:href="@{/member/regist}">직원 등록</a></li>
                         </ul>
                     </li>
-                    <li class="main"><a href="../accessManage/boardManage.html">권한 관리</a>
+                    <li class="main"><a th:href="@{/allManage/list}">권한 관리</a>
                         <ul class="sub sub2">
                             <li><a th:href="@{/allManage/list}">접근 권한 관리</a></li>
                             <li><a th:href="@{/calendarManage/list}">일정 권한 관리</a></li>
@@ -43,15 +43,27 @@
                 <form th:action="@{/emp/hrList}" method="get" class="search">
                     <input type="hidden" name="currentPage" value="1">
                     <label>발령구분</label>
-                    <select name="searchCondition" id="searchCondition">
-                        <option th:selected="${ selectCriteria.getSearchCondition() == ''}">전체</option>
-                        <option value="promotion" th:selected="${ selectCriteria.getSearchCondition() == 'promotion'}">승진</option>
-                        <option value="move" th:selected="${ selectCriteria.getSearchCondition() == 'move'}">부서이동</option>
+                    <select name="searchCategory" id="searchCategory">
+                        <option>전체</option>
+                        <option value="promotion" name="promotion">승진</option>
+                        <option value="move" name="move">부서이동</option>
                     </select>
-                    <label for="searchValue">사원명</label>
-                    <input type="search" class="inputSearch" name="searchValue" id="searchValue" th:value="${ selectCriteria.getSearchValue() }">
+                    <label for="searchName">사원명</label>
+                    <input type="search" class="inputSearch" name="searchName" id="searchName">
                     <button>검색</button>
                 </form>
+<!--                <form th:action="@{/emp/hrList}" method="get" class="search">-->
+<!--                    <input type="hidden" name="currentPage" value="1">-->
+<!--                    <label>발령구분</label>-->
+<!--                    <select name="searchCondition" id="searchCondition">-->
+<!--                        <option>전체</option>-->
+<!--                        <option value="promotion" th:selected="${ selectCriteria.getSearchCondition() == 'promotion'}">승진</option>-->
+<!--                        <option value="move" th:selected="${ selectCriteria.getSearchCondition() == 'move'}">부서이동</option>-->
+<!--                    </select>-->
+<!--                    <label for="searchValue">사원명</label>-->
+<!--                    <input type="search" class="inputSearch" name="searchValue" id="searchValue" th:value="${ selectCriteria.getSearchValue() }">-->
+<!--                    <button>검색</button>-->
+<!--                </form>-->
                 <th:block sec:authorize="hasRole('ROLE_HR_EM_AUTH')">
                     <div class="btnArea">
                         <button onclick="openPop()">발령등록</button>

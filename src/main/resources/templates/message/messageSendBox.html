@@ -27,7 +27,7 @@
 				<h3 style="position: relative; top: 40px; left: 80px">보낸쪽지함</h3><br>
 <!--/*			<hr style="width: 1000px; position: relative; left:50px; top:50px"><br> */-->
 			<div id="messageheader" style="float:left; position:relative; top:60px; left: 60px">
-				<form th:action="@{/ms/recp}" method="get">
+				<form th:action="@{/ms/send}" method="get">
 					<input type="hidden" name="searchbox" value="1">
 					<select name="searchCondition" id="searchCondition" 
 						    style="border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;margin: 10px;">
@@ -43,12 +43,12 @@
 			style="position: relative; top: 125px; right: 425px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 8px;">삭제</button>
 			<div class="table-area">
 				<table align="center" id="listArea">
-					<tr>
+					<tr style="background-color: #dddddd; height: 50px;">
 						<th><input type="checkbox" id="allCheckBox" name="allCheckBox" onclick="allChecked();" style="margin: 10px"></th>
-						<th>보낸사람</th>
-						<th>제목</th>
-						<th>날짜</th>
-						<th>글번호</th>
+						<th style="width: 200px;">보낸사람</th>
+						<th style="width: 700px;">제목</th>
+						<th style="width: 200px;">날짜</th>
+						<th style="width: 100px; display: none;">글번호</th>
 					</tr>
 					<tr th:each="boardList : ${ boardList }">
 						<td><label class="checkbox-inline">
@@ -57,14 +57,14 @@
 						<td name="click" id="click" th:text="${boardList.sendName}"></td>
 						<td name="click" id="click" th:text="${boardList.msTitle}"></td>
 						<td name="click" id="click" th:text="${boardList.sendDate}"></td>
-						<td name="click" id="click" th:text="${boardList.msNo}"></td>
+						<td style="width: 100px; display: none;" name="click" id="click" th:text="${boardList.msNo}"></td>
 					</tr>
 				</table>
 			</div>
 		</div>
 	</div>
 
-		<div class="page-nation" align="">
+		<div class="page-nation" align="" style="position: relative; top: 750px;">
 			<!-- 맨 앞으로 이동 버튼 -->
 			<button th:onclick="'location.href=\'/ms/send?currentPage='+ @{${searchList.selectCriteria.startPage}} + '\''"
 					th:disabled="${searchList.selectCriteria.pageNo == 1}"><<</button>

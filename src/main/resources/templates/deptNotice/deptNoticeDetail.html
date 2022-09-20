@@ -21,13 +21,13 @@
                         <a href="th:href=@{/board/list}">자유 게시판</a>
                         <ul class="sub sub1">
                             <li><a th:href="@{/board/list}">자유 게시판</a></li>
-                            <li><a href="#">익명 게시판</a></li>
+                            <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="#">업무 게시판</a>
                         <ul class="sub sub2">
                             <li><a th:href="@{/deptNotice/list}">부서별 공지사항</a></li>
-                            <li><a href="#">파일 게시판</a></li>
+                            <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
                         </ul>
                     </li>
                 </ul>

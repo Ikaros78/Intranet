@@ -25,7 +25,7 @@
 			<div class="table-area" style="position: relative; top: 80px;left: 80px;width: 1350px;">
 			
 				<p class="title"><hr><br><br>
-				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msBoard.msTitle }"></span></spen><br><br>
+				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msBoard.sendName }"></span></spen><br><br>
 				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${ msBoard.sendDate}"></span></spen><br><br><br><hr>
 		     	<a th:if="${ msBoard.originName != null }"
 		     	   class="fileDown" th:each=" msBoard : ${ msBoard.msFile }" 

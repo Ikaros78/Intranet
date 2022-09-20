@@ -59,14 +59,6 @@
         <association property="member" resultMap="memberResultMap"/>
     </resultMap>
 
-    <resultMap id="frRecommendResultMap" type="FrRecommendDTO">
-        <result property="fr_no" column="FR_NO"/>
-        <result property="mem_num" column="MEM_NUM"/>
-        <result property="like_yn" column="LIKE_YN"/>
-    </resultMap>
-
-
-
     <select id="selectBoardList" resultMap="boardResultMap">
         SELECT A.RNUM
         , A.FR_NO
@@ -327,12 +319,6 @@
           FROM FC_FREE_COMMENT A
           LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
      WHERE FR_NO = #{ fr_no }
-    </select>
-
-    <select id="selectRecCount" resultMap="frRecommendResultMap">
-        SELECT COUNT(*)
-          FROM FR_RECOMMEND
-         WHERE LIKE_YN = 'Y'
     </select>
 
 

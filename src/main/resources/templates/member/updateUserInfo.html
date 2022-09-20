@@ -17,12 +17,11 @@
     <div class="update-wrap">
         <form action="" method="post">
             <div class="input-box">
-                <input th:value="${ #authentication.getPrincipal().getMem_id() }"
-                        id="mem_id"
-                        name="mem_id"
-                        type="hidden"
-                        placeholder="아이디"
-                        required
+                <input th:value="${ #authentication.getPrincipal().getMem_num() }"
+                       id="memDepartNum"
+                       name="mem_num"
+                       type="hidden"
+                       placeholder="사원번호"
                 />
             </div>
             <div class="input-box">

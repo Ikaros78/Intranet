@@ -98,15 +98,10 @@
         , C.FR_VIEWS
         , C.MEM_NUM
         FROM FR_FREE C
-        <if test="searchCondition == 'writer'">
-            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
-        </if>
+
         <where>
             <if test="searchCondition == 'title'">
-                C.FR_TITLE LIKE '%' || #{ searchValue } || '%'
-            </if>
-            <if test="searchCondition == 'writer'">
-                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+              AND C.FR_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
         </where>
         ORDER BY C.FR_NO DESC
@@ -124,13 +119,9 @@
     <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
         FROM FR_FREE A
-        <if test="searchCondition == 'writer'">
-            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
-        </if>
+
         <where>
-            <if test="searchCondition == 'writer'">
-                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
-            </if>
+
             <if test="searchCondition == 'title'">
                 A.FR_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
@@ -190,12 +181,7 @@
 
     </update>
 
-    <delete id="boardDelete" >
-     DELETE
-     FROM FR_FREE
-     WHERE FR_NO = #{ no }
 
-    </delete>
 
 
     <select id="selectBoardListe" resultMap="eiboardResultMap">
@@ -223,7 +209,7 @@
 
         <where>
             <if test="searchCondition == 'title'">
-                C.NB_TITLE LIKE '%' || #{ searchValue } || '%'
+                AND  C.NB_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
 
         </where>
@@ -299,14 +285,6 @@
 
     </update>
 
-
-    <delete id="eiboardDelete" >
-        DELETE
-        FROM NB_NONE
-        WHERE NB_NO = #{ no }
-
-    </delete>
-
     <insert id="boardcomment">
         INSERT
         INTO FC_FREE_COMMENT A(
@@ -367,8 +345,36 @@
         WHERE NB_NO = #{ nb_no }
     </select>
 
+    <delete id="eeiboardDelete" >
+        DELETE
+        FROM NC_NONE_COMMENT
+        WHERE NB_NO = #{ no }
+
+    </delete>
 
 
+    <delete id="eiboardDelete" >
+        DELETE
+        FROM NB_NONE
+        WHERE NB_NO = #{ no }
+
+    </delete>
+
+
+    <delete id="boardcommentDelete" >
+        DELETE
+        FROM FC_FREE_COMMENT
+        WHERE FR_NO = #{ no }
+
+    </delete>
+
+
+    <delete id="boardDelete" >
+        DELETE
+        FROM FR_FREE
+        WHERE FR_NO = #{ no }
+
+    </delete>
 
 
 </mapper>

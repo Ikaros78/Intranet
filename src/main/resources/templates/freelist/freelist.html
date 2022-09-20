@@ -43,7 +43,7 @@
                     <input type="date"> ~ <input type="date">
                 </div>
                 <select name="searchCondition" id="searchCondition">
-                    <option value="제목">제목</option>
+                    <option value="title">제목</option>
                     <option value="작성자">작성자</option>
                 </select>
                 <input type="search" name="searchValue" id="searchValue">
@@ -100,24 +100,9 @@
                 </tbody>
             </table>
                 <button class="registBtn" onclick="location.href='/board/insert'">등록하기</button>
-                <div th:replace="notice/paging"></div>
+                <div th:replace="freelist/paging"></div>
 
-<!--            <div class="hs_table_foot">-->
-<!--                <input class="hs_board_lshift shiftbtn" type="button" value="<<">-->
-<!--                <input class="hs_board_left shiftbtn" type="button" value="<"><a class="hs_board_numbering">1</a>-->
-<!--                <input class="hs_board_right shiftbtn" type="button" value=">"><input class="hs_board_rshift shiftbtn" type="button" value=">>">-->
-<!--            </div>-->
-<!--            &lt;!&ndash; <div class="pagingArea">-->
-<!--                <button disabled><<</button>-->
-<!--                <button id="prevPage"><</button>-->
-<!--                <button disabled>1</button>-->
-<!--                <button onclick="pageButtonAction(this.innerText);">2</button>-->
-<!--                <button onclick="pageButtonAction(this.innerText);">3</button>-->
-<!--                <button onclick="pageButtonAction(this.innerText);">4</button>-->
-<!--                <button onclick="pageButtonAction(this.innerText);">5</button>-->
-<!--                <button disabled>></button>-->
-<!--                <button id="nextPage">>></button>-->
-<!--            </div> &ndash;&gt;-->
+
         </div>
     </div>
 </div>

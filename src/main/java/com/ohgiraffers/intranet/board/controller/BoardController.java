@@ -110,6 +110,7 @@ public class BoardController {
 
         mv.addObject("boardList", boardList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject( "searchValue", searchValue);
         log.info("selectCriteria 확인 : " + selectCriteria);
 
         log.info("dept값 가져오나 확인 : " + boardList);
@@ -134,7 +135,7 @@ public class BoardController {
 
         List<CommentDTO> commentList = boardService.selectComentList(fr_no);
         log.info("List값 확인 : " + commentList);
-
+        mv.addObject("no",no);
         mv.addObject("commentList", commentList);
         mv.setViewName("freelist/boardDetail");
 
@@ -176,15 +177,29 @@ public class BoardController {
     }
 
     @GetMapping("/delete")
+    public String boardDelete(@RequestParam String no, HttpServletRequest request) {
 
-    public String boardDelete(@ModelAttribute FreeinsertDTO freeinsert, HttpServletRequest request) {
+       String num =  request.getParameter("no");
 
-        String no = request.getParameter("no");
+        System.out.println("nononono" + no);
 
-        boardService.boardDelete(freeinsert);
+        System.out.println("nononono" + num);
+
+        boardService.boardDelete(no);
 
         return "redirect:/board/list";
     }
+
+//    @GetMapping("ei/delete")
+//
+//    public String eiboardDelete(@RequestParam String no, HttpServletRequest request) {
+//
+//
+//        boardService.eiboardDelete(no);
+//
+//        return "redirect:/board/eiboard/list";
+//    }
+
 
 
 //    익명
@@ -233,6 +248,8 @@ public class BoardController {
 
         mv.addObject("eiboardlist", eiboardList);
         mv.addObject("selectCriteria", selectCriteria);
+        mv.addObject( "searchValue", searchValue);
+
         log.info("selectCriteria 확인 : " + selectCriteria);
 
         log.info("dept값 가져오나 확인 : " + eiboardList);
@@ -318,15 +335,10 @@ public class BoardController {
 
     @GetMapping("ei/delete")
 
-    public String eiboardDelete(@ModelAttribute AnonyDTO anonyinsert, HttpServletRequest request) {
+    public String eiboardDelete(@RequestParam String no, HttpServletRequest request) {
 
-        String no = request.getParameter("no");
 
-        EiCommentDTO boardeicomment = new EiCommentDTO();
-
-        boardService.eeiboardDelete(boardeicomment);
-
-        boardService.eiboardDelete(anonyinsert);
+        boardService.eiboardDelete(no);
 
         return "redirect:/board/eiboard/list";
     }

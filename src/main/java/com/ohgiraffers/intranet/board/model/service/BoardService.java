@@ -63,10 +63,7 @@ public class BoardService {
 
     }
 
-    @Transactional
-    public void boardDelete(FreeinsertDTO freeinsert) {
-        boardMapper.boardDelete(freeinsert.getNo());
-    }
+
 
 //    익명
 
@@ -118,10 +115,15 @@ public class BoardService {
 
     }
 
-    public void eiboardDelete(AnonyDTO anonyinsert) {
-
-        boardMapper.eiboardDelete(anonyinsert.getNo());
-    }
+//    public void eiboardDelete(String no) {
+//
+//      String result = boardMapper.eiboardDelete(no);
+//      
+//        if(result != null ){
+//            
+//        boardMapper.eicommentDelete(no);
+//        }
+//    }
 
     @Transactional
     public int boardcomment(CommentDTO boardcomment) {
@@ -171,10 +173,36 @@ public class BoardService {
 
     }
 
-    public void eeiboardDelete(EiCommentDTO eeiboardDelete) {
+@Transactional
+    public void eiboardDelete(String no) {
 
-        boardMapper.eeiboardDelete(eeiboardDelete.getNb_no());
+      boardMapper.eeiboardDelete(no);
+      boardMapper.eiboardDelete(no);
+
     }
+@Transactional
+    public void boardDelete(String no) {
+
+    boardMapper.boardcommentDelete(no);
+    boardMapper.boardDelete(no);
+
+
+    }
+
+
+//    public void eiboardDelete(String no) {
+//
+//       boardMapper.boardeicomment(no);
+//       
+//    }
+
+//    public void eeiboardDelete(EiCommentDTO eeiboardDelete) {
+//
+//        boardMapper.eeiboardDelete(eeiboardDelete.getNb_no());
+//
+//
+//    }
+
 
 }
 

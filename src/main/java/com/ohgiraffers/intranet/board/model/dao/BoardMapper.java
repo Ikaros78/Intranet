@@ -58,4 +58,10 @@ public interface BoardMapper {
     List<EiCommentDTO> selecteiComentList(String nb_no);
 
     void eeiboardDelete(String nb_no);
+
+    void eiboardDelet(String no);
+
+    void eicommentDelete(String no);
+
+    void boardcommentDelete(String no);
 }

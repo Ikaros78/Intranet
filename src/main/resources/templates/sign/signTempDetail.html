@@ -31,7 +31,7 @@
     <div class="details">
         <div class="buttons" align="right">
             <button id="rewrite" type="submit" form="signform" onclick='btn_click("rewrite");'>수정</button>
-            <button id="delete" type="submit" form="signform" onclick='btn_click("delete");'>삭제</button>
+            <button id="delete" onclick='btn_click("delete");'>삭제</button>
             <button id="print">인쇄</button>
             <button id="backtoList">목록</button>
         </div>
@@ -131,8 +131,13 @@
             signform.action = "/sign/reWriteRegistForm";
         }else if(str=="delete"){
 
+            let check = confirm("삭제하시겠습니까?");
 
-            signform.action = "/sign/delete";
+            if(check === true){
+                let $signform = document.getElementById('signform');
+                $signform.action = "/sign/delete";
+                $signform.submit();
+            }
         }
     }
 

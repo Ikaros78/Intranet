@@ -6,16 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>참조/열람문서함</title>
     <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.standalone.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link rel="stylesheet" type="text/css" href="/css/basic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signbasic.css">
     <link rel="stylesheet" type="text/css" href="/css/sign/signmain.css">
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     
 </head>
 <body>
@@ -38,10 +37,10 @@
 
                             <table>
                                 <colgroup>
-                                    <col style="width:7%";>
-                                    <col style="width:33%";>
-                                    <col style="width:7%";>
-                                    <col style="width:33%";>
+                                    <col style="width:10%";>
+                                    <col style="width:55%";>
+                                    <col style="width:10%";>
+                                    <col style="width:55%";>
                                 </colgroup>
                                 <tbody>
                                     <tr>
@@ -68,11 +67,13 @@
                                         <th scope="row">
                                             <label>배정일</label>
                                         </th>
-                                        <td>
-                                            <input type="text" title="시작일" name="searchStartDate" class="datePicker">
-                                            <span>~</span>
-                                            <input type="text" title="종료일" name="searchEndDate" class="datePicker">
-                                            <!-- 시작일과 종료일 나중에 value로 값 받아오기 -->
+                                        <td id="reportrange" class="form-control" style="cursor: pointer; max-width: max-content;">
+                                            <i class="fa fa-calendar"></i>
+                                            <span class="date">
+                                            <!-- 날짜 입력한 값 들어감 -->
+                                            </span>
+                                            <input type="hidden" id="startDate" name="searchStartDate">
+                                            <input type="hidden" id="endDate" name="searchEndDate">
                                             <button type="submit" class="btn btn-color7">검색</button>
                                         </td>
                                     </tr>
@@ -95,7 +96,7 @@
                         <thead>
                             <tr>
                                 <th width="100px">문서번호</th>
-                                <th width="600px">문서제목</th>
+                                <th width="600px" style="text-align: left">문서제목</th>
                                 <th width="200px">양식명</th>
                                 <th width="130px">기안자</th>
                                 <th width="150px">기안부서</th>
@@ -105,7 +106,7 @@
                         <tbody>
                             <tr th:each="sign : ${ referenceList }">
                                 <td th:text="${sign.signNo}"></td>
-                                <td th:text="${sign.signTitle}" name="title"></td>
+                                <td th:text="${sign.signTitle}" name="title" style="text-align: left"></td>
                                 <td th:text="${sign.signForm.name}"></td>
                                 <td th:text="${sign.writer.mem_name}"></td>
                                 <td th:text="${sign.writer.department.dept_name}"></td>
@@ -162,10 +163,64 @@
     
 
     <script type="text/javascript">
-        $('.datePicker').datepicker({
-            format : "yyyy-mm-dd",
-            language : "kr",
-            todayHighlight : true
+
+        $(function(){
+
+            let start = moment();
+            let end = moment();
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('YYYY-MM-DD') + ' ~ ' + end.format('YYYY-MM-DD'));
+                $('#reportrange #startDate').val(start.format('YYYY-MM-DD'));
+                $('#reportrange #endDate').val(end.format('YYYY-MM-DD'));
+            }
+
+            $('#reportrange').daterangepicker({
+                showDropdowns: true,
+                minYear: 2020,
+                maxYear: 2030,
+                autoApply: true,
+                autoUpdateInput: false,
+                "linkedCalendars": false,
+                "locale": {
+                    "format": "YYYY/MM/DD",
+                    "separator": " ~ ",
+                    "applyLabel": "확인",
+                    "cancelLabel": "취소",
+                    "fromLabel": "From",
+                    "toLabel": "To",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "W",
+                    "daysOfWeek": [
+                        "일",
+                        "월",
+                        "화",
+                        "수",
+                        "목",
+                        "금",
+                        "토"
+                    ],
+                    "monthNames": [
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월"
+                    ],
+                    "firstDay": 7
+                },
+                startDate: start,
+                endDate: end,
+            }, cb)
+
+            cb(start, end);
         });
 
         if(document.querySelectorAll('.referenceList td')){

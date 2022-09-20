@@ -326,4 +326,34 @@
 
 
 
+<!--    <insert id = singoInsert>-->
+<!--        INSERT-->
+<!--        INTO RE_REPORTED A-->
+<!--        (-->
+<!--          A.RE_NO-->
+<!--        , A.MEM_NUM-->
+<!--        , A.RE_DATE-->
+<!--        , A.RE_REASON-->
+<!--        , A.RE_DISPOSE_YN-->
+<!--        , A.FR_NO-->
+<!--        , A.FC_NO-->
+<!--        , A.NB_NO-->
+<!--        , A.NC_NO-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--          1-->
+<!--        , #{ memNo }-->
+<!--        , SYSDATE-->
+<!--        , #{ reReason }-->
+<!--        , 'N'-->
+<!--        , #{ frNo }-->
+<!--        , #{ fcNo }-->
+<!--        , #{ nbNo }-->
+<!--        , #{ ncNo }-->
+<!--        )-->
+<!--    </insert>-->
+
+
+
 </mapper>

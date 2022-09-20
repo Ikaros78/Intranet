@@ -60,6 +60,7 @@
         font-size: 24px;
         margin-bottom: 5px;
         text-align: center;
+        height: 29px;
     }
     /* 공지사항 테이블 헤더 */
     .noTitle{
@@ -153,8 +154,36 @@
     <div id="contents">
         <div id="sideBar" style="float: left; margin-right: 50px;">
             <h3><span th:text="${#authentication.getPrincipal().getMem_name()}"></span>님<br>환영합니다</h3>
+            <script>
+
+                $.ajax({
+
+                    url: "wait",
+                    /* 타입 : get */
+                    /* 데이터 : gsongson */
+
+                    success:function(data){
+
+                        console.table(data);
+
+                        const $table = $("#list");
+                        $table.html(""); // 초기화
+
+                        let $totalCount = $('<span>').text(data);
+
+                        $table.append($totalCount);
+
+                    },
+                    error: function(error) {
+
+                        console.log(error);
+                    }
+
+                });
+
+            </script>
             <div id="sig">
-                <strong><p>대기중인 결재 : <span>5</span>개</p></strong>
+                <a th:href="@{/sign/main}"><strong><p>대기중인 결재 : <span id="list"></span>개</p></strong></a>
             </div>
         </div>
         <br>
@@ -228,7 +257,7 @@
 
             <table id="boTable">
 
-                <strong><p class="tableName">부서공지사항</p></strong>
+                <strong><p class="tableName">부서별 공지사항</p></strong><span class="moreNo"><a th:href="@{/deptNotice/list}">+ 더보기</a></span>
                 <hr color="#999999" noshade>
                 <thead>
                 <th class="boTitle">제목</th>
@@ -237,6 +266,46 @@
                 </thead>
                 <tbody>
                 </tbody>
+                <script>
+
+                    $.ajax({
+
+                        url: "mainDept",
+                        /* 타입 : get */
+                        /* 데이터 : noMv */
+
+                        success:function(data){
+
+                            console.table(data);
+
+                            const noDept = JSON.parse(data);
+
+                            console.log(noDept);
+                            const $table = $("#boTable tbody");
+                            $table.html(""); // 초기화
+
+                            for (let idx in noDept) {
+
+                                $tr = $("<tr>");
+                                $db_title = $('<td class="ddd">').text(noDept[idx].db_title);
+                                $member = $('<td class="dd">').text(noDept[idx].member.mem_name);
+                                $db_date = $('<td class="dddd">').text(noDept[idx].db_date);
+
+                                $tr.append($db_title);
+                                $tr.append($member);
+                                $tr.append($db_date);
+
+                                $table.append($tr);
+                            }
+                        },
+                        error: function(error) {
+
+                            console.log(error);
+                        }
+
+                    });
+
+                </script>
 
 
             </table>

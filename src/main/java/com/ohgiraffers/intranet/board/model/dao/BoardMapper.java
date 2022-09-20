@@ -25,4 +25,6 @@ public interface BoardMapper {
     FreeinsertDTO selectBoardDetail(String no);
 
     int boardUpdate(FreeinsertDTO board);
+
+    int singoInsert(int memNo);
 }

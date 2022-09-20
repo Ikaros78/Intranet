@@ -60,4 +60,9 @@ public class BoardService {
 
         return boardMapper.selectBoardDetail(no);
     }
+
+    public int singoInsert(int memNo) {
+
+        return boardMapper.singoInsert(memNo);
+    }
 }

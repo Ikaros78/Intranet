@@ -70,6 +70,11 @@
         , D.MEM_NAME
         FROM FB_FILE C
         LEFT JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+	<where>
+		<if test="searchCondition == 'fbTitle'">
+           AND C.FB_TITLE LIKE '%' || #{ searchValue } || '%'
+		</if>
+	</where>
         ORDER BY C.FB_NO DESC
         ) B
         <![CDATA[
@@ -159,7 +164,7 @@
     <delete id="fileFileDelete">
         DELETE
         FROM FF_FILE_FILE
-        WHERE FF_NO = #{ ffNo }
+        WHERE FB_NO = #{ fbNo }
     </delete>
 
 <!--     공지사항 업데이트 -->

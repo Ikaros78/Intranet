@@ -80,8 +80,14 @@ public class FileController {
 
 		List<FileBoardDTO> fileList = fileService.fileBoardList(selectCriteria);
 
+		System.out.println("searchValuesearchValue" + searchValue);
+		System.out.println("searchValuesearchValue" + searchCondition);
+		System.out.println("searchValuesearchValue" + selectCriteria);
+		
 		mv.addObject("fileList", fileList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("searchValue", searchValue);
+		mv.addObject("searchCondition", searchCondition);
 		mv.setViewName("fileBoard/fileList");
 
 		return mv;
@@ -174,6 +180,8 @@ public class FileController {
 			@RequestParam(name = "originName", required = false) MultipartFile originName)
 			throws FileNotFoundException {
 
+		
+		System.out.println("fileBoard" + fileBoard);
 		FileFileDTO fileFile = new FileFileDTO();
 
 		String filePath = ResourceUtils.getURL("src/main/resources").getPath() + "upload";
@@ -212,19 +220,19 @@ public class FileController {
 						fileFile.setFfSavePath(fileUploadDirectory);
 
 						fileService.fileFileUpdate(fileFile);
+					
+						}
+					} else {
+	
+						fileFile.setFbNo(fileBoard.getFbNo());
+						fileFile.setFfOriginName(originFileName);
+						fileFile.setFfSaveName(saveName);
+						fileFile.setFfSavePath(fileUploadDirectory);
+	
+						fileService.fileFileUpdate(fileFile);
 					}
-
-				} else {
-
-					fileFile.setFbNo(fileBoard.getFbNo());
-					fileFile.setFfOriginName(originFileName);
-					fileFile.setFfSaveName(saveName);
-					fileFile.setFfSavePath(fileUploadDirectory);
-
-					fileService.fileFileUpdate(fileFile);
+	
 				}
-
-			}
 
 			// file insert
 
@@ -236,17 +244,20 @@ public class FileController {
 				new File(fileUploadDirectory + "//" + saveName).delete();
 			}
 
+		}else {
+			
+            int result = fileService.fileBoardUpdate(fileBoard); 
 		}
 
 		rttr.addFlashAttribute("message", "수정이 완료되었습니다");
-
+		
 		return "redirect:/file/fileList";
 	}
 
 	@GetMapping("/fileDelete")
 	public String fileBoardDelete(@ModelAttribute FileBoardDTO fileboard, HttpServletRequest request) {
 
-		int no = Integer.parseInt(request.getParameter("no"));
+		int fbNo = Integer.parseInt(request.getParameter("fbNo"));
 
 		fileService.fileBoardDelete(fileboard);
 

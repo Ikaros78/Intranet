@@ -67,21 +67,21 @@
         </div>
     </div>
     
-<!--/*
+
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             /*<![CDATA[*/
 
             // 게시글 삭제
             function removeCheck() {
-                const no = [[ ${fileList.fbNo} ]];
+                const no = [[ ${Detail.fbNo} ]];
                 if ( !confirm("게시글을 삭제할까요?") ) {
                     return false;
                 }
 
                 const formHtml = `
                     <form id="deleteForm" action="/file/fileDelete?=${no}" method="get">
-                        <input type="hidden" id="no" name="no" value="${no}" />
+                        <input type="hidden" id="fbNo" name="fbNo" value="${no}" />
                     </form>
                 `;
                 const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -89,7 +89,7 @@
                 document.body.append(form);
                 document.getElementById('deleteForm').submit();
             }
-*/-->
+
 
         </script>
     </th:block>

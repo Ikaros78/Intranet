@@ -28,7 +28,7 @@ public interface FileMapper {
 
 	int fileFileDelete(int fbNo);
 
-	void fileFileUpdate(FileFileDTO fileFile);
+	int fileFileUpdate(FileFileDTO fileFile);
 
 	int fileBoardDelete(int fbNo);
 

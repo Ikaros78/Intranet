@@ -47,15 +47,14 @@
 			</div>
 			<div class="table-area">
 				<table align="center" id="listArea" >
-					<tr >
-						<th>
-						
+					<tr style="background-color: #dddddd; height: 50px;">
+						<th style="width: 100px; ">		
                         <label class="checkbox-inline">
 				        <input type="checkbox" id="allCheckBox" onclick="allChecked()">
 				        </label></th>
-						<th>보낸사람</th>
-						<th>제목</th>
-						<th>날짜</th>
+						<th style="width: 200px;">보낸사람</th>
+						<th style="width: 700px;">제목</th>
+						<th style="width: 200px;">날짜</th>
 						<th>글번호</th>
 					</tr>
 					<tr th:each=" boardList : ${ boardList }">
@@ -74,7 +73,7 @@
 	</div>
 
 		<!-- 페이지 처리 -->
-		<div class="page-nation" align="">
+		<div class="page-nation" align="" style="position: relative; top: 750px;">
 			<!-- 맨 앞으로 이동 버튼 -->
 			<button th:onclick="'location.href=\'/ms/recp?currentPage='+ @{${searchList.selectCriteria.startPage}} + '\''"
 					th:disabled="${searchList.selectCriteria.pageNo == 1}"><<</button>

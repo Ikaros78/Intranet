@@ -76,6 +76,13 @@ public class FileServiceImpl implements FileService  {
     	
         return fileMapper.fileBoardUpdate(fileBoard);
     }
+    
+    @Override
+    @Transactional
+    public int fileFileDelete(int fbNo) {
+    	
+    	return fileMapper.fileFileDelete(fbNo);
+    }
 
     @Override
     @Transactional
@@ -86,16 +93,8 @@ public class FileServiceImpl implements FileService  {
     
     @Override
     @Transactional
-    public int fileFileDelete(int fbNo) {
-    	
-        return fileMapper.fileFileDelete(fbNo);
-    }
-
-
-    @Override
-    @Transactional
     public void fileBoardDelete(FileBoardDTO fileBoard) {
-        int result1 = fileMapper.fileFileDelete(fileBoard.getFbNo());
-        int result2 = fileMapper.fileBoardDelete(fileBoard.getFbNo());
+    	int result1 =  fileMapper.fileFileDelete(fileBoard.getFbNo());
+        int result2 =  fileMapper.fileBoardDelete(fileBoard.getFbNo());
     }
 }

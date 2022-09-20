@@ -322,6 +322,10 @@ public class BoardController {
 
         String no = request.getParameter("no");
 
+        EiCommentDTO boardeicomment = new EiCommentDTO();
+
+        boardService.eeiboardDelete(boardeicomment);
+
         boardService.eiboardDelete(anonyinsert);
 
         return "redirect:/board/eiboard/list";

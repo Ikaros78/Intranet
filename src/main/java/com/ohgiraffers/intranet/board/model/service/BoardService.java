@@ -170,6 +170,12 @@ public class BoardService {
         return eicommentlist;
 
     }
+
+    public void eeiboardDelete(EiCommentDTO eeiboardDelete) {
+
+        boardMapper.eeiboardDelete(eeiboardDelete.getNb_no());
+    }
+
 }
 
 //

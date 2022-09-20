@@ -52,7 +52,7 @@
                 A.MEM_NAME LIKE '%' || #{ searchValue } || '%'
             </if>
             <if test="searchCondition == 'mem_num'">
-                A.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+                A.MEM_NUM LIKE #{ searchValue }
             </if>
             <if test="searchCondition == 'dept_name'">
                 B.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
@@ -103,7 +103,7 @@
                                 C.MEM_NAME LIKE '%' || #{ searchValue } || '%'
                             </if>
                             <if test="searchCondition == 'mem_num'">
-                                C.MEM_NUM LIKE '%' || #{ searchValue } || '%'
+                                C.MEM_NUM LIKE #{ searchValue }
                             </if>
                             <if test="searchCondition == 'dept_name'">
                                 D.DEPT_NAME LIKE '%' || #{ searchValue } || '%'
@@ -175,18 +175,18 @@
     <select id="selectHrListTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
           FROM PA_PERSONNER_APPOINTMENT A
-          <if test="searchCondition == 'writer'">
+          <if test="searchName != null and searchName != ''">
             JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
           </if>
         <where>
-            <if test="searchCondition == 'promotion'">
-                AND A.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
+            <if test="searchCategory == 'promotion'">
+                A.PA_CATEGORY LIKE '승진'
             </if>
-            <if test="searchCondition == 'move'">
-                AND A.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
+            <if test="searchCategory == 'move'">
+                A.PA_CATEGORY LIKE '부서이동'
             </if>
-            <if test="searchCondition == 'writer'">
-                AND B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+            <if test="searchName != null and searchName != ''">
+                AND B.MEM_NAME LIKE '%' || #{ searchName } || '%'
             </if>
         </where>
     </select>
@@ -225,29 +225,29 @@
                              , C.PA_BEF_CODE
                              , C.PA_CONTENTS
                      FROM PA_PERSONNER_APPOINTMENT C
-                    <if test="searchCondition == 'writer'">
+                    <if test="searchName != null and searchName != ''">
                         JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
                     </if>
-                     <where>
-                         <if test="searchCondition == 'promotion'">
-                             AND C.PA_CATEGORY LIKE '승진' || #{ searchValue } || '%'
-                         </if>
-                         <if test="searchCondition == 'move'">
-                             AND C.PA_CATEGORY LIKE '부서이동' || #{ searchValue } || '%'
-                         </if>
-                         <if test="searchCondition == 'writer'">
-                             AND D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
-                         </if>
-                     </where>
+                    <where>
+                        <if test="searchCategory == 'promotion'">
+                            C.PA_CATEGORY LIKE '승진'
+                        </if>
+                        <if test="searchCategory == 'move'">
+                            C.PA_CATEGORY LIKE '부서이동'
+                        </if>
+                        <if test="searchName != null and searchName != ''">
+                            AND D.MEM_NAME LIKE '%' || #{ searchName } || '%'
+                        </if>
+                    </where>
                      ORDER BY C.PA_NO DESC
                      ) B
                      <![CDATA[
-                        WHERE ROWNUM <= #{ endRow }
+                        WHERE ROWNUM <= #{ selectCriteria.endRow }
                      ]]>
              ) A
              LEFT JOIN MEMBER D ON(A.MEM_NUM = D.MEM_NUM)
              LEFT JOIN DEPARTMENT E ON(D.DEPT_CODE = E.DEPT_CODE)
-            WHERE A.RNUM >= #{ startRow }
+            WHERE A.RNUM >= #{ selectCriteria.startRow }
             ORDER BY 1 ASC
     </select>
 
@@ -285,10 +285,9 @@
     <!-- 직원 정보 수정(관리자) -->
     <update id="empUpdate">
         UPDATE MEMBER
-           SET MEM_NUM = #{ mem_num }
-             , MEM_JOINDATE = #{ mem_joinDate }
+           SET MEM_JOINDATE = #{ mem_joinDate }
              , DEPT_CODE = #{ dept_code }
-         WHERE MEM_NUM = #{ bef_num }
+         WHERE MEM_NUM = #{ mem_num }
     </update>
 
     <!-- 바뀌기 전 직원 번호 DB 저장 -->

@@ -30,8 +30,8 @@
 
                 <div class="details">
                     <div class="buttons" align="right">
-                        <button id="sign" type="submit" form="signform" onclick='btn_click("sign");'>결재</button>
-                        <button id="refuse" type="submit" form="signform" onclick='btn_click("refuse");'>반려</button>
+                        <button id="sign" type="button" onclick='btn_click("sign");'>결재</button>
+                        <button id="refuse" type="button" onclick='btn_click("refuse");'>반려</button>
                         <button id="print">인쇄</button>
                         <button id="backtoList">목록</button>
                     </div>
@@ -157,12 +157,26 @@
 
             document.getElementById("getOpinion").value = prompt("결재의견을 입력해주세요","");
 
-            signform.action = "/sign/approve";
+            let $opinion = document.getElementById("getOpinion").value;
+
+            console.log($opinion);
+
+            if($opinion != null){
+                let signform = document.getElementById('signform');
+                signform.action = "/sign/approve";
+                signform.submit();
+            }
         }else if(str=="refuse"){
 
             document.getElementById("getOpinion").value = prompt("반려의견을 입력해주세요","");
 
-            signform.action = "/sign/refuse";
+            let $opinion = document.getElementById("getOpinion").value;
+
+            if($opinion != null){
+                let signform = document.getElementById('signform');
+                signform.action = "/sign/refuse";
+                signform.submit();
+            }
         }
     }
 

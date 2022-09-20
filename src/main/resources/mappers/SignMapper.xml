@@ -986,7 +986,7 @@
             <if test="searchWriter != null and searchWriter != ''">
                 AND C.MEM_NAME LIKE '%' || #{ searchWriter } || '%'
             </if>
-            <if test="searchForm != null and searchForm != ''">
+            <if test="searchForm != null and searchForm != ''">appointmentList
                 AND D.SF_NAME LIKE '%' || #{ searchForm } || '%'
             </if>
             <if test="searchTitle != null and searchTitle != ''">
@@ -1150,5 +1150,19 @@
         WHERE A.RNUM >= #{ selectCriteria.startRow }
         ORDER BY 1 ASC
     </select>
+
+    <insert id="addReader" parameterType="hashmap">
+        INSERT
+        INTO REFERENCER A
+            (
+                 A.SIGN_NO
+               , A.REFERENCER_NO
+            )
+        VALUES
+            (
+              #{ signNo }
+            , #{ num }
+            )
+    </insert>
 
 </mapper>

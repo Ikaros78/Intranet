@@ -1,23 +1,29 @@
 @charset "utf-8";
 #contents{height: 955px;}
 #contents div{float: left;}
-#contents #container{margin: 36px 0 0 60px; width: 1550px; font-size: 20px; position: relative;}
+#contents #container{margin: 36px 0 80px 60px; width: 1550px; font-size: 20px; position: relative;}
 
 #contents #container h4{font-size: 20px;}
 #contents #container hr{width: 1550px; margin : 7px 0 30px 0;}
-#contents #container .title {height: 95px; background-color: #eee; padding : 45px 0 0 10px;}
+#contents #container div .notice {font-size: 15px; margin-top: -26px; margin-left: 20px; display: block;}
+#contents #container .title {height: 95px; background-color: #eee; padding : 45px 0 0 10px; margin-top: 10px;}
 #contents #container .title .writer{font-size: 17px; line-height: 50px; font-weight: bold;}
 #contents #container .title .date{font-size: 17px; line-height: 50px; font-weight: normal;}
-#contents #container .title .fileDown{font-size: 15px; display: block;}
-#contents #container .title .fileDown>span{margin-left: 5px;}
-#contents #container .title .fileDown:hover span span{color: #e25f27; text-decoration: underline;}
 
-#contents #container .body{width: 1490px; margin-top: 30px; height: 540px; overflow: auto; border: 1px solid #ddd; padding: 30px; font-size: 17px; 
+#contents #container .body{width: 1490px; margin-top: 60px; height: 340px; overflow: auto; border: 1px solid #ddd; padding: 30px; font-size: 17px;
     background-color: rgba(238, 238, 238, 0.384);}
 
-#contents #container .btnArea{position: absolute; right: 0; bottom: -55px;}
+#contents #container .btnArea{position: absolute; right: 0; top: 220px;}
 #contents #container button{width: 80px; height: 40px; font-size: 15px; border : none; border-radius: 5px; cursor:pointer;
     margin-top: 30px;}
 #contents #container button:nth-child(3){background-color: #FFA57E; color: #fff;}
 #contents #container button:hover{background-color: #e25f27; transition: all .3s; color: #fff;}
 
+.suggestBox{width: 160px; height: 40px; background-color: rgb(255, 255, 255);position: absolute; top: 140px; right: 100px; border-radius: 3px;}
+.suggestBox span{color: #000; width: 80px; line-height: 40px; position: absolute; right: 0; text-align: center; font-size: 17px; color:#e25f27;}
+.suggest{border: 1px solid #FFA57E  !important; background: #fff; position: absolute; top: -30px;}
+.cmtBox{width: 1550px; border: 1px solid #ddd; height: 70px; background-color: rgba(238, 238, 238, 0.384); position: relative;;}
+.cmt{width: 1420px; height: 40px; font-size: 16px; border : 1px solid #eee; margin: 15px 0 0 15px;}
+.bot{position: absolute;bottom: 15px; right: 15px; background-color: #FFA57E}
+.cmtTable{height: 70px; background-color: #eee; border-bottom : 1px solid rgb(201, 201, 201);width: 1552px; padding-left: 10px; font-size: 16px;}
+.cmtTable tr:first-child{color:#444;}

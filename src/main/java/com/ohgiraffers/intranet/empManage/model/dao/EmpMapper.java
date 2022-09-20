@@ -27,10 +27,10 @@ public interface EmpMapper {
     int appointmentUpdate(MemberDTO member);
 
     /* 인사 발령 수 조회 */
-    int selectHrListTotalCount(Map<String, String> searchMap);
+    int selectHrListTotalCount(Map<String, Object> searchMap);
 
     /* 인사 발령 리스트 조회 */
-    List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
+//    List<AppointmentDTO> selectHrList(SelectCriteria selectCriteria);
 
     /* 인사 발령 삭제(값 되돌리기) */
     int hrDelete(int appointment);
@@ -49,4 +49,6 @@ public interface EmpMapper {
 
     /* 이전 직원 번호 삭제 */
     int numDelete(MemberDTO member);
+
+    List<AppointmentDTO> selectHrList(Map<String, Object> searchList);
 }

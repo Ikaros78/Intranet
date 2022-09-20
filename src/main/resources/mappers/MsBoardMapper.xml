@@ -107,11 +107,15 @@
 										, C.MS_SEND_NUM
 									FROM  MS_BOARD C
 									<where>
-										<if test="searchCondition == 'msTitle'">
-							                AND   C.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
+
+										<if test="selectCriteria.searchCondition == 'msTitle'">
+							                AND   C.MS_TITLE  LIKE '%' || #{ selectCriteria.searchValue } || '%'
 										</if>
-										<if test="searchCondition == 'sendName'">
-											AND   C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+										<if test="selectCriteria.searchCondition == 'sendName'">
+											AND   C.MS_SEND_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
+										</if>
+										<if test="selectCriteria.searchCondition == 'recpName'">
+											AND   C.MS_RECP_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
 										</if>
 											AND   C.MS_READ_YN = 'N'
 											AND   C.MS_RECP_NUM = #{ memNum }
@@ -132,13 +136,13 @@
 		FROM MS_BOARD A
 		<where>
 			<if test="searchCondition == 'msTitle'">
-				A.MS_TITLE = #{ searchValue }
+	            AND A.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
 			</if>
 			<if test="searchCondition == 'sendName'">
-				A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+				AND A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 			<if test="searchCondition == 'recpName'">
-				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+				AND A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 		        AND A.MS_SEND_NUM = #{ memNum }
 		        AND A.MS_SEND_DEL = 'N'
@@ -187,11 +191,14 @@
 		, C.MS_SEND_NUM
 		FROM MS_BOARD C
 		<where>
-			<if test="searchCondition == 'sendName'">
-				C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+			<if test="selectCriteria.searchCondition == 'msTitle'">
+                AND   C.MS_TITLE  LIKE '%' || #{ selectCriteria.searchValue } || '%'
 			</if>
-			<if test="searchCondition == 'recpName'">
-				C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+			<if test="selectCriteria.searchCondition == 'sendName'">
+				AND   C.MS_SEND_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
+			</if>
+			<if test="selectCriteria.searchCondition == 'recpName'">
+				AND   C.MS_RECP_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
 			</if>
 			AND   C.MS_SEND_NUM = #{ memNum }
 			AND   C.MS_SEND_DEL = 'N'
@@ -211,13 +218,13 @@
 		FROM MS_BOARD A
 		<where>
 			<if test="searchCondition == 'msTitle'">
-				A.MS_TITLE = #{ searchValue }
+	            AND A.MS_TITLE  LIKE '%' || #{ searchValue } || '%'
 			</if>
 			<if test="searchCondition == 'sendName'">
-				A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
+				AND A.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 			<if test="searchCondition == 'recpName'">
-				A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
+				AND A.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
 			</if>
 		        AND A.MS_RECP_NUM = #{ memNum }
 		        AND A.MS_RECP_DEL = 'N'
@@ -267,15 +274,15 @@
 						, C.MS_SEND_NUM
 						FROM MS_BOARD C
 						<where>
-							<if test="searchCondition == 'msTitle'">
-								C.MS_TITLE LIKE '%' ||  #{ searchValue } || '%'
-							</if>
-							<if test="searchCondition == 'sendName'">
-								C.MS_SEND_NAME LIKE '%' || #{ searchValue } || '%'
-							</if>
-							<if test="searchCondition == 'recpName'">
-								C.MS_RECP_NAME LIKE '%' || #{ searchValue } || '%'
-							</if>
+						<if test="selectCriteria.searchCondition == 'msTitle'">
+			                   C.MS_TITLE  LIKE '%' || #{ selectCriteria.searchValue } || '%'
+						</if>
+						<if test="selectCriteria.searchCondition == 'sendName'">
+							AND   C.MS_SEND_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
+						</if>
+						<if test="selectCriteria.searchCondition == 'recpName'">
+							AND   C.MS_RECP_NAME LIKE '%' || #{ selectCriteria.searchValue } || '%'
+						</if>
 							AND C.MS_RECP_NUM = #{ memNum }
 							AND C.MS_RECP_DEL = 'N'
 						</where>

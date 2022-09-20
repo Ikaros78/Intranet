@@ -34,12 +34,11 @@
 					<select name="searchCondition" id="searchCondition"
 						style="border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;margin: 10px;">
 						<option value="msTitle">제목</option>
-						<option value="sendName">보낸사람</option>w
+						<option value="sendName">보낸사람</option>
 					</select>
-					<input type="search" name="searchValue" id="searchValue"
-						style="width: 300px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
-					<button
-						style="width:70px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">검색</button>
+					<input type="search" name="searchValue" id="searchValue" 
+					style="width: 300px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">
+					<button style="width:70px; border: 1px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px;">검색</button>
 				</form>
 			</div>
 			<button id="selectedElementsCnt" name="selectedElementsCnt" class="btn btn-danger" onclick="boardDelete()"
@@ -58,12 +57,10 @@
 						<th style="width: 100px; display: none;">글번호</th>
 					</tr>
 					<tr th:each="boardList : ${ boardList }">
-
-
-						<td><label class="checkbox-inline">
-								<input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
-									th:value="${boardList.msNo}" style="margin: 10px">
-							</label></td>
+					<td><label class="checkbox-inline">
+						<input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
+							th:value="${boardList.msNo}" style="margin: 10px">
+					</label></td>
 						<td name="click" id="click" th:text="${boardList.sendName}"></td>
 						<td name="click" id="click" th:text="${boardList.msTitle}"></td>
 						<td name="click" id="click" th:text="${boardList.sendDate}"></td>

@@ -155,13 +155,13 @@
     function btn_click(str){
         if(str=="sign"){
 
-            document.getElementById("getOpinion").value = prompt("결재의견을 입력해주세요","");
+            let $opinion = prompt("결재의견을 입력해주세요","");
 
-            let $opinion = document.getElementById("getOpinion").value;
+            document.getElementById("getOpinion").value = $opinion;
 
             console.log($opinion);
 
-            if($opinion != null){
+            if($opinion != null && $opinion != ''){
                 let signform = document.getElementById('signform');
                 signform.action = "/sign/approve";
                 signform.submit();
@@ -172,7 +172,7 @@
 
             let $opinion = document.getElementById("getOpinion").value;
 
-            if($opinion != null){
+            if($opinion != null && $opinion != ''){
                 let signform = document.getElementById('signform');
                 signform.action = "/sign/refuse";
                 signform.submit();

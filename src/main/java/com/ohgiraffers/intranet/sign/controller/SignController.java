@@ -142,7 +142,8 @@ public class SignController {
     }
 
     @GetMapping("/signChecked")
-    public ModelAndView signChecked(ModelAndView mv, HttpServletRequest request, @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
+    public ModelAndView signChecked(ModelAndView mv, HttpServletRequest request,
+                                    @AuthenticationPrincipal User user, RedirectAttributes rttr) throws SignApproveException {
 
         String getSignList = request.getParameter("checkArr");
         String[] signNoList = getSignList.split(",");

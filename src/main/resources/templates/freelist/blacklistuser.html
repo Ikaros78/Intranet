@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>basic</title>
+
+    <!-- 기본 공용 CSS -->
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+
+    <!-- 개별 페이지 CSS -->
+    <link rel="stylesheet" th:href="@{/css/freelist/hs_basic.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            ListUser();
+        });
+
+
+        function ListUser() {
+            var bound = document.getElementsByClassName('hs_board_search_keyword')[0].value;
+            var toggle = document.getElementsByClassName('hs_board_search_option')[0].value;
+
+            var act;
+
+            if(toggle == 'name') {
+                act = "ajaxBlacklistUserListName";
+            } else {
+                act = "ajaxBlacklistUserListEnum";
+            }
+
+            var params = {	ATTRIBUTE1 : bound, ACTION : act };
+            $.ajax({
+                type : "GET",
+                url : "/board/selajax",
+                data : params,
+                success : function(res){
+                    SetList(res);
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){
+                    alert("FAILD");
+                },
+                complete : function() {
+
+                }
+            });
+        }
+
+        function SetList(item) {
+            let $dom = document.querySelectorAll('.hs_table')[0].querySelectorAll('tbody')[0];
+
+            while ( $dom.hasChildNodes() )
+            {
+                $dom.removeChild( $dom.firstChild );
+            }
+
+            var tmphtml = document.createElement('html');
+            tmphtml.innerHTML = item;
+            var toLen = tmphtml.querySelectorAll('tr');
+
+            for(var i = 0; i < toLen.length; i++ ) {
+                var trow = document.createElement('tr');
+
+                var detailbtn = document.createElement('td');
+                detailbtn.className = 'bblackbtn';
+                detailbtn.innerHTML = '<input type="button" value="상세">';
+
+                var deletebtn = document.createElement('td');
+                deletebtn.className = 'bdelete';
+                deletebtn.innerHTML = '<input type="button" value="보기" onclick="toDetail(this)">';
+
+                toLen[i].querySelectorAll('[name=ajax-a1]')[0].className = 'name';
+                trow.append(toLen[i].querySelectorAll('[name=ajax-a1]')[0]);
+
+                toLen[i].querySelectorAll('[name=ajax-a2]')[0].className = 'employeenumber';
+                trow.append(toLen[i].querySelectorAll('[name=ajax-a2]')[0]);
+
+                toLen[i].querySelectorAll('[name=ajax-a3]')[0].className = 'mcount';
+                trow.append(toLen[i].querySelectorAll('[name=ajax-a3]')[0]);
+
+                toLen[i].querySelectorAll('[name=ajax-a4]')[0].className = 'bdate';
+                trow.append(toLen[i].querySelectorAll('[name=ajax-a4]')[0]);
+
+                //trow.append(detailbtn);
+                trow.append(deletebtn);
+
+                $dom.append(trow);
+            }
+        }
+
+        function toDetail(item){
+            var empno = item.parentElement.parentElement.querySelector('.employeenumber').innerText;
+            window.location.href = 'bldetail?empno=' + empno;
+        }
+    </script>
+</head>
+
+<body>
+    <div id="wrap">
+        <div th:replace="common/header.html"></div>
+        </div>
+        <div id="contents">
+
+            <div id="sideBar">
+                <h3>게시판</h3>
+                <ul>
+                    <li class="main">
+                        <a href="th:href=@{/board/list}">자유 게시판</a>
+                        <ul class="sub sub1">
+                            <li><a th:href="@{/board/list}">자유 게시판</a></li>
+                            <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="#">업무 게시판</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/deptNotice/list}">부서별 공지사항</a></li>
+                            <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="#">관리자 메뉴</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/board/bluser}">블랙리스트 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+               <div class="hs_content">
+                    <div class="hs_title">
+                         블랙리스트 관리
+                    </div>
+                    <div class="hs_board_main">
+                         <div class="hs_table_search">
+                              <select class="hs_board_search_option">
+                                   <option value="name">이름</option>
+                                   <option value="enumber">사원번호</option>
+                              </select>
+                              <input class="hs_board_search_keyword" type="text" placeholder="검색어를 입력해주세요">
+                             <input class="hs_board_search_button" type="button" onclick="ListUser()" value="🔍">
+                         </div>
+
+                         <table class="hs_table">
+                         <thead>
+                         <tr>
+                              <th>
+                                   이름
+                              </th>
+                              <th>
+                                   사원번호
+                              </th>
+                              <th>
+                                    누적 신고 횟수
+                              </th>
+                              <th>
+                                   등록날짜
+                              </th>
+                              <!--<th>접근관리</th>-->
+                              <th>
+                                   상세목록
+                              </th>
+                         </tr>
+                         </thead>
+                         <tbody>
+
+                         </tbody>
+                         </table>
+                         <div class="hs_table_foot">
+                              <input class="hs_board_lshift shiftbtn" type="button" value="<<">
+                              <input class="hs_board_left shiftbtn" type="button" value="<"><a class="hs_board_numbering">1</a>
+                              <input class="hs_board_right shiftbtn" type="button" value=">"><input class="hs_board_rshift shiftbtn" type="button" value=">>">
+                         </div>
+                    </div>
+               </div>
+          </div>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,149 @@
+.hs_content {
+    position: absolute;
+    margin-left: 250px;
+    top: 100px;
+    height: 100%;
+    width: calc(1920px - 290px);
+    padding: 20px;
+}
+
+.hs_table th, .hs_table td {
+    padding: 10px;
+}
+
+table.hs_table {
+    border-collapse: collapse;
+    border-color: black;
+    background: #f9f9f9;
+    width: 100%;
+}
+
+
+.shiftbtn {
+    background: transparent;
+    border: 0px;
+    width: 25px;
+    font-family: 'NanumSquare';
+    font-weight: 900;
+    color: lightgray;
+    font-size: 20px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+}
+
+a.hs_board_numbering {
+    width: 24px;
+    height: 20px;
+    padding-top: 5px;
+    padding-right: 1px;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 900;
+    color: #4b4b4b;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.hs_table_foot {
+    text-align: center;
+    margin-top: 30px;
+}
+
+a.hs_board_numbering:hover {
+    background: #FFA57E;
+    color: white;
+    border-radius: 15px;
+}
+
+.shiftbtn:hover {
+    color: black;
+}
+
+.hs_table td {
+    text-align: center;
+}
+
+table.hs_table>tbody>tr {
+    border-bottom: 1px solid lightgray;
+}
+
+table.hs_table>tbody>tr:last-child {
+    border-bottom: 0px;
+}
+
+.hs_table>thead>tr {border-top: 2px solid black;border-bottom: 2px solid black;}
+
+table.hs_table>tbody input[type=button] {
+    background: white;
+    width: 50px;
+    height: 30px;
+    border: 1px solid;
+    cursor: pointer;
+}
+
+table.hs_table>tbody input[type=button]:hover {
+    background: #dadada;
+}
+
+.hs_title {
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+}
+
+.hs_board_main {
+    padding: 15px 100px;
+}
+
+.hs_table_search {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+select.hs_board_search_option {
+    height: 25px;
+    font-size: 15px;
+    text-align: center;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+input.hs_board_search_keyword {
+    font-size: 15px;
+    height: 21px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+input.hs_board_search_button {
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.hs_title_subdiv {
+    padding: 20px;
+    font-size: 23px;
+}
+
+.hs_title_subdiv_title {
+    font-weight: 900;
+}
+
+.hs_title_subdiv div {
+    padding: 10px 0px;
+}
+
+input.hs_board_foot_btn {
+    background: #404040;
+    width: 70px;
+    height: 30px;
+    border: 0px;
+    color: white;
+    cursor: pointer;
+}
+
+input.hs_board_foot_btn:hover {
+    background: gray;
+}

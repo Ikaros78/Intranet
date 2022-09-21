@@ -224,6 +224,7 @@
               , A.SIGN_WRITER
               , A.SIGN_TITLE
               , B.MEM_NAME
+              , B.DEPT_RANK
               , D.DEPT_NAME
               , A.SIGN_CONTENT
               , A.REG_DATE

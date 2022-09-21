@@ -1,10 +1,7 @@
 package com.ohgiraffers.intranet.board.controller;
 
 
-import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
-import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
-import com.ohgiraffers.intranet.board.model.dto.EiCommentDTO;
+import com.ohgiraffers.intranet.board.model.dto.*;
 import com.ohgiraffers.intranet.board.model.service.BoardService;
 import com.ohgiraffers.intranet.common.paging.Pagenation;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
@@ -68,6 +65,109 @@ public class BoardController {
         return "redirect:/board/detail?no="+fr_no;
 
     }
+
+    @GetMapping("/ajax")
+    public ModelAndView cajax(ModelAndView mv, HttpServletRequest request) {
+        AjaxDTO cajax = new AjaxDTO();
+        String atr1 = request.getParameter("ATTRIBUTE1") == null ? "" : request.getParameter("ATTRIBUTE1");
+        String atr2 = request.getParameter("ATTRIBUTE2") == null ? "" : request.getParameter("ATTRIBUTE2");
+        String atr3 = request.getParameter("ATTRIBUTE3") == null ? "" : request.getParameter("ATTRIBUTE3");
+        String atr4 = request.getParameter("ATTRIBUTE4") == null ? "" : request.getParameter("ATTRIBUTE4");
+        String atr5 = request.getParameter("ATTRIBUTE5") == null ? "" : request.getParameter("ATTRIBUTE5");
+        String atr6 = request.getParameter("ATTRIBUTE6") == null ? "" : request.getParameter("ATTRIBUTE6");
+        String a_act = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
+        String a_call = request.getParameter("CALLBACK") == null ? "" : request.getParameter("CALLBACK");
+
+        cajax.setATTRIBUTE1(atr1);
+        cajax.setATTRIBUTE2(atr2);
+        cajax.setATTRIBUTE3(atr3);
+        cajax.setATTRIBUTE4(atr4);
+        cajax.setATTRIBUTE5(atr5);
+        cajax.setATTRIBUTE6(atr6);
+        cajax.setA_ACTION(a_act);
+        cajax.setA_CALLBACK(a_call);
+
+
+        log.info("atr1값 : " + cajax.getATTRIBUTE1());
+        log.info("atr2값 : " + cajax.getATTRIBUTE2());
+        log.info("atr3값 : " + cajax.getATTRIBUTE3());
+        log.info("atr4값 : " + cajax.getATTRIBUTE4());
+        log.info("atr5값 : " + cajax.getATTRIBUTE5());
+        log.info("atr6값 : " + cajax.getATTRIBUTE6());
+
+        int registResult = boardService.cajax(cajax);
+
+        List<SelAjaxDTO> selAjax = null;
+
+        mv.addObject("selAjax", selAjax);
+        mv.setViewName("ajax/json");
+
+        return mv;
+
+    }
+
+    @GetMapping("/selajax")
+    public ModelAndView selajax(ModelAndView mv, HttpServletRequest request) {
+        AjaxDTO cajax = new AjaxDTO();
+        String atr1 = request.getParameter("ATTRIBUTE1") == null ? "" : request.getParameter("ATTRIBUTE1");
+        String atr2 = request.getParameter("ATTRIBUTE2") == null ? "" : request.getParameter("ATTRIBUTE2");
+        String atr3 = request.getParameter("ATTRIBUTE3") == null ? "" : request.getParameter("ATTRIBUTE3");
+        String atr4 = request.getParameter("ATTRIBUTE4") == null ? "" : request.getParameter("ATTRIBUTE4");
+        String atr5 = request.getParameter("ATTRIBUTE5") == null ? "" : request.getParameter("ATTRIBUTE5");
+        String atr6 = request.getParameter("ATTRIBUTE6") == null ? "" : request.getParameter("ATTRIBUTE6");
+        String a_act = request.getParameter("ACTION") == null ? "" : request.getParameter("ACTION");
+        String a_call = request.getParameter("CALLBACK") == null ? "" : request.getParameter("CALLBACK");
+
+        cajax.setATTRIBUTE1(atr1);
+        cajax.setATTRIBUTE2(atr2);
+        cajax.setATTRIBUTE3(atr3);
+        cajax.setATTRIBUTE4(atr4);
+        cajax.setATTRIBUTE5(atr5);
+        cajax.setATTRIBUTE6(atr6);
+        cajax.setA_ACTION(a_act);
+        cajax.setA_CALLBACK(a_call);
+
+
+        log.info("atr1값 : " + cajax.getATTRIBUTE1());
+        log.info("atr2값 : " + cajax.getATTRIBUTE2());
+        log.info("atr3값 : " + cajax.getATTRIBUTE3());
+        log.info("atr4값 : " + cajax.getATTRIBUTE4());
+        log.info("atr5값 : " + cajax.getATTRIBUTE5());
+        log.info("atr6값 : " + cajax.getATTRIBUTE6());
+
+        List<SelAjaxDTO> selAjax = boardService.selectAjax(cajax);
+
+        mv.addObject("selAjax", selAjax);
+        mv.setViewName("ajax/json");
+
+        return mv;
+    }
+
+    @GetMapping("/bldetail")
+    public ModelAndView blacklistdetail(ModelAndView mv, HttpServletRequest request) {
+        String EmpNo = request.getParameter("empno");
+        mv.addObject("EmpNo",EmpNo);
+        mv.setViewName("freelist/blacklistdetail");
+
+        return mv;
+    }
+
+    @GetMapping("/blmgr")
+    public ModelAndView blacklistmanager(ModelAndView mv, HttpServletRequest request) {
+
+        mv.setViewName("freelist/blacklistmgr");
+
+        return mv;
+    }
+
+    @GetMapping("/bluser")
+    public ModelAndView blacklistuser(ModelAndView mv, HttpServletRequest request) {
+
+        mv.setViewName("freelist/blacklistuser");
+
+        return mv;
+    }
+
     @GetMapping("/list")
     public ModelAndView boardlist(HttpServletRequest request, ModelAndView mv){
 

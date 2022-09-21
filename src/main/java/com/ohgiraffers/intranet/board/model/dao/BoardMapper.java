@@ -1,9 +1,6 @@
 package com.ohgiraffers.intranet.board.model.dao;
 
-import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
-import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.EiCommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
+import com.ohgiraffers.intranet.board.model.dto.*;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -64,4 +61,18 @@ public interface BoardMapper {
     void eicommentDelete(String no);
 
     void boardcommentDelete(String no);
+
+    int cajax(AjaxDTO cajax);
+
+    List<SelAjaxDTO> ajaxBlacklistCnt(AjaxDTO cajax);
+    List<SelAjaxDTO> ajaxBlacklistCntNB(AjaxDTO cajax);
+    List<SelAjaxDTO> ajaxBlacklistUserListName(AjaxDTO cajax);
+    List<SelAjaxDTO> ajaxBlacklistUserListEnum(AjaxDTO cajax);
+    List<SelAjaxDTO> ajaxBlacklistDetailList(AjaxDTO cajax);
+    int ajaxBlacklistFRInsert(AjaxDTO cajax);
+    int ajaxBlacklistFRInsertDetail(AjaxDTO cajax);
+    int ajaxBlacklistNBInsert(AjaxDTO cajax);
+    int ajaxBlacklistNBInsertDetail(AjaxDTO cajax);
 }
+
+

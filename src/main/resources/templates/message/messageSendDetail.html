@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8">
+	<title>basic</title>
+	<link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/common/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common/basic.css}">
+</head>
+
+<body>
+	<div id="wrap">
+		<div th:replace="common/header.html"></div>
+		<div id="contents">
+			<div id="sideBar"  style="float: left;">
+				<h3>쪽지함</h3>
+				<ul>
+					<li class="main"><a href="/ms/msinsert">쪽지보내기</a></li>
+					<li class="main"><a href="/ms/recp">받은쪽지함</a></li>
+					<li class="main"><a href="/ms/send">보낸쪽지함</a></li>
+					<li class="main"><a href="/ms/allrecp">쪽지보관함</a></li>
+				</ul>
+			</div>
+			<h3 style="position: relative; top: 40px; left: 80px">상세보기</h3><br>
+			<div class="table-area" style="position: relative; top: 80px;left: 80px;width: 1350px;">
+			
+				<p class="title"><hr><br><br>
+				<spen>보낸 사람 : &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${ msBoard.sendName }"></span></spen><br><br>
+				<spen>보낸 시간 : &nbsp;&nbsp;&nbsp;&nbsp;<span class="date" th:text="${ msBoard.sendDate}"></span></spen><br><br><br><hr>
+		     	<a th:if="${ msBoard.originName != null }"
+		     	   class="fileDown" th:each=" msBoard : ${ msBoard.msFile }" 
+	        	   th:href="|/upload/msFile/ ${ msBoard.saveName }|"
+				   th:value="${ msBoard.originName }" download>
+				<span>다운로드(<span th:text="${ msBoard.originName }"></span>)</span></a></p>
+				<br>
+				<div class="" style="width: 1100px; height: 400px;">
+					<tr>
+						<p th:utext="${ msBoard.contents }" style="vertical-align: top; text-align: left;">
+				
+					</tr>
+				</div>
+					<hr style="width: 1100px; position: relative; left:250px;"><br>
+				<!--/*	<button class="list delete" id="deleteBtn"  onclick="removeCheck()" style="position: relative; top: 20px; left: 350px; padding: 10px 12px;">삭제</button> */-->
+					<button onclick="goBack()" style="position: relative; top: 20px; left: 250px; padding: 10px 12px;">뒤로가기</button>
+				</table>
+			</div>
+		</div>
+		
+
+
+        <script type="text/javascript">
+			function goBack() {
+				window.history.back();
+			}
+		</script>
+        
+	       
+		
+
+
+</body>
+
+</html>

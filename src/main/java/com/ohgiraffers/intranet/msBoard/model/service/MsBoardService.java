@@ -45,5 +45,7 @@ public interface MsBoardService {
 
 	void sendBoardDelete(MsBoardDTO msboardDTO);
 
+	MsBoardDTO selectSendBoardDetail(int msNo);
+
 	
 }

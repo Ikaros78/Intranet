@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>공지사항</title>
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
-    <link rel="stylesheet" th:href="@{/css/notice/noticeList.css}">
+    <link rel="stylesheet" th:href="@{/css/fileBoard/fileBoardList.css}">
 </head>
 <body>
     <div id="wrap">
@@ -27,33 +27,31 @@
                             <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
                         </ul>
                     </li>
-                    <li class="main"><a href="#">관리자 메뉴</a>
+                    <li class="main" sec:authorize="hasRole('ROLE_EM_ALL')"><a href="#">관리자 메뉴</a>
                         <ul class="sub sub2">
-                            <li><a th:href="@{/board/bluser}">블랙리스트 관리</a></li>
+                            <li><a th:href="@{/board/bluser}" sec:authorize="hasRole('ROLE_EM_ALL')">블랙리스트 관리</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
             <div id="container">
-                <h4>공지사항</h4><hr>
+                <h4>파일 게시판</h4><hr>
                 <p>전체 <span th:text="${ selectCriteria.totalCount }"></span></p>
-                <form th:action="@{/fileList/fileList}" method="get">
+                <form th:action="@{/file/fileList}" method="get">
                     <input type="hidden" name="currentPage" value="1">
 <!--                    <div class="date">-->
 <!--                        <input type="date"> ~ <input type="date">-->
 <!--                    </div>-->
                     <select name="searchCondition" id="searchCondition">
-                        <option value="title">제목</option>
-                        <option value="writer">작성자</option>
+                        <option value="fbTitle">제목</option>
                     </select>
-                    <input type="search" name="searchValue" id="searchValue">
+                    <input type="search" name="searchValue" id="searchValue" >
                     <button>검색</button>
                 </form>
                 <table id="listArea">
                     <thead>
                         <tr>
                         <th>번호</th>
-                        <th><img th:src="@{/images/clip.png}" alt="첨부파일"></th>
                         <th>제목</th>
                         <th>작성자</th>
                         <th>등록일</th>
@@ -62,10 +60,8 @@
                     <tbody>
                         <tr th:each="fileList : ${ fileList }">
                             <td th:text="${ fileList.fbNo }"></td>
-                  			<td th:if="${fileList.file.ffOriginName != null}"><img th:src="@{/images/clip.png}" alt="첨부파일"></td>
-                            <td th:if="${fileList.file.ffOriginName == null}"></td>
                             <td th:text="${ fileList.fbTitle }"></td>
-                            <!--/*        */-->
+                            <td><span th:text="${ fileList.member.mem_name}"></span>&nbsp;
                             <td th:text="${ fileList.fbDate }"></td>
                         </tr>
                     </tbody>    

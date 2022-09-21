@@ -44,7 +44,8 @@
 			<div class="table-area">
 				<table align="center" id="listArea">
 					<tr style="background-color: #dddddd; height: 50px;">
-						<th><input type="checkbox" id="allCheckBox" name="allCheckBox" onclick="allChecked();" style="margin: 10px"></th>
+						<th style="width: 100px; ">
+						<input type="checkbox" id="allCheckBox" name="allCheckBox" onclick="allChecked();" style="margin: 10px"></th>
 						<th style="width: 200px;">보낸사람</th>
 						<th style="width: 700px;">제목</th>
 						<th style="width: 200px;">날짜</th>
@@ -102,7 +103,7 @@
 				$tds[i].onclick = function() {
 					const msNo = this.parentNode.children[4].innerText;
 					/* chileren[ 행에 있는 index 위치 찾는거 ] */
-					location.href = "/ms/msdetail?msNo=" + msNo;
+					location.href = "/ms/senddetail?msNo=" + msNo;
 				}
 			}
 		}
@@ -181,7 +182,6 @@
 							   data : { arr : JSON.stringify(arr) },
 							   success:function(data){
 								
-									alert("정말 정말 정말로 삭제하시겠습니까? 복구 안되는데.. 진짜 맞아요? 맞아? 삭제가 뭔지 알죠? 삭제입니다!!!!!!!!!!!");
 									console.log("data +++++" + data);
 									location.reload();
 								},

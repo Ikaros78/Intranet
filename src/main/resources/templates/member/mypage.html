@@ -30,30 +30,30 @@
       <h3><span th:text="${#authentication.getPrincipal().getMem_name()}"></span>님<br>환영합니다</h3>
       <script>
 
-        $.ajax({
-
-          url: "wait",
-          /* 타입 : get */
-          /* 데이터 : gsongson */
-
-          success:function(data){
-
-            console.table(data);
-
-            const $table = $("#list");
-            $table.html(""); // 초기화
-
-            let $totalCount = $('<span>').text(data);
-
-            $table.append($totalCount);
-
-          },
-          error: function(error) {
-
-            console.log(error);
-          }
-
-        });
+        // $.ajax({
+        //
+        //   url: "wait",
+        //   /* 타입 : get */
+        //   /* 데이터 : gsongson */
+        //
+        //   success:function(data){
+        //
+        //     console.table(data);
+        //
+        //     const $table = $("#list");
+        //     $table.html(""); // 초기화
+        //
+        //     let $totalCount = $('<span>').text(data);
+        //
+        //     $table.append($totalCount);
+        //
+        //   },
+        //   error: function(error) {
+        //
+        //     console.log(error);
+        //   }
+        //
+        // });
 
       </script>
       <div id="sig">

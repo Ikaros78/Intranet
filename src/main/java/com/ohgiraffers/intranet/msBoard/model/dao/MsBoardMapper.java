@@ -61,5 +61,10 @@ public interface MsBoardMapper {
 
 	CharSequence count_receive_note(String payload);
 
+	MsBoardDTO selectSendBoardDetail(int msNo);
+
+	void YNSendChangeMsBoard(int msNo);
+
+
 
 }

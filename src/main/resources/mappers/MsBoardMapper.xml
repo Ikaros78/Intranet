@@ -19,6 +19,7 @@
 		<result property="contents" column="MS_CONTENTS" />
 		<result property="sendNum" column="MS_SEND_NUM" />
 		<result property="memNum" column="MEM_NUM" />
+		<result property="sendreanYN" column="MS_SEND_YN" />
 		<collection property="msFile" resultMap="MsFileResultMap"/>
 	</resultMap>
 	
@@ -159,6 +160,7 @@
 		, A.MS_SEND_DATE
 		, A.MS_RECP_DATE
 		, A.MS_READ_YN
+		, A.MS_SEND_YN
 		, A.MS_SEND_DEL
 		, A.MS_RECP_DEL
 		, A.MS_RECP_NUM
@@ -172,6 +174,7 @@
 		, B.MS_SEND_DATE
 		, B.MS_RECP_DATE
 		, B.MS_READ_YN
+		, B.MS_SEND_YN
 		, B.MS_SEND_DEL
 		, B.MS_RECP_DEL
 		, B.MS_RECP_NUM
@@ -184,6 +187,7 @@
 		, C.MS_SEND_DATE
 		, C.MS_RECP_DATE
 		, C.MS_READ_YN
+		, C.MS_SEND_YN
 		, C.MS_SEND_DEL
 		, C.MS_RECP_DEL
 		, C.MS_RECP_NUM
@@ -368,6 +372,25 @@
         LEFT JOIN MS_FILE B ON (A.MS_NO = B.MS_NO)
 		WHERE A.MS_NO =	#{ msNo }
 	</select>
+	
+	<select id="selectSendBoardDetail" resultMap="MsboardResultMap">
+		SELECT
+	      A.MS_NO
+		, A.MS_TITLE
+		, A.MS_SEND_NAME
+		, A.MS_RECP_NAME
+		, A.MS_SEND_DATE
+		, A.MS_RECP_DATE
+		, A.MS_CONTENTS
+		, A.MS_READ_YN
+		, A.MEM_NUM
+        , B.MSF_ORIGINAL_NAME
+        , B.MSF_SAVE_NAME
+        , B.MSF_NO
+		FROM MS_BOARD A
+        LEFT JOIN MS_FILE B ON (A.MS_NO = B.MS_NO)
+		WHERE A.MS_NO =	#{ msNo }
+	</select>
 
 	<update id="YNChangeMsBoard">
 		UPDATE
@@ -379,6 +402,15 @@
 		AND A.MS_READ_YN = 'N'
 	</update>
 <!-- 비동기 처리를 하기위해서 만듬 ,보낸사람 부서 명 및 이름 NUM 을 가져오기 위한  -->
+
+	<update id="YNSendChangeMsBoard">
+		UPDATE
+		MS_BOARD A
+		SET A.MS_SEND_YN = 'Y'
+		WHERE
+		A.MS_NO = #{ msNo }
+		AND A.MS_SEND_YN = 'N'
+	</update>
 
 	<select id="getdeptList" resultMap="deptResultMap">
 		SELECT
@@ -419,6 +451,7 @@
        FROM MEMBER B
       WHERE A.MS_RECP_NUM = B.MEM_NUM)
 	</update>
+	
 	
 	
 	<!-- 진짜 삭제 버튼 지우기  -->

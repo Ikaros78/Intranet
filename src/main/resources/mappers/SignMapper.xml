@@ -206,7 +206,7 @@
             AND F.IS_APPROVED = 'N'
             AND C.IS_TEMP = 'N'
         </where>
-        ORDER BY C.SIGN_NO DESC
+        ORDER BY C.SIGN_NO ASC
         ) B
         <![CDATA[
                   WHERE ROWNUM <= #{ selectCriteria.endRow }
@@ -315,6 +315,7 @@
                         C.SF_NAME LIKE '%'|| #{ searchName } || '%'
                     </if>
                 </where>
+                ORDER BY C.SF_CODE ASC
                 ) B
                 <![CDATA[
                           WHERE ROWNUM <= #{ selectCriteria.endRow }

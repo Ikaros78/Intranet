@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>부서별 공지사항:등록</title>
@@ -36,9 +36,9 @@
                         <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
                     </ul>
                 </li>
-                <li class="main"><a href="#">관리자 메뉴</a>
+                <li class="main" sec:authorize="hasRole('ROLE_EM_ALL')"><a href="#">관리자 메뉴</a>
                     <ul class="sub sub2">
-                        <li><a th:href="@{/board/bluser}">블랙리스트 관리</a></li>
+                        <li><a th:href="@{/board/bluser}" sec:authorize="hasRole('ROLE_EM_ALL')">블랙리스트 관리</a></li>
                     </ul>
                 </li>
             </ul>

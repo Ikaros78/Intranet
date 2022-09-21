@@ -46,7 +46,7 @@
 			<div class="table-area">
 				<table align="center" id="listArea">
 					<tr style="background-color: #dddddd; height: 50px;">
-						<th>
+						<th style="width: 100px; ">
 							<label class="checkbox-inline">
 								<input type="checkbox" id="allCheckBox" onclick="allChecked()">
 							</label>
@@ -194,7 +194,6 @@
 						data: {arr: JSON.stringify(arr)},
 						success: function (data) {
 
-							alert("가냐?");
 							console.log("data +++++" + data);
 							location.reload();
 						},

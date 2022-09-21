@@ -10,6 +10,7 @@ import com.ohgiraffers.intranet.sign.model.dto.SignFileDTO;
 import com.ohgiraffers.intranet.sign.model.dto.SignFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 전자결재 일괄결재용 메소드 */
+    @Transactional
     @Override
     public int updateSignChecked(Map<String, Object> signMap) throws SignApproveException {
 
@@ -104,6 +106,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 결재용 메소드 */
+    @Transactional
     @Override
     public int approveSign(Map<String, Object> approve) throws SignApproveException {
 
@@ -118,6 +121,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 결재 반려용 메소드 */
+    @Transactional
     @Override
     public int refuseSign(Map<String, Object> refuse) throws SignApproveException {
 
@@ -215,6 +219,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 선택된 임시저장 결재 일괄삭제용 메소드 */
+    @Transactional
     @Override
     public int deleteSignChecked(Map<String, Object> signMap) throws SignApproveException {
 
@@ -265,6 +270,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 결재 등록용 메소드 */
+    @Transactional
     @Override
     public int registSign(Map<String, String> insertMap) throws SignApproveException {
 
@@ -278,6 +284,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 결재선 등록용 메소드 */
+    @Transactional
     @Override
     public int registApprover(Map<String, String> approver) throws SignApproveException {
 
@@ -290,6 +297,7 @@ public class SignServiceImpl implements SignService {
         return result;
     }
     /* 결재선 최종결재자 등록용 메소드 */
+    @Transactional
     @Override
     public int registFianlApprover(Map<String, String> approver) throws SignApproveException {
 
@@ -303,6 +311,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 수신처 등록용 메소드 */
+    @Transactional
     @Override
     public int registReceiver(Map<String, String> receiver) throws SignApproveException {
 
@@ -316,6 +325,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 참조자 등록용 메소드 */
+    @Transactional
     @Override
     public int registReferencer(Map<String, String> referencer) throws SignApproveException {
 
@@ -329,6 +339,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 첨부파일 등록용 메소드 */
+    @Transactional
     @Override
     public int signFileInsert(SignFileDTO signFile) throws SignApproveException {
 
@@ -342,6 +353,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 결재 임시저장용 메소드 */
+    @Transactional
     @Override
     public int registTempSign(Map<String, String> insertMap) throws SignApproveException {
 
@@ -355,6 +367,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 임시저장한 결재 삭제용 메소드 */
+    @Transactional
     @Override
     public int deleteSign(int signNo) throws SignApproveException {
 
@@ -404,6 +417,7 @@ public class SignServiceImpl implements SignService {
     }
 
     /* 열람권한 추가용 메소드 */
+    @Transactional
     @Override
     public int addReader(Map<String, Object> numMap) {
 

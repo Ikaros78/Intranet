@@ -57,7 +57,36 @@
         <result property="fr_no" column="FR_NO"/>
 
         <association property="member" resultMap="memberResultMap"/>
+
+
     </resultMap>
+
+    <resultMap id="boardeicomment" type="com.ohgiraffers.intranet.board.model.dto.EiCommentDTO">
+        <id property="nc_no" column="NC_NO"/>
+        <result property="contents" column="NC_CONTENTS"/>
+        <result property="date" column="NC_DATE"/>
+        <result property="mem_num" column="MEM_NUM"/>
+        <result property="nb_no" column="NB_NO"/>
+
+        <association property="member" resultMap="memberResultMap"/>
+
+
+    </resultMap>
+
+    <resultMap id="cajaxselect" type="com.ohgiraffers.intranet.board.model.dto.SelAjaxDTO">
+        <result property="a1" column="A1"/>
+        <result property="a2" column="A2"/>
+        <result property="a3" column="A3"/>
+        <result property="a4" column="A4"/>
+        <result property="a5" column="A5"/>
+        <result property="a6" column="A6"/>
+        <result property="a7" column="A7"/>
+        <result property="a8" column="A8"/>
+        <result property="a9" column="A9"/>
+        <result property="a10" column="A10"/>
+    </resultMap>
+
+
 
     <select id="selectBoardList" resultMap="boardResultMap">
         SELECT A.RNUM
@@ -82,15 +111,10 @@
         , C.FR_VIEWS
         , C.MEM_NUM
         FROM FR_FREE C
-        <if test="searchCondition == 'writer'">
-            JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
-        </if>
+
         <where>
             <if test="searchCondition == 'title'">
-                C.FR_TITLE LIKE '%' || #{ searchValue } || '%'
-            </if>
-            <if test="searchCondition == 'writer'">
-                D.MEM_NAME LIKE '%' || #{ searchValue } || '%'
+              AND C.FR_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
         </where>
         ORDER BY C.FR_NO DESC
@@ -108,13 +132,9 @@
     <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
         FROM FR_FREE A
-        <if test="searchCondition == 'writer'">
-            JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
-        </if>
+
         <where>
-            <if test="searchCondition == 'writer'">
-                B.MEM_NAME LIKE '%' || #{ searchValue } || '%'
-            </if>
+
             <if test="searchCondition == 'title'">
                 A.FR_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
@@ -174,12 +194,7 @@
 
     </update>
 
-    <delete id="boardDelete" >
-     DELETE
-     FROM FR_FREE
-     WHERE FR_NO = #{ no }
 
-    </delete>
 
 
     <select id="selectBoardListe" resultMap="eiboardResultMap">
@@ -207,7 +222,7 @@
 
         <where>
             <if test="searchCondition == 'title'">
-                C.NB_TITLE LIKE '%' || #{ searchValue } || '%'
+                AND  C.NB_TITLE LIKE '%' || #{ searchValue } || '%'
             </if>
 
         </where>
@@ -283,14 +298,6 @@
 
     </update>
 
-
-    <delete id="eiboardDelete" >
-        DELETE
-        FROM NB_NONE
-        WHERE NB_NO = #{ no }
-
-    </delete>
-
     <insert id="boardcomment">
         INSERT
         INTO FC_FREE_COMMENT A(
@@ -320,10 +327,225 @@
           LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
      WHERE FR_NO = #{ fr_no }
     </select>
+<!--        익명 인설트-->
+    <insert id="boardeicomment">
+        INSERT
+        INTO NC_NONE_COMMENT A(
+            A.NC_NO
+           ,A.NC_CONTENTS
+           ,A.NC_DATE
+           ,A.MEM_NUM
+           ,A.NB_NO
+           ) VALUES(
+            'NC' || SEQ_NC_NO.NEXTVAL
+                ,#{contents}
+                ,SYSDATE
+                ,#{mem_num}
+                ,#{nb_no}
+            )
+    </insert>
+<!--            익명 셀렉트-->
+    <select id="selecteiComentList" resultMap="boardeicomment">
+        SELECT
+            A.NC_NO
+             , A.NC_CONTENTS
+             , A.NC_DATE
+             , A.MEM_NUM
+             , A.NB_NO
+             , B.MEM_NAME
+        FROM NC_NONE_COMMENT A
+                 LEFT JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        WHERE NB_NO = #{ nb_no }
+    </select>
+
+    <delete id="eeiboardDelete" >
+        DELETE
+        FROM NC_NONE_COMMENT
+        WHERE NB_NO = #{ no }
+
+    </delete>
 
 
+    <delete id="eiboardDelete" >
+        DELETE
+        FROM NB_NONE
+        WHERE NB_NO = #{ no }
+
+    </delete>
 
 
+    <delete id="boardcommentDelete" >
+        DELETE
+        FROM FC_FREE_COMMENT
+        WHERE FR_NO = #{ no }
+
+    </delete>
 
 
+    <delete id="boardDelete" >
+        DELETE
+        FROM FR_FREE
+        WHERE FR_NO = #{ no }
+
+    </delete>
+
+    <select id="ajaxBlacklistCnt" resultMap="cajaxselect">
+        -- 기존에 블랙리스트 있는지 여부 (0 이상이면 있다) for 공용
+        SELECT TO_CHAR(count(1)) AS a1
+             ,' ' a2
+             ,' ' a3
+             ,' ' a4
+             ,' ' a5
+             ,' ' a6
+             ,' ' a7
+             ,' ' a8
+             ,' ' a9
+             ,' ' a10
+        FROM MEM_BLACKLIST_AUTH
+        WHERE MEM_NUM = (SELECT MEM_NUM FROM FR_FREE
+                         WHERE FR_NO = #{ ATTRIBUTE1 })
+    </select>
+
+    <insert id="ajaxBlacklistFRInsert">
+        -- 없으면 새로생성(권한자는 일단 전부 부여로) for 자유게시판
+        INSERT INTO MEM_BLACKLIST_AUTH
+        SELECT	MEM_NUM
+             ,'Y' -- FR_AUTH_VIEW : 자유게시판 게시글보기 Y/N
+             ,'Y' -- FR_AUTH_WRITE : 자유게시판 게시글쓰기 Y/N
+             ,'Y' -- FR_AUTH_COMMENT : 자유게시판 댓글쓰기 Y/N
+             ,'Y' -- AN_AUTH_VIEW : 익명게시판 게시글보기 Y/N
+             ,'Y' -- AN_AUTH_WRITE : 익명게시판 게시글쓰기 Y/N
+             ,'Y' -- AN_AUTH_COMMENT : 익명게시판 댓글쓰기 Y/N
+             ,sysdate -- CREATION_DATE : TIMESTAMP,
+             ,sysdate -- LAST_UPDATE_DATE : TIMESTAMP
+        FROM FR_FREE
+        WHERE FR_NO = #{ ATTRIBUTE1 }
+    </insert>
+
+    <insert id="ajaxBlacklistFRInsertDetail">
+        -- 없으면 새로생성(권한자는 일단 전부 부여로) for 자유게시판
+        INSERT INTO MEM_BLACKLIST_DETAIL
+        SELECT	DECODE((SELECT MAX(SEQ) FROM MEM_BLACKLIST_DETAIL),NULL,1,(SELECT MAX(SEQ) FROM MEM_BLACKLIST_DETAIL)+1)
+             ,SYSDATE
+             ,FF.MEM_NUM
+             ,#{ ATTRIBUTE1 }
+             ,'FR'
+             ,SUBSTR(#{ ATTRIBUTE2 },3)
+             ,'N'
+             ,SYSDATE
+             ,SYSDATE
+        FROM 	FR_FREE FF
+        WHERE   FF.FR_NO = #{ ATTRIBUTE2 }
+    </insert>
+
+    <select id="ajaxBlacklistCntNB" resultMap="cajaxselect">
+        -- 기존에 블랙리스트 있는지 여부 (0 이상이면 있다) for 공용
+        SELECT TO_CHAR(count(1)) AS a1
+             ,' ' a2
+             ,' ' a3
+             ,' ' a4
+             ,' ' a5
+             ,' ' a6
+             ,' ' a7
+             ,' ' a8
+             ,' ' a9
+             ,' ' a10
+        FROM MEM_BLACKLIST_AUTH
+        WHERE MEM_NUM = (SELECT MEM_NUM FROM NB_NONE
+                         WHERE NB_NO = #{ ATTRIBUTE1 })
+    </select>
+
+    <insert id="ajaxBlacklistNBInsert">
+        -- 없으면 새로생성(권한자는 일단 전부 부여로) for 자유게시판
+        INSERT INTO MEM_BLACKLIST_AUTH
+        SELECT	MEM_NUM
+             ,'Y' -- FR_AUTH_VIEW : 자유게시판 게시글보기 Y/N
+             ,'Y' -- FR_AUTH_WRITE : 자유게시판 게시글쓰기 Y/N
+             ,'Y' -- FR_AUTH_COMMENT : 자유게시판 댓글쓰기 Y/N
+             ,'Y' -- AN_AUTH_VIEW : 익명게시판 게시글보기 Y/N
+             ,'Y' -- AN_AUTH_WRITE : 익명게시판 게시글쓰기 Y/N
+             ,'Y' -- AN_AUTH_COMMENT : 익명게시판 댓글쓰기 Y/N
+             ,sysdate -- CREATION_DATE : TIMESTAMP,
+             ,sysdate -- LAST_UPDATE_DATE : TIMESTAMP
+        FROM NB_NONE
+        WHERE NB_NO = #{ ATTRIBUTE1 }
+    </insert>
+
+    <insert id="ajaxBlacklistNBInsertDetail">
+        -- 없으면 새로생성(권한자는 일단 전부 부여로) for 자유게시판
+        INSERT INTO MEM_BLACKLIST_DETAIL
+        SELECT	DECODE((SELECT MAX(SEQ) FROM MEM_BLACKLIST_DETAIL),NULL,1,(SELECT MAX(SEQ) FROM MEM_BLACKLIST_DETAIL)+1)
+             ,SYSDATE
+             ,FF.MEM_NUM
+             ,#{ ATTRIBUTE1 }
+             ,'NB'
+             ,SUBSTR(#{ ATTRIBUTE2 },3)
+             ,'N'
+             ,SYSDATE
+             ,SYSDATE
+        FROM 	NB_NONE FF
+        WHERE   FF.NB_NO = #{ ATTRIBUTE2 }
+    </insert>
+
+    <select id="ajaxBlacklistUserListName" resultMap="cajaxselect">
+        -- 블랙리스트 관리 > 리스트 :: SELECT (사원이름)
+        SELECT  MEM.MEM_NAME								a1
+        ,MBA.MEM_NUM 								a2
+        ,COUNT(MBD.MEM_NUM)							a3
+        ,TO_CHAR(MBA.CREATION_DATE,'YYYY/MM/DD')	a4
+        ,' '	a5
+        ,' '	a6
+        ,' '	a7
+        ,' '	a8
+        ,' '	a9
+        ,' '	a10
+
+        FROM	MEM_BLACKLIST_AUTH MBA
+        ,MEMBER MEM
+        ,MEM_BLACKLIST_DETAIL MBD
+        WHERE	1=1
+        AND 	MBA.MEM_NUM = MEM.MEM_NUM
+        AND  MBA.MEM_NUM = MBD.MEM_NUM
+        AND  MEM.MEM_NAME LIKE #{ ATTRIBUTE1 } || '%'
+        GROUP BY MEM.MEM_NAME, MBA.MEM_NUM, TO_CHAR(MBA.CREATION_DATE,'YYYY/MM/DD')
+        ORDER BY MEM.MEM_NAME
+    </select>
+
+    <select id="ajaxBlacklistUserListEnum" resultMap="cajaxselect">
+        SELECT  MEM.MEM_NAME								a1		-- 이름
+        ,MBA.MEM_NUM 								a2	-- 사원번호
+        ,COUNT(MBD.MEM_NUM)								a3		-- 누적신고횟수
+        ,TO_CHAR(MBA.CREATION_DATE,'YYYY/MM/DD')	a4	-- 등록날짜
+        ,' '	a5
+        ,' '	a6
+        ,' '	a7
+        ,' '	a8
+        ,' '	a9
+        ,' '	a10
+
+        FROM	MEM_BLACKLIST_AUTH MBA
+        ,MEMBER MEM
+        ,MEM_BLACKLIST_DETAIL MBD
+        WHERE	1=1
+        AND 	MBA.MEM_NUM = MEM.MEM_NUM
+        AND  MBA.MEM_NUM = MBD.MEM_NUM
+        AND  MEM.MEM_NUM LIKE #{ ATTRIBUTE1 } || '%'
+        GROUP BY MEM.MEM_NAME, MBA.MEM_NUM, TO_CHAR(MBA.CREATION_DATE,'YYYY/MM/DD')
+        ORDER BY MEM.MEM_NAME
+    </select>
+
+    <select id="ajaxBlacklistDetailList" resultMap="cajaxselect">
+        SELECT	TO_CHAR(DEC_DATE,'YYYY/MM/DD') a1 -- 신고날짜
+                ,DESCRIPTION	a2 -- 신고사유
+                ,'처리완료' 			a3-- 처리내역
+             ,' ' a4
+                ,' '	a5
+                ,' '	a6
+                ,' '	a7
+                ,' '	a8
+                ,' '	a9
+                ,' '	a10
+        FROM	MEM_BLACKLIST_DETAIL
+        WHERE  MEM_NUM = #{ ATTRIBUTE1 } -- 멤버번호
+    </select>
 </mapper>

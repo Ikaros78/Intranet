@@ -1,12 +1,105 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="UTF-8">
   <title>익명게시판:상세조회</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
   <link rel="stylesheet" th:href="@{/css/common/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common/basic.css}">
   <link rel="stylesheet" th:href="@{/css/freelist/bordDetail.css}">
+  <link rel="stylesheet" th:href="@{/css/freelist/freeDetil.css}">
+  <script>
+    document.addEventListener('DOMContentLoaded',function(){
+      let bodydom = document.getElementsByClassName('body')[0];
+      let rephtml = bodydom.innerHTML;
+      rephtml = rephtml.replaceAll('&lt;','<').replaceAll('&gt;','>');
+      bodydom.innerHTML = rephtml;
+    });
+
+    function Overlay_Singo($toggle) {
+      if($toggle) {
+        var title = document.querySelectorAll('p.title')[0].querySelectorAll('span')[0].innerText;
+        var writer = document.querySelectorAll('p.title')[0].querySelectorAll('span')[1].innerText;
+        document.querySelectorAll('p[title]')[0].innerText = title;
+        document.querySelectorAll('p[writer]')[0].innerText = writer;
+        document.querySelectorAll('[name=conf_sel]')[0].checked = true;
+        document.getElementsByClassName('overlay')[0].style.display = 'block';
+      } else {
+        document.getElementsByClassName('overlay')[0].style.display = 'none';
+      }
+    }
+
+    function Board_Singo() {
+      var board = nb_no.value;
+      var params = {	ATTRIBUTE1 : board	, ACTION : "ajaxBlacklistCntNB" };
+      $.ajax({
+        type : "GET",
+        url : "/board/selajax",
+        data : params,
+        success : function(res){
+          BlackListSearch(res);
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown){
+          alert("FAILD");
+        }
+      });
+    }
+
+    function BlackListSearch(res) {
+      let tmphtml = document.createElement('html');
+      tmphtml.innerHTML = res;
+      console.log(tmphtml.querySelectorAll('[name=ajax-a1]')[0].innerText);
+      let cnt = Number(tmphtml.querySelectorAll('[name=ajax-a1]')[0].innerText);
+      if(cnt == 0) {
+        BlackMemAdd();
+      } else {
+        BlackListAdd();
+      }
+    }
+
+    function BlackMemAdd() {
+      var board = nb_no.value;
+      var params = {	ATTRIBUTE1 : board	, ACTION : "ajaxBlacklistNBInsert" };
+      $.ajax({
+        type : "GET",
+        url : "/board/ajax",
+        data : params,
+        success : function(res){
+          alert("블랙리스트에 추가하였습니다.");
+          BlackListAdd();
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown){
+          alert("FAILD");
+        },
+        complete : function() {
+
+        }
+      });
+    }
+
+    function BlackListAdd() {
+      var board = nb_no.value;
+      var params = {	ATTRIBUTE1 : document.querySelectorAll('[name=conf_sel]:checked')[0].parentElement.querySelector('span').innerText,
+        ATTRIBUTE2 : board	,
+        ACTION : "ajaxBlacklistNBInsertDetail" };
+      $.ajax({
+        type : "GET",
+        url : "/board/ajax",
+        data : params,
+        success : function(res){
+          alert("신고목록에 추가하였습니다.");
+        },
+        error : function(XMLHttpRequest, textStatus, errorThrown){
+          alert("FAILD");
+        },
+        complete : function() {
+          Overlay_Singo(false);
+        }
+      });
+    }
+
+  </script>
 </head>
 <body>
 <div id="wrap" style="margin-top: -20px;">
@@ -15,7 +108,8 @@
     <div id="sideBar">
       <h3>게시판</h3>
       <ul>
-        <li class="main"><a href="../free/freeList.html">자유 게시판</a>
+        <li class="main">
+          <a href="th:href=@{/board/list}">자유 게시판</a>
           <ul class="sub sub1">
             <li><a th:href="@{/board/list}">자유 게시판</a></li>
             <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
@@ -23,19 +117,21 @@
         </li>
         <li class="main"><a href="#">업무 게시판</a>
           <ul class="sub sub2">
-            <li><a href="#">부서별 공지사항</a></li>
-            <li><a href="#">파일 게시판</a></li>
+            <li><a th:href="@{/deptNotice/list}">부서별 공지사항</a></li>
+            <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
+          </ul>
+        </li>
+        <li class="main"><a href="#" sec:authorize="hasRole('ROLE_EM_ALL')">관리자 메뉴</a>
+          <ul class="sub sub2">
+            <li><a th:href="@{/board/bluser}" sec:authorize="hasRole('ROLE_EM_ALL')">블랙리스트 관리</a></li>
           </ul>
         </li>
       </ul>
-      <div class="admin">
-        <a href="../blacklist/blacklist management.html">게시판관리(관리자)</a>
-      </div>
     </div>
     <div id="container">
       <h4>익명게시판</h4><hr>
       <div>
-        <img src="resources/images/circleMark.png" alt="">
+        <img th:src="@{/images/circleMark.png}" alt="">
         <span>부적절한 게시글 및 댓글의 경우 신고를 할 수 있습니다. 신고가 누적되면 게시판 사용이 제한되오니 유의 바랍니다.</span>
         <p class="title">
 
@@ -44,32 +140,92 @@
           <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
           <span> </span><span class="date" th:text="${ eiboard.date }"></span>
 
-        <div class="d-flex justify-content-end">
-          <button class="suggest">추천</button>
-        </div>
+
         <div class="body">
           <p th:utext="${ eiboard.contents }">
         </div>
 
       </div>
 
-      <div>
-        <input type="text">
-        <button class="bot">댓글</button>
-        <table>
-
-
-
-
-        </table>
-
-      </div>
       <div class="btnArea">
-        <button class="list singo">신고</button>
+        <button class="list singo" onclick="Overlay_Singo(true)">신고</button>
         <button th:if="${#authentication.getPrincipal().getMem_num() eq eiboard.member.mem_num }" class="list update"
                 th:onclick="|location.href='@{ /board/ei/update(no=${ eiboard.no }) }'|">수정</button>
         <button th:if="${#authentication.getPrincipal().getMem_num() eq eiboard.member.mem_num }" class="list delete" id="deleteBtn" onclick="removeCheck()">삭제</button>
-        <button class="list">목록</button>
+        <button class="list"  th:onclick="|location.href='@{ /board/eiboard/list }'|">목록</button>
+      </div>
+      <div class="cmtBox">
+        <form id="commentForm" th:action="@{ /board/ei/comment }" method="post">
+          <input type="text" class="cmt" id="comment-input" name="contents" placeholder="댓글을 입력해 주세요.">
+          <input
+                  type="hidden"
+                  id="mem_num"
+                  name="mem_num"
+                  th:value="${ #authentication.getPrincipal().getMem_num() }">
+
+          <input
+                  type="hidden"
+                  id="nb_no"
+                  name="nb_no"
+                  th:value="${ eiboard.no }">
+
+          <button class="bot">등록</button>
+        </form>
+      </div>
+      <table class="cmtTable" th:each="eicomment : ${ eicommentList }">
+        <tr>
+          <td>
+            <span class="writer"> 익명 </span>
+            <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            <span> </span><span class="date" th:text="${ eicomment.date }"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="writer" th:utext="${ eicomment.contents }"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+  <div class="overlay">
+    <div id="selconf" style="margin: 100px 25%;">
+      <div class="conf_title">
+        게시글 신고
+      </div>
+      <div class="conf_description">
+        여러분의 관심과 신고가 건전하고 올바른 문화를 만듭니다.<br>
+        신고일 경우 신고자가 제재받을 수 있습니다.
+      </div>
+      <div class="conf_boardinf">
+        <p title="">
+          게시글이름
+        </p>
+        <p writer="">
+          작성자
+        </p>
+      </div>
+      <div class="conf_radio">
+        <div>
+          <input type="radio" name="conf_sel" value="1"><span>영리목적의 광고</span>
+        </div>
+        <div>
+          <input type="radio" name="conf_sel" value="1"><span>음란성/선정성 게시글</span>
+        </div>
+        <div>
+          <input type="radio" name="conf_sel" value="1"><span>도배 게시글/댓글</span>
+        </div>
+        <div>
+          <input type="radio" name="conf_sel" value="1"><span>개인정보 노출/사생활 침해</span>
+        </div>
+        <div>
+          <input type="radio" name="conf_sel" value="1"><span>기타</span>
+        </div>
+      </div>
+      <div class="conf_buttonlist">
+        <input type="button" value="신고하기" id="conf_do" onclick="Board_Singo()">
+        <input type="button" value="취소" id="conf_exit" onclick="Overlay_Singo(false)">
       </div>
     </div>
   </div>

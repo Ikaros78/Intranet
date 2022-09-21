@@ -290,25 +290,4 @@
          WHERE MEM_NUM = #{ mem_num }
     </update>
 
-    <!-- 바뀌기 전 직원 번호 DB 저장 -->
-<!--    <insert id="numModify">-->
-<!--        INSERT-->
-<!--          INTO MEMBER_MODIFY-->
-<!--        (-->
-<!--          BEF_NUM-->
-<!--        , MEM_NUM-->
-<!--        )-->
-<!--        VALUES-->
-<!--        (-->
-<!--          #{ bef_num }-->
-<!--        , #{ mem_num }-->
-<!--        )-->
-<!--    </insert>-->
-
-     <!-- 이전 직원 번호 삭제 -->
-<!--    <update id="numDelete">-->
-<!--        UPDATE MEMBER-->
-<!--           SET BEF_NUM IS NULL-->
-<!--          FROM MEM_NUM = #{ mem_num }-->
-<!--    </update>-->
 </mapper>

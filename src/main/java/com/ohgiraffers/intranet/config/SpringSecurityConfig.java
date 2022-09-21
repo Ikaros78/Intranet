@@ -48,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-                .antMatchers("/", "/member/**", "/common/**").permitAll()
+                .antMatchers("/", "/common/**").permitAll()
                 // notice 게시판 접근 권한
 //                .antMatchers("/notice/news/list/**", "/notice/gallery/**")
 //                .hasAnyAuthority("ROLE_NT_ALL", "ROLE_ALL_ALL")
@@ -56,9 +56,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/calendar/main/**")
 //                .hasAnyAuthority("ROLE_CD_DEPT", "ROLE_CD_ALL", "ROLE_ALL_ALL")
                 // emplManage 게시판 접근 권한
-//                .antMatchers("/calendarManage/**", "/accessManage/**")
-//                .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
-//                .anyRequest().authenticated()
+                .antMatchers("/member/regist/**")
+                .hasAnyAuthority("ROLE_NM")
+                .anyRequest().authenticated()
                // sign 게시판 접근 권한
                // board 게시판 접근 권한
                // authorManage 게시판 접근 권한
@@ -68,31 +68,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
            .and()
                 .formLogin() // 로그인 form을 따로 이용하여 로그인.
                 .loginPage("/common/login")
-                .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 코드.
-                .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 코드.
+                .usernameParameter("mem_id") //html id name을 mem_id로 쓰겠다는 설정.
+                .passwordParameter("mem_pw") //html pw name을 mem_pw로 사용하겠다는 설정.
                 .defaultSuccessUrl("/main/main")
                 .failureUrl("/member/loginFail")
 
            .and()
                 .logout() //로그아웃
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                .deleteCookies("JSESSIONID") // 쿠키 제거 -> 로그아웃 시 자동로그인이 해제되도록 할 생각.
+                .deleteCookies("JSESSIONID") // 쿠키 제거
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/");
 
         //중복 로그인 방지용 코드
     http.sessionManagement()
             .maximumSessions(1) //세션 최대 허용 수
-            .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림
-
-                //자동 로그인 코드
-//        http.rememberMe()
-//                    .key("heechang!") // token 생성 값. 필수
-//                    .rememberMeParameter("remember-me") // check-box 의 name과 맞추어야.
-//                    .tokenValiditySeconds(86400) // 쿠키의 만료 시간 24시간. * 2 를 붙일경우 이틀, * 30 하면 한달.
-//                    .alwaysRemember(false) // 사용자가 체크박스를 활성화 하지 않아도 항상 실행 방지.
-//                    .userDetailsService(userDetailsService()) // 사용자 정보를 받음.
-
+            .maxSessionsPreventsLogin(false); //중복 로그인을 인지하면 이전 로그인이 풀림 -> 타 브라우저 환경에서 실행 됐음.
 
                 //예외처리 핸들링
                http.exceptionHandling()

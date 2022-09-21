@@ -28,37 +28,6 @@
   <div id="contents" style="height: 1200px;">
     <div id="sideBar" style="float: left; margin-right: 50px;">
       <h3><span th:text="${#authentication.getPrincipal().getMem_name()}"></span>님<br>환영합니다</h3>
-      <script>
-
-        // $.ajax({
-        //
-        //   url: "wait",
-        //   /* 타입 : get */
-        //   /* 데이터 : gsongson */
-        //
-        //   success:function(data){
-        //
-        //     console.table(data);
-        //
-        //     const $table = $("#list");
-        //     $table.html(""); // 초기화
-        //
-        //     let $totalCount = $('<span>').text(data);
-        //
-        //     $table.append($totalCount);
-        //
-        //   },
-        //   error: function(error) {
-        //
-        //     console.log(error);
-        //   }
-        //
-        // });
-
-      </script>
-      <div id="sig">
-<!--        <a th:href="@{/sign/main}"><strong><p>대기중인 결재 : <span id="list"></span>개</p></strong></a>-->
-      </div>
     </div>
     <div id="myPage">
 <!--      <form action="get">-->

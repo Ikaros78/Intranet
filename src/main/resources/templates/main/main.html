@@ -229,7 +229,7 @@
                                for (let idx in noMv) {
 
                                    $tr = $("<tr>");
-                                   $title = $('<td class="ddd">').text(noMv[idx].title.substring(0, 11));
+                                   $title = $('<td class="ddd">').text(noMv[idx].title.substring(0, 14));
                                    $member = $('<td class="dd">').text(noMv[idx].member.mem_name);
                                    $date = $('<td class="dddd">').text(noMv[idx].date);
 
@@ -288,7 +288,7 @@
                             for (let idx in noDept) {
 
                                 $tr = $("<tr>");
-                                $db_title = $('<td class="ddd">').text(noDept[idx].db_title.substring(0, 11));
+                                $db_title = $('<td class="ddd">').text(noDept[idx].db_title.substring(0, 14));
                                 $member = $('<td class="dd">').text(noDept[idx].member.mem_name);
                                 $db_date = $('<td class="dddd">').text(noDept[idx].db_date);
 
@@ -317,7 +317,7 @@
 
             <table id="msTable">
 
-                <p class="tableName"><strong>메시지함</strong></p><span class="moreMs"><a th:href="@{/ms/recp}">+ 더보기</a></span>
+                <p class="tableName"><strong>받은 메시지함</strong></p><span class="moreMs"><a th:href="@{/ms/recp}">+ 더보기</a></span>
                 <hr color="#999999" noshade>
                 <thead>
                 <th class="msTitle">제목</th>
@@ -347,7 +347,7 @@
                             for (let idx in noMs) {
 
                                 $tr = $("<tr>");
-                                $msTitle = $('<td class="ddd">').text(noMs[idx].msTitle.substring(0, 11));
+                                $msTitle = $('<td class="ddd">').text(noMs[idx].msTitle.substring(0, 14));
                                 $member = $('<td class="dd">').text(noMs[idx].sendName);
                                 $sendDate = $('<td class="dddd">').text(noMs[idx].sendDate);
 
@@ -371,7 +371,8 @@
         </div><!-- 메시지 end -->
 
 
-        <div th:replace="common/chatImage"></div>
+
+
     </div><!-- content end -->
 
 

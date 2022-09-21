@@ -6,12 +6,7 @@
     <link rel="shortcut icon" th:href="@{ /images/favicon.gif }" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/common/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common/basic.css}">
-<!--    <link rel="stylesheet" th:href="@{/css/common/paging.css}">-->
     <link rel="stylesheet" th:href="@{/css/empManage/hrList.css}">
-<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>-->
-<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>-->
-<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
-<!--    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
     <script src="https://code.jquery.com./jquery-3.6.0.js"></script>
 </head>
 <body>
@@ -52,19 +47,7 @@
                     <input type="search" class="inputSearch" name="searchName" id="searchName">
                     <button>검색</button>
                 </form>
-<!--                <form th:action="@{/emp/hrList}" method="get" class="search">-->
-<!--                    <input type="hidden" name="currentPage" value="1">-->
-<!--                    <label>발령구분</label>-->
-<!--                    <select name="searchCondition" id="searchCondition">-->
-<!--                        <option>전체</option>-->
-<!--                        <option value="promotion" th:selected="${ selectCriteria.getSearchCondition() == 'promotion'}">승진</option>-->
-<!--                        <option value="move" th:selected="${ selectCriteria.getSearchCondition() == 'move'}">부서이동</option>-->
-<!--                    </select>-->
-<!--                    <label for="searchValue">사원명</label>-->
-<!--                    <input type="search" class="inputSearch" name="searchValue" id="searchValue" th:value="${ selectCriteria.getSearchValue() }">-->
-<!--                    <button>검색</button>-->
-<!--                </form>-->
-                <th:block sec:authorize="hasRole('ROLE_HR_EM_AUTH')">
+                <th:block sec:authorize="hasRole('ROLE_HR_ALL')">
                     <div class="btnArea">
                         <button onclick="openPop()">발령등록</button>
                         <button type="button" onclick="hrDelete()">발령취소</button>
@@ -86,7 +69,6 @@
                             </thead>
                             <tbody id="tbodyTest">
                                 <tr th:each="appoint : ${ appointList }">
-<!--                                    <td><input type="checkbox" name="chkList"></td>-->
                                     <td id="inputAppend"></td>
                                     <td id="appNo" th:text="${ appoint.no }"></td>
                                     <td th:text="${ appoint.category }"></td>
@@ -97,7 +79,6 @@
                                     <td><span class="dept" th:text="${ appoint.bef_name }"></span>&nbsp;→&nbsp;<span th:text="${ appoint.dept.dept_name }"></span></td>
                                     <td th:text="${ appoint.contents }"></td>
                                     <td th:text="${ appoint.bef_code }" style="display: none;"></td>
-<!--                                    <input type="hidden" th:value="${ appoint.member.dept_code }" name="dept_code">-->
                                 </tr>
                             </tbody>
                         </table>
@@ -129,23 +110,16 @@
                 let query = 'input[name="chkBox"]:checked';
                 let selectedElements = document.querySelectorAll(query);
                 let selectedElementsCnt = selectedElements.length;
-                // let no = $("tbody tr:first-child #appNo").value();
-                // let no = document.getElementsByTagName("td")[val].childNodes[1].nodeValue;
                 let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
 
-                    let test = no[0].getElementsByTagName("td");
-                    let test2 = no[0].getElementsByClassName("rank");
-                    // let test3 = no[0].getElementsByClassName("dept");
+                let test = no[0].getElementsByTagName("td");
+                let test2 = no[0].getElementsByClassName("rank");
 
-                    let appNo = test[1].firstChild.data;
-                    let mem_num = test[4].firstChild.data;
-                    let bef_rank = test2[0].firstChild.data;
-                    // let bef_dept = test3[0].firstChild.data;
-                    let dept_code = test[9].firstChild.data;
-                    let mem_name = test[5].firstChild.data;
-                // alert(appNo);
-
-
+                let appNo = test[1].firstChild.data;
+                let mem_num = test[4].firstChild.data;
+                let bef_rank = test2[0].firstChild.data;
+                let dept_code = test[9].firstChild.data;
+                let mem_name = test[5].firstChild.data;
 
                 if(selectedElementsCnt == 0){
                     alert("발령 취소할 항목을 선택해주세요");
@@ -162,73 +136,6 @@
 
             }
 
-
-            // $(document).ready(function (){
-            //     let no = document.getElementById("tbodyTest").getElementsByTagName("tr");
-            //     for(let i = 0; i < no.length(); i++)
-            //     {
-            //         let test = no[i].getElementsByTagName("td");
-            //     }
-            // });
-
-
-                    // location.href = "/emp/hrDelete?checkArr=" + checkArr;
-
-
-
-            // <input type="checkbox" name="chkList">
-            // 발령 취소 테이블 행 삭제
-            // (function($){
-            //
-            //     $(document).ready(function(){
-            //         $("#del").click(function(){
-            //             if($("input").is(":checked") == true){
-            //                 let i = $("input:checked").parents("tr");
-            //                 let e = i.next("tr");
-            //                 i.remove();
-            //                 e.remove();
-            //             } else {
-            //                 alert("삭제할 항목을 선택해주세요!")
-            //             }
-            //         });
-            //     });
-            // });
-
-            // $(function() {
-            //
-            //     let start = moment();
-            //     let end = moment();
-            //
-            //     function cb(start, end){
-            //         ('#pa_date #startDate').val(start.format('YYYY-MM-DD'));
-            //         ('#pa_date #endDate').val(end.format('YYYY-MM-DD'));
-            //     }
-            //
-            //     $('input[name="pa_date"]').daterangepicker({
-            //         autoUpdateInput: false,
-            //         locale: {
-            //             "separator": " ~ ",      // 시작일시와 종료일시 구분자
-            //             "format": 'YYYY-MM-DD',    //일시 노출 포맷
-            //             "applyLabel": "확인",     // 확인 버튼 텍스트
-            //             "cancelLabel": "취소",     // 취소 버튼 텍스트
-            //             "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
-            //             "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
-            //         },
-            //         startDate : start,
-            //         endDate : end
-            //     }, cb);
-            //
-            //     cb(start, end);
-            //     //
-            //     // $('input[name="pa_date"]').on('apply.daterangepicker', function(ev, picker) {
-            //     //     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-            //     // });
-            //     //
-            //     // $('input[name="pa_date"]').on('cancel.daterangepicker', function(ev, picker) {
-            //     //     $(this).val('');
-            //     // });
-            //
-            // });
         </script>
 </body>
 </html>

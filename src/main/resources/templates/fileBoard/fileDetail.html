@@ -18,70 +18,70 @@
                         <a href="th:href=@{/board/list}">자유 게시판</a>
                         <ul class="sub sub1">
                             <li><a th:href="@{/board/list}">자유 게시판</a></li>
-                            <li><a href="#">익명 게시판</a></li>
+                            <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
                         </ul>
                     </li>
                     <li class="main"><a href="#">업무 게시판</a>
                         <ul class="sub sub2">
-                            <li><a href="#">부서별 공지사항</a></li>
+                            <li><a th:href="@{/deptNotice/list}">부서별 공지사항</a></li>
                             <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
+                        </ul>
+                    </li>
+                    <li class="main"><a href="#">관리자 메뉴</a>
+                        <ul class="sub sub2">
+                            <li><a th:href="@{/board/bluser}">블랙리스트 관리</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
                 <div id="container">
-                    <h4>파일 게시판</h4><hr>
+                    <h4>공지사항</h4><hr>
                         <p class="title">
                             <span th:text="${ Detail.fbTitle }"></span><br>
-                     		<span class="writer" th:text="${ Detail.member.mem_name}"></span>
-<!--/*   
+       <!--/*                     <span class="writer" th:text="${ notice.member.mem_name }"></span>
                             <span class="writer">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                         <span class="writer" th:text="${ fileList.dept.dept_name }"></span>
-     */--> 
-                            <span>&nbsp;&nbsp;</span><span class="date" th:text="${ Detail.fbDate }"></span><br>
-                            <a th:if="${Detail.file.ffOriginName != null}" class="fileDown"
+                            <span class="writer" th:text="${ notice.dept.dept_name }"></span>
+                            <span>&nbsp;&nbsp;</span><span class="date" th:text="${ notice.date }"></span><br>
+                            <a th:if="${notice.file.originName != null}" class="fileDown"
                                
-                                th:href="|/upload/fileFile/${ Detail.file.getFfSaveName()}|"
+                                th:href="|/upload/noticeFile/${ notice.file.getSaveName()}|"
          
-                                th:value="${ Detail.file.getFfOriginName() }" download>
+                                th:value="${ notice.file.getOriginName() }" download>
                                 <img th:src="@{/images/downloadIcon.png}" alt="파일다운로드">
-                                <span>첨부파일다운로드(<span th:text="${ Detail.file.getFfOriginName }"></span>)</span>
+                                <span>첨부파일다운로드(<span th:text="${ notice.file.originName }"></span>)</span>
                             </a>
                         </p>
-
+*/-->
                     <div class="body">
                         <p th:utext="${ Detail.fbContent }">
                     </div>
-                  <div class="btnArea">
-                        <button th:if="${#authentication.getPrincipal().getMem_num() eq Detail.member.mem_num }" class="list update"
-                                th:onclick="|location.href='@{ /file/fileUpdate(no=${ Detail.fbNo }) }'|">수정</button>
-               
-
-                        <button th:if="${#authentication.getPrincipal().getMem_num() eq Detail.member.mem_num }" class="list delete" id="deleteBtn"  onclick="removeCheck()">삭제</button>
-                        <button class="list" onclick="location.href='/file/fileList'">목록</button>
-
+<!--/*                    <div class="btnArea">
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq notice.member.mem_num }" class="list update"
+                                th:onclick="|location.href='@{ /notice/update(no=${ notice.no }) }'|">수정</button>
+                        <button th:if="${#authentication.getPrincipal().getMem_num() eq notice.member.mem_num }" class="list delete" id="deleteBtn"  onclick="removeCheck()">삭제</button>
+                        <button class="list" onclick="location.href='/notice/list'">목록</button>
                     </div>
-
+    */-->
                 </div>
     
         </div>
     </div>
     
-
+    <!--/*
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             /*<![CDATA[*/
 
             // 게시글 삭제
             function removeCheck() {
-                const no = [[ ${Detail.fbNo} ]];
+                const no = [[ ${fileList.fbNo} ]];
                 if ( !confirm("게시글을 삭제할까요?") ) {
                     return false;
                 }
 
                 const formHtml = `
-                    <form id="deleteForm" action="/file/fileDelete?=${no}" method="get">
-                        <input type="hidden" id="fbNo" name="fbNo" value="${no}" />
+                    <form id="deleteForm" action="/notice/delete?no=${no}" method="get">
+                        <input type="hidden" id="no" name="no" value="${no}" />
                     </form>
                 `;
                 const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -90,8 +90,10 @@
                 document.getElementById('deleteForm').submit();
             }
 
-
+            /*]]>*/
         </script>
     </th:block>
+*/-->
+
 </body>
 </html>

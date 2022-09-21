@@ -18,13 +18,6 @@ public class BoardService {
         this.boardMapper = boardMapper;
     }
 
-    /* 신고 접수 메소드 */
-    @Transactional
-    public int singoInsert(SingoDTO singo) {
-
-        return boardMapper.singoInsert(singo);
-    }
-
     @Transactional
     public int freeinsert(FreeinsertDTO freeinsert) {
 

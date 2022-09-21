@@ -70,7 +70,7 @@
         FROM CD_CALENDAR A
          <where>
             <if test='type == "all"'>
-            A.CD_TYPE= 3 OR (A.CD_TYPE = 2 AND A.DEPT_CODE = #{ deptCode }) OR (A.CD_TYPE = 1 AND A.MEM_NUM = #{ memNum })
+            A.CD_TYPE= 3 OR A.CD_TYPE= 2 OR (A.CD_TYPE = 1 AND A.MEM_NUM = #{ memNum })
             </if>
             <if test='type == "dept"'>
             A.DEPT_CODE = #{ deptCode }

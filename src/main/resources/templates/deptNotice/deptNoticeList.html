@@ -55,6 +55,7 @@
                     <thead>
                         <tr>
                         <th>번호</th>
+                        <th></th>
                         <th>제목</th>
                         <th>등록자</th>
                         <th>등록일</th>
@@ -64,6 +65,7 @@
                     <tbody>
                         <tr th:each=" deptNotice : ${ deptNoticeList }">
                             <td th:text="${ deptNotice.db_no }"></td>
+                            <td></td>
                             <td th:text="${ deptNotice.db_title }"></td>
                             <td><span th:text="${ deptNotice.member.mem_name}"></span><span th:text="${ deptNotice.dept.dept_name }"></span></td>
                             <td th:text="${ deptNotice.db_date }"></td>

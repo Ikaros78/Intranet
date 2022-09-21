@@ -46,7 +46,7 @@ public class MemberController {
     }
 
 
-    /* 회원가입 요청을 받으면 회원가입 폼으로 이동 시킴*/
+    /* 회원가입 요청을 받으면 회원가입 폼으로 이동 */
     @GetMapping("/regist")
     public String memberRegist(){
 
@@ -116,7 +116,8 @@ public class MemberController {
 
     /* 마이페이지 개인 정보 수정 */
     @PostMapping("/mypageUpdate")
-    public String memberUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rttr) throws MemberUpdateException {
+    public String memberUpdate(@ModelAttribute MemberDTO member, HttpServletRequest request, HttpServletResponse response,
+                               RedirectAttributes rttr) throws MemberUpdateException {
 
         log.info("");
         log.info("");
@@ -139,16 +140,4 @@ public class MemberController {
         return "redirect:/";
 
     }
-
-//    /* 마이페이지 비밀번호 확인 팝업창 */
-//    @GetMapping("/checkPwd")
-//    public String getCheckPwd(){
-//
-//        return "/member/checkPwd";
-//    }
-
-
-
-
-
 }

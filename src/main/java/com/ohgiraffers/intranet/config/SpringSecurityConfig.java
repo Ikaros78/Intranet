@@ -48,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()//non-browser clients 만을 위한 서비스하면 csrf 를 disable 하여도 좋다고 함, 서버에 인증정보를 저장하지 않기 때문
                 .authorizeRequests() //요청에 대한 권한 체크
-                .antMatchers("/", "/member/**", "/common/**").permitAll()
+                .antMatchers("/", "/common/**").permitAll()
                 // notice 게시판 접근 권한
 //                .antMatchers("/notice/news/list/**", "/notice/gallery/**")
 //                .hasAnyAuthority("ROLE_NT_ALL", "ROLE_ALL_ALL")
@@ -56,9 +56,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/calendar/main/**")
 //                .hasAnyAuthority("ROLE_CD_DEPT", "ROLE_CD_ALL", "ROLE_ALL_ALL")
                 // emplManage 게시판 접근 권한
-//                .antMatchers("/calendarManage/**", "/accessManage/**")
-//                .hasAnyAuthority("ROLE_EM_READ", "ROLE_EM_ALL", "ROLE_ALL_ALL")
-//                .anyRequest().authenticated()
+                .antMatchers("/member/regist/**")
+                .hasAnyAuthority("ROLE_NM")
+                .anyRequest().authenticated()
                // sign 게시판 접근 권한
                // board 게시판 접근 권한
                // authorManage 게시판 접근 권한

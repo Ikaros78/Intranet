@@ -332,12 +332,16 @@
                 <input class="mTitle" type="text" name="title" placeholder="캘린더에 적히는 간단한 제목">
                 <br>일정 색선택
                 <select class="select" name="color" style="width: 90px; height:28px; padding-left: 5px;">
-                    <option name="color" value="">기본색상</option>
-                    <option name="color" value="#f5cec7" style="background-color: #ffd4cd; color: white">color1</option>
-                    <option name="color" value="#e79796" style="background-color: #ffa5a4; color: white">color2</option>
-                    <option name="color" value="#ffc98b" style="background-color: #ffce96; color: white">color3</option>
-                    <option name="color" value="#ffb2b4" style="background-color: #ffb9bb; color: white">color4</option>
-                    <option name="color" value="#c6c09c" style="background-color: #fff7c3; color: white">color5</option>
+                    <option name="color" value="blue" style="background-color: blue; color: white">기본색상</option>
+                    <option sec:authorize="hasRole('CD_ALL')" name="color" value="#000" style="background-color: #000; color: white">전체일정</option>
+                    <option sec:authorize="hasRole('CD_DEPT')" name="color" value="#f5b6c1" style="background-color: #f5b6c1; color: white">인사부</option>
+                    <option sec:authorize="hasRole('CD_DEPT')" name="color" value="#badb96" style="background-color: #badb96; color: white">기술지원부</option>
+                    <option sec:authorize="hasRole('CD_DEPT')" name="color" value="#7dcec8" style="background-color: #7dcec8; color: white">영업1부</option>
+                    <option sec:authorize="hasRole('CD_DEPT')" name="color" value="#93c6e4" style="background-color: #93c6e4; color: white">영업2부</option>
+                    <option sec:authorize="hasRole('CD_DEPT')" name="color" value="#85b0db" style="background-color: #85b0db; color: white">사업부</option>
+                    <option name="color" value="#aea7d1" style="background-color: #aea7d1; color: white">개인일정</option>
+                    <option name="color" value="#f7c469" style="background-color: #f7c469; color: white">개인일정</option>
+                    <option name="color" value="#e75957" style="background-color: #e75957; color: white">개인일정</option>
                 </select>
                 <br><br>일정 시작일
                 <input class="mdate startB" type="date" name="start">

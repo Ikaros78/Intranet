@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="UTF-8">
   <title>익명게시판:등록</title>
@@ -21,9 +21,10 @@
     <div id="sideBar">
       <h3>게시판</h3>
       <ul>
-        <li class="main"><a href="@{board/freelist}">자유 게시판</a>
+        <li class="main">
+          <a href="th:href=@{/board/list}">자유 게시판</a>
           <ul class="sub sub1">
-            <li><a href="../free/freeList.html">자유 게시판</a></li>
+            <li><a th:href="@{/board/list}">자유 게시판</a></li>
             <li><a th:href="@{/board/eiboard/list}">익명 게시판</a></li>
           </ul>
         </li>
@@ -33,10 +34,12 @@
             <li><a th:href="@{/file/fileList}">파일 게시판</a></li>
           </ul>
         </li>
+        <li class="main" sec:authorize="hasRole('ROLE_EM_ALL')"><a href="#">관리자 메뉴</a>
+          <ul class="sub sub2">
+            <li><a th:href="@{/board/bluser}" sec:authorize="hasRole('ROLE_EM_ALL')">블랙리스트 관리</a></li>
+          </ul>
+        </li>
       </ul>
-      <div class="admin">
-        <a href="../blacklist/blacklist management.html">게시판관리(관리자)</a>
-      </div>
     </div>
     <div id="container">
       <h4> 익명 게시판</h4>

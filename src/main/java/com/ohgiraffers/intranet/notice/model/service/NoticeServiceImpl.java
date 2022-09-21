@@ -206,9 +206,6 @@ public class NoticeServiceImpl implements NoticeService {
             log.info("확인");
         }
 
-//        if(galleryFileResult == 0){
-//            throw new GalleryRegistException("이미지 파일을 첨부해주세요");
-//        }
     }
 
     /* 갤러리 전체 게시글 수 조회 */

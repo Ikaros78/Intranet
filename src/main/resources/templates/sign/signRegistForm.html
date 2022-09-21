@@ -56,7 +56,7 @@
                     <th style="border : 1px solid";>기안</th>
                 </tr>
                 <tr id="approverBody">
-                    <td th:text="${ formMap.userInfo.mem_name }"></td>
+                    <td th:text="${ formMap.userInfo.mem_name } + ' ' + ${ formMap.userInfo.dept_rank}"></td>
                 </tr>
             </table>
         </div>
@@ -79,7 +79,7 @@
                 </tr>
                 <tr>
                     <th>기안자</th>
-                    <td th:text="${ formMap.userInfo.mem_name }">;
+                    <td th:text="${ formMap.userInfo.mem_name } + ' ' + ${ formMap.userInfo.dept_rank}">;
                     <th>기안부서</th>
                     <td th:text="${ formMap.deptName }">
                 </tr>

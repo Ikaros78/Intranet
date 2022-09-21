@@ -1,6 +1,5 @@
 package com.ohgiraffers.intranet.msBoard.model.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import com.ohgiraffers.intranet.member.model.dto.DepartmentDTO;
 import com.ohgiraffers.intranet.msBoard.model.dao.MsBoardMapper;
 import com.ohgiraffers.intranet.msBoard.model.dto.MsBoardDTO;
@@ -31,8 +29,6 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 	@Override
 	public List<MsBoardDTO> selectMsRecpBoard(Map<String, Object> searchList) {
-
-		System.out.println("searchListsearchList" + searchList);
 
 		List<MsBoardDTO> msBoardlist = msBoardMapper.selectMsRecpBoard(searchList);
 

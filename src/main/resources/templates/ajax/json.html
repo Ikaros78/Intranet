@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+  <tbody th:each="selajax : ${ selAjax }">
+    <tr>
+      <td name="ajax-a1" th:text="${ selajax.a1 }"> </td>
+      <td name="ajax-a2" th:text="${ selajax.a2 }"> </td>
+      <td name="ajax-a3" th:text="${ selajax.a3 }"> </td>
+      <td name="ajax-a4" th:text="${ selajax.a4 }"> </td>
+      <td name="ajax-a5" th:text="${ selajax.a5 }"> </td>
+      <td name="ajax-a6" th:text="${ selajax.a6 }"> </td>
+      <td name="ajax-a7" th:text="${ selajax.a7 }"> </td>
+      <td name="ajax-a8" th:text="${ selajax.a8 }"> </td>
+      <td name="ajax-a9" th:text="${ selajax.a9 }"> </td>
+      <td name="ajax-a10" th:text="${ selajax.a10 }"> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

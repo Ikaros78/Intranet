@@ -224,6 +224,7 @@
               , A.SIGN_WRITER
               , A.SIGN_TITLE
               , B.MEM_NAME
+              , B.DEPT_RANK
               , D.DEPT_NAME
               , A.SIGN_CONTENT
               , A.REG_DATE
@@ -314,12 +315,13 @@
                         C.SF_NAME LIKE '%'|| #{ searchName } || '%'
                     </if>
                 </where>
-                ORDER BY C.SF_CODE ASC) B
+                ) B
                 <![CDATA[
                           WHERE ROWNUM <= #{ selectCriteria.endRow }
                           ]]>
             ) A
             WHERE A.RNUM >= #{ selectCriteria.startRow }
+            ORDER BY 1 ASC
     </select>
 
     <select id="selectFormByCode" resultMap="signFormResultMap">

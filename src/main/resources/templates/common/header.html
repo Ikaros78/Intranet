@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -22,7 +22,7 @@
                 <li><a href="/calendar/all?type=all">일정관리</a></li>
                 <li><a href="/sign/main">전자결재</a></li>
                 <li><a href="/ms/recp">쪽지함</a></li>
-                <li><a th:href="@{/emp/empList}">직원관리</a></li>
+                <li sec:authorize="hasAnyRole('ROLE_NM','ROLE_EM_READ', 'ROLE_EM_ALL', 'ROLE_ALL_AUTH')"><a th:href="@{/emp/empList}">직원관리</a></li>
             </ul>
         </div>
     </wrap>

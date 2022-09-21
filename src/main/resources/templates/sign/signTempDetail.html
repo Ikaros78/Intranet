@@ -51,7 +51,7 @@
                         </th:block>
                     </tr>
                     <tr>
-                        <td th:text="${signDetail.writer.mem_name}" style="border : 1px solid; width:100px; text-align: center"></td>
+                        <td th:text="${signDetail.writer.mem_name} + ' ' + ${signDetail.writer.dept_rank}" style="border : 1px solid; width:100px; text-align: center"></td>
                         <th:block th:if="${approver != null}" th:each="approve : ${signDetail.approver}">
                             <td th:if="${approve.isApproved eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재대기'" style="border : 1px solid; width:100px; text-align: center"></td>
                             <td th:if="${approve.isApproved eq 'Y' and approve.isRefused eq 'N'}" th:utext="${approve.approver.approverName} + ' ' + ${approve.approver.approverRank} + '<br>결재완료'" style="border : 1px solid; width:100px; text-align: center"></td>
@@ -81,7 +81,7 @@
                         </tr>
                         <tr>
                             <th>기안자</th>
-                            <td th:text="${signDetail.writer.mem_name}"></td>
+                            <td th:text="${signDetail.writer.mem_name} + ' ' + ${signDetail.writer.dept_rank}"></td>
                             <th>기안부서</th>
                             <td th:text="${signDetail.writer.department.dept_name}"></td>
                         </tr>
@@ -106,7 +106,7 @@
                             <td th:text="${signDetail.signTitle}" th:colspan="3"></td>
                         </tr>
                         <tr>
-                            <td th:if="${signDetail.signContent != null}" th:text="${signDetail.signContent}" th:colspan="4"></td>
+                            <td th:if="${signDetail.signContent != null}" th:utext="${signDetail.signContent}" th:colspan="4"></td>
                         </tr>
                         <tr th:if="${signDetail.file.originName != null}">
                             <td th:colspan="4">

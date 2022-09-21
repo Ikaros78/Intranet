@@ -1,13 +1,10 @@
 package com.ohgiraffers.intranet.board.model.service;
 
 import com.ohgiraffers.intranet.board.model.dao.BoardMapper;
-import com.ohgiraffers.intranet.board.model.dto.AnonyDTO;
-import com.ohgiraffers.intranet.board.model.dto.CommentDTO;
-import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
+import com.ohgiraffers.intranet.board.model.dto.*;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -63,10 +60,7 @@ public class BoardService {
 
     }
 
-    @Transactional
-    public void boardDelete(FreeinsertDTO freeinsert) {
-        boardMapper.boardDelete(freeinsert.getNo());
-    }
+
 
 //    익명
 
@@ -118,10 +112,15 @@ public class BoardService {
 
     }
 
-    public void eiboardDelete(AnonyDTO anonyinsert) {
-
-        boardMapper.eiboardDelete(anonyinsert.getNo());
-    }
+//    public void eiboardDelete(String no) {
+//
+//      String result = boardMapper.eiboardDelete(no);
+//      
+//        if(result != null ){
+//            
+//        boardMapper.eicommentDelete(no);
+//        }
+//    }
 
     @Transactional
     public int boardcomment(CommentDTO boardcomment) {
@@ -132,6 +131,7 @@ public class BoardService {
 
 
     }
+
 
 
 
@@ -154,6 +154,112 @@ public class BoardService {
        System.out.println("commentlist" + commentlist);
                return commentlist;
        }
+//        익명
+    public int boardeicomment(EiCommentDTO boardeicomment) {
+
+        int reult = boardMapper.boardeicomment(boardeicomment);
+
+        return reult;
+
+    }
+//    익명
+    public List<EiCommentDTO> selecteiComentList(String nb_no) {
+        List<EiCommentDTO> eicommentlist = boardMapper.selecteiComentList(nb_no);
+
+        System.out.println("eicommentlist" + eicommentlist);
+        return eicommentlist;
+
+    }
+
+@Transactional
+    public void eiboardDelete(String no) {
+
+      boardMapper.eeiboardDelete(no);
+      boardMapper.eiboardDelete(no);
+
+    }
+@Transactional
+    public void boardDelete(String no) {
+
+    boardMapper.boardcommentDelete(no);
+    boardMapper.boardDelete(no);
+
+
+    }
+
+    public List<SelAjaxDTO> selectAjax(AjaxDTO ajaxDTO) {
+        List<SelAjaxDTO> SelAjaxList = null;
+
+        // 블랙리스트 있는지 여부 확인
+        if(ajaxDTO.getA_ACTION().equals("ajaxBlacklistCnt")) {
+            SelAjaxList = boardMapper.ajaxBlacklistCnt(ajaxDTO);
+        }
+        // 블랙리스트 있는지 여부 확인
+        else if(ajaxDTO.getA_ACTION().equals("ajaxBlacklistCntNB")) {
+            SelAjaxList = boardMapper.ajaxBlacklistCntNB(ajaxDTO);
+        }
+
+        // 블랙리스트 유저 이름 검색
+        else if(ajaxDTO.getA_ACTION().equals("ajaxBlacklistUserListName")) {
+            SelAjaxList = boardMapper.ajaxBlacklistUserListName(ajaxDTO);
+        }
+
+        // 블랙리스트 유저 사원번호 검색
+        else if(ajaxDTO.getA_ACTION().equals("ajaxBlacklistUserListEnum")) {
+            SelAjaxList = boardMapper.ajaxBlacklistUserListEnum(ajaxDTO);
+        }
+
+        else if(ajaxDTO.getA_ACTION().equals("ajaxBlacklistDetailList")) {
+            SelAjaxList = boardMapper.ajaxBlacklistDetailList(ajaxDTO);
+        }
+
+        System.out.println("SelAjaxList" + SelAjaxList);
+        return SelAjaxList;
+    }
+
+    @Transactional
+    public int cajax(AjaxDTO cajax) {
+
+        String ACTION = cajax.getA_ACTION();
+
+        int reult = 0;
+
+        if(ACTION.equals("ajaxBlacklistFRInsert")) {
+            reult = boardMapper.ajaxBlacklistFRInsert(cajax);
+        }
+
+        else if(ACTION.equals("ajaxBlacklistFRInsertDetail")) {
+            reult = boardMapper.ajaxBlacklistFRInsertDetail(cajax);
+        }
+
+        else if(ACTION.equals("ajaxBlacklistNBInsert")) {
+            reult = boardMapper.ajaxBlacklistNBInsert(cajax);
+        }
+
+        else if(ACTION.equals("ajaxBlacklistNBInsertDetail")) {
+            reult = boardMapper.ajaxBlacklistNBInsertDetail(cajax);
+        }
+
+
+
+        return reult;
+
+
+    }
+
+//    public void eiboardDelete(String no) {
+//
+//       boardMapper.boardeicomment(no);
+//       
+//    }
+
+//    public void eeiboardDelete(EiCommentDTO eeiboardDelete) {
+//
+//        boardMapper.eeiboardDelete(eeiboardDelete.getNb_no());
+//
+//
+//    }
+
 
 }
 

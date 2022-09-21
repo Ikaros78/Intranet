@@ -69,54 +69,32 @@ public class FileServiceImpl implements FileService  {
         }
         return fileBoard;
     }
-//
-//    /* 공지사항 수정용 메소드 */
-//    @Override
-//    @Transactional
-//    public int noticeUpdate(NoticeDTO notice) {
-//        return noticeMapper.noticeUpdate(notice);
-//    }
-//
-//    /* 공지사항 파일 삭제용 메소드 */
-//    @Override
-//    @Transactional
-//    public int noticeFileDelete(int no) {
-//        return noticeMapper.deleteFile(no);
-//    }
-//
-//    /* 공지사항 파일 다시 넣기 메소드 */
-//    @Override
-//    @Transactional
-//    public void noticeFileUpdate(NoticeFileDTO noticeFile) {
-//        noticeMapper.noticeFileUpdate(noticeFile);
-//    }
-//
-//    /* 공지사항 삭제용 메소드 */
-//    @Override
-//    @Transactional
-//    public void noticeDelete(NoticeDTO notice) {
-//        int result1 = noticeMapper.deleteFile(notice.getNo());
-//        log.info("파일삭제 안되나.." + result1);
-//        int result2 = noticeMapper.noticeDelete(notice.getNo());
-//    }
-	
-	
-//	@Override
-//	public void fileBoardDelete(FileBoardDTO fileboard) {
-////		int result1 = fileMapper.fileFileInsert();
-//				
-//		int result2 = fileMapper.fileBoardDelete(fileboard.getFbNo());		
-//				
-//	}
-//
-//	@Override
-//	public FileBoardDTO fileBoardDetail(int no) {
-//		return null;
-//	}
-//
-//	@Override
-//	public int fileBoardRegist(FileBoardDTO fileboard) {
-//		return 0;
-//	}
+
+    @Override
+    @Transactional
+    public int fileBoardUpdate(FileBoardDTO fileBoard) {
+    	
+        return fileMapper.fileBoardUpdate(fileBoard);
+    }
     
+    @Override
+    @Transactional
+    public int fileFileDelete(int fbNo) {
+    	
+    	return fileMapper.fileFileDelete(fbNo);
+    }
+
+    @Override
+    @Transactional
+    public void fileFileUpdate(FileFileDTO fileFile) {
+    	
+    	fileMapper.fileFileUpdate(fileFile);
+    }
+    
+    @Override
+    @Transactional
+    public void fileBoardDelete(FileBoardDTO fileBoard) {
+    	int result1 =  fileMapper.fileFileDelete(fileBoard.getFbNo());
+        int result2 =  fileMapper.fileBoardDelete(fileBoard.getFbNo());
+    }
 }

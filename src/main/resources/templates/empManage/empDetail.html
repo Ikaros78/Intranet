@@ -71,7 +71,7 @@
                             <td th:text="${ emp.mem_joinDate }"></td>
                         </tr>
                     </table>
-                    <th:block sec:authorize="hasRole('ROLE_HR_EM_AUTH')">
+                    <th:block sec:authorize="hasRole('ROLE_EM_ALL')">
                         <button th:onclick="|location.href='@{ /emp/empUpdate(no=${ emp.mem_num }) }'|">수정</button>
                     </th:block>
                 </form>

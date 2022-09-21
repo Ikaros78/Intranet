@@ -252,21 +252,13 @@ public class EmpController {
         int mem_num = Integer.parseInt(request.getParameter("mem_num"));
         log.info(" number값 받아오는지 확인 : " + mem_num);
 
-//        int modifyResult = empService.numModify(member); // 이전 직원번호 테이블에 먼저 넣어줌
-//        log.info("modifyResult : " + modifyResult);
+        int updateResult = empService.empUpdate(member); // 정보 업데이트
 
-//        if(modifyResult > 0) {
-            int updateResult = empService.empUpdate(member); // 정보 업데이트
-//
-//            if(updateResult > 0){
-//                int deleteResult = empService.numDelete(member); // 이전 직원번호 삭제
-//
-//            }
-//        } else {
-//
+        if(updateResult == 0) {
+
             log.info("직원 정보 수정에 실패하였습니다.");
-//        }
 
+        }
 
         return "redirect:/emp/empList";
     }

@@ -7,7 +7,6 @@ import com.ohgiraffers.intranet.board.model.dto.FreeinsertDTO;
 import com.ohgiraffers.intranet.common.paging.SelectCriteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,13 @@ public class BoardService {
 
     public BoardService(BoardMapper boardMapper) {
         this.boardMapper = boardMapper;
+    }
+
+    /* 신고 접수 메소드 */
+    @Transactional
+    public int singoInsert(SingoDTO singo) {
+
+        return boardMapper.singoInsert(singo);
     }
 
     @Transactional

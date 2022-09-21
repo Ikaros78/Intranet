@@ -52,4 +52,6 @@ public interface BoardMapper {
 
     List<CommentDTO> selectComentList(String no);
 
+    /* 신고 접수 메소드 */
+    int singoInsert(SingoDTO singo);
 }

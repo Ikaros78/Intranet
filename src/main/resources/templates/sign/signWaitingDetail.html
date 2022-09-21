@@ -168,9 +168,9 @@
             }
         }else if(str=="refuse"){
 
-            document.getElementById("getOpinion").value = prompt("반려의견을 입력해주세요","");
+            let $opinion = prompt("반려의견을 입력해주세요","");
 
-            let $opinion = document.getElementById("getOpinion").value;
+            document.getElementById("getOpinion").value = $opinion;
 
             if($opinion != null && $opinion != ''){
                 let signform = document.getElementById('signform');

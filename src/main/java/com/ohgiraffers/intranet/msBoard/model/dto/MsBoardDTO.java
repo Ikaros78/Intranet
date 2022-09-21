@@ -12,6 +12,7 @@ public class MsBoardDTO {
 	private Date sendDate;
 	private Date recpDate;
 	private String readYn;
+	private String sendreanYN;
 	private String sendDel;
 	private String recpDel;
 	private String recpNum;
@@ -24,8 +25,8 @@ public class MsBoardDTO {
 		// TODO Auto-generated constructor stub
 	}
 	public MsBoardDTO(int msNo, String msTitle, String sendName, String recpName, Date sendDate, Date recpDate,
-			String readYn, String sendDel, String recpDel, String recpNum, String sendNum, String contents, int memNum,
-			List<MsFileDTO> msFile) {
+			String readYn, String sendreanYN, String sendDel, String recpDel, String recpNum, String sendNum,
+			String contents, int memNum, List<MsFileDTO> msFile) {
 		super();
 		this.msNo = msNo;
 		this.msTitle = msTitle;
@@ -34,6 +35,7 @@ public class MsBoardDTO {
 		this.sendDate = sendDate;
 		this.recpDate = recpDate;
 		this.readYn = readYn;
+		this.sendreanYN = sendreanYN;
 		this.sendDel = sendDel;
 		this.recpDel = recpDel;
 		this.recpNum = recpNum;
@@ -84,6 +86,12 @@ public class MsBoardDTO {
 	public void setReadYn(String readYn) {
 		this.readYn = readYn;
 	}
+	public String getSendreanYN() {
+		return sendreanYN;
+	}
+	public void setSendreanYN(String sendreanYN) {
+		this.sendreanYN = sendreanYN;
+	}
 	public String getSendDel() {
 		return sendDel;
 	}
@@ -129,10 +137,11 @@ public class MsBoardDTO {
 	@Override
 	public String toString() {
 		return "MsBoardDTO [msNo=" + msNo + ", msTitle=" + msTitle + ", sendName=" + sendName + ", recpName=" + recpName
-				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendDel=" + sendDel
-				+ ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", sendNum=" + sendNum + ", contents=" + contents
-				+ ", memNum=" + memNum + ", msFile=" + msFile + "]";
+				+ ", sendDate=" + sendDate + ", recpDate=" + recpDate + ", readYn=" + readYn + ", sendreanYN="
+				+ sendreanYN + ", sendDel=" + sendDel + ", recpDel=" + recpDel + ", recpNum=" + recpNum + ", sendNum="
+				+ sendNum + ", contents=" + contents + ", memNum=" + memNum + ", msFile=" + msFile + "]";
 	}
+
 	
 	
 }

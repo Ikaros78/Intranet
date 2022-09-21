@@ -342,6 +342,18 @@ public class MsBoardController {
 
 		return "message/messageDetail";
 	}
+	
+	@GetMapping("/senddetail")
+	public String selectSendBoardDetail(HttpServletRequest request, Model model) {
+
+		int msNo = Integer.parseInt(request.getParameter("msNo"));
+
+		MsBoardDTO boardDetail = msBoardService.selectSendBoardDetail(msNo);
+
+		model.addAttribute("msBoard", boardDetail);
+
+		return "message/messageSendDetail";
+	}
 
 	@GetMapping(value = "getdeptList", produces = "application/json; charset-UTF-8")
 	@ResponseBody

@@ -43,7 +43,6 @@
                 </pre>
       <p>전체 <span th:text ="${ selectCriteria.totalCount }" ></span></p>
       <form th:action="@{/board/eiboard/list}" method="get">
-
         <select name="searchCondition" id="searchCondition">
           <option value="title" th:selected="${ selectCriteria.getSearchCondition() == 'title'}">제목</option>
         </select>

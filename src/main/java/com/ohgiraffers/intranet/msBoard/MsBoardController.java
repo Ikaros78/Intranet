@@ -100,6 +100,9 @@ public class MsBoardController {
 
 		List<MsBoardDTO> boardList = msBoardService.selectMsRecpBoard(searchList);
 
+		System.out.println("boardList" + boardList);
+		
+		
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
 		mv.addObject("searchList", searchList);
@@ -156,8 +159,13 @@ public class MsBoardController {
 
 		List<MsBoardDTO> boardList = msBoardService.selectMsSendBoard(searchList);
 
+		System.out.println("searchValuesearchValue" + boardList);
+		
+		
 		mv.addObject("boardList", boardList);
 		mv.addObject("selectCriteria", selectCriteria);
+		mv.addObject("searchValue", searchValue);
+		mv.addObject("searchCondition", searchCondition);
 		mv.addObject("searchList", searchList);
 		mv.setViewName("message/messageSendBox");
 

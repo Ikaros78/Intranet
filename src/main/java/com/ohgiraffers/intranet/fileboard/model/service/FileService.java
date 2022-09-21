@@ -18,11 +18,15 @@ public interface FileService {
 	int fileBoardRegist(FileBoardDTO fileboard);
 
 	FileBoardDTO fileBoardDetail(int fbNo);
-//
-//	void fileBoardDelete(FileBoardDTO fileboard);
 
+	int fileBoardUpdate(FileBoardDTO fileBoard);
 
-//	int fileBoardRegist(FileBoardDTO fileboard);
+	int fileFileDelete(int fbNo);
+
+	void fileFileUpdate(FileFileDTO fileFile);
+
+	void fileBoardDelete(FileBoardDTO fileboard);
+
 
 
 }

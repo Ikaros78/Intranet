@@ -12,6 +12,7 @@
 		<result property="fbContent" column="FB_CONTENTS" />
 		<result property="memnum" column="MEM_NUM" />
 		<association property="file" resultMap="FileFileResultMap"/>
+		<association property="member" resultMap="memberResultMap"/>
 	</resultMap>
 
 	<resultMap id="FileFileResultMap" type="com.ohgiraffers.intranet.fileboard.model.dto.FileFileDTO">
@@ -23,6 +24,19 @@
 		<result property="fbNo" column="FB_NO" />
 	</resultMap>
 
+    <resultMap id="memberResultMap" type="com.ohgiraffers.intranet.member.model.dto.MemberDTO">
+        <id property="mem_num" column="MEM_NUM"/>
+        <result property="mem_id" column="MEM_ID"/>
+        <result property="mem_pw" column="MEM_PW"/>
+        <result property="mem_name" column="MEM_NAME"/>
+        <result property="mem_phone" column="MEM_PHONE"/>
+        <result property="mem_joinDate" column="MEM_JOINDATE"/>
+        <result property="mem_birth" column="MEM_BIRTH"/>
+        <result property="mem_email" column="MEM_EMAIL"/>
+        <result property="mem_address" column="MEM_ADDRESS"/>
+        <result property="dept_rank" column="DEPT_RANK"/>
+        <result property="dept_code" column="DEPT_CODE"/>
+    </resultMap>
 
     <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
         SELECT COUNT(*)
@@ -37,6 +51,7 @@
         , A.FB_VIEWS
         , A.FB_CONTENTS
         , A.MEM_NUM
+        , A.MEM_NAME
         FROM (SELECT ROWNUM RNUM
         , B.FB_NO
         , B.FB_TITLE
@@ -44,6 +59,7 @@
         , B.FB_VIEWS
         , B.FB_CONTENTS
         , B.MEM_NUM
+        , B.MEM_NAME
         FROM (SELECT
           C.FB_NO
         , C.FB_TITLE
@@ -51,7 +67,14 @@
         , C.FB_VIEWS
         , C.FB_CONTENTS
         , C.MEM_NUM
+        , D.MEM_NAME
         FROM FB_FILE C
+        LEFT JOIN MEMBER D ON(C.MEM_NUM = D.MEM_NUM)
+	<where>
+		<if test="searchCondition == 'fbTitle'">
+           AND C.FB_TITLE LIKE '%' || #{ searchValue } || '%'
+		</if>
+	</where>
         ORDER BY C.FB_NO DESC
         ) B
         <![CDATA[
@@ -113,13 +136,18 @@
 
     <select id="fileBoardDetail" parameterType="_int" resultMap="FileboardResultMap">
         SELECT
-               A.FB_NO
+                A.FB_NO
 		      , A.FB_TITLE
 		      , A.FB_DATE
 		      , A.FB_VIEWS
 		      , A.FB_CONTENTS
 		      , A.MEM_NUM
+		      , B.MEM_NAME
+		      , C.FF_ORIGIN_NAME
+		      , C.FF_SAVE_NAME
         FROM    FB_FILE A
+        LEFT    JOIN MEMBER B ON(A.MEM_NUM = B.MEM_NUM)
+        LEFT    JOIN FF_FILE_FILE C ON(A.FB_NO = C.FB_NO)
         WHERE   A.FB_NO = #{ fbno }
     </select>
 
@@ -132,30 +160,49 @@
                          ) + 1
         WHERE A.FB_NO = #{ fbno }
     </update>
-<!--     <delete id="deleteFile"> -->
-<!--         DELETE -->
-<!--         FROM NTF_NOTICE_FILE -->
-<!--         WHERE NT_NO = #{ ntNo } -->
-<!--     </delete> -->
+    
+    <delete id="fileFileDelete">
+        DELETE
+        FROM FF_FILE_FILE
+        WHERE FB_NO = #{ fbNo }
+    </delete>
 
 <!--     공지사항 업데이트 -->
-<!--     <update id="noticeUpdate"> -->
-<!--         UPDATE -->
-<!--             NT_NOTICE -->
-<!--         SET NT_TITLE = #{ title } -->
-<!--           , NT_CONTENTS = #{ contents } -->
-<!--         WHERE NT_NO = #{ no } -->
-<!--     </update> -->
+    <update id="fileBoardUpdate">
+        UPDATE
+            FB_FILE
+        SET FB_TITLE = #{ fbTitle }
+          , FB_CONTENTS = #{ fbContent }
+        WHERE FB_NO = #{ fbNo }
+    </update>
 
 <!--     공지사항 삭제 -->
-<!--     <delete id="noticeDelete" parameterType="int"> -->
-<!--         DELETE -->
-<!--         FROM NT_NOTICE -->
-<!--         WHERE NT_NO = #{ no } -->
-<!--     </delete> -->
+    <delete id="fileBoardDelete" parameterType="int">
+        DELETE
+        FROM FB_FILE
+        WHERE FB_NO = #{ fbNo }
+    </delete>
 
-
-
-
+    <insert id="fileFileUpdate" parameterType="FileFileDTO">
+        INSERT
+        INTO FF_FILE_FILE
+        (
+          FF_NO
+        , FF_ORIGIN_NAME
+        , FF_SAVE_NAME
+        , FF_SAVE_PATH
+        , FF_DELETE_YN
+        , FB_NO
+        )
+        VALUES
+        (
+        SEQ_FF_NO.NEXTVAL
+        , #{ffOriginName}
+        , #{ffSaveName}
+        , #{ffSavePath}
+        ,  DEFAULT
+        , #{fbNo}
+        )
+    </insert>
 
 	</mapper>

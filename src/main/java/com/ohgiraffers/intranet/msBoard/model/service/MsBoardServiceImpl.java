@@ -101,6 +101,7 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		msBoardMapper.recpNameUpdate(msBoardDTO);
 	}
+	
 
 	// 보낸 쪽지함 상세 페이지 조회용 메소드
 	@Override
@@ -118,6 +119,22 @@ public class MsBoardServiceImpl implements MsBoardService {
 
 		return msDetail;
 
+	}
+	@Override
+	public MsBoardDTO selectSendBoardDetail(int msNo) {
+		
+		MsBoardDTO msDetail = msBoardMapper.selectSendBoardDetail(msNo);
+		// 지금 파일 이름이 다르니까
+		
+		System.out.println("msDetail : " + msDetail);
+		
+		if (msDetail.equals(msDetail)) {
+			
+			msBoardMapper.YNSendChangeMsBoard(msNo);
+		}
+		
+		return msDetail;
+		
 	}
 
 	// ajax 용 비동기 1

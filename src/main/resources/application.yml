@@ -4,9 +4,9 @@
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:oracle:thin:@oracle.coffit.site:1521:xe
-    username: C##INTRANET
-    password: INTRANET
+    url: 오라클 url
+    username: 유저이름
+    password: 비밀번호
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
